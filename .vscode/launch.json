@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "frontend",
+            "request": "launch",
+            "type": "dart",
+            "program": "frontend/lib"
+        },
+        {
+            "name": "Android",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554",
+            "program": "frontend/lib/main.dart"
+        },
+        {
+            "name": "Chrome",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "chrome",
+            "program": "frontend/lib/main.dart"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Compound",
+            "configurations": ["Android", "Chrome"]
+        }
+    ]
+}
