@@ -71,7 +71,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         actions: mobile ? null : <Widget> [
             appBarAuthenticationButtons(context),
         ],
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.black87,
         elevation: 0,
         centerTitle: false,
       ),
