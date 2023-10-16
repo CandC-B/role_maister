@@ -3,7 +3,7 @@ import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
-  static const String routeName = "/";
+  static const String routeName = "/register";
   const RegisterScreen({super.key});
 
   static Route route() {

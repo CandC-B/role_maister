@@ -3,7 +3,7 @@ import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
 class RulesScreen extends StatelessWidget {
-  static const String routeName = "/";
+  static const String routeName = "/rules";
   const RulesScreen({super.key});
 
   static Route route() {
