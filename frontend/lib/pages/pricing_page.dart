@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class PricingPage extends StatelessWidget {
+  const PricingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-          child: Text("Register Page"),
+          child: Text("Pricing Page"),
         );
   }
 }

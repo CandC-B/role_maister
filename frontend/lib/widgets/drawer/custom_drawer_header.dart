@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// TODO check if autenticated or not
 Widget drawerHeader (BuildContext context) => Material(
   color: Colors.deepPurple,
   child: InkWell(

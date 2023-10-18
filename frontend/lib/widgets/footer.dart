@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:boxy/flex.dart';
 
 class WebFooter extends StatefulWidget {
+  const WebFooter({super.key});
+
   @override
   State<WebFooter> createState() => _WebFooterState();
 }
@@ -18,24 +19,6 @@ class BoxyDesktopFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   color: Colors.black,
-    //   child: Row(
-    //     children: [
-    //       DesktopFooterColumnOne(),
-    //       DesktopFooterColumnTwo(),
-    //       DesktopFooterColumnThree(),
-    //       Flexible(
-    //         child: Align(
-    //           alignment: Alignment.bottomCenter,
-    //           child: FooterCopyright(),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-
-    // same but if its less than 700px wide, it will be a column
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 700) {
@@ -109,6 +92,8 @@ final RichText appLogoMark = RichText(
 );
 
 class DesktopFooterColumnTwo extends StatelessWidget {
+  const DesktopFooterColumnTwo({super.key});
+
   @override
   Widget build(BuildContext context) {
 
@@ -140,6 +125,8 @@ class DesktopFooterColumnTwo extends StatelessWidget {
 }
 
 class DesktopFooterColumnThree extends StatelessWidget {
+  const DesktopFooterColumnThree({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Column(

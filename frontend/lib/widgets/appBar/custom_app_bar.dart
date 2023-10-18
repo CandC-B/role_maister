@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final String path;
-  const CustomAppBar({super.key, required this.path});
+  final String title;
+  const CustomAppBar({super.key, required this.title});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -18,15 +18,24 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool rulesScreen = false;
   bool signInScreen = false;
   bool registerScreen = false;
+  bool pricingScreen= false;
+  bool aboutUsScreen = false;
+  bool contactUsScreen = false;
 
-  checkCurrentPath(path) {
-        switch (path) {
-      case '/rules':
+  checkCurrentPath(title) {
+        switch (title) {
+      case 'Rules':
         rulesScreen = true;
-      case '/sign_in':
+      case 'Sign In':
         signInScreen = true;
-      case '/register':
+      case 'Register':
         registerScreen = true;
+      case 'Pricing':
+        pricingScreen = true;
+      case 'About Us':
+        aboutUsScreen = true;
+      case 'Contact Us':
+        contactUsScreen = true;
       default:
         homeScreen = true;
     }
@@ -34,21 +43,30 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    checkCurrentPath(widget.path);
+    checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
         automaticallyImplyLeading: mobile ? true : false,
         leading: mobile ? Builder(
                   builder: (context) {
                     return IconButton(
-                      icon: const Icon(Icons.menu),
+                      icon: const Icon(Icons.menu, color: Colors.white,),
                       onPressed: () {
                         Scaffold.of(context).openDrawer();
                       },
                     );
                   }
                 ) : null,
-        title: mobile ? Image.asset("images/small_logo.png", width: 65,) : 
+        title: mobile ? 
+          Row(
+            children: [
+              Image.asset("images/small_logo.png", width: 65,),
+              Align(
+                alignment: Alignment.center,
+                child: Text(widget.title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, ),),
+              )
+            ]
+          ,) :
         Row(
           children: [
             InkWell(
@@ -65,7 +83,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         )
             
         ],
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.deepPurple,
         elevation: 0,
         centerTitle: false,
       );
@@ -73,7 +91,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget appBarTitle (BuildContext context) => const Text(
     "Role MAIster", style: TextStyle(
-      fontWeight: FontWeight.bold,color:  Colors.deepPurple,),
+      fontWeight: FontWeight.bold,color:  Colors.white,),
   );
 
   Widget appBarInfoButtons (BuildContext context) => Wrap(
@@ -89,14 +107,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Home",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: homeScreen ? Colors.deepPurple : Colors.grey, 
+                  color: homeScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
               homeScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30)
                             ),
                 ) : const SizedBox()
@@ -110,14 +128,77 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Rules",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: rulesScreen ? Colors.deepPurple : Colors.grey, 
+                  color: rulesScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
               rulesScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30)
+                            ),
+                ) : const SizedBox()
+              ],
+            ),
+          ),
+          MaterialButton(
+            onPressed: () => context.go('/pricing'),
+            child: Column(children: [
+              Text(
+                "Pricing",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: pricingScreen ? Colors.white : Colors.grey.shade300, 
+                ),
+              ),
+              const SizedBox(height: 6,),
+              pricingScreen ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30)
+                            ),
+                ) : const SizedBox()
+              ],
+            ),
+          ),
+          MaterialButton(
+            onPressed: () => context.go('/about_us'),
+            child: Column(children: [
+              Text(
+                "About Us",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: aboutUsScreen ? Colors.white : Colors.grey.shade300, 
+                ),
+              ),
+              const SizedBox(height: 6,),
+              aboutUsScreen ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30)
+                            ),
+                ) : const SizedBox()
+              ],
+            ),
+          ),
+          MaterialButton(
+            onPressed: () => context.go('/contact_us'),
+            child: Column(children: [
+              Text(
+                "Contact Us",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: contactUsScreen ? Colors.white : Colors.grey.shade300, 
+                ),
+              ),
+              const SizedBox(height: 6,),
+              contactUsScreen ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30)
                             ),
                 ) : const SizedBox()
@@ -142,14 +223,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Sign In",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: signInScreen ? Colors.deepPurple : Colors.grey, 
+                  color: signInScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
               signInScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30)
                             ),
                 ) : const SizedBox()
@@ -163,14 +244,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Register",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: registerScreen ? Colors.deepPurple : Colors.grey, 
+                  color: registerScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
               registerScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30)
                             ),
                 ) : const SizedBox()

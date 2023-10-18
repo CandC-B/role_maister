@@ -8,7 +8,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(path: "/register"),
+      appBar: const CustomAppBar(title: "Register"),
       drawer: customDrawer(context),
       body: const RegisterPage(),
     );
