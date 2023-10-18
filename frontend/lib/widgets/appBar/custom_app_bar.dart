@@ -48,14 +48,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     );
                   }
                 ) : null,
-        title: mobile ? Image.asset("images/role_maister_logo.png", width: 65,) : 
+        title: mobile ? Image.asset("images/small_logo.png", width: 65,) : 
         Row(
           children: [
             InkWell(
             onTap: () {
               context.go('/');
             },
-            child: Image.asset('images/role_maister_logo.png', width: 65,), // Reemplaza 'tu_imagen.png' con la ruta de tu imagen.
+            child: Image.asset('images/small_logo.png', width: 65,), // Reemplaza 'tu_imagen.png' con la ruta de tu imagen.
           ),
             appBarInfoButtons(context)
           ] 

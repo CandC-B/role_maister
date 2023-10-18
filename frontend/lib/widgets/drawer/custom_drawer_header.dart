@@ -14,7 +14,7 @@ Widget drawerHeader (BuildContext context) => Material(
           CircleAvatar(
             radius: 52,
             backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage("images/role_maister_logo.png"),
+            backgroundImage: AssetImage("images/small_logo.png"),
           ),
           SizedBox(height: 12,),
           Text("Username", style: TextStyle(
