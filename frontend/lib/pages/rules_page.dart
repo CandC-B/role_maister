@@ -5,6 +5,8 @@ class RulesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("Rules Page");
+    return const Center(
+        child: Text("Rules Page"),
+      );
   }
 }
