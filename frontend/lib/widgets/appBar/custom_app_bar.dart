@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String path;
-
-  // const CustomAppBar({super.key});
   const CustomAppBar({super.key, required this.path});
 
   @override
@@ -67,42 +65,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
         )
             
         ],
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         elevation: 0,
         centerTitle: false,
       );
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     automaticallyImplyLeading: mobile ? true : false,
-    //     // leading: Navigator.of(context).canPop() ? null : null,
-    //     title: mobile ? appBarTitle(context) : 
-    //     Row(
-    //       children: [
-    //         appBarTitle(context),
-    //         const SizedBox(width: 100,),
-    //         appBarInfoButtons(context)
-    //       ] 
-    //     ),
-    //     actions: mobile ? null : <Widget> [
-    //         appBarAuthenticationButtons(context),
-    //     ],
-    //     backgroundColor: Colors.black87,
-    //     elevation: 0,
-    //     centerTitle: false,
-    //   ),
-    //   drawer: mobile ? Drawer(
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.stretch,
-    //         children: 
-    //         [
-    //           drawerHeader(context),
-    //           drawerItems(context),
-    //         ],
-    //       ),
-    //     ),
-    //   ) : null,
-    // );
   }
 
   Widget appBarTitle (BuildContext context) => const Text(
@@ -217,68 +183,3 @@ class _CustomAppBarState extends State<CustomAppBar> {
     ],
   ); 
 }
-
-
-
-// Widget _menuItem ({required String title, required bool isActive}) {
-//   return ElevatedButton(
-//       onPressed: () => isActive = true,
-//       style: buttonPrimary,
-//       child: Column(children: [
-//         Text(
-//           title,
-//           style: TextStyle(
-//             fontWeight: FontWeight.bold,
-//             color: isActive ? Colors.deepPurple : Colors.grey, 
-//           ),
-//         ),
-//         const SizedBox(height: 6,),
-//         isActive ? Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-//           decoration: BoxDecoration(
-//             color: Colors.deepPurple,
-//             borderRadius: BorderRadius.circular(30)
-//           ),
-//         ) : const SizedBox()
-//       ],
-//     ),
-//   );
-// }
-
-// final ButtonStyle buttonPrimary = ElevatedButton.styleFrom(
-//   backgroundColor: const Color(0x00000000),
-//   elevation: 0,
-// );
-
-// Widget _menuItems (BuildContext context) => Wrap(
-//   children: [
-//      ElevatedButton(
-//       onPressed: () {},
-//       style: buttonPrimary,
-//       child: const Column(children: [
-//         Text(
-//           "title",
-//           style: TextStyle(
-//             fontWeight: FontWeight.bold,
-//             color: Colors.deepPurple, 
-//           ),
-//         ),
-//         // const SizedBox(height: 6,),
-//         // isActive ? Container(
-//         //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-//         //   decoration: BoxDecoration(
-//         //     color: Colors.deepPurple,
-//         //     borderRadius: BorderRadius.circular(30)
-//         //   ),
-//         // ) : const SizedBox()
-//       ],
-//     ),
-//   ),
-//   ],
-// );
-
-
-
-  
-
-

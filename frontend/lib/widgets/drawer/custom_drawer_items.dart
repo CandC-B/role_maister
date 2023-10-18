@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 Widget drawerItems (BuildContext context) => Wrap(
   children: [
@@ -8,8 +9,7 @@ Widget drawerItems (BuildContext context) => Wrap(
             fontWeight: FontWeight.bold,
             color: Colors.deepPurple, 
           ),),
-      onTap: () {} /*=> 
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage())*/,
+      onTap: () => context.go('/'),
     ),
     ListTile(
       leading: const Icon(Icons.rule_outlined, color: Colors.deepPurple,),
@@ -17,8 +17,15 @@ Widget drawerItems (BuildContext context) => Wrap(
             fontWeight: FontWeight.bold,
             color: Colors.deepPurple, 
           ),),
-      onTap: () {}/*=> 
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RulesPage())*/,
+      onTap: () => context.go('/rules'),
+    ),
+    ListTile(
+      leading: const Icon(Icons.help_outline, color: Colors.deepPurple,),
+      title: const Text("Pricing", style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurple, 
+          ),),
+      onTap: () => context.go('/pricing'),
     ),
     const Divider(color: Colors.black54,),
     ListTile(
@@ -27,17 +34,16 @@ Widget drawerItems (BuildContext context) => Wrap(
             fontWeight: FontWeight.bold,
             color: Colors.deepPurple, 
           ),),
-      onTap: () {}/*=> 
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RulesPage())*/,
+      onTap: () => context.go('/aboutUs'),
     ),
     ListTile(
-      leading: const Icon(Icons.help_outline, color: Colors.deepPurple,),
-      title: const Text("Help", style: TextStyle(
+      leading: const Icon(Icons.info_outline, color: Colors.deepPurple,),
+      title: const Text("Contact Us", style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.deepPurple, 
           ),),
-      onTap: () {}/*=> 
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RulesPage())*/,
+      onTap: () => context.go('/contactUs'),
     ),
+    
   ],
 );

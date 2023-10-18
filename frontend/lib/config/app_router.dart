@@ -1,36 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/screens/screens.dart';
-
-// TODO Change to GoRouter
-// class AppRouter {
-
-//   static Route onGenerateRoute(RouteSettings settings) {
-//     print("This is route: ${settings.name}");
-
-//     switch (settings.name) {
-//       case "/":
-//         return HomeScreen.route();
-//       case "/rules":
-//         return RulesScreen.route();
-//       case "/signin":
-//         return SignInScreen.route();
-//       case "/register":
-//         return RegisterScreen.route();
-//       default:
-//       return _errorRoute();
-//     }
-//   }
-
-//   static Route _errorRoute() {
-    
-//     return MaterialPageRoute(
-//       settings: const RouteSettings(name: "/error"),
-//       builder: (_) => Scaffold(appBar: AppBar(title: const Text("Error")),)
-//       );
-//   }
-// }
 
 class ApplicationRouter {
   GoRouter router = GoRouter(
@@ -40,7 +10,7 @@ class ApplicationRouter {
       pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: HomeScreen(),
+              child: const HomeScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
@@ -55,7 +25,7 @@ class ApplicationRouter {
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: RulesScreen(),
+              child: const RulesScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
@@ -70,7 +40,7 @@ class ApplicationRouter {
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: SignInScreen(),
+              child: const SignInScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
@@ -85,7 +55,7 @@ class ApplicationRouter {
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: RegisterScreen(),
+              child: const RegisterScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),

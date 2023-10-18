@@ -9,47 +9,6 @@ class SignInPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Container(
-          //   width: 360,
-          //   child: const Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text(
-          //         'Sign In to Role MAIster',
-          //         style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-          //       ),
-          //       SizedBox(
-          //         height: 30,
-          //       ),
-          //       Text(
-          //         "If you don't have an account",
-          //         style: TextStyle(
-          //           color: Colors.black54, fontWeight: FontWeight.bold
-          //         ),
-          //       ),
-          //       SizedBox(
-          //         height: 10,
-          //       ),
-          //       Row(
-          //         children: [
-          //           Text('You can',
-          //             style: TextStyle(
-          //               color: Colors.black54, fontWeight: FontWeight.bold
-          //             ),
-          //           ),
-          //           SizedBox(width: 15,),
-          //           Text('Register here!',
-          //             style: TextStyle(
-          //               color: Colors.deepPurple, fontWeight: FontWeight.bold
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // Image.asset("images/role_maister_logo.png", width: 200,),
-          // Log in buttons
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: MediaQuery.of(context).size.height / 6
@@ -58,7 +17,7 @@ class SignInPage extends StatelessWidget {
               width: 300,
               child: _formLogin(),
             ),
-            ),
+          ),
         ],
       ),
     );
