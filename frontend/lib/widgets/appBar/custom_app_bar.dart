@@ -107,7 +107,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Home",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: homeScreen ? Colors.white : Colors.white, 
+                  color: homeScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -128,7 +128,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Rules",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: rulesScreen ? Colors.white : Colors.white, 
+                  color: rulesScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -149,7 +149,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Pricing",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: pricingScreen ? Colors.white : Colors.white, 
+                  color: pricingScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -170,7 +170,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "About Us",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: aboutUsScreen ? Colors.white : Colors.white, 
+                  color: aboutUsScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -191,7 +191,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Contact Us",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: contactUsScreen ? Colors.white : Colors.white, 
+                  color: contactUsScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -223,7 +223,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Sign In",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: signInScreen ? Colors.white : Colors.white, 
+                  color: signInScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
@@ -244,7 +244,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 "Register",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: registerScreen ? Colors.white : Colors.white, 
+                  color: registerScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
