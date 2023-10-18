@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
-class RulesScreen extends StatelessWidget {
-  const RulesScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Rules"),
+      appBar: const CustomAppBar(title: "Profile"),
       drawer: customDrawer(context),
-      body: const RulesPage()
+      body: const ProfilePage()
     );
   }
 }
