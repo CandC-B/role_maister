@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_router.dart';
+import 'package:role_maister/screens/game_screen.dart';
 import 'screens/screens.dart';
 
 void main() {
@@ -14,8 +15,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: "Role MAIster",
       debugShowCheckedModeBanner: false,
-      onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: HomeScreen.routeName,
+      home: GameScreen(),
     );
   }
 }
