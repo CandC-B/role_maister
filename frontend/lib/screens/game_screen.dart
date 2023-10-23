@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/pages/pages.dart';
-import 'package:role_maister/widgets/widgets.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});

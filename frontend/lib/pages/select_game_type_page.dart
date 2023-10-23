@@ -7,7 +7,6 @@ class SelectGameType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool isHovering = false;
 
     return Scaffold(
       body: Container(
