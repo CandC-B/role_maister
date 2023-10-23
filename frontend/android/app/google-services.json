@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "146527793374",
+    "project_id": "role-maister",
+    "storage_bucket": "role-maister.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146527793374:android:5bcbe4ac8b95ed5332d24f",
+        "android_client_info": {
+          "package_name": "com.candc.role_maister"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3xwHCqI_jDsrFbJNCapqplws5TdU0HFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146527793374:android:bbfbfd6a53fff2ff32d24f",
+        "android_client_info": {
+          "package_name": "com.candc_b.role_maister"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3xwHCqI_jDsrFbJNCapqplws5TdU0HFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
