@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'page_widgets/image_color_filter.dart';
+import 'package:role_maister/widgets/widgets.dart';
+import 'dart:math';
 
 class SelectGameType extends StatelessWidget {
   const SelectGameType({super.key});
@@ -20,7 +21,7 @@ class SelectGameType extends StatelessWidget {
             height: size.height * 0.9,
             width: size.width * 0.8,
             color: Colors.black87,
-            child: const Row(
+            child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ImageColorFilter(
@@ -28,21 +29,30 @@ class SelectGameType extends StatelessWidget {
                     routeName: 'FantasyHome',
                     imageText: "SINGLE PLAYER",
                     isAvailable: true,
-                    angle: -0.985,
+                    height: size.height * 0.9,
+                    width: size.width * 0.8 / 3,
+                    isLink: true,
+                    preset: false,
                   ),
                   ImageColorFilter(
                     imagePath: 'assets/images/multiplayer.png',
                     routeName: 'FantasyHome',
                     imageText: "MULTIPLAYER",
                     isAvailable: false,
-                    angle: -0.985,
+                    height: size.height * 0.9,
+                    width: size.width * 0.8 / 3,
+                    isLink: false,
+                    preset: false,
                   ),
                   ImageColorFilter(
                     imagePath: 'assets/images/pairingmode.png',
                     routeName: 'FantasyHome',
                     imageText: "PAIRING MODE",
                     isAvailable: false,
-                    angle: -0.985,
+                    height: size.height * 0.9,
+                    width: size.width * 0.8 / 3,
+                    isLink: false,
+                    preset: false,
                   ),
                 ]),
           ),
