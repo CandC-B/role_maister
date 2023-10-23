@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Home"),
       drawer: customDrawer(context),
-      body: const InitGame()
+      body: const HomePage()
     );
   }
 }
