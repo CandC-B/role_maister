@@ -8,13 +8,19 @@ class ImageColorFilter extends StatefulWidget {
     required this.routeName,
     required this.imageText,
     required this.isAvailable,
-    required this.angle,
+    required this.width,
+    required this.height,
+    required this.isLink,
+    required this.preset,
   });
   final String imagePath;
   final String routeName;
   final String imageText;
   final bool isAvailable;
-  final double angle;
+  final double width;
+  final double height;
+  final bool isLink;
+  final bool preset;
 
   @override
   _ImageColorFilterState createState() => _ImageColorFilterState();
@@ -26,9 +32,6 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 0.8) / 3;
-    final height = (MediaQuery.of(context).size.height) * 0.9;
-
     return InkWell(
       onHover: (hovering) {
         setState(() {
@@ -37,13 +40,13 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
       },
       child: ClipRect(
         child: ColorFiltered(
-          colorFilter: isHovering
+          colorFilter: isHovering || widget.preset
               ? ColorFilter.mode(Colors.transparent, BlendMode.color)
               : ColorFilter.mode(Colors.grey, BlendMode.saturation),
           child: Stack(
             children: [
               Container(
-                width: width,
+                width: widget.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(widget.imagePath),
@@ -52,8 +55,8 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                 ),
               ),
               Container(
-                width: width,
-                height: height,
+                width: widget.width,
+                height: widget.height,
                 alignment: Alignment.center,
                 child: FittedBox(
                   fit: BoxFit.contain,
@@ -68,8 +71,8 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                 ),
               ),
               SizedBox(
-                width: width,
-                height: height,
+                width: widget.width,
+                height: widget.height,
                 child: CustomPaint(
                     painter: LinePainter(
                         color: widget.isAvailable
@@ -77,11 +80,11 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                             : Colors.deepPurple)),
               ),
               Container(
-                width: width,
-                height: height,
+                width: widget.width,
+                height: widget.height,
                 alignment: Alignment.center,
                 child: Transform.rotate(
-                  angle: -atan(height/width),
+                  angle: -atan(widget.height/widget.width),
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: Text(
@@ -106,12 +109,9 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
         // Handle the tap action here.
         // TODO: redirect to next page widget.routeName
         if (widget.isAvailable) {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => InitGame(),
-          //   ),
-          // );
+          if (widget.isLink) {
+
+          }
         }
       },
     );
