@@ -12,6 +12,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    return FantasyHome();
+  }
+}
+
+class FantasyHome extends StatelessWidget {
+  const FantasyHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
@@ -56,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           width: size.width * 0.2,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
+                  shape: StadiumBorder(),
                   backgroundColor: Colors.deepPurple,
                   textStyle: const TextStyle(
                       fontSize: 36, fontWeight: FontWeight.bold)),

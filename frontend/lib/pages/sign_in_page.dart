@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  TextEditingController email = TextEditingController ();
+  TextEditingController password = TextEditingController ();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -22,12 +30,13 @@ class SignInPage extends StatelessWidget {
       ),
     );
   }
-}
+
 
 Widget _formLogin() {
   return Column(
     children: [
       TextField(
+        controller: email,
         decoration: InputDecoration(
           hintText: "Enter email or username",
           fillColor: Colors.blueGrey[50],
@@ -48,6 +57,8 @@ Widget _formLogin() {
         height: 30,
       ),
       TextField(
+        obscureText: true,
+        controller: password,
         decoration: InputDecoration(
           hintText: "Password",
           counterText: "Forgot password?",
@@ -88,17 +99,21 @@ Widget _formLogin() {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15))),
           onPressed: () async {
-            // try {
-            //   final credential = await FirebaseAuth.instance
-            //       .signInWithEmailAndPassword(
-            //           email: emailAddress, password: password);
-            // } on FirebaseAuthException catch (e) {
-            //   if (e.code == 'user-not-found') {
-            //     print('No user found for that email.');
-            //   } else if (e.code == 'wrong-password') {
-            //     print('Wrong password provided for that user.');
-            //   }
-            // }
+            try {
+              final credential = await FirebaseAuth.instance
+                  .signInWithEmailAndPassword(
+                      email: email.text, password: password.text);
+              User? user = credential.user;
+              // print('User signed in: ${user?.email}');
+              // ignore: use_build_context_synchronously
+              context.go('/');
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'user-not-found') {
+                print('No user found for that email.');
+              } else if (e.code == 'wrong-password') {
+                print('Wrong password provided for that user.');
+              }
+            }
           },
           child: const SizedBox(
             width: double.infinity,
@@ -166,4 +181,5 @@ Widget _loginWithButton({required String image, bool isActive = false}) {
       width: 35,
     )),
   );
+}
 }
