@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class WebFooter extends StatefulWidget {
   const WebFooter({super.key});
@@ -24,11 +25,11 @@ class BoxyDesktopFooter extends StatelessWidget {
         if (constraints.maxWidth > 700) {
           return Container(
             color: Colors.black,
-            child: Row(
+            child: const Row(
               children: [
                 DesktopFooterColumnOne(),
                 DesktopFooterColumnTwo(),
-                const SizedBox(width: 50),
+                SizedBox(width: 50),
                 DesktopFooterColumnThree(),
                 Flexible(
                   child: Align(
@@ -41,18 +42,21 @@ class BoxyDesktopFooter extends StatelessWidget {
           );
         } else {
           return Container(
+            alignment: Alignment.center,
             color: Colors.black,
-            child: Row(
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 DesktopFooterColumnOne(),
                 Flexible(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Divider(color: Colors.black, thickness: 0.5),
-                      DesktopFooterColumnTwo(),
-                      const Divider(color: Colors.black, thickness: 0.5),
+                      Divider(color: Colors.black, thickness: 0.5),
+                      DesktopFooterColumnTwo(), // TODO make that this part centers like the other two (Check web in mobile window size)
+                      Divider(color: Colors.black, thickness: 0.5),
                       DesktopFooterColumnThree(),
-                      const Divider(color: Colors.black, thickness: 0.5),
+                      Divider(color: Colors.black, thickness: 0.5),
                       FooterCopyright(),
                     ],
                   ),
@@ -67,6 +71,8 @@ class BoxyDesktopFooter extends StatelessWidget {
 }
 
 class DesktopFooterColumnOne extends StatelessWidget {
+  const DesktopFooterColumnOne({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -85,7 +91,6 @@ final RichText appLogoMark = RichText(
           image: AssetImage("images/small_logo.png"),
           width: 200,
         ),
-
       ),
     ],
   ),
@@ -96,31 +101,13 @@ class DesktopFooterColumnTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Column(
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TextButton(
-          onPressed: () => (), // TODO: Add link to about us page
-          child: const Text(
-            "About Us",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () => (), // TODO: Add link to contact us page
-          child: const Text(
-            "Contact Us",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-
-          ),
-        ),
+        AboutUsIconAndText(),
+        ContactUsIconAndText(),
       ],
     );
-
   }
 }
 
@@ -161,6 +148,8 @@ class DesktopFooterColumnThree extends StatelessWidget {
 }
 
 class FooterCopyright extends StatelessWidget {
+  const FooterCopyright({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Text(
@@ -173,6 +162,67 @@ class FooterCopyright extends StatelessWidget {
 }
 
 
+
+class AboutUsIconAndText extends StatelessWidget {
+  const AboutUsIconAndText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+    Row(
+      children: [
+        IconButton(
+              icon: const Icon(
+                Icons.info_outline,
+                size: 20.0,
+                color: Colors.white,
+              ),
+              color: const Color(0xFF162A49),
+              onPressed: () {},
+            ),
+            TextButton(
+              onPressed: () => context.go('/about_us'),
+              child: const Text(
+                "About Us",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+      ],
+    );
+  }
+}
+
+class ContactUsIconAndText extends StatelessWidget {
+  const ContactUsIconAndText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.mail_outline,
+                size: 20.0,
+                color: Colors.white,
+              ),
+              color: const Color(0xFF162A49),
+              onPressed: () => context.go('/contact_us'),
+            ),
+            TextButton(
+              onPressed: () => context.go('/contact_us'),
+              child: const Text(
+                "Contact Us",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+  }
+}
 // import 'package:flutter/material.dart';
 // import 'package:footer/footer.dart';
 
