@@ -10,7 +10,12 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Register"),
       drawer: customDrawer(context),
-      body: const RegisterPage(),
+      body: ListView(
+        children: const [
+          RegisterPage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }

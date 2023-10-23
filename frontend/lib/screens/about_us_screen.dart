@@ -10,7 +10,12 @@ class AboutUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "About Us"),
       drawer: customDrawer(context),
-      body: const AboutUsPage()
+      body: ListView(
+        children: const [
+          AboutUsPage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }

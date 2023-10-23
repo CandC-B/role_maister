@@ -38,7 +38,7 @@ Widget drawerItems (BuildContext context) => Wrap(
     ),
     const Divider(color: Colors.white,),
     ListTile(
-      leading: const Icon(Icons.info, color: Colors.white,),
+      leading: const Icon(Icons.info_outline, color: Colors.white,),
       title: const Text("About Us", style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white, 

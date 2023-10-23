@@ -10,7 +10,12 @@ class PricingScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Pricing"),
       drawer: customDrawer(context),
-      body: const PricingPage()
+      body: ListView(
+        children: const [
+          PricingPage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }

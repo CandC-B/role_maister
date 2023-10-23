@@ -9,7 +9,12 @@ class RulesScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Rules"),
       drawer: customDrawer(context),
-      body: const RulesPage()
+      body: ListView(
+        children: const [
+          RulesPage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }

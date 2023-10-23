@@ -10,7 +10,12 @@ class ContactUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Contact Us"),
       drawer: customDrawer(context),
-      body: const ContactUsPage()
+      body: ListView(
+        children: const [
+          ContactUsPage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }
