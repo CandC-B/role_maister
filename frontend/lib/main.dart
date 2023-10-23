@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_router.dart';
+import 'package:role_maister/screens/game_screen.dart';
+import 'screens/screens.dart';
 
 void main() {
   runApp(const MyApp()
