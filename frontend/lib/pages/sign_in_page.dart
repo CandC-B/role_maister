@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -106,6 +109,8 @@ Widget _formLogin() {
               User? user = credential.user;
               // print('User signed in: ${user?.email}');
               // ignore: use_build_context_synchronously
+              AppSingleton singleton = AppSingleton();
+              singleton.user = user;
               context.go('/');
             } on FirebaseAuthException catch (e) {
               if (e.code == 'user-not-found') {
