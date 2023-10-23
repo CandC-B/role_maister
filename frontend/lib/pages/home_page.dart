@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'select_game_type_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,14 +70,14 @@ class FantasyHome extends StatelessWidget {
                   textStyle: const TextStyle(
                       fontSize: 36, fontWeight: FontWeight.bold)),
               onPressed: () {
-                //TODO: Route to SelectGameType page
+                //TODO: Poner la ruta buena
 
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => SelectGameType(),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SelectGameType(),
+                  ),
+                );
               },
               child: const FittedBox(
                   fit: BoxFit.contain, child: Text("Play Game"))),
