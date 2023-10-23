@@ -10,7 +10,12 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Profile"),
       drawer: customDrawer(context),
-      body: const ProfilePage()
+      body: ListView(
+        children: const [
+          ProfilePage(),
+          WebFooter(),
+        ],
+      )
     );
   }
 }
