@@ -2,22 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'select_game_type_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return FantasyHome();
-  }
-}
-
-class FantasyHome extends StatelessWidget {
-  const FantasyHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +23,7 @@ class FantasyHome extends StatelessWidget {
         Container(
           height: size.height / 2,
           width: size.width,
-          alignment: Alignment(0.0, -0.1),
+          alignment: const Alignment(0.0, -0.1),
           child: FittedBox(
             fit: BoxFit.contain,
             child: DefaultTextStyle(
@@ -86,3 +72,4 @@ class FantasyHome extends StatelessWidget {
     );
   }
 }
+

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -108,9 +106,9 @@ Widget _formLogin() {
                       email: email.text, password: password.text);
               User? user = credential.user;
               // print('User signed in: ${user?.email}');
-              // ignore: use_build_context_synchronously
               AppSingleton singleton = AppSingleton();
               singleton.user = user;
+              // ignore: use_build_context_synchronously
               context.go('/');
             } on FirebaseAuthException catch (e) {
               if (e.code == 'user-not-found') {

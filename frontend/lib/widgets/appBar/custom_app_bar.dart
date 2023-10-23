@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -21,6 +22,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool pricingScreen= false;
   bool aboutUsScreen = false;
   bool contactUsScreen = false;
+  AppSingleton singleton = AppSingleton();
 
   checkCurrentPath(title) {
         switch (title) {
@@ -79,7 +81,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ] 
         ),
         actions: mobile ? null : <Widget> [ Center(
-            child: appBarAuthenticationButtons(context),
+            child: singleton.user != null ? appBarProfileButtons(context) : appBarAuthenticationButtons(context),
         )
             
         ],
@@ -263,4 +265,34 @@ class _CustomAppBarState extends State<CustomAppBar> {
       const SizedBox(width: 20,),
     ],
   ); 
+
+
+  Widget appBarProfileButtons (BuildContext context) => Wrap (
+    alignment: WrapAlignment.end,
+    children: [
+      MaterialButton(
+            onPressed: () => context.go('/profile'),
+            child: Column(children: [
+              IconButton(
+              icon: const Icon(
+                Icons.account_circle_outlined,
+                size: 20.0,
+                color: Colors.white,
+              ),
+              color: const Color(0xFF162A49),
+              onPressed: () {},
+              ),
+              const SizedBox(height: 6,),
+              signInScreen ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30)
+                            ),
+                ) : const SizedBox()
+              ],
+            ),
+        ),
+     ],
+  );
 }

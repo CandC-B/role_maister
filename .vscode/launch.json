@@ -1,24 +1,24 @@
 {
     "version": "0.2.0",
     "configurations": [
+        // {
+        //     "name": "frontend",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "program": "frontend/lib"
+        // },
         {
-            "name": "frontend",
+            "name": "Chrome",
             "request": "launch",
             "type": "dart",
-            "program": "frontend/lib"
+            "deviceId": "chrome",
+            "program": "frontend/lib/main.dart"
         },
         {
             "name": "Android",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5554",
-            "program": "frontend/lib/main.dart"
-        },
-        {
-            "name": "Chrome",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "chrome",
             "program": "frontend/lib/main.dart"
         },
     ],

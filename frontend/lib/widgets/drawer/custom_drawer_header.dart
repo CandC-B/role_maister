@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/app_singleton.dart';
 // TODO check if autenticated or not
+AppSingleton singleton = AppSingleton();
 Widget drawerHeader (BuildContext context) => Material(
   color: Colors.deepPurple,
   child: InkWell(
@@ -17,7 +19,7 @@ Widget drawerHeader (BuildContext context) => Material(
             backgroundImage: AssetImage("images/small_logo.png"),
           ),
           SizedBox(height: 12,),
-          Text("Username", style: TextStyle(
+          Text("Username", style: TextStyle( // TODO change to user email
               fontWeight: FontWeight.bold,
               color: Colors.white, 
             ),
