@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/firebase_logic.dart';
 
 enum ProfileItems { profile, logout }
+FirebaseService firebase = FirebaseService();
 
 class PopupMenuProfile extends StatefulWidget {
   const PopupMenuProfile({super.key});
@@ -24,7 +26,7 @@ class _PopupMenuProfileState extends State<PopupMenuProfile> {
               if (item == ProfileItems.profile) {
                 context.go("/profile");
               } else if (item == ProfileItems.logout) {
-                // TODO Log out
+                firebase.signOut(context);
               }
             });
           },
