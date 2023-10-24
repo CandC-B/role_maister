@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/widgets/popup_menu_profile.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -83,7 +84,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ] 
         ),
         actions: mobile ? null : <Widget> [ Center(
-            child: singleton.user != null ? appBarProfileButtons(context) : appBarAuthenticationButtons(context),
+            child: singleton.user != null ? const PopupMenuProfile(): appBarAuthenticationButtons(context),
         )
             
         ],
