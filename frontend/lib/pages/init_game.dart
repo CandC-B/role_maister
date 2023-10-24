@@ -8,6 +8,7 @@ class InitGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    UserStatistics character = UserStatistics.random();
 
     return Scaffold(
       body: Container(
@@ -24,9 +25,9 @@ class InitGame extends StatelessWidget {
             child: Row(children: [
               Expanded(
                   flex: 2,
-                  child: GameForm(),
+                  child: GameForm(character: character),
                 ),
-              Expanded(flex: 1, child: StatsTab(userStats: UserStatistics.random(),)),
+              Expanded(flex: 1, child: StatsTab(userStats: character,)),
             ]),
           ),
         ),

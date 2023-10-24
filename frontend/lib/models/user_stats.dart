@@ -35,10 +35,12 @@ class UserStatistics {
     required this.hp,
   });
 
+  
+
  // Factory constructor to generate random UserStatistics
   factory UserStatistics.random() {
     final career = _generateCareer();
-    final attributes = _generateRandomCarrerAndAttributes(career);
+    final attributes = _generateRandomAttributes(career);
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
     final name = _getRandomName(career);
@@ -74,7 +76,7 @@ class UserStatistics {
   }
 
 
-  static Map<String, int> _generateRandomCarrerAndAttributes(
+  static Map<String, int> _generateRandomAttributes(
       String selectedCareer) {
     Map<String, int> attributes = {
       "Strength": 0,
@@ -556,5 +558,24 @@ class UserStatistics {
         ' cash: $cash,'
         ' hp: $hp'
         '}';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'characterLevel': characterLevel,
+      'career': career,
+      'attributes': attributes,
+      'skills': skills,
+      'talents': talents,
+      'name': name,
+      'appearance': appearance,
+      'personalAgenda': personalAgenda,
+      'friend': friend,
+      'rival': rival,
+      'gear': gear,
+      'signatureItem': signatureItem,
+      'cash': cash,
+      'hp': hp,
+    };
   }
 }
