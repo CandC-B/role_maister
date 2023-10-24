@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:role_maister/models/models.dart';
+import 'dart:convert';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({Key? key}) : super(key: key);
@@ -25,9 +26,10 @@ class _GamePlayersState extends State<GamePlayers> {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            Center(child: StatsTab()),
+            // TODO: poner el de Firebase
+            Center(child: StatsTab(userStats: UserStatistics.random(),)),
             Center(child: PlayersTab()),
           ],
         ),
@@ -37,9 +39,18 @@ class _GamePlayersState extends State<GamePlayers> {
 }
 
 // Stats tab
-class StatsTab extends StatelessWidget {
-  const StatsTab({Key? key}) : super(key: key);
+class StatsTab extends StatefulWidget {
+  const StatsTab({
+    super.key,
+    required this.userStats,
+  });
+  final UserStatistics userStats;
 
+  @override
+  State<StatsTab> createState() => _StatsTabState();
+}
+
+class _StatsTabState extends State<StatsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +58,7 @@ class StatsTab extends StatelessWidget {
       backgroundColor: Colors.black87,
       body: Container(
         // child: const Text("Stats Tab Content"),
-        child: const Stats(),
+        child: Stats(userStats: widget.userStats),
       )
       
     );
@@ -111,64 +122,17 @@ class PlayerCard extends StatelessWidget {
   }
 }
 
-class UserStatistics {
-  final int characterLevel;
-  final String career;
-  final Map<String, int> attributes;
-  final List<String> skills;
-  final List<String> talents;
-  final String name;
-  final String appearance;
-  final String personalAgenda;
-  final String friend;
-  final String rival;
-  final String gear;
-  final String signatureItem;
-  final int cash;
-  final int hp;
 
-  UserStatistics({
-    required this.characterLevel,
-    required this.career,
-    required this.attributes,
-    required this.skills,
-    required this.talents,
-    required this.name,
-    required this.appearance,
-    required this.personalAgenda,
-    required this.friend,
-    required this.rival,
-    required this.gear,
-    required this.signatureItem,
-    required this.cash,
-    required this.hp,
-  });
-}
 
 class Stats extends StatelessWidget {
-  const Stats({super.key});
+  const Stats({super.key, required this.userStats});
+  final UserStatistics userStats;
 
   @override
   Widget build(BuildContext context) {
     // TODO: This is Mock user statistics, replace with real data
     // TODO: Improve the UI 
     // TODO: Reorder the stats
-    UserStatistics userStats = UserStatistics(
-      characterLevel: 30,
-      career: 'Software Engineer',
-      attributes: {'fuerza': 80, 'agilidad': 90, 'empatia': 70, 'iq': 85},
-      skills: ['Skill 1', 'Skill 2', 'Skill 3'],
-      talents: ['Talent 1', 'Talent 2'],
-      name: 'John Doe',
-      appearance: 'Tall, dark hair',
-      personalAgenda: 'Complete projects on time',
-      friend: 'Very Satisfied',
-      rival: 'Extremely Dissatisfied',
-      gear: 'Laptop, headset',
-      signatureItem: 'Favorite Pen',
-      cash: 1000,
-      hp: 95,
-    );
 
      
     return Scaffold(
@@ -187,13 +151,13 @@ class Stats extends StatelessWidget {
                 _buildStatItem('Character Level', Icons.bar_chart, userStats.characterLevel.toString(), Colors.white),
                 _buildStatItem('Career', Icons.school, userStats.career, Colors.white),
                 _buildAttributeStats(userStats.attributes),
-                _buildStatItem('Skills', Icons.list, userStats.skills.join(', '), Colors.white),
+                _buildStatItem('Skills', Icons.list, userStats.skills.toString().replaceAll(RegExp("[{}]"), ""), Colors.white),
                 _buildStatItem('Talents', Icons.star, userStats.talents.join(', '), Colors.white),
                 _buildStatItem('Appearance', Icons.face, userStats.appearance, Colors.white),
                 _buildStatItem('Personal Agenda', Icons.assignment, userStats.personalAgenda, Colors.white),
                 _buildStatItem('Friend', Icons.sentiment_very_satisfied, userStats.friend, Colors.white),
                 _buildStatItem('Rival', Icons.sentiment_very_dissatisfied, userStats.rival, Colors.white),
-                _buildStatItem('Gear', Icons.accessibility, userStats.gear, Colors.white),
+                _buildStatItem('Gear', Icons.accessibility, userStats.gear.join(', '), Colors.white),
                 _buildStatItem('Signature Item', Icons.edit, userStats.signatureItem, Colors.white),
                 _buildStatItem('Cash', Icons.attach_money, '\$${userStats.cash}', Colors.white),  
               ],
@@ -221,19 +185,19 @@ class Stats extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text('Fuerza: ${attributes['fuerza']}', style: TextStyle(color: Colors.white)),
+          title: Text('Strength: ${attributes['Strength']}', style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text('Agilidad: ${attributes['agilidad']}', style: TextStyle(color: Colors.white)),
+          title: Text('Agility: ${attributes['Agility']}', style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text('Empatia: ${attributes['empatia']}', style: TextStyle(color: Colors.white)),
+          title: Text('Empathy: ${attributes['Empathy']}', style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('IQ: ${attributes['iq']}', style: TextStyle(color: Colors.white)),
+          title: Text('Wits: ${attributes['Wits']}', style: TextStyle(color: Colors.white)),
         ),
       ],
     );

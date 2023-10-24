@@ -6,3 +6,5 @@ export 'footer.dart';
 
 export 'game_chat.dart';
 export 'game_players.dart';
+export 'image_color_filter.dart';
+export 'game_form.dart';
