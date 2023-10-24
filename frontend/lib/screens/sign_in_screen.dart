@@ -9,6 +9,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "Sign In"),
+      drawer: customDrawer(context),
       body: ListView(
         children: const [
           SignInPage(),

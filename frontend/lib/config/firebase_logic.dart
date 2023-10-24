@@ -33,7 +33,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
-import 'package:role_maister/config/app_router.dart';
+import 'package:role_maister/pages/register_page.dart';
+
+FirebaseService firebase = FirebaseService();
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -106,15 +108,12 @@ class FirebaseService {
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = credential.user;
       // print('User signed in: ${user?.email}');
-      AppSingleton singleton = AppSingleton();
       singleton.user = user;
-      context.go("/");
-      context.push("/");
+      context.go("/rules");
+      context.push("/rules");
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+      if (e.code == 'email-already-in-use') {
+        print("The account already exists for that email") ;
       }
     } catch (e) {
       print(e);

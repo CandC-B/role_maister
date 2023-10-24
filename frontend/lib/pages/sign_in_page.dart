@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
-import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
-
-FirebaseService firebase = FirebaseService();
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
