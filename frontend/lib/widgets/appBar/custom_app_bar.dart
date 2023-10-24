@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/widgets/popup_menu_profile.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -21,6 +23,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool pricingScreen= false;
   bool aboutUsScreen = false;
   bool contactUsScreen = false;
+  AppSingleton singleton = AppSingleton();
 
   checkCurrentPath(title) {
         switch (title) {
@@ -43,6 +46,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    print(singleton.user);
     checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
@@ -72,6 +76,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             InkWell(
             onTap: () {
               context.go('/');
+              context.push('/');
             },
             child: Image.asset('images/small_logo.png', width: 65,), // Reemplaza 'tu_imagen.png' con la ruta de tu imagen.
           ),
@@ -79,7 +84,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ] 
         ),
         actions: mobile ? null : <Widget> [ Center(
-            child: appBarAuthenticationButtons(context),
+            child: singleton.user != null ? const PopupMenuProfile(): appBarAuthenticationButtons(context),
         )
             
         ],
@@ -101,7 +106,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MaterialButton(
-            onPressed: () => context.go('/'),
+            onPressed: () {
+              context.go("/");
+              context.push("/");
+            } ,
             child: Column(children: [
               Text(
                 "Home",
@@ -263,4 +271,34 @@ class _CustomAppBarState extends State<CustomAppBar> {
       const SizedBox(width: 20,),
     ],
   ); 
+
+
+  Widget appBarProfileButtons (BuildContext context) => Wrap (
+    alignment: WrapAlignment.end,
+    children: [
+      MaterialButton(
+            onPressed: () => context.go('/profile'),
+            child: Column(children: [
+              IconButton(
+              icon: const Icon(
+                Icons.account_circle_outlined,
+                size: 20.0,
+                color: Colors.white,
+              ),
+              color: const Color(0xFF162A49),
+              onPressed: () {},
+              ),
+              const SizedBox(height: 6,),
+              signInScreen ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30)
+                            ),
+                ) : const SizedBox()
+              ],
+            ),
+        ),
+     ],
+  );
 }

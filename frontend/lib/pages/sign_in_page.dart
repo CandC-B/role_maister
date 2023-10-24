@@ -1,9 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/config/firebase_logic.dart';
+
+FirebaseService firebase = FirebaseService();
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -101,25 +102,7 @@ Widget _formLogin() {
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15))),
-          onPressed: () async {
-            try {
-              final credential = await FirebaseAuth.instance
-                  .signInWithEmailAndPassword(
-                      email: email.text, password: password.text);
-              User? user = credential.user;
-              // print('User signed in: ${user?.email}');
-              // ignore: use_build_context_synchronously
-              AppSingleton singleton = AppSingleton();
-              singleton.user = user;
-              context.go('/');
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'user-not-found') {
-                print('No user found for that email.');
-              } else if (e.code == 'wrong-password') {
-                print('Wrong password provided for that user.');
-              }
-            }
-          },
+          onPressed: () => firebase.signIn(email.text, password.text, context),
           child: const SizedBox(
             width: double.infinity,
             height: 50,

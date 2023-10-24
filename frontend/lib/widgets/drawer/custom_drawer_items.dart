@@ -12,6 +12,7 @@ Widget drawerItems (BuildContext context) => Wrap(
       onTap: () {
         context.pop();
         context.go('/');
+        context.push('/');
       }
     ),
     ListTile(
