@@ -109,7 +109,9 @@ Widget _formLogin() {
               AppSingleton singleton = AppSingleton();
               singleton.user = user;
               // ignore: use_build_context_synchronously
-              context.go('/');
+              context.go("/");
+              // ignore: use_build_context_synchronously
+              context.push("/");
             } on FirebaseAuthException catch (e) {
               if (e.code == 'user-not-found') {
                 print('No user found for that email.');

@@ -45,6 +45,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    print(singleton.user);
     checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
@@ -74,6 +75,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             InkWell(
             onTap: () {
               context.go('/');
+              context.push('/');
             },
             child: Image.asset('images/small_logo.png', width: 65,), // Reemplaza 'tu_imagen.png' con la ruta de tu imagen.
           ),
@@ -103,7 +105,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MaterialButton(
-            onPressed: () => context.go('/'),
+            onPressed: () {
+              context.go("/");
+              context.push("/");
+            } ,
             child: Column(children: [
               Text(
                 "Home",
