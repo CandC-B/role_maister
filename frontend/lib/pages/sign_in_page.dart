@@ -34,6 +34,17 @@ class _SignInPageState extends State<SignInPage> {
 Widget _formLogin() {
   return Column(
     children: [
+      const Text(
+          "Sign In",
+          style: TextStyle(
+            color: Colors.deepPurple,
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 58.5,
+        ),
       TextField(
         controller: email,
         decoration: InputDecoration(

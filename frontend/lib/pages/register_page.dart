@@ -31,8 +31,12 @@ class _RegisterPageState extends State<RegisterPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height / 7),
+            padding: const EdgeInsets.fromLTRB(
+                        16.0,  // Espacio a la izquierda
+                        150.0,   // Espacio en la parte superior
+                        16.0,  // Espacio a la derecha
+                        270.0,  // Espacio en la parte inferior
+                      ),
             child: Container(
               // TODO poner un recuadro e imagen de fondo
               width: 300,
@@ -56,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
         const SizedBox(
-          height: 58.5,
+          height: 60,
         ),
         TextField(
           controller: email,
