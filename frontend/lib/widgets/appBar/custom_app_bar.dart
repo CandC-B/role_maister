@@ -17,7 +17,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   bool mobile = false;
   bool homeScreen = false;
-  bool rulesScreen = false;
+  bool guideScreen = false;
   bool signInScreen = false;
   bool registerScreen = false;
   bool pricingScreen= false;
@@ -27,8 +27,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   checkCurrentPath(title) {
         switch (title) {
-      case 'Rules':
-        rulesScreen = true;
+      case 'Guide':
+        guideScreen = true;
       case 'Sign In':
         signInScreen = true;
       case 'Register':
@@ -39,14 +39,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
         aboutUsScreen = true;
       case 'Contact Us':
         contactUsScreen = true;
-      default:
+      case 'Home':
         homeScreen = true;
+      default:
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(singleton.user);
     checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
@@ -130,17 +130,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
           ),
           MaterialButton(
-            onPressed: () => context.go('/rules'),
+            onPressed: () => context.go('/guide'),
             child: Column(children: [
               Text(
-                "Rules",
+                "Guide",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: rulesScreen ? Colors.white : Colors.grey.shade300, 
+                  color: guideScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
-              rulesScreen ? Container(
+              guideScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
