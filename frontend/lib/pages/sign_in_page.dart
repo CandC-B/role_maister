@@ -13,19 +13,31 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController password = TextEditingController ();
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height / 6),
-            child: Container(
-              width: 300,
-              child: _formLogin(),
+    return Container(
+      decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/dnd.png'),
+              fit: BoxFit.cover,
             ),
           ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 550.0, vertical: 110.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+              color: Colors.deepPurple, // Border color
+              width: 2.0, // Border width
+            ),
+            color: Colors.white70,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+            child: Container(
+              child: _formLogin(),
+            ),
+            ),
+          ),
       ),
     );
   }
@@ -143,9 +155,9 @@ Widget _formLogin() {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _loginWithButton(image: "images/google_logo.png"),
+          _loginWithButton(image: "images/google_logo.png", isActive: true),
           _loginWithButton(image: "images/github_logo.png", isActive: true),
-          _loginWithButton(image: "images/facebook_logo.png"),
+          _loginWithButton(image: "images/facebook_logo.png", isActive: true),
         ],
       )
     ],
