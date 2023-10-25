@@ -562,18 +562,18 @@ class UserStatistics {
 
   Map<String, dynamic> toMap() {
     return {
-      'characterLevel': characterLevel,
+      'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
       'skills': skills,
       'talents': talents,
       'name': name,
       'appearance': appearance,
-      'personalAgenda': personalAgenda,
+      'personal_agenda': personalAgenda,
       'friend': friend,
       'rival': rival,
       'gear': gear,
-      'signatureItem': signatureItem,
+      'signature_item': signatureItem,
       'cash': cash,
       'hp': hp,
     };

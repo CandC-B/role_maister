@@ -11,19 +11,19 @@ Future<void> _createNewGame(UserStatistics userStats, String history) async {
     mapUserStats["num_players"]= 1;
     mapUserStats["story_description"]= history;
 
-    try {
-      final response = await http.post(
-        // TODO: add constants.dart in utils folder
-        Uri.parse("http://localhost:8000/game/"),
-        body: jsonEncode(
-          mapUserStats
-        )
-      );
-    } catch (e){
-      print(e);
-    }
-    
+    // Set the headers for the request, including the content type.
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
 
+    final response = await http.post(
+        // TODO: add constants.dart in utils folder
+        Uri.http("localhost:8000", "/game/"),
+        headers: headers,
+        body: jsonEncode(mapUserStats)
+    );
+    var coralMessage = json.decode(response.body)["message"];
+    print(coralMessage);
 }
 
 
