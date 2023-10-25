@@ -3,16 +3,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/models/models.dart';
 import 'package:role_maister/pages/register_page.dart';
 
 FirebaseService firebase = FirebaseService();
 
+FirebaseService firestoreService = FirebaseService();
 
-  FirebaseService firestoreService = FirebaseService();
-  
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<String> createCharacter(Map<String, dynamic> character) async {
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('character').add(character);
+      return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<String> createGame(Map<String, dynamic> gameConfig) async {
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('game').add(gameConfig);
+      return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   Future<void> saveMessage(String messageText, DateTime sentAt,
       String currentGameId, String sentBy) async {
@@ -45,21 +65,20 @@ class FirebaseService {
         .collection('messages')
         .orderBy('sentAt', descending: true)
         .snapshots();
-        // .map((QuerySnapshot querySnapshot) {
-        //     List<Map<String, dynamic>> allMessages = [];
-        //     querySnapshot.docs.forEach((doc) {
-        //       if (doc.exists) {
-        //         allMessages.add(doc.data() as Map<String, dynamic>);
-        //       }
-        //     });
-        //     return allMessages;
-        //   }
-        // );
+    // .map((QuerySnapshot querySnapshot) {
+    //     List<Map<String, dynamic>> allMessages = [];
+    //     querySnapshot.docs.forEach((doc) {
+    //       if (doc.exists) {
+    //         allMessages.add(doc.data() as Map<String, dynamic>);
+    //       }
+    //     });
+    //     return allMessages;
+    //   }
+    // );
   }
 
   Future<void> signIn(
-      String email, String password, BuildContext context
-  ) async {
+      String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -78,8 +97,7 @@ class FirebaseService {
   }
 
   Future<void> signUp(
-      String email, String password, BuildContext context
-  ) async {
+      String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -90,7 +108,7 @@ class FirebaseService {
       context.push("/rules");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print("The account already exists for that email") ;
+        print("The account already exists for that email");
       }
     } catch (e) {
       print(e);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:role_maister/config/app_singleton.dart';
+
 // TODO check if autenticated or not
-AppSingleton singleton = AppSingleton();
 Widget drawerHeader (BuildContext context) => Material(
   color: Colors.deepPurple,
   child: InkWell(
