@@ -21,9 +21,7 @@ class GamePage extends StatelessWidget {
             flex: 3,
             child: Container(
               height: size.height,
-              // child: const GameChat(),
-              // child: const Text("GameChat"),
-              child: GameChat(),
+              child: GameChat(gameId: 'm6VtWFlpFAS7ePjF6q0i'),
             ),
           ),
         ],

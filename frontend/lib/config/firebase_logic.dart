@@ -1,33 +1,3 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// Future<void> fetchMessagesByGameId(String groupId) async {
-//   final CollectionReference messagesCollection = FirebaseFirestore.instance
-//       .collection('message')
-//       .doc(groupId.trim())
-//       .collection('messages');
-
-//   try {
-//     final QuerySnapshot querySnapshot =
-//         await messagesCollection.orderBy('sentAt').get();
-
-//     final List<Map<String, dynamic>> allMessages = [];
-
-//     // querySnapshot.docs.forEach((doc) {
-//     for (var doc in querySnapshot.docs) {
-//       if (doc.exists) {
-//         allMessages.add(doc.data() as Map<String, dynamic>);
-//       }
-//     // });
-//     }
-
-//     // Now you can use allMessages for further processing
-//   } catch (e) {
-//     print('Error fetching messages: $e');
-//   }
-// }
-
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/app_router.dart';
 
+
+  FirebaseService firestoreService = FirebaseService();
+  
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -43,7 +16,7 @@ class FirebaseService {
       String currentGameId, String sentBy) async {
     if (messageText.trim().isNotEmpty) {
       Map<String, dynamic> message = {
-        'messageText': messageText,
+        'text': messageText,
         'sentAt': sentAt,
         'sentBy': sentBy,
       };
@@ -60,22 +33,26 @@ class FirebaseService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
+  // Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
+  Stream<QuerySnapshot> fetchMessagesByGameId(String gameId) {
     return _firestore
         .collection('message')
-        .doc(gameId.trim())
+        // .doc(gameId.trim())
+        .doc(gameId)
+        // .doc('m6VtWFlpFAS7ePjF6q0i')
         .collection('messages')
-        .orderBy('sentAt')
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Map<String, dynamic>> allMessages = [];
-      querySnapshot.docs.forEach((doc) {
-        if (doc.exists) {
-          allMessages.add(doc.data() as Map<String, dynamic>);
-        }
-      });
-      return allMessages;
-    });
+        .orderBy('sentAt', descending: true)
+        .snapshots();
+        // .map((QuerySnapshot querySnapshot) {
+        //     List<Map<String, dynamic>> allMessages = [];
+        //     querySnapshot.docs.forEach((doc) {
+        //       if (doc.exists) {
+        //         allMessages.add(doc.data() as Map<String, dynamic>);
+        //       }
+        //     });
+        //     return allMessages;
+        //   }
+        // );
   }
 
   Future<void> signIn(

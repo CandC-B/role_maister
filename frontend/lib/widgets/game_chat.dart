@@ -1,112 +1,162 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/config/firebase_logic.dart';
 
-class Message {
-  final String content;
-  final MessageType messageType;
-
-  Message(this.content, this.messageType);
-}
-
-enum MessageType {
-  IA,
-  PLAYER,
-  USER,
-}
+import '../models/models.dart';
 
 class GameChat extends StatefulWidget {
+  final String gameId;
+
+  const GameChat({Key? key, required this.gameId}) : super(key: key);
+
   @override
-  _GameChatState createState() => _GameChatState();
+  _GameChatState createState() => _GameChatState(gameId);
 }
 
 class _GameChatState extends State<GameChat> {
-  final List<Message> messages = [];
-  final TextEditingController _textController = TextEditingController();
+  _GameChatState(String gameId);
+
+  // late String currentUserId = singleton.user!.uid;
+  late String currentUserId = 'aXO4V6bhNHGFoEZK4Ji1';
+
+  // final List<Message> messages = [];
+  List<QueryDocumentSnapshot> listMessages = [];
+  final TextEditingController textEditingController = TextEditingController();
+  // final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    // Mock initial messages
-    messages.addAll([
-      Message('¡Hola! Soy la IA. ¿En qué puedo ayudarte?', MessageType.IA),
-    ]);
+
+    // scrollController.addListener(_scrollListener);
   }
 
-  void _addMessage(String content, MessageType messageType) {
-    setState(() {
-      messages.add(Message(content, messageType));
-    });
+  void onSendMessage(String text) {
+    // TODO: mandar todo pal BE primero
+
+    if (text.trim().isNotEmpty) {
+      textEditingController.clear();
+      firestoreService.saveMessage(
+          text, DateTime.now(), widget.gameId, currentUserId);
+      // scrollController.animateTo(0,
+      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    }
+    // else {
+    //   Fluttertoast.showToast(
+    //       msg: 'Nothing to send', backgroundColor: Colors.grey);
+    // }
   }
 
-  void _sendMessage(String content) {
+  // checking if sent message
+  // bool isMessageSent(int index) {
+  //   if ((index > 0 && listMessages[index - 1].get('sentBy') != currentUserId) ||
+  //       index == 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-    // Simula mi mensaje
-    String myResponse = content;
-    _addMessage(myResponse, MessageType.USER);
-
-    // Simular respuesta de otro jugador
-    String response = 'Gracias por tu mensaje: $content';
-    _addMessage(response, MessageType.PLAYER);
-
-    // Simular respuesta de la IA
-    String iaResponse = 'Estoy procesando tu pregunta...';
-    _addMessage(iaResponse, MessageType.IA);
-
-    _textController.clear();
-  }
+  // // checking if received message
+  // bool isMessageReceived(int index) {
+  //   if ((index > 0 && listMessages[index - 1].get('sentBy') == currentUserId) ||
+  //       index == 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return ChatBubble(
-                    content: messages[index].content,
-                    messageType: messages[index].messageType,
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: firestoreService.fetchMessagesByGameId(widget.gameId),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  listMessages = snapshot.data!.docs;
+                  if (listMessages.isNotEmpty) {
+                    return ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        reverse: true,
+                        // controller: scrollController,
+                        itemBuilder: (context, index) {
+                          if (index < listMessages.length) {
+                            return messageBubble(
+                                chatContent: listMessages[index].get('text'),
+                                messageType: listMessages[index].get('sentBy'),
+                            );
+                          }
+                        },
+                    );
+                        
+                  } else {
+                    return const Center(
+                      child: Text('No messages...'),
+                    );
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                        // color: AppColors.burgundy,
+                        ),
                   );
-                },
-              ),
+                }
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onSubmitted: (content) {
-                  _sendMessage(content);
-                },
-                decoration: InputDecoration(
-                  hintText: 'Escribe un mensaje...',
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () {
-                      // Enviar el mensaje cuando se hace clic en el icono de enviar
-                      // _sendMessage(content);
-                      _sendMessage('Hola, tengo una pregunta sobre Flutter.');
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    // focusNode: focusNode,
+                    textInputAction: TextInputAction.send,
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: textEditingController,
+                    decoration:
+                        const InputDecoration(hintText: "Craft the destiny of your character's journey..."),
+                    // kTextInputDecoration.copyWith(hintText: 'write here...'),
+                    onSubmitted: (value) {
+                      onSendMessage(textEditingController.text);
                     },
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  // color: AppColors.burgundy,
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    onSendMessage(textEditingController.text);
+                  },
+                  icon: const Icon(Icons.send_rounded),
+                  // color: AppColors.white,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
-}
 
-class ChatBubble extends StatelessWidget {
-  final String content;
-  final MessageType messageType;
-
-  const ChatBubble({
-    required this.content,
-    required this.messageType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return messageType == MessageType.IA
+  // TODO: modificar los bubbles para que no parezca un chat de whatts
+  Widget messageBubble({
+    required String chatContent,
+    required String messageType,
+  }) {
+    return messageType == 'IA'
         ? Padding(
             padding: const EdgeInsets.only(right: 50.0),
             child: Row(
@@ -114,7 +164,7 @@ class ChatBubble extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(12.0),
@@ -126,10 +176,10 @@ class ChatBubble extends StatelessWidget {
                         width: 100.0,
                         height: 100.0,
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text(
-                        content,
-                        style: TextStyle(color: Colors.black),
+                        chatContent,
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   ),
@@ -138,17 +188,20 @@ class ChatBubble extends StatelessWidget {
             ),
           )
         : Align(
-            alignment: messageType == MessageType.USER ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: messageType == currentUserId
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
             child: Container(
-              padding: EdgeInsets.all(8.0),
-              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                color: messageType == MessageType.USER ? Colors.blue : Colors.green,
+                color:
+                    messageType == currentUserId ? Colors.blue : Colors.green,
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Text(
-                content,
-                style: TextStyle(color: Colors.white),
+                chatContent,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           );
