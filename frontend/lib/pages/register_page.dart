@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 110.0),
+        padding: const EdgeInsets.symmetric(vertical: 150.0),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/dnd.png'),
@@ -37,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Container(
           width: 450,
-          height: 600,
+          height: 500,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               border: Border.all(
