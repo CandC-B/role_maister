@@ -17,36 +17,30 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   bool mobile = false;
   bool homeScreen = false;
-  bool rulesScreen = false;
+  bool guideScreen = false;
   bool signInScreen = false;
   bool registerScreen = false;
   bool pricingScreen= false;
-  bool aboutUsScreen = false;
-  bool contactUsScreen = false;
   AppSingleton singleton = AppSingleton();
 
   checkCurrentPath(title) {
         switch (title) {
-      case 'Rules':
-        rulesScreen = true;
+      case 'Guide':
+        guideScreen = true;
       case 'Sign In':
         signInScreen = true;
       case 'Register':
         registerScreen = true;
       case 'Pricing':
         pricingScreen = true;
-      case 'About Us':
-        aboutUsScreen = true;
-      case 'Contact Us':
-        contactUsScreen = true;
-      default:
+      case 'Home':
         homeScreen = true;
+      default:
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(singleton.user);
     checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
@@ -130,17 +124,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
           ),
           MaterialButton(
-            onPressed: () => context.go('/rules'),
+            onPressed: () => context.go('/guide'),
             child: Column(children: [
               Text(
-                "Rules",
+                "Guide",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: rulesScreen ? Colors.white : Colors.grey.shade300, 
+                  color: guideScreen ? Colors.white : Colors.grey.shade300, 
                 ),
               ),
               const SizedBox(height: 6,),
-              rulesScreen ? Container(
+              guideScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -162,48 +156,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               const SizedBox(height: 6,),
               pricingScreen ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30)
-                            ),
-                ) : const SizedBox()
-              ],
-            ),
-          ),
-          MaterialButton(
-            onPressed: () => context.go('/about_us'),
-            child: Column(children: [
-              Text(
-                "About Us",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: aboutUsScreen ? Colors.white : Colors.grey.shade300, 
-                ),
-              ),
-              const SizedBox(height: 6,),
-              aboutUsScreen ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30)
-                            ),
-                ) : const SizedBox()
-              ],
-            ),
-          ),
-          MaterialButton(
-            onPressed: () => context.go('/contact_us'),
-            child: Column(children: [
-              Text(
-                "Contact Us",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: contactUsScreen ? Colors.white : Colors.grey.shade300, 
-                ),
-              ),
-              const SizedBox(height: 6,),
-              contactUsScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
