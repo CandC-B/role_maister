@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 AppSingleton singleton = AppSingleton();
+
+
 class AppSingleton {
   AppSingleton._privateConstructor();
 

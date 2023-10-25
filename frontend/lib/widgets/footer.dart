@@ -24,17 +24,35 @@ class BoxyDesktopFooter extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth > 700) {
           return Container(
-            color: Colors.black,
-            child: const Row(
+            color: Colors.deepPurple,
+            child: Row(
               children: [
-                DesktopFooterColumnOne(),
-                DesktopFooterColumnTwo(),
-                SizedBox(width: 50),
-                DesktopFooterColumnThree(),
-                Flexible(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FooterCopyright(),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const DesktopFooterColumnOne(),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const DesktopFooterColumnTwo(),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const DesktopFooterColumnThree(),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const FooterCopyright(),
                   ),
                 ),
               ],
@@ -43,7 +61,7 @@ class BoxyDesktopFooter extends StatelessWidget {
         } else {
           return Container(
             alignment: Alignment.center,
-            color: Colors.black,
+            color: Colors.deepPurple,
             child: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -52,11 +70,11 @@ class BoxyDesktopFooter extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Divider(color: Colors.black, thickness: 0.5),
+                      Divider(color: Colors.deepPurple, thickness: 0.5),
                       DesktopFooterColumnTwo(), // TODO make that this part centers like the other two (Check web in mobile window size)
-                      Divider(color: Colors.black, thickness: 0.5),
+                      Divider(color: Colors.deepPurple, thickness: 0.5),
                       DesktopFooterColumnThree(),
-                      Divider(color: Colors.black, thickness: 0.5),
+                      Divider(color: Colors.deepPurple, thickness: 0.5),
                       FooterCopyright(),
                     ],
                   ),
@@ -102,10 +120,11 @@ class DesktopFooterColumnTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AboutUsIconAndText(),
         ContactUsIconAndText(),
+        TermsIconAndText(),
       ],
     );
   }
@@ -161,34 +180,31 @@ class FooterCopyright extends StatelessWidget {
   }
 }
 
-
-
 class AboutUsIconAndText extends StatelessWidget {
   const AboutUsIconAndText({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Row(
+    return Row(
       children: [
         IconButton(
-              icon: const Icon(
-                Icons.info_outline,
-                size: 20.0,
-                color: Colors.white,
-              ),
-              color: const Color(0xFF162A49),
-              onPressed: () {},
+          icon: const Icon(
+            Icons.info_outline,
+            size: 20.0,
+            color: Colors.white,
+          ),
+          color: const Color(0xFF162A49),
+          onPressed: () {},
+        ),
+        TextButton(
+          onPressed: () => context.go('/about_us'),
+          child: const Text(
+            "About Us",
+            style: TextStyle(
+              color: Colors.white,
             ),
-            TextButton(
-              onPressed: () => context.go('/about_us'),
-              child: const Text(
-                "About Us",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
+          ),
+        ),
       ],
     );
   }
@@ -200,27 +216,57 @@ class ContactUsIconAndText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-          children: [
-            IconButton(
-              icon: const Icon(
-                Icons.mail_outline,
-                size: 20.0,
-                color: Colors.white,
-              ),
-              color: const Color(0xFF162A49),
-              onPressed: () => context.go('/contact_us'),
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.mail_outline,
+            size: 20.0,
+            color: Colors.white,
+          ),
+          color: const Color(0xFF162A49),
+          onPressed: () => context.go('/contact_us'),
+        ),
+        TextButton(
+          onPressed: () => context.go('/contact_us'),
+          child: const Text(
+            "Contact Us",
+            style: TextStyle(
+              color: Colors.white,
             ),
-            TextButton(
-              onPressed: () => context.go('/contact_us'),
-              child: const Text(
-                "Contact Us",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TermsIconAndText extends StatelessWidget {
+  const TermsIconAndText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.history_edu_outlined,
+            size: 20.0,
+            color: Colors.white,
+          ),
+          color: const Color(0xFF162A49),
+          onPressed: () => context.go('/terms_conditions'),
+        ),
+        TextButton(
+          onPressed: () => context.go('/terms_conditions'),
+          child: const Text(
+            "Terms & Conditions",
+            style: TextStyle(
+              color: Colors.white,
             ),
-          ],
-        );
+          ),
+        ),
+      ],
+    );
   }
 }
 // import 'package:flutter/material.dart';

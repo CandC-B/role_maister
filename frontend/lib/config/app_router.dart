@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/screens/guide_screen.dart';
 import 'package:role_maister/screens/screens.dart';
 
 class ApplicationRouter {
@@ -21,11 +22,11 @@ class ApplicationRouter {
           },
       routes: <RouteBase>[
         GoRoute(
-          path: 'rules',
+          path: 'guide',
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: const RulesScreen(),
+              child: const GuideScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
@@ -116,6 +117,21 @@ class ApplicationRouter {
             return CustomTransitionPage(
               key: state.pageKey,
               child: const ProfileScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+          path: 'terms_conditions',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const RulesScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
