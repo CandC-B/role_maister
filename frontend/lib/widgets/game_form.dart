@@ -1,8 +1,36 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:http/http.dart' as http;
+
+Future<void> _createNewGame(UserStatistics userStats, String history) async {
+    Map<String, dynamic> mapUserStats = userStats.toMap();
+    // TODO: don't harcode this
+    mapUserStats["role_system"]= "aliens";
+    mapUserStats["num_players"]= 1;
+    mapUserStats["story_description"]= history;
+
+    // Set the headers for the request, including the content type.
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    final response = await http.post(
+        // TODO: add constants.dart in utils folder
+        Uri.http("localhost:8000", "/game/"),
+        headers: headers,
+        body: jsonEncode(mapUserStats)
+    );
+    var coralMessage = json.decode(response.body)["message"];
+    print(coralMessage);
+}
+
 
 class GameForm extends StatelessWidget {
-  const GameForm({super.key});
+  GameForm({super.key, required this.character});
+  final UserStatistics character;
+  var _storyController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +103,7 @@ class GameForm extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10), // Optionally, round the corners
                     ),
                     child: TextFormField(
+                      controller: _storyController,
                       keyboardType: TextInputType.multiline,
                       style: const TextStyle(color: Colors.white),
                       maxLines: null,
@@ -111,7 +140,8 @@ class GameForm extends StatelessWidget {
                       )
                   ),
                   onPressed: () {
-                    
+                    _createNewGame(character, _storyController.text);
+                    _storyController.text = '';
                   },
                   child: const FittedBox(
                     fit: BoxFit.contain, child: Text("Start Game")
