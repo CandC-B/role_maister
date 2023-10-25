@@ -11,12 +11,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: "Home"),
       drawer: customDrawer(context),
-      body: ListView(
-        children: const [
-          HomePage(),
-          WebFooter(),
-        ],
-      )
+      body: InitGame()//ListView(
+      //   children: const [
+      //     HomePage(),
+      //     WebFooter(),
+      //   ],
+      // )
     );
   }
 }
