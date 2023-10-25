@@ -37,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Container(
           width: 450,
-          height: 500,
+          height: 550,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               border: Border.all(
