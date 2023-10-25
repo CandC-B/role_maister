@@ -21,8 +21,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool signInScreen = false;
   bool registerScreen = false;
   bool pricingScreen= false;
-  bool aboutUsScreen = false;
-  bool contactUsScreen = false;
   AppSingleton singleton = AppSingleton();
 
   checkCurrentPath(title) {
@@ -35,10 +33,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
         registerScreen = true;
       case 'Pricing':
         pricingScreen = true;
-      case 'About Us':
-        aboutUsScreen = true;
-      case 'Contact Us':
-        contactUsScreen = true;
       case 'Home':
         homeScreen = true;
       default:
@@ -162,48 +156,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               const SizedBox(height: 6,),
               pricingScreen ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30)
-                            ),
-                ) : const SizedBox()
-              ],
-            ),
-          ),
-          MaterialButton(
-            onPressed: () => context.go('/about_us'),
-            child: Column(children: [
-              Text(
-                "About Us",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: aboutUsScreen ? Colors.white : Colors.grey.shade300, 
-                ),
-              ),
-              const SizedBox(height: 6,),
-              aboutUsScreen ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30)
-                            ),
-                ) : const SizedBox()
-              ],
-            ),
-          ),
-          MaterialButton(
-            onPressed: () => context.go('/contact_us'),
-            child: Column(children: [
-              Text(
-                "Contact Us",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: contactUsScreen ? Colors.white : Colors.grey.shade300, 
-                ),
-              ),
-              const SizedBox(height: 6,),
-              contactUsScreen ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
