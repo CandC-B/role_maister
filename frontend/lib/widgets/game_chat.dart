@@ -70,8 +70,15 @@ class _GameChatState extends State<GameChat> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/dnd.png'),
+          fit: BoxFit.cover,
+          opacity: 0.9,
+        ),
+      ),
+      child: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -82,19 +89,18 @@ class _GameChatState extends State<GameChat> {
                   listMessages = snapshot.data!.docs;
                   if (listMessages.isNotEmpty) {
                     return ListView.builder(
-                        padding: const EdgeInsets.all(10),
-                        reverse: true,
-                        // controller: scrollController,
-                        itemBuilder: (context, index) {
-                          if (index < listMessages.length) {
-                            return messageBubble(
-                                chatContent: listMessages[index].get('text'),
-                                messageType: listMessages[index].get('sentBy'),
-                            );
-                          }
-                        },
+                      padding: const EdgeInsets.all(10),
+                      reverse: true,
+                      // controller: scrollController,
+                      itemBuilder: (context, index) {
+                        if (index < listMessages.length) {
+                          return messageBubble(
+                            chatContent: listMessages[index].get('text'),
+                            messageType: listMessages[index].get('sentBy'),
+                          );
+                        }
+                      },
                     );
-                        
                   } else {
                     return const Center(
                       child: Text('No messages...'),
@@ -121,8 +127,22 @@ class _GameChatState extends State<GameChat> {
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller: textEditingController,
-                    decoration:
-                        const InputDecoration(hintText: "Craft the destiny of your character's journey..."),
+                    decoration: const InputDecoration(
+                      hintText:
+                          "Craft the destiny of your character's journey...",
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors
+                                .white), // Set the underline color to white
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors
+                                .deepPurple), // Set the underline color to white when focused
+                      ),
+                    ),
+                    style: TextStyle(color: Colors.white),
                     // kTextInputDecoration.copyWith(hintText: 'write here...'),
                     onSubmitted: (value) {
                       onSendMessage(textEditingController.text);
@@ -141,6 +161,7 @@ class _GameChatState extends State<GameChat> {
                     onSendMessage(textEditingController.text);
                   },
                   icon: const Icon(Icons.send_rounded),
+                  color: Colors.white,
                   // color: AppColors.white,
                 ),
               ),
@@ -193,10 +214,11 @@ class _GameChatState extends State<GameChat> {
                 : Alignment.centerLeft,
             child: Container(
               padding: const EdgeInsets.all(8.0),
-              margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
                 color:
-                    messageType == currentUserId ? Colors.blue : Colors.green,
+                    messageType == currentUserId ? Colors.deepPurple : Colors.green,
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Text(

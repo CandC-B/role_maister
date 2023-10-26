@@ -13,7 +13,12 @@ class InitGame extends StatelessWidget {
     return Container(
         width: size.width,
         height: size.height,
-        color: Colors.black87,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/dnd.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
         alignment: Alignment.center,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
