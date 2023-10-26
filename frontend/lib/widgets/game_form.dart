@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +35,6 @@ Future<void> _createNewGame(UserStatistics userStats, String history) async {
       body: jsonEncode(mapUserStats));
   var coralMessage = json.decode(response.body)["message"];
   firebase.saveMessage(coralMessage, DateTime.now(), game_uid, "IA");
-  // TODO: Mario enruta al chat i pasar game_uid
 }
 
 class GameForm extends StatelessWidget {
@@ -56,7 +56,7 @@ class GameForm extends StatelessWidget {
               flex: 1,
               child: ImageColorFilter(
                 imagePath: 'assets/images/aliens.jpg',
-                routeName: 'ChatPage',
+                routeName: '/game',
                 imageText: "ALIENS",
                 isAvailable: true,
                 height: size.height * 0.9 / 4,
@@ -69,7 +69,7 @@ class GameForm extends StatelessWidget {
               flex: 1,
               child: ImageColorFilter(
                 imagePath: 'assets/images/dungeons_and_dragons.jpg',
-                routeName: 'ChatPage',
+                routeName: '/game',
                 imageText: "DUNGEONS AND DRAGONS",
                 isAvailable: false,
                 height: size.height * 0.9 / 4,
@@ -82,7 +82,7 @@ class GameForm extends StatelessWidget {
               flex: 1,
               child: ImageColorFilter(
                 imagePath: 'assets/images/cthulhu.jpg',
-                routeName: 'ChatPage',
+                routeName: '/game',
                 imageText: "THE CALL OF CTHULHU",
                 isAvailable: false,
                 height: size.height * 0.9 / 4,
@@ -157,8 +157,9 @@ class GameForm extends StatelessWidget {
                       textStyle: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    _createNewGame(character, _storyController.text);
-                    _storyController.text = '';
+                    // _createNewGame(character, _storyController.text);
+                    // _storyController.text = '';
+                    context.go("/game");
                   },
                   child: const FittedBox(
                       fit: BoxFit.contain, child: Text("Start Game"))),
