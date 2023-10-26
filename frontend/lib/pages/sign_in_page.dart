@@ -48,7 +48,7 @@ Widget _formLogin() {
       TextField(
         controller: email,
         decoration: InputDecoration(
-          hintText: "Enter email or username",
+          hintText: "Enter email",
           fillColor: Colors.blueGrey[50],
           filled: true,
           labelStyle: const TextStyle(fontSize: 12),

@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
         TextField(
           controller: email,
           decoration: InputDecoration(
-            hintText: "Enter email or username",
+            hintText: "Enter email",
             counterText: emailError ? "Invalid Email" : null,
             counterStyle: const TextStyle(color: Colors.red),
             fillColor: Colors.blueGrey[50],
