@@ -10,12 +10,11 @@ class InitGame extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     UserStatistics character = UserStatistics.random();
 
-    return Scaffold(
-      body: Container(
+    return Container(
         width: size.width,
         height: size.height,
         color: Colors.black87,
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
@@ -31,7 +30,6 @@ class InitGame extends StatelessWidget {
             ]),
           ),
         ),
-      ),
-    );
+      );
   }
 }

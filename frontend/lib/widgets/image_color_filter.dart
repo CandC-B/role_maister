@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ImageColorFilter extends StatefulWidget {
   const ImageColorFilter({
@@ -107,10 +108,9 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
       ),
       onTap: () {
         // Handle the tap action here.
-        // TODO: redirect to next page widget.routeName
         if (widget.isAvailable) {
           if (widget.isLink) {
-
+            context.go(widget.routeName);
           }
         }
       },
