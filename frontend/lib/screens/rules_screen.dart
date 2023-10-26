@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:role_maister/pages/terms_page.dart';
+import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
-class TermsScreen extends StatelessWidget {
-  const TermsScreen({super.key});
-  
+class RulesScreen extends StatelessWidget {
+  const RulesScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "None"),
+      appBar: const CustomAppBar(title: "Rules"),
       drawer: customDrawer(context),
       body: ListView(
         children: const [
-          TermsPage(),
+          RulesPage(),
           WebFooter(),
         ],
       )

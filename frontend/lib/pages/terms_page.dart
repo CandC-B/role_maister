@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class RulesPage extends StatelessWidget {
-  const RulesPage({super.key});
+class TermsPage extends StatelessWidget {
+  const TermsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/dnd.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
+        image: DecorationImage(
+          image: AssetImage('assets/images/dnd.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
         child: Container(
@@ -27,7 +27,7 @@ class RulesPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Column(children: <Widget>[
               Text(
-                'Terms & Conditions',
+                'Lorem ipsum',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class RulesPage extends StatelessWidget {
               ),
               SizedBox(height: 40),
               Text(
-                "Welcome to the Rules Section! Here, you'll quickly learn what you need to get started and have some fun!\n\n",
+                "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\n\n",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ class RulesPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'How to play',
+                'There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 20,
@@ -54,31 +54,12 @@ class RulesPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "To begin playing, simply press the 'Start Game' button and select the game mode (in this first version, only Singleplayer mode is available). Next, you can choose the role you want to play:\n\n"
-                "Once you've chosen your game mode, you can configure your game. You'll need to provide a brief description of the story's setting that you want to follow (including the condition to end the game) and create your character sheet. Don't worry if you have no experience with this; the game can generate a character sheet for you—it does it all! (Currently, the game only provides auto-generated character sheets.)\n\n"
-                "After this, if you have enough tokens to play, you can start your new campaign!\n\n",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel est justo. Ut tincidunt arcu non elementum sollicitudin. Donec ut turpis commodo, vulputate lorem mattis, vulputate purus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi tristique nec sem eu ultrices. Vivamus auctor vehicula dui sed facilisis. In efficitur eu nulla ac tempus. Praesent non sapien feugiat, congue erat eget, tristique lectus. \n\n"
+                "Quisque eget efficitur risus. Duis tincidunt, dolor quis tincidunt lacinia, augue ipsum faucibus purus, vitae consectetur dolor est sit amet lacus. Phasellus vel dictum mi. Vivamus tristique orci velit, ut molestie massa mollis sit amet. Ut varius nunc erat, ultrices suscipit arcu volutpat a. Nam ac ex ex. Nullam et vulputate nunc, sed elementum est. Aenean auctor urna odio, in semper tellus scelerisque in. Aliquam vitae laoreet nisl. Nullam tempus, urna eu vulputate varius, metus lacus ultricies elit, ut scelerisque ligula ipsum non magna. Praesent commodo purus tellus, sit amet elementum odio elementum posuere. Aliquam vel consequat urna, vel sagittis velit. Etiam laoreet elit sit amet massa ultrices convallis. Etiam non euismod dui. \n\n"
+                "Sed dapibus eros sed tristique fermentum. Cras dapibus auctor nunc ac congue. Curabitur quis sodales magna. Maecenas lorem eros, tincidunt sed elit vitae, porta finibus risus. Aenean cursus erat vel consequat dictum. Cras vestibulum lectus nulla, in malesuada purus blandit eget. Nullam vehicula ac nisl ut lobortis. Mauris elementum, felis posuere consectetur rutrum, ex libero venenatis mauris, congue ullamcorper purus mauris non erat. Pellentesque egestas, sapien eget hendrerit accumsan, nibh ex aliquet lectus, a cursus nibh nisl a ex. Nunc eu vestibulum urna, vel mattis dolor.",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              Text(
-                'Rules',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "This part is important. Since it's an AI that's responsible for guiding the game, and not a human, all players must commit to following certain guidelines to facilitate the flow of the game:\n\n"
-                "Adhere to your character sheet: Remember your character's details and incorporate them into the conversation whenever possible to provide more context to the AI. Don't change your character's details unless instructed to do so.\n\n"
-                "Don't make up dice rolls: The natural mechanism for role-playing is dice rolls. If you're asked to make a roll, don't make up the values. Embrace the randomness!\n\n"
-                "Keep the AI in context: We trust you to follow the story provided by the AI. After all, it's not human. Correct when necessary, make decisions your character would make, and forge your own path, but don't diverge into unrelated topics. You might confuse the AI and disrupt the narrative.\n\n"
-                "No cheating: We appeal to the goodwill of our players. If things go awry, don't hesitate to help the AI remember certain decisions and aspects of your character sheet.\n\n"
-                "Behave as you would with your trusted Game Master: It's each player's responsibility to ensure it's an enjoyable and easy-to-follow game.\n\n"
-                "Disclaimer: Since it's an external conversational AI, we're not responsible for the content of the conversations. We trust in you!",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              )
             ]),
           ),
         ),
