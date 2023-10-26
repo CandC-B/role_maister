@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/screens/game_screen.dart';
 import 'package:role_maister/screens/guide_screen.dart';
+import 'package:role_maister/screens/terms_screen.dart';
 import 'package:role_maister/screens/screens.dart';
 import 'package:role_maister/screens/select_game_type_screen.dart';
 
@@ -26,6 +27,21 @@ class ApplicationRouter {
               );
           },
       routes: <RouteBase>[
+        GoRoute(
+          path: 'rules',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const RulesScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+              },
+            );
+          },
+        ),
         GoRoute(
           path: 'guide',
           pageBuilder: (BuildContext context, GoRouterState state) {
@@ -136,7 +152,7 @@ class ApplicationRouter {
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: const RulesScreen(),
+              child: const TermsScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
