@@ -102,8 +102,8 @@ class FirebaseService {
       User? user = credential.user;
       // print('User signed in: ${user?.email}');
       singleton.user = user;
-      context.go("/rules");
-      context.push("/rules");
+      context.go("/terms_conditions");
+      context.push("/terms_conditions");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print("The account already exists for that email");

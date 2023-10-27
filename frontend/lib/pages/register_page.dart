@@ -26,179 +26,190 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-                        16.0,  // Espacio a la izquierda
-                        150.0,   // Espacio en la parte superior
-                        16.0,  // Espacio a la derecha
-                        270.0,  // Espacio en la parte inferior
-                      ),
-            child: Container(
-              // TODO poner un recuadro e imagen de fondo
-              width: 300,
-              child: _formLogin(),
-            ),
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 150.0),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/dnd.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        width: 450,
+        height: 550,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Colors.deepPurple, // Border color
+            width: 2.0, // Border width
           ),
-        ],
+          color: Colors.white70,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 40.0),
+          child: Container(
+            child: _formRegister(),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _formLogin() {
-    return Column(
-      children: [
-        const Text(
-          "Register",
-          style: TextStyle(
-            color: Colors.deepPurple,
-            fontSize: 50,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(
-          height: 60,
-        ),
-        TextField(
-          controller: email,
-          decoration: InputDecoration(
-            hintText: "Enter email",
-            counterText: emailError ? "Invalid Email" : null,
-            counterStyle: const TextStyle(color: Colors.red),
-            fillColor: Colors.blueGrey[50],
-            filled: true,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.only(left: 30),
-            enabledBorder: OutlineInputBorder(
-              borderSide: emailError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: emailError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
+  Widget _formRegister() {
+    return Container(
+        width: 500,
+        height: 500,
+        child: Column(children: [
+          const Text(
+            "Register",
+            style: TextStyle(
+              color: Colors.deepPurple,
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        TextField(
-          obscureText: !isPasswordVisible,
-          controller: newPassword1,
-          decoration: InputDecoration(
-            hintText: "New password",
-            suffixIcon:
-                passwordVisionIcon(),
-            fillColor: Colors.blueGrey[50],
-            filled: true,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.only(left: 30),
-            enabledBorder: OutlineInputBorder(
-              borderSide: passwordError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: passwordError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
+          const SizedBox(
+            height: 60,
+          ),
+          TextField(
+            cursorColor: Colors.deepPurple,
+            controller: email,
+            decoration: InputDecoration(
+              hintText: "Enter email or username",
+              counterText: emailError ? "Invalid Email" : null,
+              counterStyle: const TextStyle(color: Colors.red),
+              fillColor: Colors.blueGrey[50],
+              filled: true,
+              labelStyle: const TextStyle(fontSize: 12),
+              contentPadding: const EdgeInsets.only(left: 30),
+              enabledBorder: OutlineInputBorder(
+                borderSide: emailError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: emailError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        TextField(
-          obscureText: !isPasswordVisible,
-          controller: newPassword2,
-          decoration: InputDecoration(
-            hintText: "New password",
-            counterText: passwordError
-                ? "At least one letter, one digit and 8 characters"
-                : null,
-            counterStyle: const TextStyle(color: Colors.red),
-            suffixIcon:
-                passwordVisionIcon(),
-            fillColor: Colors.blueGrey[50],
-            filled: true,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.only(left: 30),
-            enabledBorder: OutlineInputBorder(
-              borderSide: passwordError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: passwordError
-                  ? const BorderSide(color: Colors.red)
-                  : const BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
+          const SizedBox(
+            height: 30,
+          ),
+          TextField(
+            cursorColor: Colors.deepPurple,
+            obscureText: !isPasswordVisible,
+            controller: newPassword1,
+            decoration: InputDecoration(
+              hintText: "New password",
+              suffixIcon: passwordVisionIcon(),
+              fillColor: Colors.blueGrey[50],
+              filled: true,
+              labelStyle: const TextStyle(fontSize: 12),
+              contentPadding: const EdgeInsets.only(left: 30),
+              enabledBorder: OutlineInputBorder(
+                borderSide: passwordError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: passwordError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.deepPurple.shade100,
-                  spreadRadius: 10,
-                  blurRadius: 20,
-                )
-              ]),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15))),
-            onPressed: () async {
-              if (newPassword1.text == newPassword2.text) {
-                checkRegisterInput();
-                if (!passwordError && !emailError) {
-                  firebase.signUp(email.text, newPassword1.text, context); // TODO Handle if email is already created
+          const SizedBox(
+            height: 15,
+          ),
+          TextField(
+            cursorColor: Colors.deepPurple,
+            obscureText: !isPasswordVisible,
+            controller: newPassword2,
+            decoration: InputDecoration(
+              hintText: "New password",
+              counterText: passwordError
+                  ? "At least one letter, one digit and 8 characters"
+                  : null,
+              counterStyle: const TextStyle(color: Colors.red),
+              suffixIcon: passwordVisionIcon(),
+              fillColor: Colors.blueGrey[50],
+              filled: true,
+              labelStyle: const TextStyle(fontSize: 12),
+              contentPadding: const EdgeInsets.only(left: 30),
+              enabledBorder: OutlineInputBorder(
+                borderSide: passwordError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: passwordError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.deepPurple.shade100,
+                    spreadRadius: 10,
+                    blurRadius: 20,
+                  )
+                ]),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+              onPressed: () async {
+                if (newPassword1.text == newPassword2.text) {
+                  checkRegisterInput();
+                  if (!passwordError && !emailError) {
+                    firebase.signUp(email.text, newPassword1.text,
+                        context); // TODO Handle if email is already created
+                  }
                 }
-              }
-            },
-            child: const SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: Center(child: Text('Register')),
+              },
+              child: const SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: Center(child: Text('Register')),
+              ),
             ),
-          ),
-        ),
-      ],
-    );
+          )
+        ]));
   }
 
   Widget passwordVisionIcon() {
     return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                    child: Icon(
-                      isPasswordVisible
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: Colors.grey,
-                    ),
-                  );
+      onTap: () {
+        setState(() {
+          isPasswordVisible = !isPasswordVisible;
+        });
+      },
+      child: Icon(
+        isPasswordVisible
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined,
+        color: Colors.grey,
+      ),
+    );
   }
 
   Widget _loginWithButton({required String image, bool isActive = false}) {

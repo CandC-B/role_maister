@@ -121,6 +121,7 @@ class GameForm extends StatelessWidget {
                           10), // Optionally, round the corners
                     ),
                     child: TextFormField(
+                      cursorColor: Colors.deepPurple,
                       controller: _storyController,
                       keyboardType: TextInputType.multiline,
                       style: const TextStyle(color: Colors.white),
