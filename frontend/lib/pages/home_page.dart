@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'select_game_type_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
