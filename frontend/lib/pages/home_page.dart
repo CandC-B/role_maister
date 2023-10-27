@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class HomePage extends StatelessWidget {
@@ -56,7 +57,11 @@ class HomePage extends StatelessWidget {
                   textStyle: const TextStyle(
                       fontSize: 36, fontWeight: FontWeight.bold)),
               onPressed: () {
-                context.go("/mode");
+                if (singleton.user != null) {
+                  context.go("/mode");
+                }else {
+                  context.go("/sign_in");
+                }
               },
               child: const FittedBox(
                   fit: BoxFit.contain, child: Text("Play Game"))),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 
 class SignInPage extends StatefulWidget {
@@ -11,38 +12,38 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 110.0),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/dnd.png'),
-            fit: BoxFit.cover,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 110.0),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/dnd.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        width: 450,
+        height: 650,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Colors.deepPurple, // Border color
+            width: 2.0, // Border width
+          ),
+          color: Colors.white70,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            child: _formLogin(),
           ),
         ),
-        child: Container(
-            width: 450,
-            height: 600,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Colors.deepPurple, // Border color
-                width: 2.0, // Border width
-              ),
-              color: Colors.white70,
-            ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                child: _formLogin(),
-              ),
-            ),
-          ),
-        );
+      ),
+    );
   }
 
   Widget _formLogin() {
@@ -63,6 +64,7 @@ class _SignInPageState extends State<SignInPage> {
             height: 58.5,
           ),
           TextField(
+            cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
               hintText: "Enter email or username",
@@ -84,13 +86,13 @@ class _SignInPageState extends State<SignInPage> {
             height: 30,
           ),
           TextField(
-            obscureText: true,
+            cursorColor: Colors.deepPurple,
+            obscureText: !isPasswordVisible,
             controller: password,
             decoration: InputDecoration(
               hintText: "Password",
               counterText: "Forgot password?",
-              suffixIcon:
-                  const Icon(Icons.visibility_off_outlined, color: Colors.grey),
+              suffixIcon: passwordVisionIcon(),
               fillColor: Colors.blueGrey[50],
               filled: true,
               labelStyle: const TextStyle(fontSize: 12),
@@ -134,6 +136,10 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          registerText(),
           const SizedBox(
             height: 40,
           ),
@@ -197,5 +203,29 @@ class _SignInPageState extends State<SignInPage> {
         width: 35,
       )),
     );
+  }
+
+  Widget passwordVisionIcon() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isPasswordVisible = !isPasswordVisible;
+        });
+      },
+      child: Icon(
+        isPasswordVisible
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined,
+        color: Colors.grey,
+      ),
+    );
+  }
+
+  Widget registerText() {
+    return GestureDetector(
+        onTap: () {
+          context.go("/register");
+        },
+        child: const Text("Does not have account? Register"));
   }
 }
