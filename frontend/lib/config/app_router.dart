@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/screens/game_screen.dart';
 import 'package:role_maister/screens/guide_screen.dart';
+import 'package:role_maister/screens/home_screen.dart';
+import 'package:role_maister/screens/terms_screen.dart';
 import 'package:role_maister/screens/screens.dart';
+import 'package:role_maister/screens/select_game_type_screen.dart';
 
 class ApplicationRouter {
   GoRouter router = GoRouter(
@@ -21,6 +25,21 @@ class ApplicationRouter {
               );
           },
       routes: <RouteBase>[
+        GoRoute(
+          path: 'rules',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const RulesScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+              },
+            );
+          },
+        ),
         GoRoute(
           path: 'guide',
           pageBuilder: (BuildContext context, GoRouterState state) {
@@ -131,7 +150,52 @@ class ApplicationRouter {
           pageBuilder: (BuildContext context, GoRouterState state) {
             return CustomTransitionPage(
               key: state.pageKey,
-              child: const RulesScreen(),
+              child: const TermsScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+          path: 'mode',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const SelectGameTypeScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+          path: 'form_singleplayer',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const InitGameScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+          path: 'game',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const GameScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),

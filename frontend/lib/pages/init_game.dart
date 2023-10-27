@@ -8,13 +8,18 @@ class InitGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    UserStatistics character = UserStatistics.random();
 
-    return Scaffold(
-      body: Container(
+    return Container(
         width: size.width,
         height: size.height,
-        color: Colors.black87,
-        alignment: Alignment.bottomCenter,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/dnd.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        alignment: Alignment.center,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
@@ -24,13 +29,12 @@ class InitGame extends StatelessWidget {
             child: Row(children: [
               Expanded(
                   flex: 2,
-                  child: GameForm(),
+                  child: GameForm(character: character),
                 ),
-              Expanded(flex: 1, child: StatsTab(userStats: UserStatistics.random(),)),
+              Expanded(flex: 1, child: StatsTab(userStats: character,)),
             ]),
           ),
         ),
-      ),
-    );
+      );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'select_game_type_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -56,14 +56,7 @@ class HomePage extends StatelessWidget {
                   textStyle: const TextStyle(
                       fontSize: 36, fontWeight: FontWeight.bold)),
               onPressed: () {
-                //TODO: Poner la ruta buena
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SelectGameType(),
-                  ),
-                );
+                context.go("/mode");
               },
               child: const FittedBox(
                   fit: BoxFit.contain, child: Text("Play Game"))),

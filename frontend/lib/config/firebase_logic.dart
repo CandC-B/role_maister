@@ -1,51 +1,42 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// Future<void> fetchMessagesByGameId(String groupId) async {
-//   final CollectionReference messagesCollection = FirebaseFirestore.instance
-//       .collection('message')
-//       .doc(groupId.trim())
-//       .collection('messages');
-
-//   try {
-//     final QuerySnapshot querySnapshot =
-//         await messagesCollection.orderBy('sentAt').get();
-
-//     final List<Map<String, dynamic>> allMessages = [];
-
-//     // querySnapshot.docs.forEach((doc) {
-//     for (var doc in querySnapshot.docs) {
-//       if (doc.exists) {
-//         allMessages.add(doc.data() as Map<String, dynamic>);
-//       }
-//     // });
-//     }
-
-//     // Now you can use allMessages for further processing
-//   } catch (e) {
-//     print('Error fetching messages: $e');
-//   }
-// }
-
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
-import 'package:role_maister/pages/register_page.dart';
 
 FirebaseService firebase = FirebaseService();
+
+FirebaseService firestoreService = FirebaseService();
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<String> createCharacter(Map<String, dynamic> character) async {
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('character').add(character);
+      return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<String> createGame(Map<String, dynamic> gameConfig) async {
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('game').add(gameConfig);
+      return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> saveMessage(String messageText, DateTime sentAt,
       String currentGameId, String sentBy) async {
     if (messageText.trim().isNotEmpty) {
       Map<String, dynamic> message = {
-        'messageText': messageText,
+        'text': messageText,
         'sentAt': sentAt,
         'sentBy': sentBy,
       };
@@ -62,27 +53,30 @@ class FirebaseService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
+  // Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
+  Stream<QuerySnapshot> fetchMessagesByGameId(String gameId) {
     return _firestore
         .collection('message')
-        .doc(gameId.trim())
+        // .doc(gameId.trim())
+        .doc(gameId)
+        // .doc('m6VtWFlpFAS7ePjF6q0i')
         .collection('messages')
-        .orderBy('sentAt')
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Map<String, dynamic>> allMessages = [];
-      querySnapshot.docs.forEach((doc) {
-        if (doc.exists) {
-          allMessages.add(doc.data() as Map<String, dynamic>);
-        }
-      });
-      return allMessages;
-    });
+        .orderBy('sentAt', descending: true)
+        .snapshots();
+    // .map((QuerySnapshot querySnapshot) {
+    //     List<Map<String, dynamic>> allMessages = [];
+    //     querySnapshot.docs.forEach((doc) {
+    //       if (doc.exists) {
+    //         allMessages.add(doc.data() as Map<String, dynamic>);
+    //       }
+    //     });
+    //     return allMessages;
+    //   }
+    // );
   }
 
   Future<void> signIn(
-      String email, String password, BuildContext context
-  ) async {
+      String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -101,8 +95,7 @@ class FirebaseService {
   }
 
   Future<void> signUp(
-      String email, String password, BuildContext context
-  ) async {
+      String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -113,7 +106,7 @@ class FirebaseService {
       context.push("/terms_conditions");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print("The account already exists for that email") ;
+        print("The account already exists for that email");
       }
     } catch (e) {
       print(e);

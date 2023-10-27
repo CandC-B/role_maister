@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
-import 'dart:math';
 
 class SelectGameType extends StatelessWidget {
   const SelectGameType({super.key});
@@ -9,12 +8,16 @@ class SelectGameType extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Container(
+    return  Container(
         width: size.width,
         height: size.height,
-        color: Colors.black87,
-        alignment: Alignment.bottomCenter,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/dnd.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        alignment: Alignment.center,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
@@ -26,7 +29,7 @@ class SelectGameType extends StatelessWidget {
                 children: [
                   ImageColorFilter(
                     imagePath: 'assets/images/singleplayer.png',
-                    routeName: 'FantasyHome',
+                    routeName: '/form_singleplayer',
                     imageText: "SINGLE PLAYER",
                     isAvailable: true,
                     height: size.height * 0.9,
@@ -57,7 +60,6 @@ class SelectGameType extends StatelessWidget {
                 ]),
           ),
         ),
-      ),
-    );
+      );
   }
 }

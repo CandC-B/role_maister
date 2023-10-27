@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:role_maister/config/app_singleton.dart';
+import 'package:go_router/go_router.dart';
+
 // TODO check if autenticated or not
-AppSingleton singleton = AppSingleton();
 Widget drawerHeader (BuildContext context) => Material(
   color: Colors.deepPurple,
   child: InkWell(
-    onTap: () {},
+    onTap: () {context.go("/profile");},
     child: Container(
       padding: EdgeInsets.only(
         top: 24 + MediaQuery.of(context).padding.top,
