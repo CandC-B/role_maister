@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // TODO check if autenticated or not
 Widget drawerHeader (BuildContext context) => Material(
   color: Colors.deepPurple,
   child: InkWell(
-    onTap: () {},
+    onTap: () {context.go("/profile");},
     child: Container(
       padding: EdgeInsets.only(
         top: 24 + MediaQuery.of(context).padding.top,

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/screens/game_screen.dart';
 import 'package:role_maister/screens/guide_screen.dart';
+import 'package:role_maister/screens/home_screen.dart';
 import 'package:role_maister/screens/terms_screen.dart';
 import 'package:role_maister/screens/screens.dart';
 import 'package:role_maister/screens/select_game_type_screen.dart';
-
-import '../screens/home_screen.dart';
 
 class ApplicationRouter {
   GoRouter router = GoRouter(
