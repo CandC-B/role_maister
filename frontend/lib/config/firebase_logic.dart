@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
-import 'package:role_maister/models/models.dart';
-import 'package:role_maister/pages/register_page.dart';
 
 FirebaseService firebase = FirebaseService();
 

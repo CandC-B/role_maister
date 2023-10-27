@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/models/models.dart';
-import 'dart:convert';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({Key? key}) : super(key: key);
