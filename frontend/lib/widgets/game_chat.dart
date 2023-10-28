@@ -18,8 +18,7 @@ class GameChat extends StatefulWidget {
 class _GameChatState extends State<GameChat> {
   _GameChatState(String gameId);
 
-  // late String currentUserId = singleton.user!.uid;
-  late String currentUserId = 'aXO4V6bhNHGFoEZK4Ji1';
+  late String currentUserId = singleton.user!.uid;
 
   // final List<Message> messages = [];
   List<QueryDocumentSnapshot> listMessages = [];
@@ -96,7 +95,7 @@ class _GameChatState extends State<GameChat> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/dnd.png'),
+          image: AssetImage('assets/images/background4.png'),
           fit: BoxFit.cover,
           opacity: 0.9,
         ),
@@ -127,7 +126,7 @@ class _GameChatState extends State<GameChat> {
                             tail: true,
                             isSender: !ai_msg,
                             textStyle:
-                                TextStyle(color: Colors.black, fontSize: 16),
+                                TextStyle(color: ai_msg? Colors.black: Colors.white, fontSize: 16),
                           );
                           // return messageBubble(
                           //   chatContent: listMessages[index].get('text'),

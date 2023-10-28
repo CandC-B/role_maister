@@ -19,7 +19,7 @@ class ShopScreen extends StatelessWidget {
       body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/dnd.png'),
+              image: AssetImage('assets/images/background4.png'),
               fit: BoxFit.cover,
             ),
           ),

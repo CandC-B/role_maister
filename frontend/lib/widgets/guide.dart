@@ -19,8 +19,7 @@ class _GuidesState extends State<Guides> {
       children: [
         Positioned.fill(
           child: Image.asset(
-            // 'assets/images/aliens_guide.png', // TODO: poner esta, no funciona
-            'assets/images/dnd.png',
+            'assets/images/aliens_guide.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
