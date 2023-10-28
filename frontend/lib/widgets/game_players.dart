@@ -16,6 +16,8 @@ class _GamePlayersState extends State<GamePlayers> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
           title: const Text('Role MAIster'),
           backgroundColor: Colors.deepPurple,
           bottom: const TabBar(
@@ -136,6 +138,8 @@ class Stats extends StatelessWidget {
      
     return Scaffold(
         appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.black54,
           title: Text(userStats.name),
         ),
