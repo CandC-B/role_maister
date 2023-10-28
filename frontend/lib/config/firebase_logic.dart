@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
-import 'package:role_maister/models/models.dart';
-import 'package:role_maister/pages/register_page.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -135,8 +133,8 @@ class FirebaseService {
       User? user = credential.user;
       // print('User signed in: ${user?.email}');
       singleton.user = user;
-      context.go("/rules");
-      context.push("/rules");
+      context.go("/terms_conditions");
+      context.push("/terms_conditions");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print("The account already exists for that email");

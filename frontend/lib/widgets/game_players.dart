@@ -16,8 +16,6 @@ class _GamePlayersState extends State<GamePlayers> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
           title: const Text('Role MAIster'),
           backgroundColor: Colors.deepPurple,
           bottom: const TabBar(
@@ -55,11 +53,14 @@ class StatsTab extends StatefulWidget {
 class _StatsTabState extends State<StatsTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+
+      backgroundColor: Colors.black87,
+      body: Container(
         // child: const Text("Stats Tab Content"),
         child: Stats(userStats: widget.userStats),
-        color: Colors.black87
-      );
+      )
+    );
   }
 }
 
@@ -135,13 +136,10 @@ class Stats extends StatelessWidget {
      
     return Scaffold(
         appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
           backgroundColor: Colors.black54,
           title: Text(userStats.name),
-
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.deepPurple,
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
