@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:role_maister/config/firebase_logic.dart';
+import 'package:role_maister/config/config.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
 import '../models/models.dart';
@@ -41,6 +41,10 @@ class _GameChatState extends State<GameChat> {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
+
+    firestoreService.saveMessage(
+            text, DateTime.now(), widget.gameId, currentUserId);
+    textEditingController.clear();
   
     if (messages != null) {
       final response = await http.post(
@@ -50,9 +54,6 @@ class _GameChatState extends State<GameChat> {
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
-        textEditingController.clear();
-        firestoreService.saveMessage(
-            text, DateTime.now(), widget.gameId, currentUserId);
         firestoreService.saveMessage(
             json.decode(response.body)["message"], DateTime.now(), widget.gameId, "IA");
         // scrollController.animateTo(0,
