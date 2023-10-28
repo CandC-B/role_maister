@@ -35,9 +35,7 @@ class UserStatistics {
     required this.hp,
   });
 
-  
-
- // Factory constructor to generate random UserStatistics
+  // Factory constructor to generate random UserStatistics
   factory UserStatistics.random() {
     final career = _generateCareer();
     final attributes = _generateRandomAttributes(career);
@@ -66,18 +64,26 @@ class UserStatistics {
       gear: gear,
       signatureItem: signatureItem,
       cash: cash,
-      hp: 2*attributes["Strength"]!,
+      hp: 2 * attributes["Strength"]!,
     );
   }
 
-  static String _generateCareer(){
-    List<String> careers = ["Colonial marine", "Colonial marshall", "Agent", "Kid", "Medic", "Official", "Pilot", "Roughneck", "Scientific"];
+  static String _generateCareer() {
+    List<String> careers = [
+      "Colonial marine",
+      "Colonial marshall",
+      "Agent",
+      "Kid",
+      "Medic",
+      "Official",
+      "Pilot",
+      "Roughneck",
+      "Scientific"
+    ];
     return randomChoice(careers);
   }
 
-
-  static Map<String, int> _generateRandomAttributes(
-      String selectedCareer) {
+  static Map<String, int> _generateRandomAttributes(String selectedCareer) {
     Map<String, int> attributes = {
       "Strength": 0,
       "Agility": 0,
@@ -383,7 +389,7 @@ class UserStatistics {
         "You once gave up your family for work. Now you don't plan to disappoint your friends. Never.",
         "You like to enjoy your free time. If you can grab a can of beer and spend some time alone, you are the happiest person in the world."
       ],
-      "Scientific":[
+      "Scientific": [
         "Your last project was stolen, so now you keep most of your findings a secret.",
         "You hate authority; Do your best to appear uncooperative.",
         "It is very difficult for you to delegate to others, even when it makes you work more than necessary."
@@ -400,7 +406,7 @@ class UserStatistics {
     Map<String, List<List<String>>> appearance = {
       "Colonial marine": [
         ["A pulse rifle", "A smart machine gun"],
-        ["A motion tracker","2 electroshock grenades"],
+        ["A motion tracker", "2 electroshock grenades"],
         ["A pressure suit", "Armor"],
         ["A sparkler", "A deck of cards"]
       ],
@@ -413,7 +419,10 @@ class UserStatistics {
       "Agent": [
         ["A leather briefcase", "A chrome briefcase."],
         ["A gold-plated fountain pen", "A luxury watch."],
-        ["A data transmission card with corporate accreditation", "A service pistol."],
+        [
+          "A data transmission card with corporate accreditation",
+          "A service pistol."
+        ],
         ["1D6 sleep reliever pills", "1D6 dose of Naproleve."]
       ],
       "Kid": [
@@ -456,9 +465,9 @@ class UserStatistics {
 
     List<String> gear = [];
     if (appearance.containsKey(selectedCareer)) {
-      appearance[selectedCareer]!.forEach((element) { 
-          String choice = randomChoice(element);
-          gear.add(choice);
+      appearance[selectedCareer]!.forEach((element) {
+        String choice = randomChoice(element);
+        gear.add(choice);
       });
       return gear;
     }
@@ -537,7 +546,6 @@ class UserStatistics {
       return cash[selectedCareer]!;
     }
     throw Exception("Unsupported career selected");
-  
   }
 
   @override
@@ -577,5 +585,30 @@ class UserStatistics {
       'cash': cash,
       'hp': hp,
     };
+  }
+
+  static fromMap(Map<String, dynamic> statsData) {
+    return UserStatistics(
+      name: statsData['name'] as String,
+      hp: statsData['hp'] as int,
+      characterLevel: statsData['character_level'] as int,
+      career: statsData['career'] as String,
+      attributes: (statsData['attributes'] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, value as int)),
+      skills: (statsData['skills'] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, value as int)),
+      talents: (statsData['talents'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      appearance: statsData['appearance'] as String,
+      personalAgenda: statsData['signature_item'] as String,
+      friend: statsData['friend'] as String,
+      rival: statsData['rival'] as String,
+      gear: (statsData['gear'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      signatureItem: statsData['signature_item'] as String,
+      cash: statsData['cash'] as int,
+    );
   }
 }
