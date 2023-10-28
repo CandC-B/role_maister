@@ -210,7 +210,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Column(
                 children: [
                   Text(
-                    "Pricing",
+                    "Shop",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color:
