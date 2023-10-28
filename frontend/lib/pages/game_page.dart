@@ -15,7 +15,7 @@ class GamePage extends StatelessWidget {
             flex: 1,
             child: Container(
               height: size.height,
-              child: const GamePlayers(),
+              child: GamePlayers(gameId: singleton.currentGame!),
             ),
           ),
           Expanded(
