@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
-
+import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:http/http.dart' as http;
 import '../models/models.dart';
+import 'dart:convert';
 
 class GameChat extends StatefulWidget {
   final String gameId;
@@ -32,16 +34,37 @@ class _GameChatState extends State<GameChat> {
     // scrollController.addListener(_scrollListener);
   }
 
-  void onSendMessage(String text) {
+  void onSendMessage(String text) async {
     // TODO: mandar todo pal BE primero
+    List<Map<String, dynamic>>? messages =
+        await firebase.fetchConversationByGameID(singleton.currentGame!);
 
-    if (text.trim().isNotEmpty) {
-      textEditingController.clear();
-      firestoreService.saveMessage(
-          text, DateTime.now(), widget.gameId, currentUserId);
-      // scrollController.animateTo(0,
-      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+  
+    if (messages != null) {
+      final response = await http.post(
+          // TODO: add constants.dart in utils folder
+          // Uri.http("localhost:8000", "/game/master?message=$text"),
+          Uri.parse("http://localhost:8000/game/master?message=$text"),
+          headers: headers,
+          body: jsonEncode(messages));
+      if (text.trim().isNotEmpty) {
+        textEditingController.clear();
+        firestoreService.saveMessage(
+            text, DateTime.now(), widget.gameId, currentUserId);
+        firestoreService.saveMessage(
+            json.decode(response.body)["message"], DateTime.now(), widget.gameId, "IA");
+        // scrollController.animateTo(0,
+        //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     }
+    } else {
+      // Handle the case where there was an error fetching messages
+      // TODO: ni puta idea de que hacer
+    }
+
+    
     // else {
     //   Fluttertoast.showToast(
     //       msg: 'Nothing to send', backgroundColor: Colors.grey);
@@ -94,10 +117,22 @@ class _GameChatState extends State<GameChat> {
                       // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < listMessages.length) {
-                          return messageBubble(
-                            chatContent: listMessages[index].get('text'),
-                            messageType: listMessages[index].get('sentBy'),
+                          bool ai_msg =
+                              listMessages[index].get('sentBy') == "IA";
+                          return BubbleSpecialThree(
+                            text: listMessages[index].get('text'),
+                            color: ai_msg
+                                ? Color.fromARGB(255, 234, 226, 248)
+                                : Colors.deepPurple,
+                            tail: true,
+                            isSender: !ai_msg,
+                            textStyle:
+                                TextStyle(color: Colors.black, fontSize: 16),
                           );
+                          // return messageBubble(
+                          //   chatContent: listMessages[index].get('text'),
+                          //   messageType: listMessages[index].get('sentBy'),
+                          // );
                         }
                       },
                     );
@@ -217,8 +252,9 @@ class _GameChatState extends State<GameChat> {
               margin:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                color:
-                    messageType == currentUserId ? Colors.deepPurple : Colors.green,
+                color: messageType == currentUserId
+                    ? Colors.deepPurple
+                    : Colors.green,
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Text(

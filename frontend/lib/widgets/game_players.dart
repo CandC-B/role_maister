@@ -42,7 +42,7 @@ class _GamePlayersState extends State<GamePlayers> {
               body: TabBarView(
                 children: [
                   Center(child: StatsTab(userStats: userStats)),
-                  const Center(child: PlayersTab()),
+                  Center(child: PlayersTab(userStats: userStats)),
                 ],
               ),
             ),
@@ -85,22 +85,31 @@ class StatsTab extends StatefulWidget {
 class _StatsTabState extends State<StatsTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+
+      backgroundColor: Colors.black87,
+      body: Container(
         // child: const Text("Stats Tab Content"),
         child: Stats(userStats: widget.userStats),
-        color: Colors.black87);
+      )
+    );
   }
 }
 
 // Players tab
 class PlayersTab extends StatelessWidget {
-  const PlayersTab({Key? key}) : super(key: key);
+  const PlayersTab({
+    super.key,
+    required this.userStats,
+  });
+
+  final UserStatistics userStats;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         backgroundColor: Colors.black,
-        body: PlayerCard(playerName: "John Doe") // TODO: REPLACE WITH REAL DATA
+        body: PlayerCard(playerName: userStats.name) // TODO: REPLACE WITH REAL DATA
 
         );
   }
@@ -159,12 +168,10 @@ class Stats extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: null,
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.black54,
         title: Text(userStats.name),
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.deepPurple,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(

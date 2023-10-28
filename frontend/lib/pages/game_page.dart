@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:role_maister/config/config.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({super.key});
@@ -14,14 +15,14 @@ class GamePage extends StatelessWidget {
             flex: 1,
             child: Container(
               height: size.height,
-              child: const GamePlayers(),
+              child: GamePlayers(gameId: singleton.currentGame!),
             ),
           ),
           Expanded(
             flex: 3,
             child: Container(
               height: size.height,
-              child: GameChat(gameId: 'm6VtWFlpFAS7ePjF6q0i'),
+              child: GameChat(gameId: singleton.currentGame!),
             ),
           ),
         ],

@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
-import 'package:role_maister/models/models.dart';
-import 'package:role_maister/pages/register_page.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -99,6 +97,37 @@ class FirebaseService {
     }
   }
 
+  Future<List<Map<String, dynamic>>?> fetchConversationByGameID(String gameId) async {
+  try {
+    List<Map<String, dynamic>> allMessages = [];
+
+    final querySnapshot = await _firestore
+        .collection('message')
+        .doc(gameId)
+        .collection('messages')
+        .orderBy('sentAt', descending: true)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      if (doc.exists) {
+        final data = doc.data() as Map<String, dynamic>;
+        final sentBy = data['sentBy'] as String;
+        final text = data['text'] as String;
+        if (sentBy == "IA"){
+          allMessages.add({"role": "CHATBOT", "message": text});
+        }
+        
+      }
+    });
+
+    return allMessages;
+  } catch (e) {
+    print("Error fetching conversation: $e");
+    return null;
+  }
+}
+
+
   // Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
   Stream<QuerySnapshot> fetchMessagesByGameId(String gameId) {
     return _firestore
@@ -148,8 +177,8 @@ class FirebaseService {
       User? user = credential.user;
       // print('User signed in: ${user?.email}');
       singleton.user = user;
-      context.go("/rules");
-      context.push("/rules");
+      context.go("/terms_conditions");
+      context.push("/terms_conditions");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print("The account already exists for that email");
