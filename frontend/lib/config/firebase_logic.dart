@@ -24,6 +24,50 @@ class FirebaseService {
     }
   }
 
+  // TODO: modificar esta función para el multiplayer
+  Future<Map<String, dynamic>> getCharacters(String gameId) async {
+    try {
+      final DocumentReference gameReference =
+          _firestore.collection("game").doc(gameId);
+      final DocumentSnapshot gameSnapshot = await gameReference.get();
+
+      if (gameSnapshot.exists) {
+        final Map<String, dynamic> gameData =
+            gameSnapshot.data() as Map<String, dynamic>;
+
+        if (gameData.containsKey("players")) {
+          final List<dynamic> players = gameData["players"];
+
+          if (players.isNotEmpty) {
+            final String characterId = players[0];
+            final DocumentReference characterReference =
+                _firestore.collection('character').doc(characterId);
+            final DocumentSnapshot characterSnapshot =
+                await characterReference.get();
+
+            if (characterSnapshot.exists) {
+              final Map<String, dynamic> characterData =
+                  characterSnapshot.data() as Map<String, dynamic>;
+
+              // print(characterData);
+              return characterData;
+            } else {
+              throw Exception("CHARACTER: Document does not exist");
+            }
+          } else {
+            throw Exception("GAME: 'players' list is empty");
+          }
+        } else {
+          throw Exception("GAME: Attribute 'players' does not exist");
+        }
+      } else {
+        throw Exception("GAME: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<String> createGame(Map<String, dynamic> gameConfig) async {
     try {
       DocumentReference docRef =

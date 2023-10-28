@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/models.dart';
-import 'dart:convert';
 
 class GamePlayers extends StatefulWidget {
-  const GamePlayers({Key? key}) : super(key: key);
+  const GamePlayers({super.key, required this.gameId});
+  final String gameId;
 
   @override
   State<GamePlayers> createState() => _GamePlayersState();
@@ -12,31 +13,60 @@ class GamePlayers extends StatefulWidget {
 class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
-          title: const Text('Role MAIster'),
-          backgroundColor: Colors.deepPurple,
-          bottom: const TabBar(
-            indicatorColor: Colors.white,
-            tabs: [
-              Tab(text: 'Stats'),
-              Tab(text: 'Players'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            // TODO: poner el de Firebase
-            Center(child: StatsTab(userStats: UserStatistics.random(),)),
-            Center(child: PlayersTab()),
-          ],
-        ),
-      ),
+    return FutureBuilder<UserStatistics>(
+      future: getUserStats(widget.gameId),
+      builder: (BuildContext context, AsyncSnapshot<UserStatistics?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera la respuesta.
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          final userStats = snapshot.data ??
+              UserStatistics.random(); // Usar datos o valor random
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: const Text('Role MAIster'),
+                backgroundColor: Colors.deepPurple,
+                bottom: const TabBar(
+                  indicatorColor: Colors.white,
+                  tabs: [
+                    Tab(text: 'Stats'),
+                    Tab(text: 'Players'),
+                  ],
+                ),
+              ),
+              body: TabBarView(
+                children: [
+                  Center(child: StatsTab(userStats: userStats)),
+                  const Center(child: PlayersTab()),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const Text('No se encontraron estadísticas.');
+        }
+      },
     );
+  }
+
+  Future<UserStatistics> getUserStats(String gameId) async {
+    try {
+      final Map<String, dynamic> statsData =
+          await firestoreService.getCharacters(gameId);
+      try {
+        return UserStatistics.fromMap(statsData);
+      } catch (e) {
+        print("Error: $e");
+        return UserStatistics.random();
+      }
+    } catch (error) {
+      throw Exception("Error al obtener estadísticas del usuario: $error");
+    }
   }
 }
 
@@ -58,8 +88,7 @@ class _StatsTabState extends State<StatsTab> {
     return Container(
         // child: const Text("Stats Tab Content"),
         child: Stats(userStats: widget.userStats),
-        color: Colors.black87
-      );
+        color: Colors.black87);
   }
 }
 
@@ -70,14 +99,12 @@ class PlayersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+        backgroundColor: Colors.black,
+        body: PlayerCard(playerName: "John Doe") // TODO: REPLACE WITH REAL DATA
 
-      backgroundColor: Colors.black,
-      body: PlayerCard(playerName: "John Doe") // TODO: REPLACE WITH REAL DATA
-      
-    );
+        );
   }
 }
-
 
 // TODO: LAS CARTAS DEBEN SER BUTTONS TAMBIÉN PARA  UE PUEDAS VER LOS STATS DE OTROS PLAYERS
 class PlayerCard extends StatelessWidget {
@@ -120,8 +147,6 @@ class PlayerCard extends StatelessWidget {
   }
 }
 
-
-
 class Stats extends StatelessWidget {
   const Stats({super.key, required this.userStats});
   final UserStatistics userStats;
@@ -129,49 +154,63 @@ class Stats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: This is Mock user statistics, replace with real data
-    // TODO: Improve the UI 
+    // TODO: Improve the UI
     // TODO: Reorder the stats
 
-     
     return Scaffold(
-        appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.black54,
-          title: Text(userStats.name),
-
-        ),
-        backgroundColor: Colors.black,
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildStatItem('HP', Icons.favorite, userStats.hp.toString(), Colors.white),
-                _buildStatItem('Character Level', Icons.bar_chart, userStats.characterLevel.toString(), Colors.white),
-                _buildStatItem('Career', Icons.school, userStats.career, Colors.white),
-                _buildAttributeStats(userStats.attributes),
-                _buildStatItem('Skills', Icons.list, userStats.skills.toString().replaceAll(RegExp("[{}]"), ""), Colors.white),
-                _buildStatItem('Talents', Icons.star, userStats.talents.join(', '), Colors.white),
-                _buildStatItem('Appearance', Icons.face, userStats.appearance, Colors.white),
-                _buildStatItem('Personal Agenda', Icons.assignment, userStats.personalAgenda, Colors.white),
-                _buildStatItem('Friend', Icons.sentiment_very_satisfied, userStats.friend, Colors.white),
-                _buildStatItem('Rival', Icons.sentiment_very_dissatisfied, userStats.rival, Colors.white),
-                _buildStatItem('Gear', Icons.accessibility, userStats.gear.join(', '), Colors.white),
-                _buildStatItem('Signature Item', Icons.edit, userStats.signatureItem, Colors.white),
-                _buildStatItem('Cash', Icons.attach_money, '\$${userStats.cash}', Colors.white),  
-              ],
-            ),
+      appBar: AppBar(
+        leading: null,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.black54,
+        title: Text(userStats.name),
+      ),
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStatItem(
+                  'HP', Icons.favorite, userStats.hp.toString(), Colors.white),
+              _buildStatItem('Character Level', Icons.bar_chart,
+                  userStats.characterLevel.toString(), Colors.white),
+              _buildStatItem(
+                  'Career', Icons.school, userStats.career, Colors.white),
+              _buildAttributeStats(userStats.attributes),
+              _buildStatItem(
+                  'Skills',
+                  Icons.list,
+                  userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
+                  Colors.white),
+              _buildStatItem('Talents', Icons.star,
+                  userStats.talents.join(', '), Colors.white),
+              _buildStatItem(
+                  'Appearance', Icons.face, userStats.appearance, Colors.white),
+              _buildStatItem('Personal Agenda', Icons.assignment,
+                  userStats.personalAgenda, Colors.white),
+              _buildStatItem('Friend', Icons.sentiment_very_satisfied,
+                  userStats.friend, Colors.white),
+              _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
+                  userStats.rival, Colors.white),
+              _buildStatItem('Gear', Icons.accessibility,
+                  userStats.gear.join(', '), Colors.white),
+              _buildStatItem('Signature Item', Icons.edit,
+                  userStats.signatureItem, Colors.white),
+              _buildStatItem('Cash', Icons.attach_money, '\$${userStats.cash}',
+                  Colors.white),
+            ],
           ),
         ),
-      );    
+      ),
+    );
   }
 
-  Widget _buildStatItem(String label, IconData icon, String value, Color textColor) {
+  Widget _buildStatItem(
+      String label, IconData icon, String value, Color textColor) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
-      title: Text(label, style: TextStyle(color: Colors.white)),
+      title: Text(label, style: const TextStyle(color: Colors.white)),
       subtitle: Text(value, style: TextStyle(color: textColor)),
     );
   }
@@ -186,19 +225,23 @@ class Stats extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text('Strength: ${attributes['Strength']}', style: TextStyle(color: Colors.white)),
+          title: Text('Strength: ${attributes['Strength']}',
+              style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text('Agility: ${attributes['Agility']}', style: TextStyle(color: Colors.white)),
+          title: Text('Agility: ${attributes['Agility']}',
+              style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text('Empathy: ${attributes['Empathy']}', style: TextStyle(color: Colors.white)),
+          title: Text('Empathy: ${attributes['Empathy']}',
+              style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
-          leading: Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('Wits: ${attributes['Wits']}', style: TextStyle(color: Colors.white)),
+          leading: const Icon(Icons.lightbulb, color: Colors.white),
+          title: Text('Wits: ${attributes['Wits']}',
+              style: const TextStyle(color: Colors.white)),
         ),
       ],
     );
