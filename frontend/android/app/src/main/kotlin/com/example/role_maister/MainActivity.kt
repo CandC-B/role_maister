@@ -1,4 +1,4 @@
-package com.example.role_maister
+package com.candc_b.role_maister
 
 import io.flutter.embedding.android.FlutterActivity
 
