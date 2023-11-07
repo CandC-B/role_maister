@@ -178,13 +178,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
               onPressed: () async {
-                if (newPassword1.text == newPassword2.text) {
-                  checkRegisterInput();
-                  if (!passwordError && !emailError) {
-                    firebase.signUp(email.text, newPassword1.text,
-                        context); // TODO Handle if email is already created
-                  }
-                }
+                // TODO remove comments in production
+                // if (newPassword1.text == newPassword2.text) {
+                //   checkRegisterInput();
+                //   if (!passwordError && !emailError) {
+                //     firebase.signUp(email.text, newPassword1.text,
+                //         context); // TODO Handle if email is already created
+                //   }
+                // }
               },
               child: const SizedBox(
                 width: double.infinity,
