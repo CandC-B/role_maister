@@ -15,9 +15,12 @@ class _SignInPageState extends State<SignInPage> {
   bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 110.0),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
+          : const EdgeInsets.symmetric(vertical: 110.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -36,7 +39,9 @@ class _SignInPageState extends State<SignInPage> {
           color: Colors.white70,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+          padding: isMobile
+              ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0)
+              : const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: _formLogin(),
@@ -91,7 +96,6 @@ class _SignInPageState extends State<SignInPage> {
             controller: password,
             decoration: InputDecoration(
               hintText: "Password",
-              counterText: "Forgot password?",
               suffixIcon: passwordVisionIcon(),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -106,6 +110,19 @@ class _SignInPageState extends State<SignInPage> {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Align( // TODO SOlve this
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+                child: Text("Forgot Password?", textAlign: TextAlign.end)),
           ),
           const SizedBox(
             height: 40,
@@ -167,8 +184,10 @@ class _SignInPageState extends State<SignInPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _loginWithButton(image: "assets/images/google_logo.png", isActive: true),
-              _loginWithButton(image: "assets/images/github_logo.png", isActive: true),
+              _loginWithButton(
+                  image: "assets/images/google_logo.png", isActive: true),
+              _loginWithButton(
+                  image: "assets/images/github_logo.png", isActive: true),
               _loginWithButton(
                   image: "assets/images/facebook_logo.png", isActive: true),
             ],
