@@ -7742,7 +7742,7 @@ if(a==="https")return"https"
 if(a==="package")return"package"
 return a},
 aHk(a,b,c){if(a==null)return""
-return A.If(a,b,c,B.IB,!1,!1)},
+return A.If(a,b,c,B.IC,!1,!1)},
 auC(a,b,c,d,e,f){var s,r=e==="file",q=r||f
 if(a==null){if(d==null)return r?"/":""
 s=new A.a3(d,new A.auD(),A.a9(d).i("a3<1,l>")).aM(0,"/")}else if(d!=null)throw A.c(A.bo("Both path and pathSegments specified",null))
@@ -27559,7 +27559,7 @@ aoK:function aoK(a){this.a=a},
 aoF:function aoF(a){this.a=a},
 aoG:function aoG(a){this.a=a},
 aY7(a){var s=null
-return A.jg(B.a4,!0,s,A.qc(!1,s,!0,A.aP(s,B.Dm,B.j,s,s,s,s,s,s,new A.at(0,24+A.bj(a,s,t.w).w.f.b,0,24),s,s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.awi(a),s,s,s,s,s),B.j,B.C,0,s,s,s,s,s,B.du)},
+return A.jg(B.a4,!0,s,A.qc(!1,s,!0,A.aP(s,B.Dp,B.j,s,s,s,s,s,s,new A.at(0,24+A.bj(a,s,t.w).w.f.b,0,24),s,s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.awi(a),s,s,s,s,s),B.j,B.C,0,s,s,s,s,s,B.du)},
 awi:function awi(a){this.a=a},
 aY8(a){var s=null
 return A.azC(B.i4,A.a([A.ko(B.Gk,new A.awj(a),s,B.X7,s),A.ko(B.Gl,new A.awk(a),s,B.VD,s),A.ko(B.Gu,new A.awl(a),s,B.WR,s),B.Ef,A.ko(B.Gx,new A.awm(a),s,B.V8,s),A.ko(B.Gv,new A.awn(a),s,B.Vj,s)],t.p))},
@@ -30615,7 +30615,7 @@ l.push(new A.e3(n[0],n[1],n[2],n[3],B.nR[m]))}return l},
 eh(a){var s,r=this.a
 r===$&&A.b()
 r=r.a.getGlyphPositionAtCoordinate(a.a,a.b)
-s=B.IQ[B.d.ag(r.affinity.value)]
+s=B.IR[B.d.ag(r.affinity.value)]
 return new A.b1(B.d.ag(r.pos),s)},
 kC(a){var s,r
 switch(a.b.a){case 0:s=a.a-1
@@ -44970,7 +44970,7 @@ $iSC:1,
 geI(){return this.a},
 gbM(a){return this.e}}
 A.auD.prototype={
-$1(a){return A.Ig(B.IU,a,B.W,!1)},
+$1(a){return A.Ig(B.IV,a,B.W,!1)},
 $S:44}
 A.auG.prototype={
 $2(a,b){var s=this.b,r=this.a
@@ -53552,7 +53552,7 @@ A.wT.prototype={
 J(){return"_CornerId."+this.b}}
 A.mx.prototype={}
 A.uU.prototype={
-kR(){var s,r,q=this,p=A.aWD(B.IR,new A.acX(q,q.b.gaK().a2(0,q.a.gaK()))),o=q.a
+kR(){var s,r,q=this,p=A.aWD(B.IS,new A.acX(q,q.b.gaK().a2(0,q.a.gaK()))),o=q.a
 o.toString
 s=p.a
 o=q.pa(o,s)
@@ -73362,7 +73362,7 @@ A.m9.prototype={}
 A.PE.prototype={
 ld(a,b,c){var s,r,q,p,o,n=$.a7.ae$.f.c
 if(n==null||n.e==null)return!1
-for(s=t.vz,r=0;r<2;++r){q=B.IS[r]
+for(s=t.vz,r=0;r<2;++r){q=B.IT[r]
 p=n.e
 p.toString
 o=A.axL(p,q,s)
@@ -90080,10 +90080,10 @@ F(a){var s=A.la(a)
 return A.f2(B.DM,null,A.kp(B.Im),s)}}
 A.N2.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.mO,null,A.kp(B.In),s)}}
+return A.f2(B.mO,null,A.kp(B.Io),s)}}
 A.Nh.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.mO,null,A.kp(B.Io),s)}}
+return A.f2(B.mO,null,A.kp(B.Ip),s)}}
 A.R7.prototype={
 F(a){var s=null
 return A.f2(B.DP,s,A.aP(s,A.aE6(new A.ajj(this),5,s,!1),B.j,s,s,B.AS,s,s,s,s,s,s,s),s)}}
@@ -90112,22 +90112,22 @@ $0(){A.ks(this.a,!1).e0()},
 $S:0}
 A.PG.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DQ,null,A.kp(B.IC),s)}}
+return A.f2(B.DQ,null,A.kp(B.ID),s)}}
 A.PQ.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DR,null,A.kp(B.ID),s)}}
+return A.f2(B.DR,null,A.kp(B.IE),s)}}
 A.QA.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DS,null,A.kp(B.IE),s)}}
+return A.f2(B.DS,null,A.kp(B.IF),s)}}
 A.QU.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DU,null,A.kp(B.IF),s)}}
+return A.f2(B.DU,null,A.kp(B.IG),s)}}
 A.R8.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DV,null,A.kp(B.IG),s)}}
+return A.f2(B.DV,null,A.kp(B.IH),s)}}
 A.S_.prototype={
 F(a){var s=A.la(a)
-return A.f2(B.DO,null,A.kp(B.IP),s)}}
+return A.f2(B.DO,null,A.kp(B.IQ),s)}}
 A.fB.prototype={
 ai(){return new A.Ur($.a1C(),B.k)},
 gkn(){return B.Q6}}
@@ -90145,7 +90145,7 @@ case"Home":s.e=!0
 break
 case"Rules":s.x=!0
 break}},
-F(a){var s,r,q,p,o=this,n=null,m="images/small_logo.png"
+F(a){var s,r,q,p,o=this,n=null,m="assets/images/small_logo.png"
 o.aiy(o.a.c)
 s=!(A.bj(a,n,t.w).w.a.a>700)||!1
 o.d=s
@@ -94183,11 +94183,11 @@ B.AP=new A.aq(280,1/0,0,1/0)
 B.AO=new A.aq(36,1/0,36,1/0)
 B.a_r=new A.aq(88,1/0,36,1/0)
 B.lN=new A.aq(48,1/0,48,1/0)
-B.Ai=new A.ii("assets/images/dnd.png",null,null)
+B.Aj=new A.ii("assets/images/dnd.png",null,null)
 B.cD=new A.yP(2,"cover")
 B.cL=new A.uy(3,"noRepeat")
 B.dp=new A.pT(1,"low")
-B.E2=new A.nf(B.Ai,null,B.cD,1)
+B.E2=new A.nf(B.Aj,null,B.cD,1)
 B.H=new A.Kf(0,"rectangle")
 B.c5=new A.br(null,B.E2,null,null,null,null,B.H)
 B.Cm=new A.G(1006632960)
@@ -94465,8 +94465,8 @@ B.Ca=new A.ij(B.x,null,null,B.mh,null)
 B.Cb=new A.yU(null,null,null,null,null,null,null,null,null)
 B.Cc=new A.yV(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.R=new A.G(0)
-B.Aj=new A.ii("assets/images/bot_master.png",null,null)
-B.Cf=new A.tp(B.Aj,80,null)
+B.Ak=new A.ii("assets/images/bot_master.png",null,null)
+B.Cf=new A.tp(B.Ak,80,null)
 B.iE=new A.dV(0,B.v)
 B.Ch=new A.z2(B.kk)
 B.Ci=new A.z2(null)
@@ -94530,15 +94530,15 @@ B.Ds=new A.KY(null)
 B.Ra=new A.RY(null)
 B.Iy=A.a(s([B.zX,B.Ds,B.Ra]),t.p)
 B.Dk=new A.fw(B.V,B.q,B.o,B.aE,null,B.L,null,B.Iy,null)
-B.lF=new A.ii("images/small_logo.png",null,null)
-B.Ce=new A.tp(B.lF,52,null)
+B.Ai=new A.ii("asset/images/small_logo.png",null,null)
+B.Ce=new A.tp(B.Ai,52,null)
 B.yV=new A.db(null,12,null,null)
 B.ax=new A.io(6,700)
 B.cB=new A.u(!0,B.f,null,null,null,null,null,B.ax,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.WE=new A.S("Username",null,B.cB,null,null,null,null,null,null,null,null)
 B.Vn=new A.S("User Email",null,B.cB,null,null,null,null,null,null,null,null)
-B.Ip=A.a(s([B.Ce,B.yV,B.WE,B.yV,B.Vn]),t.p)
-B.Dm=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.Ip,null)
+B.In=A.a(s([B.Ce,B.yV,B.WE,B.yV,B.Vn]),t.p)
+B.Dp=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.In,null)
 B.ak=new A.u(!0,B.f,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.X_=new A.S("C&C - B",null,B.ak,null,null,null,null,null,null,null,null)
 B.Vm=new A.S("C/ de Jaume II, 69",null,B.ak,null,null,null,null,null,null,null,null)
@@ -95103,28 +95103,28 @@ B.nO=A.a(s([0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0]),t.up)
 B.FH=new A.MX(null)
 B.Im=A.a(s([B.FH,B.bH]),t.p)
 B.FK=new A.N1(null)
-B.In=A.a(s([B.FK,B.bH]),t.p)
+B.Io=A.a(s([B.FK,B.bH]),t.p)
 B.GK=new A.Ng(null)
-B.Io=A.a(s([B.GK,B.bH]),t.p)
+B.Ip=A.a(s([B.GK,B.bH]),t.p)
 B.JP=new A.nQ("en","US")
 B.nP=A.a(s([B.JP]),t.ss)
 B.h4=A.a(s([0,0,24576,1023,65534,34815,65534,18431]),t.t)
 B.nQ=A.a(s([0,0,26624,1023,65534,2047,65534,2047]),t.t)
-B.IB=A.a(s([0,0,32722,12287,65534,34815,65534,18431]),t.t)
+B.IC=A.a(s([0,0,32722,12287,65534,34815,65534,18431]),t.t)
 B.O_=new A.PF(null)
-B.IC=A.a(s([B.O_,B.bH]),t.p)
+B.ID=A.a(s([B.O_,B.bH]),t.p)
 B.O6=new A.Ct(null)
-B.ID=A.a(s([B.O6,B.bH]),t.p)
+B.IE=A.a(s([B.O6,B.bH]),t.p)
 B.Oy=new A.Qz(null)
-B.IE=A.a(s([B.Oy,B.bH]),t.p)
+B.IF=A.a(s([B.Oy,B.bH]),t.p)
 B.OT=new A.QT(null)
-B.IF=A.a(s([B.OT,B.bH]),t.p)
+B.IG=A.a(s([B.OT,B.bH]),t.p)
 B.PA=new A.Ds(null)
-B.IG=A.a(s([B.PA,B.bH]),t.p)
+B.IH=A.a(s([B.PA,B.bH]),t.p)
 B.Rb=new A.RZ(null)
-B.IP=A.a(s([B.Rb,B.bH]),t.p)
+B.IQ=A.a(s([B.Rb,B.bH]),t.p)
 B.aj=new A.E_(0,"upstream")
-B.IQ=A.a(s([B.aj,B.l]),A.aj("z<E_>"))
+B.IR=A.a(s([B.aj,B.l]),A.aj("z<E_>"))
 B.a2=new A.iF(0,"rtl")
 B.r=new A.iF(1,"ltr")
 B.nR=A.a(s([B.a2,B.r]),A.aj("z<iF>"))
@@ -95136,12 +95136,12 @@ B.zF=new A.wT(1,"topRight")
 B.zG=new A.wT(2,"bottomLeft")
 B.Zn=new A.mx(B.zF,B.zG)
 B.Zo=new A.mx(B.zG,B.zF)
-B.IR=A.a(s([B.Zm,B.Zp,B.Zn,B.Zo]),A.aj("z<mx>"))
+B.IS=A.a(s([B.Zm,B.Zp,B.Zn,B.Zo]),A.aj("z<mx>"))
 B.B3=new A.t5()
 B.eR=new A.QN(1,"page")
 B.hB=new A.ep(B.Y,B.eR)
-B.IS=A.a(s([B.B3,B.hB]),A.aj("z<b3>"))
-B.IU=A.a(s([0,0,32722,12287,65535,34815,65534,18431]),t.t)
+B.IT=A.a(s([B.B3,B.hB]),A.aj("z<b3>"))
+B.IV=A.a(s([0,0,32722,12287,65535,34815,65534,18431]),t.t)
 B.nS=A.a(s([0,0,65490,12287,65535,34815,65534,18431]),t.t)
 B.nT=A.a(s([0,0,32776,33792,1,10240,0,0]),t.t)
 B.aa=new A.eR(0,"icon")
@@ -96120,22 +96120,22 @@ B.JK=A.a(s([B.tK,null,null,B.jX]),t.L)
 B.JL=A.a(s([B.tL,null,null,B.jY]),t.L)
 B.Jl=A.a(s([B.ew,B.ew,B.he,null]),t.L)
 B.JN=A.a(s([B.ha,null,B.ha,null]),t.L)
-B.IH=A.a(s([B.bS,null,null,B.jR]),t.L)
-B.II=A.a(s([B.bD,null,null,B.jT]),t.L)
-B.IJ=A.a(s([B.bE,null,null,B.jV]),t.L)
+B.II=A.a(s([B.bS,null,null,B.jR]),t.L)
+B.IJ=A.a(s([B.bD,null,null,B.jT]),t.L)
+B.IK=A.a(s([B.bE,null,null,B.jV]),t.L)
 B.J3=A.a(s([B.bT,null,null,B.jX]),t.L)
 B.Jh=A.a(s([B.jL,null,null,B.jU]),t.L)
 B.Jm=A.a(s([B.ev,B.ev,B.hd,null]),t.L)
 B.Ik=A.a(s([B.bd,null,null,B.jO]),t.L)
-B.IK=A.a(s([B.cO,null,null,B.jQ]),t.L)
+B.IL=A.a(s([B.cO,null,null,B.jQ]),t.L)
 B.Jx=A.a(s([B.h9,null,null,B.jN]),t.L)
-B.IL=A.a(s([B.cP,null,null,B.jW]),t.L)
+B.IM=A.a(s([B.cP,null,null,B.jW]),t.L)
 B.Ji=A.a(s([B.jM,null,null,B.jP]),t.L)
 B.Jn=A.a(s([B.ex,B.ex,B.hf,null]),t.L)
-B.IM=A.a(s([B.et,null,null,B.jS]),t.L)
+B.IN=A.a(s([B.et,null,null,B.jS]),t.L)
 B.Jj=A.a(s([B.eu,null,null,B.jY]),t.L)
 B.Jo=A.a(s([B.bu,B.bu,B.bF,null]),t.L)
-B.LI=new A.cD(["*",B.Js,"+",B.Jt,"-",B.Ju,".",B.Jv,"/",B.Jw,"0",B.Iq,"1",B.Ir,"2",B.Is,"3",B.It,"4",B.Iu,"5",B.Iv,"6",B.Iw,"7",B.Ix,"8",B.JK,"9",B.JL,"Alt",B.Jl,"AltGraph",B.JN,"ArrowDown",B.IH,"ArrowLeft",B.II,"ArrowRight",B.IJ,"ArrowUp",B.J3,"Clear",B.Jh,"Control",B.Jm,"Delete",B.Ik,"End",B.IK,"Enter",B.Jx,"Home",B.IL,"Insert",B.Ji,"Meta",B.Jn,"PageDown",B.IM,"PageUp",B.Jj,"Shift",B.Jo],A.aj("cD<l,E<h?>>"))
+B.LI=new A.cD(["*",B.Js,"+",B.Jt,"-",B.Ju,".",B.Jv,"/",B.Jw,"0",B.Iq,"1",B.Ir,"2",B.Is,"3",B.It,"4",B.Iu,"5",B.Iv,"6",B.Iw,"7",B.Ix,"8",B.JK,"9",B.JL,"Alt",B.Jl,"AltGraph",B.JN,"ArrowDown",B.II,"ArrowLeft",B.IJ,"ArrowRight",B.IK,"ArrowUp",B.J3,"Clear",B.Jh,"Control",B.Jm,"Delete",B.Ik,"End",B.IL,"Enter",B.Jx,"Home",B.IM,"Insert",B.Ji,"Meta",B.Jn,"PageDown",B.IN,"PageUp",B.Jj,"Shift",B.Jo],A.aj("cD<l,E<h?>>"))
 B.LJ=new A.Ba(null,null,null,null,null,null,null,null)
 B.CO=new A.G(4284790262)
 B.CH=new A.G(4282557941)
@@ -96229,23 +96229,23 @@ B.VJ=new A.S("There is no one who loves pain itself, who seeks after it and want
 B.z=new A.u(!0,null,null,null,null,null,20,B.ax,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.VU=new A.S("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel est justo. Ut tincidunt arcu non elementum sollicitudin. Donec ut turpis commodo, vulputate lorem mattis, vulputate purus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi tristique nec sem eu ultrices. Vivamus auctor vehicula dui sed facilisis. In efficitur eu nulla ac tempus. Praesent non sapien feugiat, congue erat eget, tristique lectus. \n\nQuisque eget efficitur risus. Duis tincidunt, dolor quis tincidunt lacinia, augue ipsum faucibus purus, vitae consectetur dolor est sit amet lacus. Phasellus vel dictum mi. Vivamus tristique orci velit, ut molestie massa mollis sit amet. Ut varius nunc erat, ultrices suscipit arcu volutpat a. Nam ac ex ex. Nullam et vulputate nunc, sed elementum est. Aenean auctor urna odio, in semper tellus scelerisque in. Aliquam vitae laoreet nisl. Nullam tempus, urna eu vulputate varius, metus lacus ultricies elit, ut scelerisque ligula ipsum non magna. Praesent commodo purus tellus, sit amet elementum odio elementum posuere. Aliquam vel consequat urna, vel sagittis velit. Etiam laoreet elit sit amet massa ultrices convallis. Etiam non euismod dui. \n\nSed dapibus eros sed tristique fermentum. Cras dapibus auctor nunc ac congue. Curabitur quis sodales magna. Maecenas lorem eros, tincidunt sed elit vitae, porta finibus risus. Aenean cursus erat vel consequat dictum. Cras vestibulum lectus nulla, in malesuada purus blandit eget. Nullam vehicula ac nisl ut lobortis. Mauris elementum, felis posuere consectetur rutrum, ex libero venenatis mauris, congue ullamcorper purus mauris non erat. Pellentesque egestas, sapien eget hendrerit accumsan, nibh ex aliquet lectus, a cursus nibh nisl a ex. Nunc eu vestibulum urna, vel mattis dolor.\n\nNunc sagittis efficitur nunc sed aliquam. Proin sit amet eleifend sapien. Sed lorem metus, sodales vel egestas sit amet, iaculis eget elit. Integer vitae interdum massa, vitae condimentum eros. In vel ultricies augue. Proin tincidunt risus eu dolor mattis, et pellentesque sapien porttitor. Sed vel massa justo. Sed magna tellus, tincidunt vitae mollis ac, interdum ac nisl. Suspendisse nulla elit, faucibus non metus eget, vestibulum consectetur urna. Donec tempor nisl vitae fermentum hendrerit. In maximus, turpis consequat congue rhoncus, tellus ante pharetra lorem, a porttitor arcu ipsum in nibh. Vestibulum ultrices massa nisi, a eleifend purus sollicitudin et. Vestibulum lacinia viverra elit, ac finibus justo efficitur et. Donec aliquet maximus ipsum. Pellentesque ullamcorper, mi at pulvinar tincidunt, purus dui scelerisque diam, eget facilisis sapien nisi vitae libero. Nulla sit amet tempor urna.\n\nNullam et nibh ac mi condimentum tempor ullamcorper ut arcu. Vivamus turpis massa, viverra sed ligula sit amet, bibendum laoreet elit. Donec ultrices lobortis sollicitudin. Suspendisse sollicitudin laoreet nulla, non pulvinar odio consequat vel. Quisque ultricies sodales eleifend. In metus nisl, aliquam quis hendrerit nec, auctor nec purus. Etiam eget pharetra urna, ut rhoncus mi. Nam dolor justo, maximus euismod suscipit quis, maximus et elit. Nunc dapibus posuere sapien, ac consectetur ex euismod interdum. Fusce vel quam in ante maximus porta a vel ipsum. Vestibulum dignissim quam convallis turpis varius, ut tristique sapien laoreet. Sed velit arcu, porta in laoreet id, aliquet ut nulla. Aliquam sit amet viverra lorem. Nulla vestibulum enim in sem malesuada, ac sagittis sapien molestie. Etiam auctor orci hendrerit elementum congue. Integer nec sapien condimentum, interdum erat eget, tincidunt nibh.\n\n",null,B.z,B.y,null,null,null,null,null,null,null)
 B.Jp=A.a(s([B.X9,B.cz,B.Wn,B.m,B.VJ,B.m,B.VU,B.m]),t.p)
-B.Dn=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.Jp,null)
-B.MZ=new A.bl(B.aS,B.Dn,null)
+B.Dm=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.Jp,null)
+B.MZ=new A.bl(B.aS,B.Dm,null)
 B.VW=new A.S("Rules",null,B.zn,null,null,null,null,null,null,null,null)
 B.Xk=new A.S("Welcome to the Rules Section! Here, you'll quickly learn what you need to get started and have some fun!\n\n",null,B.K,null,null,null,null,null,null,null,null)
 B.VP=new A.S("How to play",null,B.K,B.u,null,null,null,null,null,null,null)
 B.Va=new A.S("To begin playing, simply press the 'Start Game' button and select the game mode (in this first version, only Singleplayer mode is available). Next, you can choose the role you want to play:\n\nOnce you've chosen your game mode, you can configure your game. You'll need to provide a brief description of the story's setting that you want to follow (including the condition to end the game) and create your character sheet. Don't worry if you have no experience with this; the game can generate a character sheet for you\u2014it does it all! (Currently, the game only provides auto-generated character sheets.)\n\nAfter this, if you have enough tokens to play, you can start your new campaign!\n\n",null,B.z,null,null,null,null,null,null,null,null)
 B.W3=new A.S("Rules",null,B.K,B.u,null,null,null,null,null,null,null)
 B.VV=new A.S("This part is important. Since it's an AI that's responsible for guiding the game, and not a human, all players must commit to following certain guidelines to facilitate the flow of the game:\n\nAdhere to your character sheet: Remember your character's details and incorporate them into the conversation whenever possible to provide more context to the AI. Don't change your character's details unless instructed to do so.\n\nDon't make up dice rolls: The natural mechanism for role-playing is dice rolls. If you're asked to make a roll, don't make up the values. Embrace the randomness!\n\nKeep the AI in context: We trust you to follow the story provided by the AI. After all, it's not human. Correct when necessary, make decisions your character would make, and forge your own path, but don't diverge into unrelated topics. You might confuse the AI and disrupt the narrative.\n\nNo cheating: We appeal to the goodwill of our players. If things go awry, don't hesitate to help the AI remember certain decisions and aspects of your character sheet.\n\nBehave as you would with your trusted Game Master: It's each player's responsibility to ensure it's an enjoyable and easy-to-follow game.\n\nDisclaimer: Since it's an external conversational AI, we're not responsible for the content of the conversations. We trust in you!",null,B.z,null,null,null,null,null,null,null,null)
-B.IN=A.a(s([B.VW,B.cz,B.Xk,B.m,B.VP,B.m,B.Va,B.m,B.W3,B.m,B.VV]),t.p)
-B.Dp=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.IN,null)
-B.N_=new A.bl(B.aS,B.Dp,null)
+B.IO=A.a(s([B.VW,B.cz,B.Xk,B.m,B.VP,B.m,B.Va,B.m,B.W3,B.m,B.VV]),t.p)
+B.Do=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.IO,null)
+B.N_=new A.bl(B.aS,B.Do,null)
 B.EQ=new A.at(20,0,20,0)
 B.Xl=new A.S("Or continue with",null,null,null,null,null,null,null,null,null,null)
 B.N0=new A.bl(B.EQ,B.Xl,null)
 B.bj=new A.db(null,20,null,null)
-B.Ak=new A.ii("assets/images/small_logo.png",null,null)
-B.Cd=new A.tp(B.Ak,100,null)
+B.lF=new A.ii("assets/images/small_logo.png",null,null)
+B.Cd=new A.tp(B.lF,100,null)
 B.hX=new A.u(!0,null,null,null,null,null,44,B.ax,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.WX=new A.S("C & Company - B",null,B.hX,null,null,null,null,null,null,null,null)
 B.f3=new A.db(null,30,null,null)
@@ -96306,8 +96306,8 @@ B.xO=new A.js(1,"logout")
 B.G9=new A.bH(61849,"MaterialIcons",null,!1)
 B.Gm=new A.dq(B.G9,null,B.f,null,null)
 B.X3=new A.S("Log Out",null,B.ak,null,null,null,null,null,null,null,null)
-B.IW=A.a(s([B.Gm,B.X3]),t.p)
-B.Op=new A.eo(B.U,B.ez,B.o,B.w,null,B.L,null,B.IW,null)
+B.IX=A.a(s([B.Gm,B.X3]),t.p)
+B.Op=new A.eo(B.U,B.ez,B.o,B.w,null,B.L,null,B.IX,null)
 B.NX=new A.vn(B.xO,B.Op,null,t.Xt)
 B.NY=new A.Ce(null)
 B.NZ=new A.vp(null,null,null,null,null,null,null,null,null,null)
@@ -96521,9 +96521,9 @@ B.yL=new A.aL(B.jJ,!0,!1,!1,!1)
 B.PU=new A.aL(B.eq,!0,!1,!1,!1)
 B.PV=new A.aL(B.eq,!0,!0,!1,!1)
 B.X8=new A.S("This part is important. Since it's an AI that's responsible for guiding the game, and not a human, all players must commit to following certain guidelines to facilitate the flow of the game:\n\nAdhere to your character sheet: Remember your character's details and incorporate them into the conversation whenever possible to provide more context to the AI. Don't change your character's details unless instructed to do so.\n\nDon't make up dice rolls: The natural mechanism for role-playing is dice rolls. If you're asked to make a roll, don't make up the values. Embrace the randomness!\n\nKeep the AI in context: We trust you to follow the story provided by the AI. After all, it's not human. Correct when necessary, make decisions your character would make, and forge your own path, but don't diverge into unrelated topics. You might confuse the AI and disrupt the narrative.\n\n",null,B.z,null,null,null,null,null,null,null,null)
-B.IV=A.a(s([B.X8]),t.p)
-B.Do=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.IV,null)
-B.N5=new A.bl(B.aS,B.Do,null)
+B.IW=A.a(s([B.X8]),t.p)
+B.Dn=new A.fw(B.V,B.q,B.o,B.w,null,B.L,null,B.IW,null)
+B.N5=new A.bl(B.aS,B.Dn,null)
 B.yS=new A.w1(B.V,null,null,null,B.N5,B.J,null)
 B.ci=new A.u(!0,B.C,null,null,null,null,30,B.ax,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.Wb=new A.S("Setting",null,B.ci,B.u,null,null,null,null,null,null,null)
@@ -96626,12 +96626,12 @@ B.JM=A.a(s([B.bx,B.b5,B.F9]),t.p)
 B.Os=new A.eo(B.U,B.q,B.o,B.aE,null,B.L,null,B.JM,null)
 B.VA=new A.S("Impaired decision-making, causing characters to make irrational choices.\n\n",null,B.z,B.y,null,null,null,null,null,null,null)
 B.F8=new A.eF(1,B.aM,B.VA,null)
-B.IO=A.a(s([B.bx,B.b5,B.F8]),t.p)
-B.Or=new A.eo(B.U,B.q,B.o,B.aE,null,B.L,null,B.IO,null)
+B.IP=A.a(s([B.bx,B.b5,B.F8]),t.p)
+B.Or=new A.eo(B.U,B.q,B.o,B.aE,null,B.L,null,B.IP,null)
 B.Xm=new A.S("A heightened likelihood of fleeing from danger.\n\n",null,B.z,B.y,null,null,null,null,null,null,null)
 B.Fd=new A.eF(1,B.aM,B.Xm,null)
-B.IA=A.a(s([B.bx,B.b5,B.Fd]),t.p)
-B.Ow=new A.eo(B.U,B.q,B.o,B.aE,null,B.L,null,B.IA,null)
+B.IB=A.a(s([B.bx,B.b5,B.Fd]),t.p)
+B.Ow=new A.eo(B.U,B.q,B.o,B.aE,null,B.L,null,B.IB,null)
 B.W7=new A.S("Increased vulnerability to status effects like fear or confusion.\n\n",null,B.z,B.y,null,null,null,null,null,null,null)
 B.Fb=new A.eF(1,B.aM,B.W7,null)
 B.I5=A.a(s([B.bx,B.b5,B.Fb]),t.p)
@@ -96745,8 +96745,8 @@ B.R_=new A.RS(1,"label")
 B.R0=new A.wh(null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.R8=new A.oy("Stats",null)
 B.R7=new A.oy("Players",null)
-B.IT=A.a(s([B.R8,B.R7]),t.p)
-B.R2=new A.wg(B.IT,B.f,null,null,null)
+B.IU=A.a(s([B.R8,B.R7]),t.p)
+B.R2=new A.wg(B.IU,B.f,null,null,null)
 B.R9=new A.akA("tap")
 B.Rc=new A.S_(null)
 B.z7=new A.S0(0)
@@ -96797,8 +96797,8 @@ B.Rx=new A.Ee(null,null,null)
 B.Ry=new A.Ef(B.h,null)
 B.GI=new A.uu(B.lF,200,null,null,null)
 B.Z9=new A.jK(B.GI,B.cd,null,null)
-B.IX=A.a(s([B.Z9]),t.VO)
-B.Rz=new A.mm(null,B.IX,B.c6,null)
+B.IA=A.a(s([B.Z9]),t.VO)
+B.Rz=new A.mm(null,B.IA,B.c6,null)
 B.zd=new A.E3(1)
 B.zi=new A.u(!0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,B.zd,null,null,null,null,null,null,null,null)
 B.Sa=new A.u(!1,B.mM,null,".SF Pro Text",null,null,17,null,null,-0.41,null,null,null,null,null,null,null,B.e,null,null,null,null,null,null,null,null)
