@@ -167,10 +167,10 @@ class _SignInPageState extends State<SignInPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _loginWithButton(image: "images/google_logo.png", isActive: true),
-              _loginWithButton(image: "images/github_logo.png", isActive: true),
+              _loginWithButton(image: "assets/images/google_logo.png", isActive: true),
+              _loginWithButton(image: "assets/images/github_logo.png", isActive: true),
               _loginWithButton(
-                  image: "images/facebook_logo.png", isActive: true),
+                  image: "assets/images/facebook_logo.png", isActive: true),
             ],
           )
         ],

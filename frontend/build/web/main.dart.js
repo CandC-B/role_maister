@@ -90027,7 +90027,7 @@ F(a){var s=null,r=A.bj(a,s,t.w).w,q=A.bG(10)
 return A.aP(s,new A.bl(B.dn,A.aP(s,B.N_,B.j,s,s,new A.br(B.D,s,A.n4(B.C,2),q,s,s,B.H),s,s,s,s,s,s,s),s),B.j,s,s,B.AT,s,s,s,s,s,s,r.a.a)}}
 A.QT.prototype={
 F(a){var s=null,r="FantasyHome",q=A.bj(a,s,t.w).w.a,p=q.a,o=q.b,n=o*0.9,m=p*0.8,l=m/3
-return A.aP(B.x,A.aCn(A.bG(20),A.aP(s,A.eL(A.a([A.Av(n,"assets/images/singleplayer.png","SINGLE PLAYER",!0,!0,!1,"/form_singleplayer",l),A.Av(n,"assets/images/multiplayer.png","MULTIPLAYER",!1,!1,!1,r,l),A.Av(n,"assets/images/pairingmode.PNG","PAIRING MODE",!1,!1,!1,r,l)],t.p),B.w,B.tS,B.o),B.j,B.I,s,s,s,n,s,s,s,s,m)),B.j,s,s,B.c5,s,o,s,s,s,s,p)}}
+return A.aP(B.x,A.aCn(A.bG(20),A.aP(s,A.eL(A.a([A.Av(n,"assets/images/singleplayer.PNG","SINGLE PLAYER",!0,!0,!1,"/form_singleplayer",l),A.Av(n,"assets/images/multiplayer.png","MULTIPLAYER",!1,!1,!1,r,l),A.Av(n,"assets/images/pairingmode.PNG","PAIRING MODE",!1,!1,!1,r,l)],t.p),B.w,B.tS,B.o),B.j,B.I,s,s,s,n,s,s,s,s,m)),B.j,s,s,B.c5,s,o,s,s,s,s,p)}}
 A.Ds.prototype={
 ai(){return new A.Zg(A.rl(null),A.rl(null),B.k)}}
 A.Zg.prototype={
@@ -90038,7 +90038,7 @@ n=A.wp(!0,B.bC,!1,p,!0,B.F,p,A.Jg(),q.e,B.C,p,p,p,2,A.AD(p,p,p,B.ea,p,p,"Forgot 
 m=A.bG(30)
 s=A.a([new A.dp(10,B.bJ,B.fC,B.h,20)],t.sq)
 r=t.p
-return A.aP(p,A.de(A.a([B.Vd,B.Qe,o,B.f3,n,B.cz,A.aP(p,A.u4(B.Qc,new A.atl(q),A.zL(p,p,B.C,p,p,p,p,p,p,B.f,p,p,p,p,new A.cB(A.bG(15),B.v),p,p,p,p)),B.j,p,p,new A.br(B.f,p,p,m,s,p,B.H),p,p,p,p,p,p,p),B.bj,q.apf(),B.cz,A.eL(A.a([A.ei(A.aCK(B.bN,50),1),B.N0,A.ei(A.aCK(B.bN,50),1)],r),B.w,B.q,B.o),B.cz,A.eL(A.a([q.Fr("images/google_logo.png",!0),q.Fr("images/github_logo.png",!0),q.Fr("images/facebook_logo.png",!0)],r),B.w,B.ez,B.o)],r),B.w,B.q,B.o),B.j,p,p,p,p,570,p,p,p,p,500)},
+return A.aP(p,A.de(A.a([B.Vd,B.Qe,o,B.f3,n,B.cz,A.aP(p,A.u4(B.Qc,new A.atl(q),A.zL(p,p,B.C,p,p,p,p,p,p,B.f,p,p,p,p,new A.cB(A.bG(15),B.v),p,p,p,p)),B.j,p,p,new A.br(B.f,p,p,m,s,p,B.H),p,p,p,p,p,p,p),B.bj,q.apf(),B.cz,A.eL(A.a([A.ei(A.aCK(B.bN,50),1),B.N0,A.ei(A.aCK(B.bN,50),1)],r),B.w,B.q,B.o),B.cz,A.eL(A.a([q.Fr("assets/images/google_logo.png",!0),q.Fr("assets/images/github_logo.png",!0),q.Fr("assets/images/facebook_logo.png",!0)],r),B.w,B.ez,B.o)],r),B.w,B.q,B.o),B.j,p,p,p,p,570,p,p,p,p,500)},
 Fr(a,b){var s=null,r=A.bG(15),q=A.a([new A.dp(2,B.bJ,B.mx,B.h,15)],t.sq)
 return A.aP(s,A.h1(A.abh(a,s,s,35),s,s),B.j,s,s,new A.br(B.f,s,s,r,q,s,B.H),s,70,s,s,s,s,90)},
 BI(){var s=null

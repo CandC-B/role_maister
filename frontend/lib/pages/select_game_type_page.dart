@@ -28,7 +28,7 @@ class SelectGameType extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ImageColorFilter(
-                    imagePath: 'assets/images/singleplayer.png',
+                    imagePath: 'assets/images/singleplayer.PNG',
                     routeName: '/form_singleplayer',
                     imageText: "SINGLE PLAYER",
                     isAvailable: true,
