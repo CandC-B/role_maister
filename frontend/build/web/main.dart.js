@@ -90027,7 +90027,7 @@ F(a){var s=null,r=A.bj(a,s,t.w).w,q=A.bG(10)
 return A.aP(s,new A.bl(B.dn,A.aP(s,B.N_,B.j,s,s,new A.br(B.D,s,A.n4(B.C,2),q,s,s,B.H),s,s,s,s,s,s,s),s),B.j,s,s,B.AT,s,s,s,s,s,s,r.a.a)}}
 A.QT.prototype={
 F(a){var s=null,r="FantasyHome",q=A.bj(a,s,t.w).w.a,p=q.a,o=q.b,n=o*0.9,m=p*0.8,l=m/3
-return A.aP(B.x,A.aCn(A.bG(20),A.aP(s,A.eL(A.a([A.Av(n,"assets/images/singleplayer.png","SINGLE PLAYER",!0,!0,!1,"/form_singleplayer",l),A.Av(n,"assets/images/multiplayer.png","MULTIPLAYER",!1,!1,!1,r,l),A.Av(n,"assets/images/pairingmode.png","PAIRING MODE",!1,!1,!1,r,l)],t.p),B.w,B.tS,B.o),B.j,B.I,s,s,s,n,s,s,s,s,m)),B.j,s,s,B.c5,s,o,s,s,s,s,p)}}
+return A.aP(B.x,A.aCn(A.bG(20),A.aP(s,A.eL(A.a([A.Av(n,"assets/images/singleplayer.png","SINGLE PLAYER",!0,!0,!1,"/form_singleplayer",l),A.Av(n,"assets/images/multiplayer.png","MULTIPLAYER",!1,!1,!1,r,l),A.Av(n,"assets/images/pairingmode.PNG","PAIRING MODE",!1,!1,!1,r,l)],t.p),B.w,B.tS,B.o),B.j,B.I,s,s,s,n,s,s,s,s,m)),B.j,s,s,B.c5,s,o,s,s,s,s,p)}}
 A.Ds.prototype={
 ai(){return new A.Zg(A.rl(null),A.rl(null),B.k)}}
 A.Zg.prototype={

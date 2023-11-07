@@ -48,7 +48,7 @@ class SelectGameType extends StatelessWidget {
                     preset: false,
                   ),
                   ImageColorFilter(
-                    imagePath: 'assets/images/pairingmode.png',
+                    imagePath: 'assets/images/pairingmode.PNG',
                     routeName: 'FantasyHome',
                     imageText: "PAIRING MODE",
                     isAvailable: false,
