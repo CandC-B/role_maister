@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/appBar/custom_app_bar.dart';
+import 'package:role_maister/widgets/drawer/custom_drawer.dart';
 
 class ShopScreen extends StatelessWidget {
   final List<TokenPackage> tokenPackages = [
@@ -16,6 +17,7 @@ class ShopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "Pricing"),
+      drawer: customDrawer(context),
       body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
