@@ -27,6 +27,17 @@ Widget drawerItems (BuildContext context) => Wrap(
       }
     ),
     ListTile(
+      leading: const Icon(Icons.book_outlined, color: Colors.white,),
+      title: const Text("Guide", style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, 
+          ),),
+      onTap: () {
+        context.pop();
+        context.go('/guide');
+      }
+    ),
+    ListTile(
       leading: const Icon(Icons.payment_outlined, color: Colors.white,),
       title: const Text("Pricing", style: TextStyle(
             fontWeight: FontWeight.bold,

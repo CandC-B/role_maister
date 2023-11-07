@@ -7,15 +7,24 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Register"),
-      drawer: customDrawer(context),
-      body: ListView(
-        children: const [
-          RegisterPage(),
-          WebFooter(),
-        ],
-      )
-    );
+    bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
+    if (mobile) {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "Register"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [RegisterPage()],
+          ));
+    } else {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "Register"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [
+              RegisterPage(),
+              WebFooter(),
+            ],
+          ));
+    }
   }
 }

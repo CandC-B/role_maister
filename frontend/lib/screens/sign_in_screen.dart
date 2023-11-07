@@ -7,15 +7,24 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Sign In"),
-      drawer: customDrawer(context),
-      body: ListView(
-        children: const [
-          SignInPage(),
-          WebFooter(),
-        ],
-      )
-    );
+    bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
+    if (mobile) {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "Sign In"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [SignInPage()],
+          ));
+    } else {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "Sign In"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [
+              SignInPage(),
+              WebFooter(),
+            ],
+          ));
+    }
   }
 }

@@ -6,18 +6,27 @@ import 'package:role_maister/widgets/widgets.dart';
 
 class SelectGameTypeScreen extends StatelessWidget {
   const SelectGameTypeScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "none"),
-      drawer: customDrawer(context),
-      body: ListView(
-        children: const [
-          SelectGameType(),
-          WebFooter(),
-        ],
-      )
-    );
+    bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
+    if (mobile) {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "none"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [SelectGameType()],
+          ));
+    } else {
+      return Scaffold(
+          appBar: const CustomAppBar(title: "none"),
+          drawer: customDrawer(context),
+          body: ListView(
+            children: const [
+              SelectGameType(),
+              WebFooter(),
+            ],
+          ));
+    }
   }
 }
