@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/config/firebase_logic.dart';
 
 Widget drawerItems (BuildContext context) => Wrap(
   children: [
@@ -71,6 +73,27 @@ Widget drawerItems (BuildContext context) => Wrap(
         context.go('/contact_us');
       }
     ),
-    
+    ListTile(
+      leading: const Icon(Icons.history_edu_outlined, color: Colors.white,),
+      title: const Text("Terms & Conditions", style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, 
+          ),),
+      onTap: () {
+        context.pop();
+        context.go('/terms_conditions');
+      }
+    ),
+    if(singleton.user != null) const Divider(color: Colors.white,),
+    if(singleton.user != null) ListTile(
+      leading: const Icon(Icons.logout_outlined, color: Colors.white,),
+      title: const Text("Log Out", style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, 
+          ),),
+      onTap: () {
+        firebase.signOut(context);
+      }
+    ),
   ],
 );
