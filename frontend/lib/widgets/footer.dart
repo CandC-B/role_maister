@@ -106,7 +106,7 @@ final RichText appLogoMark = RichText(
     children: [
       WidgetSpan(
         child: Image(
-          image: AssetImage("images/small_logo.png"),
+          image: AssetImage("assets/images/small_logo.png"),
           width: 200,
         ),
       ),

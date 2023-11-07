@@ -65,7 +65,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ? Row(
               children: [
                 Image.asset(
-                  "images/small_logo.png",
+                  "assets/images/small_logo.png",
                   width: 65,
                 ),
                 Align(
@@ -87,7 +87,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   context.push('/');
                 },
                 child: Image.asset(
-                  'images/small_logo.png',
+                  'assets/images/small_logo.png',
                   width: 65,
                 ), // Reemplaza 'tu_imagen.png' con la ruta de tu imagen.
               ),

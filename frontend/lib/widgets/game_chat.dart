@@ -227,7 +227,7 @@ class _GameChatState extends State<GameChat> {
                   child: Column(
                     children: [
                       Image.asset(
-                        'images/bot_master.png',
+                        'assets/images/bot_master.png',
                         width: 100.0,
                         height: 100.0,
                       ),

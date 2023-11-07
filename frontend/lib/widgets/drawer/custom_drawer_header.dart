@@ -21,7 +21,7 @@ Widget drawerHeader(BuildContext context) => Material(
               CircleAvatar(
                 radius: 52,
                 backgroundColor: Colors.transparent,
-                backgroundImage: AssetImage("images/small_logo.png"),
+                backgroundImage: AssetImage("asset/images/small_logo.png"),
               ),
               SizedBox(
                 height: 12,
