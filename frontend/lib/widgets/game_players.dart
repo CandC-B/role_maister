@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/models.dart';
 
@@ -17,7 +18,13 @@ class _GamePlayersState extends State<GamePlayers> {
       future: getUserStats(widget.gameId),
       builder: (BuildContext context, AsyncSnapshot<UserStatistics?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera la respuesta.
+          return Container(
+            color: Colors.transparent,
+            child: Center(
+              child: Image.asset(
+                  'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+            ),
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
@@ -27,8 +34,15 @@ class _GamePlayersState extends State<GamePlayers> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                leading: null,
-                automaticallyImplyLeading: false,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.exit_to_app),
+                    onPressed: () {
+                      context.go('/');
+                      context.push('/');
+                    },
+                  ),
+                ],
                 title: const Text('Role MAIster'),
                 backgroundColor: Colors.deepPurple,
                 bottom: const TabBar(
@@ -86,13 +100,11 @@ class _StatsTabState extends State<StatsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: Colors.black87,
-      body: Container(
-        // child: const Text("Stats Tab Content"),
-        child: Stats(userStats: widget.userStats),
-      )
-    );
+        backgroundColor: Colors.black87,
+        body: Container(
+          // child: const Text("Stats Tab Content"),
+          child: Stats(userStats: widget.userStats),
+        ));
   }
 }
 
@@ -109,7 +121,8 @@ class PlayersTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        body: PlayerCard(playerName: userStats.name) // TODO: REPLACE WITH REAL DATA
+        body: PlayerCard(
+            playerName: userStats.name) // TODO: REPLACE WITH REAL DATA
 
         );
   }
@@ -168,6 +181,8 @@ class Stats extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: null,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.black54,
         title: Text(userStats.name),
       ),
