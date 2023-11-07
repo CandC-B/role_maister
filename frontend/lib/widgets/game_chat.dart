@@ -49,7 +49,7 @@ class _GameChatState extends State<GameChat> {
       final response = await http.post(
           // TODO: add constants.dart in utils folder
           // Uri.http("localhost:8000", "/game/master?message=$text"),
-          Uri.parse("http://localhost:8000/game/master?message=$text"),
+          Uri.parse("https://rolemaister.onrender.com/game/master?message=$text"),
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {

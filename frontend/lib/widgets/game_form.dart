@@ -33,7 +33,7 @@ class GameForm extends StatelessWidget {
     mapUserStats.addAll(gameConfig);
     final response = await http.post(
         // TODO: add constants.dart in utils folder
-        Uri.http("localhost:8000", "/game/"),
+        Uri.https("rolemaister.onrender.com", "/game/"),
         headers: headers,
         body: jsonEncode(mapUserStats));
     var coralMessage = json.decode(response.body)["message"];
