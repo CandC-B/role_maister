@@ -12,14 +12,14 @@ class SelectGameTypeScreen extends StatelessWidget {
     bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     if (mobile) {
       return Scaffold(
-          appBar: const CustomAppBar(title: "none"),
+          appBar: const CustomAppBar(title: "Game Select"),
           drawer: customDrawer(context),
           body: ListView(
             children: const [SelectGameType()],
           ));
     } else {
       return Scaffold(
-          appBar: const CustomAppBar(title: "none"),
+          appBar: const CustomAppBar(title: "Game Select"),
           drawer: customDrawer(context),
           body: ListView(
             children: const [
