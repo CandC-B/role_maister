@@ -114,12 +114,13 @@ class _SignInPageState extends State<SignInPage> {
           const SizedBox(
             height: 5,
           ),
-          Align( // TODO SOlve this
+          Align(
+            // TODO SOlve this
             alignment: Alignment.centerRight,
             child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    isPasswordVisible = !isPasswordVisible;
+                    context.go("/forgot_password");
                   });
                 },
                 child: Text("Forgot Password?", textAlign: TextAlign.end)),
@@ -198,6 +199,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _loginWithButton({required String image, bool isActive = false}) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       width: 90,
       height: 70,

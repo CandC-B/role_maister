@@ -196,4 +196,10 @@ class FirebaseService {
     context.go("/");
     context.push("/");
   }
+
+  Future<void> sendPasswordResetEmail(String email, BuildContext context) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    context.go("/sign_in");
+    context.push("/sign_in");
+  }
 }
