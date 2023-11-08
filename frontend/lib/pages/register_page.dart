@@ -26,9 +26,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 150.0),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(vertical: 150.0, horizontal: 15)
+          : const EdgeInsets.symmetric(vertical: 150.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),

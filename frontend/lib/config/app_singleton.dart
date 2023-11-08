@@ -10,7 +10,7 @@ class AppSingleton {
   factory AppSingleton() {
     return _instance;
   }
-
+  
   User? user;
   String? currentGame;
 }

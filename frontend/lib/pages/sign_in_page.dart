@@ -52,6 +52,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _formLogin() {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       width: 500,
       height: 570,
@@ -120,7 +121,9 @@ class _SignInPageState extends State<SignInPage> {
             child: GestureDetector(
                 onTap: () {
                   setState(() {
+                    isMobile ? context.push("/forgot_password") :
                     context.go("/forgot_password");
+                    // context.push("/forgot_password");
                   });
                 },
                 child: Text("Forgot Password?", textAlign: TextAlign.end)),
