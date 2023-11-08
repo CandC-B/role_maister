@@ -11,3 +11,7 @@ bool isPasswordValid(String password) {
 
   return passwordRegex.hasMatch(password);
 }
+
+bool isUsernameValid(String username) {
+  return username.length > 3 ? true : false;
+}

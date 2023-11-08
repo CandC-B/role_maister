@@ -76,6 +76,23 @@ class FirebaseService {
     }
   }
 
+  Future<String> saveUser(User user, String username) async {
+    
+      Map<String, dynamic> currentUser = {
+        'uid': user.uid,
+        'username': username,
+        'email': user.email,
+        'characters': [],
+      };
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('user').add(currentUser);
+      return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> saveMessage(String messageText, DateTime sentAt,
       String currentGameId, String sentBy) async {
     if (messageText.trim().isNotEmpty) {
@@ -169,7 +186,7 @@ class FirebaseService {
     }
   }
 
-  Future<void> signUp(
+  Future<User?> signUp(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
@@ -179,6 +196,7 @@ class FirebaseService {
       singleton.user = user;
       context.go("/rules");
       context.push("/rules");
+      return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print("The account already exists for that email");
@@ -186,6 +204,7 @@ class FirebaseService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<void> signOut(BuildContext context) async {

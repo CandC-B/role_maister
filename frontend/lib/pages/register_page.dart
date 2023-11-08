@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
 
@@ -10,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController newPassword1 = TextEditingController();
   TextEditingController newPassword2 = TextEditingController();
@@ -22,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       passwordError = !isPasswordValid(newPassword1.text);
       emailError = !isEmailValid(email.text);
+      usernameError = !isUsernameValid(username.text);
     });
   }
 
@@ -78,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           TextField(
             cursorColor: Colors.deepPurple,
-            controller: email,
+            controller: username,
             decoration: InputDecoration(
               hintText: "Enter username",
               counterText: usernameError ? "This username already exist" : null,
@@ -88,13 +92,13 @@ class _RegisterPageState extends State<RegisterPage> {
               labelStyle: const TextStyle(fontSize: 12),
               contentPadding: const EdgeInsets.only(left: 30),
               enabledBorder: OutlineInputBorder(
-                borderSide: emailError
+                borderSide: usernameError
                     ? const BorderSide(color: Colors.red)
                     : const BorderSide(color: Colors.blueGrey),
                 borderRadius: BorderRadius.circular(15),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: emailError
+                borderSide: usernameError
                     ? const BorderSide(color: Colors.red)
                     : const BorderSide(color: Colors.blueGrey),
                 borderRadius: BorderRadius.circular(15),
@@ -211,13 +215,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(15))),
               onPressed: () async {
                 // TODO remove comments in production
-                // if (newPassword1.text == newPassword2.text) {
-                //   checkRegisterInput();
-                //   if (!passwordError && !emailError) {
-                //     firebase.signUp(email.text, newPassword1.text,
-                //         context); // TODO Handle if email is already created
-                //   }
-                // }
+                if (newPassword1.text == newPassword2.text) {
+                  checkRegisterInput();
+                  if (!passwordError && !emailError && !usernameError) {
+                    User? user = await firebase.signUp(email.text, newPassword1.text,
+                        context); // TODO Handle if email is already created
+                    if (user != null) {
+                      firebase.saveUser(user, username.text);
+                    }
+                  }
+                }
               },
               child: const SizedBox(
                 width: double.infinity,

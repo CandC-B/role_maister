@@ -246,8 +246,10 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget registerText() {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return GestureDetector(
         onTap: () {
+          isMobile ? context.push("/register"):
           context.go("/register");
         },
         child: const Text("Does not have account? Register"));
