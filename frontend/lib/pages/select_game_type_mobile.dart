@@ -10,13 +10,13 @@ class SelectGameTypePageMobile extends StatelessWidget {
 
     return Container(
       width: size.width,
-      height: size.height,
+      height: size.height * 0.9,
       alignment: Alignment.center,
       child: Column(
           children: [
             Expanded(
               child: ImageColorFilter(
-                imagePath: 'assets/images/singleplayer.PNG',
+                imagePath: 'assets/images/singleplayer_mobile.PNG',
                 routeName: '/form_singleplayer',
                 imageText: "SINGLE PLAYER",
                 isAvailable: true,
