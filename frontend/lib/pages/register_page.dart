@@ -14,6 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController newPassword1 = TextEditingController();
   TextEditingController newPassword2 = TextEditingController();
   bool passwordError = false;
+  bool usernameError = false;
   bool emailError = false;
   bool firebaseAvailable = true;
   bool isPasswordVisible = false;
@@ -30,8 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 150.0, horizontal: 15)
-          : const EdgeInsets.symmetric(vertical: 150.0),
+          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
+          : const EdgeInsets.symmetric(vertical: 110.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -40,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       child: Container(
         width: 450,
-        height: 550,
+        height: 600,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
@@ -79,7 +80,35 @@ class _RegisterPageState extends State<RegisterPage> {
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email or username",
+              hintText: "Enter username",
+              counterText: usernameError ? "This username already exist" : null,
+              counterStyle: const TextStyle(color: Colors.red),
+              fillColor: Colors.blueGrey[50],
+              filled: true,
+              labelStyle: const TextStyle(fontSize: 12),
+              contentPadding: const EdgeInsets.only(left: 30),
+              enabledBorder: OutlineInputBorder(
+                borderSide: emailError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: emailError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          TextField(
+            cursorColor: Colors.deepPurple,
+            controller: email,
+            decoration: InputDecoration(
+              hintText: "Enter email",
               counterText: emailError ? "Invalid Email" : null,
               counterStyle: const TextStyle(color: Colors.red),
               fillColor: Colors.blueGrey[50],
