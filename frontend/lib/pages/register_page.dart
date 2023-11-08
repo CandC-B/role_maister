@@ -21,11 +21,11 @@ class _RegisterPageState extends State<RegisterPage> {
   bool emailError = false;
   bool firebaseAvailable = true;
   bool isPasswordVisible = false;
-  void checkRegisterInput() {
+  void checkRegisterInput(bool isUsernameError) {
     setState(() {
       passwordError = !isPasswordValid(newPassword1.text);
       emailError = !isEmailValid(email.text);
-      usernameError = !isUsernameValid(username.text);
+      usernameError = isUsernameError;
     });
   }
 
@@ -216,7 +216,8 @@ class _RegisterPageState extends State<RegisterPage> {
               onPressed: () async {
                 // TODO remove comments in production
                 if (newPassword1.text == newPassword2.text) {
-                  checkRegisterInput();
+                  bool usernameError = await isUsernameValid(username.text);
+                  checkRegisterInput(usernameError);
                   if (!passwordError && !emailError && !usernameError) {
                     User? user = await firebase.signUp(email.text, newPassword1.text,
                         context); // TODO Handle if email is already created
