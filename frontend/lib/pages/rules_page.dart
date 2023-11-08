@@ -17,8 +17,7 @@ class RulesPage extends StatelessWidget {
             ),
           ),
       child: Padding(
-        // padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
-        padding: isMobile ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0) : const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
+        padding: isMobile ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0) : const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
