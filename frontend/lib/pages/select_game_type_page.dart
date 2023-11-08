@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
-class SelectGameType extends StatelessWidget {
-  const SelectGameType({super.key});
+class SelectGameTypePage extends StatelessWidget {
+  const SelectGameTypePage({super.key});
 
   @override
   Widget build(BuildContext context) {
