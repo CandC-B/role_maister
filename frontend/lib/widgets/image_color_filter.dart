@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ImageColorFilter extends StatefulWidget {
-  const ImageColorFilter({
+  ImageColorFilter({
     super.key,
     required this.imagePath,
     required this.routeName,
@@ -13,6 +13,7 @@ class ImageColorFilter extends StatefulWidget {
     required this.height,
     required this.isLink,
     required this.preset,
+    required this.isHovering,
   });
   final String imagePath;
   final String routeName;
@@ -22,26 +23,29 @@ class ImageColorFilter extends StatefulWidget {
   final double height;
   final bool isLink;
   final bool preset;
+  bool isHovering;
 
   @override
   _ImageColorFilterState createState() => _ImageColorFilterState();
 }
 
 class _ImageColorFilterState extends State<ImageColorFilter> {
-  bool isHovering = false;
-  
-
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onHover: (hovering) {
+    return MouseRegion(
+      onEnter: (_) {
         setState(() {
-          isHovering = hovering;
+          widget.isHovering = true;
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          widget.isHovering = false;
         });
       },
       child: ClipRect(
         child: ColorFiltered(
-          colorFilter: isHovering || widget.preset
+          colorFilter: widget.isHovering || widget.preset
               ? ColorFilter.mode(Colors.transparent, BlendMode.color)
               : ColorFilter.mode(Colors.grey, BlendMode.saturation),
           child: Stack(
@@ -85,7 +89,7 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                 height: widget.height,
                 alignment: Alignment.center,
                 child: Transform.rotate(
-                  angle: -atan(widget.height/widget.width),
+                  angle: -atan(widget.height / widget.width),
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: Text(
@@ -96,9 +100,8 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                               ? Colors.transparent
                               : Colors.white,
                           fontWeight: FontWeight.w900,
-                          fontFamily: 'Poppins'
-                        ),
-                      ),
+                          fontFamily: 'Poppins'),
+                    ),
                   ),
                 ),
               ),
@@ -106,14 +109,6 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
           ),
         ),
       ),
-      onTap: () {
-        // Handle the tap action here.
-        if (widget.isAvailable) {
-          if (widget.isLink) {
-            context.go(widget.routeName);
-          }
-        }
-      },
     );
   }
 }

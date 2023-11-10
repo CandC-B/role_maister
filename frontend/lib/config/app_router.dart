@@ -205,6 +205,21 @@ class ApplicationRouter {
               );
             },
           ),
+          GoRoute(
+          path: 'select_character',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const SelectCharacterScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     ],

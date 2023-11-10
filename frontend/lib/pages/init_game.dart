@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/models/models.dart';
 
-class InitGame extends StatelessWidget {
-  const InitGame({super.key});
+class InitGamePage extends StatelessWidget {
+  const InitGamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class InitGame extends StatelessWidget {
             child: Row(children: [
               Expanded(
                   flex: 2,
-                  child: GameForm(character: character),
+                  child: GameForm(character: character, image_width: (size.width * 0.8 * 2 / 3) / 3, preset: false, mobile: false,), 
                 ),
               Expanded(flex: 1, child: StatsTab(userStats: character,)),
             ]),
