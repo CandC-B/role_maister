@@ -126,7 +126,7 @@ class _SignInPageState extends State<SignInPage> {
                     // context.push("/forgot_password");
                   });
                 },
-                child: Text("Forgot Password?", textAlign: TextAlign.end)),
+                child: const Text("Forgot Password?", textAlign: TextAlign.end)),
           ),
           const SizedBox(
             height: 40,

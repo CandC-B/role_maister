@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
@@ -21,11 +23,18 @@ class _RegisterPageState extends State<RegisterPage> {
   bool emailError = false;
   bool firebaseAvailable = true;
   bool isPasswordVisible = false;
+  bool isRulesCheckBoxChecked = false;
   void checkRegisterInput(bool isUsernameError) {
     setState(() {
       passwordError = !isPasswordValid(newPassword1.text);
       emailError = !isEmailValid(email.text);
       usernameError = isUsernameError;
+    });
+  }
+
+  void emailAlreadyExist() {
+    setState(() {
+      emailError = true;
     });
   }
 
@@ -78,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 60,
+            height: 40,
           ),
           TextField(
             cursorColor: Colors.deepPurple,
@@ -194,7 +203,45 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 20,
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: isRulesCheckBoxChecked,
+                  activeColor: Colors.deepPurple,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isRulesCheckBoxChecked = value!;
+                    });
+                  }),
+              RichText(
+                text: TextSpan(
+                  text: 'I accept the ',
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'game rules',
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // Aquí puedes manejar la acción cuando se hace clic en "game rules"
+                          context.go("/rules");
+                        },
+                    ),
+                    const TextSpan(
+                      text: ' *',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Container(
             decoration: BoxDecoration(
@@ -218,11 +265,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (newPassword1.text == newPassword2.text) {
                   bool usernameError = await isUsernameValid(username.text);
                   checkRegisterInput(usernameError);
-                  if (!passwordError && !emailError && !usernameError) {
-                    User? user = await firebase.signUp(email.text, newPassword1.text,
-                        context); // TODO Handle if email is already created
+                  if (!passwordError &&
+                      !emailError &&
+                      !usernameError &&
+                      isRulesCheckBoxChecked) {
+                    User? user = await firebase.signUp(
+                        email.text, newPassword1.text, context);
                     if (user != null) {
                       firebase.saveUser(user, username.text);
+                    } else {
+                      emailAlreadyExist();
                     }
                   }
                 }

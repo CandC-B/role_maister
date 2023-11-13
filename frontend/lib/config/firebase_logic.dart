@@ -214,7 +214,7 @@ class FirebaseService {
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print("The account already exists for that email");
+        return null;
       }
     } catch (e) {
       print(e);
