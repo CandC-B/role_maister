@@ -13,6 +13,13 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isPasswordVisible = false;
+  bool? isInvalidCredentials;
+  void checkRegisterInput(bool isEmailValid) {
+    setState(() {
+      isInvalidCredentials = isEmailValid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
@@ -67,7 +74,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
           const SizedBox(
-            height: 58.5,
+            height: 50,
           ),
           TextField(
             cursorColor: Colors.deepPurple,
@@ -121,15 +128,31 @@ class _SignInPageState extends State<SignInPage> {
             child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    isMobile ? context.push("/forgot_password") :
-                    context.go("/forgot_password");
+                    isMobile
+                        ? context.push("/forgot_password")
+                        : context.go("/forgot_password");
                     // context.push("/forgot_password");
                   });
                 },
-                child: const Text("Forgot Password?", textAlign: TextAlign.end)),
+                child:
+                    const Text("Forgot Password?", textAlign: TextAlign.end)),
           ),
           const SizedBox(
-            height: 40,
+            height: 20,
+          ),
+          Visibility(
+            visible: isInvalidCredentials ??
+                false, // Controla la visibilidad del widget
+            child: Text(
+              "Invalid Credentials",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Container(
             decoration: BoxDecoration(
@@ -148,8 +171,10 @@ class _SignInPageState extends State<SignInPage> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-              onPressed: () =>
-                  firebase.signIn(email.text, password.text, context),
+              onPressed: () async {
+                isInvalidCredentials = // TODO does not show invalid credentials text
+                    await firebase.signIn(email.text, password.text, context);
+              },
               child: const SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -249,8 +274,7 @@ class _SignInPageState extends State<SignInPage> {
     bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return GestureDetector(
         onTap: () {
-          isMobile ? context.push("/register"):
-          context.go("/register");
+          isMobile ? context.push("/register") : context.go("/register");
         },
         child: const Text("Does not have account? Register"));
   }

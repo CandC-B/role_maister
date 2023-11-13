@@ -93,7 +93,7 @@ class FirebaseService {
     }
   }
 
-  Future<String> saveUser(User user, String username) async {
+  Future<void> saveUser(User user, String username) async {
     Map<String, dynamic> currentUser = {
       'uid': user.uid,
       'username': username,
@@ -101,9 +101,8 @@ class FirebaseService {
       'characters': [],
     };
     try {
-      DocumentReference docRef =
-          await _firestore.collection('user').add(currentUser);
-      return docRef.id;
+      _firestore.collection('user').doc(user.uid).set(currentUser);
+      // TODO error contorl if user cannot be created
     } catch (error) {
       rethrow;
     }
@@ -182,7 +181,7 @@ class FirebaseService {
     // );
   }
 
-  Future<void> signIn(
+  Future<bool?> signIn(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
@@ -192,12 +191,14 @@ class FirebaseService {
       singleton.user = user;
       context.go("/");
       context.push("/");
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      return false;
     }
   }
 
