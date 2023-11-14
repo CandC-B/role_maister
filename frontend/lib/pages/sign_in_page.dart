@@ -13,11 +13,21 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isPasswordVisible = false;
+  bool? isInvalidCredentials;
+  void checkRegisterInput(bool? isEmailInvalid) {
+    setState(() {
+      isInvalidCredentials = isEmailInvalid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 110.0),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
+          : const EdgeInsets.symmetric(vertical: 110.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -36,7 +46,9 @@ class _SignInPageState extends State<SignInPage> {
           color: Colors.white70,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+          padding: isMobile
+              ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0)
+              : const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: _formLogin(),
@@ -47,6 +59,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _formLogin() {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       width: 500,
       height: 570,
@@ -61,13 +74,13 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
           const SizedBox(
-            height: 58.5,
+            height: 50,
           ),
           TextField(
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email or username",
+              hintText: "Enter email",
               fillColor: Colors.blueGrey[50],
               filled: true,
               labelStyle: const TextStyle(fontSize: 12),
@@ -91,7 +104,6 @@ class _SignInPageState extends State<SignInPage> {
             controller: password,
             decoration: InputDecoration(
               hintText: "Password",
-              counterText: "Forgot password?",
               suffixIcon: passwordVisionIcon(),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -108,7 +120,39 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 5,
+          ),
+          Align(
+            // TODO SOlve this
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isMobile
+                        ? context.push("/forgot_password")
+                        : context.go("/forgot_password");
+                    // context.push("/forgot_password");
+                  });
+                },
+                child:
+                    const Text("Forgot Password?", textAlign: TextAlign.end)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Visibility(
+            visible: isInvalidCredentials ??
+                false, // Controla la visibilidad del widget
+            child: Text(
+              "Invalid Credentials",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Container(
             decoration: BoxDecoration(
@@ -127,8 +171,9 @@ class _SignInPageState extends State<SignInPage> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-              onPressed: () =>
-                  firebase.signIn(email.text, password.text, context),
+              onPressed: () async {                    
+                  checkRegisterInput(await firebase.signIn(email.text, password.text, context));
+              },
               child: const SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -167,8 +212,10 @@ class _SignInPageState extends State<SignInPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _loginWithButton(image: "assets/images/google_logo.png", isActive: true),
-              _loginWithButton(image: "assets/images/github_logo.png", isActive: true),
+              _loginWithButton(
+                  image: "assets/images/google_logo.png", isActive: true),
+              _loginWithButton(
+                  image: "assets/images/github_logo.png", isActive: true),
               _loginWithButton(
                   image: "assets/images/facebook_logo.png", isActive: true),
             ],
@@ -179,6 +226,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _loginWithButton({required String image, bool isActive = false}) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       width: 90,
       height: 70,
@@ -222,9 +270,10 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget registerText() {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return GestureDetector(
         onTap: () {
-          context.go("/register");
+          isMobile ? context.push("/register") : context.go("/register");
         },
         child: const Text("Does not have account? Register"));
   }

@@ -6,16 +6,18 @@ import 'package:role_maister/config/app_singleton.dart';
 Widget drawerHeader(BuildContext context) {
     String text = "Sign In";
     if(singleton.user != null) {
-      text = singleton.user!.email!;
+      text = "Profile";
     }
-
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Material(
         color: Colors.deepPurple,
         child: InkWell(
             onTap: () {
               if (singleton.user != null) {
+                isMobile ? context.push("/profile"):
                   context.go("/profile");
                 }else {
+                isMobile ? context.push("/sign_in"):
                   context.go("/sign_in");
                 }
             },

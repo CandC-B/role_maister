@@ -66,11 +66,43 @@ class FirebaseService {
     }
   }
 
+  Future<bool> checkUsernameAlreadyExist(String username) async {
+    try {
+      final CollectionReference userReference =
+          FirebaseFirestore.instance.collection("user");
+
+      QuerySnapshot querySnapshot =
+          await userReference.where("username", isEqualTo: username).get();
+      if(querySnapshot.docs.isEmpty) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<String> createGame(Map<String, dynamic> gameConfig) async {
     try {
       DocumentReference docRef =
           await _firestore.collection('game').add(gameConfig);
       return docRef.id;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> saveUser(User user, String username) async {
+    Map<String, dynamic> currentUser = {
+      'uid': user.uid,
+      'username': username,
+      'email': user.email,
+      'characters': [],
+    };
+    try {
+      _firestore.collection('user').doc(user.uid).set(currentUser);
+      // TODO error contorl if user cannot be created
     } catch (error) {
       rethrow;
     }
@@ -97,36 +129,35 @@ class FirebaseService {
     }
   }
 
-  Future<List<Map<String, dynamic>>?> fetchConversationByGameID(String gameId) async {
-  try {
-    List<Map<String, dynamic>> allMessages = [];
+  Future<List<Map<String, dynamic>>?> fetchConversationByGameID(
+      String gameId) async {
+    try {
+      List<Map<String, dynamic>> allMessages = [];
 
-    final querySnapshot = await _firestore
-        .collection('message')
-        .doc(gameId)
-        .collection('messages')
-        .orderBy('sentAt', descending: true)
-        .get();
+      final querySnapshot = await _firestore
+          .collection('message')
+          .doc(gameId)
+          .collection('messages')
+          .orderBy('sentAt', descending: true)
+          .get();
 
-    querySnapshot.docs.forEach((doc) {
-      if (doc.exists) {
-        final data = doc.data() as Map<String, dynamic>;
-        final sentBy = data['sentBy'] as String;
-        final text = data['text'] as String;
-        if (sentBy == "IA"){
-          allMessages.add({"role": "CHATBOT", "message": text});
+      querySnapshot.docs.forEach((doc) {
+        if (doc.exists) {
+          final data = doc.data() as Map<String, dynamic>;
+          final sentBy = data['sentBy'] as String;
+          final text = data['text'] as String;
+          if (sentBy == "IA") {
+            allMessages.add({"role": "CHATBOT", "message": text});
+          }
         }
-        
-      }
-    });
+      });
 
-    return allMessages;
-  } catch (e) {
-    print("Error fetching conversation: $e");
-    return null;
+      return allMessages;
+    } catch (e) {
+      print("Error fetching conversation: $e");
+      return null;
+    }
   }
-}
-
 
   // Stream<List<Map<String, dynamic>>?> fetchMessagesByGameId(String gameId) {
   Stream<QuerySnapshot> fetchMessagesByGameId(String gameId) {
@@ -150,7 +181,7 @@ class FirebaseService {
     // );
   }
 
-  Future<void> signIn(
+  Future<bool?> signIn(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
@@ -160,16 +191,18 @@ class FirebaseService {
       singleton.user = user;
       context.go("/");
       context.push("/");
+      return false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      return true;
     }
   }
 
-  Future<void> signUp(
+  Future<User?> signUp(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
@@ -179,13 +212,15 @@ class FirebaseService {
       singleton.user = user;
       context.go("/rules");
       context.push("/rules");
+      return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print("The account already exists for that email");
+        return null;
       }
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<void> signOut(BuildContext context) async {
@@ -195,5 +230,12 @@ class FirebaseService {
     // ignore: use_build_context_synchronously
     context.go("/");
     context.push("/");
+  }
+
+  Future<void> sendPasswordResetEmail(
+      String email, BuildContext context) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    context.go("/sign_in");
+    context.push("/sign_in");
   }
 }

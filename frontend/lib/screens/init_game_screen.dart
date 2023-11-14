@@ -10,14 +10,14 @@ class InitGameScreen extends StatelessWidget {
     bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     if (mobile) {
       return Scaffold(
-          appBar: const CustomAppBar(title: "Home"),
+          appBar: const CustomAppBar(title: "History Creator"),
           drawer: customDrawer(context),
           body: ListView(
             children: const [InitGame()],
           ));
     } else {
       return Scaffold(
-          appBar: const CustomAppBar(title: "Home"),
+          appBar: const CustomAppBar(title: "History Creator"),
           drawer: customDrawer(context),
           body: ListView(
             children: const [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/screens/forgot_password_screen.dart';
 import 'package:role_maister/screens/game_screen.dart';
 import 'package:role_maister/screens/guide_screen.dart';
 import 'package:role_maister/screens/home_screen.dart';
@@ -196,6 +197,21 @@ class ApplicationRouter {
             return CustomTransitionPage(
               key: state.pageKey,
               child: const GameScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child
+                  );
+                },
+              );
+            },
+          ),
+          GoRoute(
+          path: 'forgot_password',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const ForgotPasswordScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),

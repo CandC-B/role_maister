@@ -7,7 +7,6 @@ class RulesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     bool isMobile = size.width < 700;
-
     return Container(
       width: size.width,
       decoration: const BoxDecoration(
