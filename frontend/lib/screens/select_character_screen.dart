@@ -13,14 +13,14 @@ class SelectCharacterScreen extends StatelessWidget {
           appBar: const CustomAppBar(title: "Select Character"),
           drawer: customDrawer(context),
           body: ListView(
-            children: const [SelectCharacterPageMobile()],
+            children: [SelectCharacterPageMobile()],
           ));
     } else {
       return Scaffold(
           appBar: const CustomAppBar(title: "Select Character"),
           drawer: customDrawer(context),
           body: ListView(
-            children: const [
+            children: [
               SelectCharacterPageMobile(),
               WebFooter(),
             ],
