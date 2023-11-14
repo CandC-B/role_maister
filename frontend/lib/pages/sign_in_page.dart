@@ -14,9 +14,9 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController password = TextEditingController();
   bool isPasswordVisible = false;
   bool? isInvalidCredentials;
-  void checkRegisterInput(bool isEmailValid) {
+  void checkRegisterInput(bool? isEmailInvalid) {
     setState(() {
-      isInvalidCredentials = isEmailValid;
+      isInvalidCredentials = isEmailInvalid;
     });
   }
 
@@ -171,9 +171,8 @@ class _SignInPageState extends State<SignInPage> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-              onPressed: () async {
-                isInvalidCredentials = // TODO does not show invalid credentials text
-                    await firebase.signIn(email.text, password.text, context);
+              onPressed: () async {                    
+                  checkRegisterInput(await firebase.signIn(email.text, password.text, context));
               },
               child: const SizedBox(
                 width: double.infinity,

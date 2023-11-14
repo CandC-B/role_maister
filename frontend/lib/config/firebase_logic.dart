@@ -191,14 +191,14 @@ class FirebaseService {
       singleton.user = user;
       context.go("/");
       context.push("/");
-      return true;
+      return false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
-      return false;
+      return true;
     }
   }
 
