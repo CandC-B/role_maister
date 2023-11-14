@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/models/player.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -73,7 +74,7 @@ class FirebaseService {
 
       QuerySnapshot querySnapshot =
           await userReference.where("username", isEqualTo: username).get();
-      if(querySnapshot.docs.isEmpty) {
+      if (querySnapshot.docs.isEmpty) {
         return false;
       } else {
         return true;
@@ -93,19 +94,31 @@ class FirebaseService {
     }
   }
 
-  Future<void> saveUser(User user, String username) async {
-    Map<String, dynamic> currentUser = {
-      'uid': user.uid,
-      'username': username,
-      'email': user.email,
+  Future<void> saveUser(Player player) async {
+    Map<String, dynamic> currentPlayer = {
+      'uid': player.uid,
+      'username': player.username,
+      'email': player.email,
+      'tokens': player.tokens,
       'characters': [],
+      'gamesPlayed': player.gamesPlayed,
+      'experience': player.experience
     };
     try {
-      _firestore.collection('user').doc(user.uid).set(currentUser);
+      _firestore.collection('user').doc(player.uid).set(currentPlayer);
       // TODO error contorl if user cannot be created
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future<void> fetchPlayerData() async {
+    DocumentSnapshot<Map<String, dynamic>> playerDocument =
+        await _firestore.collection('user').doc(singleton.user?.uid).get();
+
+    Player player = Player.fromDocument(playerDocument);
+    print(player);
+    singleton.player = player;
   }
 
   Future<void> saveMessage(String messageText, DateTime sentAt,
@@ -215,7 +228,6 @@ class FirebaseService {
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        return null;
       }
     } catch (e) {
       print(e);

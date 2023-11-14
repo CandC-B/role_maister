@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:role_maister/models/player.dart';
 
 AppSingleton singleton = AppSingleton();
 
@@ -12,5 +13,6 @@ class AppSingleton {
   }
   
   User? user;
+  Player? player;
   String? currentGame;
 }

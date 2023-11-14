@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 
 class SignInPage extends StatefulWidget {
@@ -143,7 +144,7 @@ class _SignInPageState extends State<SignInPage> {
           Visibility(
             visible: isInvalidCredentials ??
                 false, // Controla la visibilidad del widget
-            child: Text(
+            child: const Text(
               "Invalid Credentials",
               style: TextStyle(
                 color: Colors.red,
@@ -171,8 +172,12 @@ class _SignInPageState extends State<SignInPage> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-              onPressed: () async {                    
-                  checkRegisterInput(await firebase.signIn(email.text, password.text, context));
+              onPressed: () async {
+                checkRegisterInput(
+                    await firebase.signIn(email.text, password.text, context));
+                if (!(isInvalidCredentials ?? false)) {
+                  firebase.fetchPlayerData();
+                }
               },
               child: const SizedBox(
                 width: double.infinity,

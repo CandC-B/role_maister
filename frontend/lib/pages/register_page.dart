@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
+import 'package:role_maister/models/player.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -271,9 +272,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       isRulesCheckBoxChecked) {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
+                      print("user");
+
                     if (user != null) {
-                      firebase.saveUser(user, username.text);
+                      print("user not null");
+                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,characters: [], gamesPlayed: 0, experience: 1);
+                      // singleton.user = user;
+                      singleton.player = player;
+                      firebase.saveUser(player);
                     } else {
+                      print("user null");
                       emailAlreadyExist();
                     }
                   }
