@@ -107,7 +107,7 @@ class _GuidesState extends State<Guides> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isSmallScreen ? 20.0 : 200.0,
+            horizontal: isSmallScreen ? 20.0 : 100.0,
             vertical: isSmallScreen ? 20.0 : 50.0,
           ),
           child: Container(
@@ -121,8 +121,9 @@ class _GuidesState extends State<Guides> {
             ),
             width: size.width,
             height: size.height - (isSmallScreen ? 100 : 150),
-            child: isSmallScreen
-                ? const DefaultTabController(
+            // child: isSmallScreen
+            //     ? const DefaultTabController(
+              child: DefaultTabController(
                     length: 3,
                     child: Column(
                       children: [
@@ -153,42 +154,42 @@ class _GuidesState extends State<Guides> {
                       ],
                     ),
                   )
-                : DefaultTabController(
-                    length: 3,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            color: Colors.white,
-                            child: const TabBar(
-                              indicatorColor: Colors.deepPurple,
-                              labelColor: Colors.deepPurple,
-                              labelStyle: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepPurple,
-                              ),
-                              tabs: [
-                                Tab(text: 'Aliens'),
-                                Tab(text: 'DnD'),
-                                Tab(text: 'Cthulhu'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const Expanded(
-                          flex: 4,
-                          child: TabBarView(
-                            children: [
-                              AliensTab(),
-                              DnDTab(),
-                              CthulhuTab(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                // : DefaultTabController(
+                //     length: 3,
+                //     child: Row(
+                //       children: [
+                //         Expanded(
+                //           child: Container(
+                //             color: Colors.white,
+                //             child: const TabBar(
+                //               indicatorColor: Colors.deepPurple,
+                //               labelColor: Colors.deepPurple,
+                //               labelStyle: TextStyle(
+                //                 fontSize: 20,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.deepPurple,
+                //               ),
+                //               tabs: [
+                //                 Tab(text: 'Aliens'),
+                //                 Tab(text: 'DnD'),
+                //                 Tab(text: 'Cthulhu'),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //         const Expanded(
+                //           flex: 4,
+                //           child: TabBarView(
+                //             children: [
+                //               AliensTab(),
+                //               DnDTab(),
+                //               CthulhuTab(),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
           ),
         ),
       ],

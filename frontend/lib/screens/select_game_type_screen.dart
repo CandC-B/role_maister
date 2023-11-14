@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/pages/pages.dart';
+import 'package:role_maister/pages/select_game_type_mobile.dart';
 import 'package:role_maister/pages/select_game_type_page.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
@@ -15,7 +16,7 @@ class SelectGameTypeScreen extends StatelessWidget {
           appBar: const CustomAppBar(title: "Game Select"),
           drawer: customDrawer(context),
           body: ListView(
-            children: const [SelectGameType()],
+            children: const [SelectGameTypePageMobile()],
           ));
     } else {
       return Scaffold(
@@ -23,7 +24,7 @@ class SelectGameTypeScreen extends StatelessWidget {
           drawer: customDrawer(context),
           body: ListView(
             children: const [
-              SelectGameType(),
+              SelectGameTypePage(),
               WebFooter(),
             ],
           ));
