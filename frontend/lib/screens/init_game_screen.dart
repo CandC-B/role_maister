@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class InitGameScreen extends StatelessWidget {
   const InitGameScreen({super.key});
@@ -8,7 +9,7 @@ class InitGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
-    if (mobile) {
+    if (mobile || !kIsWeb) {
       return Scaffold(
           appBar: const CustomAppBar(title: "History Creator"),
           drawer: customDrawer(context),
