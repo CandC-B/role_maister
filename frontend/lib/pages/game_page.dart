@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/config.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GamePage extends StatelessWidget {
   const GamePage({super.key});
@@ -11,7 +12,7 @@ class GamePage extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          if (size.width > 700)
+          if (size.width > 700 && kIsWeb)
             Expanded(
               flex: 1,
               child: Container(
@@ -21,7 +22,7 @@ class GamePage extends StatelessWidget {
             ),
           Expanded(
             // flex: 3,
-            flex: size.width > 700 ? 3 : 4,
+            flex: size.width > 700 && kIsWeb ? 3 : 4,
             child: Container(
               height: size.height,
               child: GameChat(gameId: singleton.currentGame!),
@@ -29,7 +30,7 @@ class GamePage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: size.width <= 700
+      floatingActionButton: size.width <= 700 || !kIsWeb
           ? FloatingActionButton(
               onPressed: () {
                 showDialog(

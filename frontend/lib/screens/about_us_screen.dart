@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/pages/about_us_page.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
@@ -8,7 +9,7 @@ class AboutUsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
-    if (mobile) {
+    if (mobile || !kIsWeb) {
       return Scaffold(
           appBar: const CustomAppBar(title: "About Us"),
           drawer: customDrawer(context),
