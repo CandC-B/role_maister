@@ -170,15 +170,23 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                       context: context,
                       builder: (BuildContext context) {
                         // TODO: robar el de Victor
-                        return const AlertDialog(
+                        return AlertDialog(
+                          backgroundColor: Colors.deepPurple,
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CircularProgressIndicator(
-                                color: Colors.deepPurple,
+                              Center(
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Center(
+                                    child: Image.asset(
+                                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                                  ),
+                                ),
                               ),
+                              LinearProgressIndicator(color: Colors.amber, backgroundColor: Colors.white,),
                               SizedBox(height: 16),
-                              Text("Creating Game..."),
+                              Text("Creating Game...", style: TextStyle(color: Colors.white),),
                             ],
                           ),
                         );
@@ -228,7 +236,15 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
             ],
           ),
           charactersData == null
-              ? Center(child: CircularProgressIndicator())
+              ? Center(child:
+                Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(
+                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                  ),
+                ),
+              )
               : Expanded(
                   child: ListView.builder(
                     itemCount: charactersData!.length,
