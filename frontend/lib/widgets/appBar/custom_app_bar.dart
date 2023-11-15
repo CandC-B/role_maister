@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/widgets/popup_menu_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -42,6 +43,32 @@ class _CustomAppBarState extends State<CustomAppBar> {
     }
   }
 
+  String getLocation(String key, BuildContext context) {   
+    if (key == 'Home') {
+      return AppLocalizations.of(context)!.home;
+    } else if (key == 'Guide') {
+      return AppLocalizations.of(context)!.guide;
+    } else if (key == 'Sign In') {
+      return AppLocalizations.of(context)!.sign_in;
+    } else if (key == 'Register') {
+      return AppLocalizations.of(context)!.register;
+    } else if (key == 'Pricing') {
+      return AppLocalizations.of(context)!.pricing;
+    } else if (key == 'Rules') {
+      return AppLocalizations.of(context)!.rules;
+    } else if (key == 'About Us') {
+      return AppLocalizations.of(context)!.about_us;
+    } else if (key == 'Profile') {
+      return AppLocalizations.of(context)!.profile;
+    } else if (key == 'Terms and Conditions') {
+      return AppLocalizations.of(context)!.terms_and_conditions;
+    } else if (key == 'Contact Us') {
+      return AppLocalizations.of(context)!.contact_us;
+    } else {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     checkCurrentPath(widget.title);
@@ -70,8 +97,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    widget.title,
+                  child: Text(                    
+                    getLocation(widget.title, context),
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -129,7 +156,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Column(
                 children: [
                   Text(
-                    "Home",
+                    AppLocalizations.of(context)!.home,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: homeScreen ? Colors.white : Colors.grey.shade300,
@@ -158,7 +185,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Column(
                 children: [
                   Text(
-                    "Rules",
+                    AppLocalizations.of(context)!.rules,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: rulesScreen ? Colors.white : Colors.grey.shade300,
@@ -184,7 +211,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Column(
                 children: [
                   Text(
-                    "Guide",
+                    AppLocalizations.of(context)!.guide,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: guideScreen ? Colors.white : Colors.grey.shade300,
@@ -210,7 +237,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Column(
                 children: [
                   Text(
-                    "Shop",
+                    AppLocalizations.of(context)!.pricing,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color:
@@ -247,7 +274,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Column(
                   children: [
                     Text(
-                      "Sign In",
+                      AppLocalizations.of(context)!.sign_in,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color:
@@ -274,7 +301,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Column(
                   children: [
                     Text(
-                      "Register",
+                      AppLocalizations.of(context)!.register,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: registerScreen
