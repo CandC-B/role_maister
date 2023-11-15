@@ -13,4 +13,5 @@ class AppSingleton {
 
   User? user;
   String? currentGame;
+  String? history;
 }

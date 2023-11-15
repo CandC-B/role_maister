@@ -127,6 +127,7 @@ class GameForm extends StatelessWidget {
                           fontSize: 20, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     if (mobile) {
+                      singleton.history = _storyController.text;
                       context.go("/select_character");
                     } else {
                       showDialog(

@@ -76,10 +76,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     Map<String, dynamic> mapUserStats = userStats.toMap();
     mapUserStats["user"] = singleton.user!.uid;
     // TODO: don't harcode this
+    print(singleton.history);
     Map<String, dynamic> gameConfig = {
       "role_system": "aliens",
       "num_players": 1,
-      "story_description": "",
+      "story_description": singleton.history,
       "players": [characterId]
     };
     String gameUid = await firebase.createGame(gameConfig);
@@ -185,7 +186,9 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                       barrierDismissible:
                           false, // Prevent closing the dialog by tapping outside.
                     );
-                    createNewGame(UserStatistics.fromMap(characterData), characterId).then((value) {
+                    createNewGame(
+                            UserStatistics.fromMap(characterData), characterId)
+                        .then((value) {
                       context.go("/game");
                     });
                   },
