@@ -14,9 +14,9 @@ class GamePlayers extends StatefulWidget {
 class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserStatistics>(
+    return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
-      builder: (BuildContext context, AsyncSnapshot<UserStatistics?> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<AliensCharacter?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             color: Colors.transparent,
@@ -29,7 +29,7 @@ class _GamePlayersState extends State<GamePlayers> {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final userStats = snapshot.data ??
-              UserStatistics.random(); // Usar datos o valor random
+              AliensCharacter.random(); // Usar datos o valor random
           return DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -68,15 +68,15 @@ class _GamePlayersState extends State<GamePlayers> {
     );
   }
 
-  Future<UserStatistics> getUserStats(String gameId) async {
+  Future<AliensCharacter> getUserStats(String gameId) async {
     try {
       final Map<String, dynamic> statsData =
-          await firestoreService.getCharacters(gameId);
+          await firestoreService.getCharactersFromGameId(gameId);
       try {
-        return UserStatistics.fromMap(statsData);
+        return AliensCharacter.fromMap(statsData);
       } catch (e) {
         print("Error: $e");
-        return UserStatistics.random();
+        return AliensCharacter.random();
       }
     } catch (error) {
       throw Exception("Error al obtener estadísticas del usuario: $error");
@@ -90,7 +90,7 @@ class StatsTab extends StatefulWidget {
     super.key,
     required this.userStats,
   });
-  final UserStatistics userStats;
+  final AliensCharacter userStats;
 
   @override
   State<StatsTab> createState() => _StatsTabState();
@@ -115,7 +115,7 @@ class PlayersTab extends StatelessWidget {
     required this.userStats,
   });
 
-  final UserStatistics userStats;
+  final AliensCharacter userStats;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,7 @@ class PlayerCard extends StatelessWidget {
 
 class Stats extends StatelessWidget {
   const Stats({super.key, required this.userStats});
-  final UserStatistics userStats;
+  final AliensCharacter userStats;
 
   @override
   Widget build(BuildContext context) {

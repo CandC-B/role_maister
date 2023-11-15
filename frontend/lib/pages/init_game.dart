@@ -8,7 +8,7 @@ class InitGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    UserStatistics character = UserStatistics.random();
+    AliensCharacter character = AliensCharacter.random();
 
     return Container(
         width: size.width,

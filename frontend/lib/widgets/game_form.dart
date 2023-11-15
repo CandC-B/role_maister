@@ -8,10 +8,10 @@ import 'package:role_maister/config/config.dart';
 
 class GameForm extends StatelessWidget {
   GameForm({super.key, required this.character});
-  final UserStatistics character;
+  final AliensCharacter character;
   var _storyController = TextEditingController();
 
-  Future<void> createNewGame(UserStatistics userStats, String history) async {
+  Future<void> createNewGame(AliensCharacter userStats, String history) async {
     Map<String, dynamic> mapUserStats = userStats.toMap();
     mapUserStats["user"] = singleton.user!.uid;
     String character_uid = await firebase.createCharacter(mapUserStats);

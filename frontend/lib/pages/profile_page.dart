@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/models/aliens_character.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
+import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/widgets/widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -141,7 +145,8 @@ class ProfileStats extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          singleton.player?.email ?? "candcompany@gmail.com", // Add user's location or other information
+          singleton.player?.email ??
+              "candcompany@gmail.com", // Add user's location or other information
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
@@ -156,7 +161,7 @@ class ProfileStats extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           singleton.player?.tokens.toString() ?? "0",
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
         const Text(
@@ -220,23 +225,131 @@ class ProfileStats extends StatelessWidget {
 }
 
 class CharactersTab extends StatelessWidget {
-  final List<TokenPackage> tokenPackages = [
-    TokenPackage("1 Tokens", 1.0),
-    TokenPackage("5 Tokens", 4.0),
-    TokenPackage("10 Tokens", 8.0),
-    TokenPackage("25 Tokens", 22.0),
-    TokenPackage("50 Tokens", 45.0),
-  ];
+  final List<AliensCharacter> aliensCharacters = [];
+  final List<DydCharacter> dydCharacters = [];
+  final List<CthulhuCharacter> cthulhuCharacters = [];
 
   CharactersTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: tokenPackages.length,
-      itemBuilder: (context, index) {
-        return TokenPackageCard(tokenPackage: tokenPackages[index]);
-      },
+    TextEditingController characterNameController = TextEditingController();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  "Aliens",
+                  style: TextStyle(
+                      color: Colors.deepPurple,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: aliensCharacters.length,
+                    itemBuilder: (context, index) {
+                      return CharacterCard(character: aliensCharacters[index]);
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CharactersDialog();
+                        });
+                  },
+                  child: const Text(
+                    "Add Character",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      minimumSize: const Size(250, 40)),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  "Dungeons and dragons",
+                  style: TextStyle(
+                      color: Colors.deepPurple,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: aliensCharacters.length,
+                    itemBuilder: (context, index) {
+                      return CharacterCard(character: aliensCharacters[index]);
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CharactersDialog();
+                        });
+                  },
+                  child: const Text(
+                    "Add Character",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      minimumSize: const Size(250, 40)),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+              child: Column(
+            children: [
+              const Text(
+                "Cthulhu",
+                style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: aliensCharacters.length,
+                  itemBuilder: (context, index) {
+                    return CharacterCard(character: aliensCharacters[index]);
+                  },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CharactersDialog();
+                        });
+                },
+                child: const Text(
+                  "Add Character",
+                  style: TextStyle(fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    minimumSize: const Size(250, 40)),
+              )
+            ],
+          ))
+        ],
+      ),
     );
   }
 }
@@ -248,10 +361,10 @@ class TokenPackage {
   TokenPackage(this.name, this.price);
 }
 
-class TokenPackageCard extends StatelessWidget {
-  final TokenPackage tokenPackage;
+class CharacterCard extends StatelessWidget {
+  final character;
 
-  TokenPackageCard({required this.tokenPackage});
+  CharacterCard({required this.character});
 
   @override
   Widget build(BuildContext context) {
@@ -267,14 +380,68 @@ class TokenPackageCard extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          tokenPackage.name,
+          character.name,
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
-        subtitle: Text(
-          '\$${tokenPackage.price.toStringAsFixed(2)}',
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+        // subtitle: Text(
+        //   '\$${tokenPackage.price.toStringAsFixed(2)}',
+        //   style: const TextStyle(color: Colors.white, fontSize: 20),
+        // ),
+      ),
+    );
+  }
+}
+
+class CharactersDialog extends StatefulWidget {
+  @override
+  _CharactersDialogState createState() => _CharactersDialogState();
+}
+
+class _CharactersDialogState extends State<CharactersDialog> {
+  TextEditingController characterNameController = TextEditingController();
+
+@override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.deepPurple,
+      title: const Text(
+        'Enter your new character name',
+        style: TextStyle(color: Colors.white),
+      ),
+      content: TextField(
+        controller: characterNameController,
+        cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
+        decoration: const InputDecoration(
+          hintText: 'Character name',
+          hintStyle: TextStyle(color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
         ),
       ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            String characterName = characterNameController.text;
+            // Do something with the character name, like saving it to a list
+            Navigator.of(context).pop();
+          },
+          child: const Text('Accept', style: TextStyle(color: Colors.white)),
+        ),
+      ],
     );
   }
 }
