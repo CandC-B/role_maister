@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePageMobile extends StatelessWidget {
   const HomePageMobile({super.key});
@@ -35,7 +36,7 @@ class HomePageMobile extends StatelessWidget {
                 color: Colors.white,
               ),
               child: GradientText(
-                'Let an AI be the \n master and enjoy \na role session \nalone or with \nyour friends',
+                AppLocalizations.of(context)!.homePageText_mobile,
                 overflow: TextOverflow.visible,
                 textAlign: TextAlign.center,
                 colors: const [
@@ -64,9 +65,9 @@ class HomePageMobile extends StatelessWidget {
                   context.go("/sign_in");
                 }
               },
-              child: const FittedBox(
-                  fit: BoxFit.contain, child: Text("Play Game"))),
-        )
+              child: FittedBox(
+                  fit: BoxFit.contain, child: Text(AppLocalizations.of(context)!.playGame))),
+        ),
       ],
     );
   }

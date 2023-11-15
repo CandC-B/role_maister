@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,7 +36,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
               ),
               child: GradientText(
-                'Let an AI be the master \n and enjoy a role session \n alone or with your friends',
+                AppLocalizations.of(context)!.homePageText,
                 overflow: TextOverflow.ellipsis,
                 colors: const [
                   Color.fromARGB(255, 226, 220, 161),
@@ -63,9 +64,10 @@ class HomePage extends StatelessWidget {
                   context.go("/sign_in");
                 }
               },
-              child: const FittedBox(
-                  fit: BoxFit.contain, child: Text("Play Game"))),
-        )
+              child: FittedBox(
+                  fit: BoxFit.contain, child: Text(AppLocalizations.of(context)!.playGame))),
+        ),
+        
       ],
     );
   }
