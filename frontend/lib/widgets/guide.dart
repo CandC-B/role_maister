@@ -122,8 +122,7 @@ class _GuidesState extends State<Guides> {
             width: size.width,
             height: size.height - (isSmallScreen ? 100 : 150),
             // child: isSmallScreen
-            //     ? const DefaultTabController(
-              child: DefaultTabController(
+              child: const DefaultTabController(
                     length: 3,
                     child: Column(
                       children: [

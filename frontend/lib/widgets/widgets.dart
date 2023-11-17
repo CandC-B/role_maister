@@ -9,4 +9,4 @@ export 'game_chat.dart';
 export 'game_players.dart';
 export 'image_color_filter.dart';
 export 'game_form.dart';
-export 'character_card.dart';
+export 'aliens_characters_card.dart';

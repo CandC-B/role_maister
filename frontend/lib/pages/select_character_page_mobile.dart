@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/models/character.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
+import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/config.dart';
@@ -39,8 +43,19 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   Future<void> createRandomPlayer() async {
     try {
-      UserStatistics newRandomUser = UserStatistics.random();
-      await firebase.createCharacter(newRandomUser.toMap());
+      if (singleton.gameMode == "Aliens") {
+        AliensCharacter newRandomUser = AliensCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else if (singleton.gameMode == "Dyd") {
+        DydCharacter newRandomUser = DydCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else if (singleton.gameMode == "Cthulhu") {
+        CthulhuCharacter newRandomUser = CthulhuCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else {
+        AliensCharacter newRandomUser = AliensCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      }
 
       // Reload character data to update the UI
       await loadCharacterData();
@@ -71,12 +86,16 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   // TODO: pasar la historia
-  Future<void> createNewGame(
-      UserStatistics userStats, String characterId) async {
-    Map<String, dynamic> mapUserStats = userStats.toMap();
+  Future<void> createNewGame(String characterId) async {
+    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    if (singleton.gameMode == "Aliens") {
+      Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    } else if (singleton.gameMode == "Dyd") {
+      Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
+    } else if (singleton.gameMode == "Cthulhu") {
+      Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
+    }
     mapUserStats["user"] = singleton.user!.uid;
-    // TODO: don't harcode this
-    print(singleton.history);
     Map<String, dynamic> gameConfig = {
       "role_system": "aliens",
       "num_players": 1,
@@ -108,12 +127,14 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     return Container(
       width: size.width,
       height: size.height,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/background2.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+      decoration: !kIsWeb
+          ? BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background2.png'),
+                fit: BoxFit.cover,
+              ),
+            )
+          : BoxDecoration(color: Colors.black87),
       child: Column(
         children: [
           Row(
@@ -127,11 +148,16 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button
+                    decoration: BoxDecoration(),
                     child: Card(
                       color: Colors.black,
                       margin: const EdgeInsets.all(10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Colors.deepPurple,
+                          width: 1,
+                        ),
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
@@ -158,93 +184,103 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    print("START GAME");
-                    final characterId =
-                        charactersData!.keys.elementAt(selectedIndex);
-                    final characterData = charactersData![characterId];
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        // TODO: robar el de Victor
-                        return AlertDialog(
-                          backgroundColor: Colors.deepPurple,
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Center(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              kIsWeb
+                  ? SizedBox()
+                  : Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          print("START GAME");
+                          final characterId =
+                              charactersData!.keys.elementAt(selectedIndex);
+                          final characterData = charactersData![characterId];
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.deepPurple,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: Image.asset(
+                                              'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                                        ),
+                                      ),
+                                    ),
+                                    LinearProgressIndicator(
+                                      color: Colors.amber,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      "Creating Game...",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            barrierDismissible:
+                                false, // Prevent closing the dialog by tapping outside.
+                          );
+                          createNewGame(characterId).then((value) {
+                            context.go("/game");
+                          });
+                        },
+                        child: Container(
+                          height: 100.0, // Set a fixed height for the button
+                          child: Card(
+                            color: Colors.black,
+                            margin: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Colors.deepPurple,
+                                width: 1,
+                              ),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.play_arrow_rounded,
+                                    color: Colors.white,
                                   ),
-                                ),
+                                  SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "Start Game",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18.0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              LinearProgressIndicator(color: Colors.amber, backgroundColor: Colors.white,),
-                              SizedBox(height: 16),
-                              Text("Creating Game...", style: TextStyle(color: Colors.white),),
-                            ],
+                            ),
                           ),
-                        );
-                      },
-                      barrierDismissible:
-                          false, // Prevent closing the dialog by tapping outside.
-                    );
-                    createNewGame(
-                            UserStatistics.fromMap(characterData), characterId)
-                        .then((value) {
-                      context.go("/game");
-                    });
-                  },
-                  child: Container(
-                    height: 100.0, // Set a fixed height for the button
-                    child: Card(
-                      color: Colors.black,
-                      margin: const EdgeInsets.all(10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.play_arrow_rounded,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 10.0),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "Start Game",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18.0),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
           charactersData == null
-              ? Center(child:
-                Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(
-                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              ? Center(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Image.asset(
+                          'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                    ),
                   ),
-                ),
-              )
+                )
               : Expanded(
                   child: ListView.builder(
                     itemCount: charactersData!.length,
@@ -252,14 +288,34 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                       final characterId = charactersData!.keys.elementAt(index);
                       final characterData = charactersData![characterId];
 
+                      singleton.selectedCharacterId =
+                          charactersData!.keys.elementAt(selectedIndex);
+                      if (singleton.gameMode == "Aliens") {
+                        singleton.alienCharacter = AliensCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else if (singleton.gameMode == "Dyd") {
+                        singleton.dydCharacter = DydCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else if (singleton.gameMode == "Cthulhu") {
+                        singleton.cthulhuCharacter = CthulhuCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else {
+                        singleton.alienCharacter = AliensCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      }
+
                       return InkWell(
                         onTap: () {
                           setState(() {
                             selectedIndex = index;
                           });
                         },
-                        child: CharacterCard(
-                          character: UserStatistics.fromMap(characterData),
+                        child: AliensCharacterCard(
+                          character: AliensCharacter.fromMap(characterData),
                           selected: selectedIndex == index,
                         ),
                       );

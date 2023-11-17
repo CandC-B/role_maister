@@ -7,3 +7,4 @@ export 'about_us_screen.dart';
 export 'contact_us_screen.dart';
 export 'profile_screen.dart';
 export 'select_character_screen.dart';
+export 'select_mode_screen.dart';

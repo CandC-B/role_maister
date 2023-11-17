@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/config.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
 class RoleTab extends StatefulWidget {
@@ -46,6 +47,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
+            singleton.gameMode == "Aliens";
             handleImageSelection(
                 0); // Call the function with the index of the selected image
           },
@@ -66,6 +68,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
+            singleton.gameMode == "Dyd";
             handleImageSelection(
                 1); // Call the function with the index of the selected image
           },
@@ -86,6 +89,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
+            singleton.gameMode == "Cthulhu";
             handleImageSelection(
                 2); // Call the function with the index of the selected image
           },

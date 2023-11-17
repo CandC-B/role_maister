@@ -8,12 +8,10 @@ class InitGamePageMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    UserStatistics character = UserStatistics.random();
-
     return Container(
         width: size.width,
         height: size.height * 0.9,
-        child: GameForm(character: character, image_width: size.width / 3, preset: false, mobile: true,)
+        child: GameForm(image_width: size.width / 3, preset: false, mobile: true,)
       );
   }
 }

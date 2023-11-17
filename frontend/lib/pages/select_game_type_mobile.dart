@@ -34,23 +34,28 @@ class SelectGameTypePageMobile extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ImageColorFilter(
-              imagePath: 'assets/images/multiplayer.png',
-              routeName: '/form_singleplayer',
-              imageText: "SINGLE PLAYER",
-              isAvailable: false,
-              height: size.height * 0.9 / 3,
-              width: size.width,
-              isLink: false,
-              preset: true,
-              isHovering: true,
+            child: InkWell(
+              onTap: () {
+                context.go("/form_multiplayer");
+              },
+              child: ImageColorFilter(
+                imagePath: 'assets/images/multiplayer.png',
+                routeName: '/form_singleplayer',
+                imageText: "MULTIPLAYER",
+                isAvailable: true,
+                height: size.height * 0.9 / 3,
+                width: size.width,
+                isLink: false,
+                preset: true,
+                isHovering: true,
+              ),
             ),
           ),
           Expanded(
             child: ImageColorFilter(
               imagePath: 'assets/images/pairingmode.PNG',
               routeName: '/form_singleplayer',
-              imageText: "SINGLE PLAYER",
+              imageText: "PAIRING MODE",
               isAvailable: false,
               height: size.height * 0.9 / 3,
               width: size.width,
