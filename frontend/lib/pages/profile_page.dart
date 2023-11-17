@@ -11,7 +11,7 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
-
+// TODO Stream builder para que se actualice la pagina cuando se cree un character
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isSmallScreen ? 20.0 : 100.0,
+            horizontal: isSmallScreen ? 10.0 : 100.0,
             vertical: isSmallScreen ? 20.0 : 50.0,
           ),
           child: Container(
@@ -233,6 +233,8 @@ class CharactersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 700;
     TextEditingController characterNameController = TextEditingController();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -266,10 +268,10 @@ class CharactersTab extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      minimumSize: const Size(250, 40)),
-                  child: const Text(
+                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                  child: Text(
                     "Add Character",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
                   ),
                 )
               ],
@@ -279,7 +281,7 @@ class CharactersTab extends StatelessWidget {
             child: Column(
               children: [
                 const Text(
-                  "Dungeons and dragons",
+                  "D&D",
                   style: TextStyle(
                       color: Colors.deepPurple,
                       fontSize: 24,
@@ -303,10 +305,10 @@ class CharactersTab extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      minimumSize: const Size(250, 40)),
-                  child: const Text(
+                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                  child: Text(
                     "Add Character",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
                   ),
                 )
               ],
@@ -340,10 +342,10 @@ class CharactersTab extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple,
-                    minimumSize: const Size(250, 40)),
-                child: const Text(
+                    minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                child: Text(
                   "Add Character",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
                 ),
               ),
             ],
@@ -469,18 +471,21 @@ class _CharactersDialogState extends State<CharactersDialog> {
 }
 
 void createAlien(String characterName) {
+  singleton.gameMode = "Aliens";
   AliensCharacter newAlien = AliensCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());
 }
 
 void createDyd(String characterName) {
+  singleton.gameMode = "Dyd";
   DydCharacter newAlien = DydCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());
 }
 
 void createCthulhu(String characterName) {
+  singleton.gameMode = "Cthulhu";
   CthulhuCharacter newAlien = CthulhuCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());
