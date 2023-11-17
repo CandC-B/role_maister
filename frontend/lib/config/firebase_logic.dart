@@ -7,7 +7,6 @@ import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/player.dart';
-import 'package:role_maister/widgets/widgets.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -18,6 +17,7 @@ class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<String> createCharacter(Map<String, dynamic> character) async {
+    
     try {
       DocumentReference docRef =
           await _firestore.collection('character').add(character);

@@ -8,7 +8,7 @@ class AliensCharacter {
   final Map<String, int> attributes;
   final Map<String, int> skills;
   final List<String> talents;
-  final String name;
+  String name;
   final String appearance;
   final String personalAgenda;
   final String friend;
@@ -41,7 +41,7 @@ class AliensCharacter {
     final attributes = _generateRandomAttributes(career);
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
-    final name = _getRandomName(career);
+    String name = _getRandomName(career);
     final appearance = _getRandomAppearance(career);
     final personalAgenda = _getRandomPersonalAgenda(career);
     final friend = _getRandomName(career);

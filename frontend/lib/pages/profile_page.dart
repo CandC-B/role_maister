@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
-import 'package:role_maister/widgets/widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -261,16 +261,16 @@ class CharactersTab extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return CharactersDialog();
+                          return CharactersDialog(gameMode: "Aliens");
                         });
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      minimumSize: const Size(250, 40)),
                   child: const Text(
                     "Add Character",
                     style: TextStyle(fontSize: 16),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: const Size(250, 40)),
                 )
               ],
             ),
@@ -298,16 +298,16 @@ class CharactersTab extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return CharactersDialog();
+                          return CharactersDialog(gameMode: "Dyd");
                         });
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      minimumSize: const Size(250, 40)),
                   child: const Text(
                     "Add Character",
                     style: TextStyle(fontSize: 16),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: const Size(250, 40)),
                 )
               ],
             ),
@@ -333,19 +333,19 @@ class CharactersTab extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CharactersDialog();
-                        });
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CharactersDialog(gameMode: "Cthulhu");
+                      });
                 },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    minimumSize: const Size(250, 40)),
                 child: const Text(
                   "Add Character",
                   style: TextStyle(fontSize: 16),
                 ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    minimumSize: const Size(250, 40)),
-              )
+              ),
             ],
           ))
         ],
@@ -393,36 +393,47 @@ class CharacterCard extends StatelessWidget {
 }
 
 class CharactersDialog extends StatefulWidget {
+  final String gameMode;
+  CharactersDialog({Key? key, required this.gameMode}) : super(key: key);
   @override
   _CharactersDialogState createState() => _CharactersDialogState();
 }
 
 class _CharactersDialogState extends State<CharactersDialog> {
   TextEditingController characterNameController = TextEditingController();
+  String gameMode = "";
+  @override
+  void initState() {
+    super.initState();
+    // Configurar el controlador con el valor inicial recibido
+    gameMode = widget.gameMode;
+  }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.white,
       title: const Text(
         'Enter your new character name',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
       ),
       content: TextField(
         controller: characterNameController,
-        cursorColor: Colors.white,
-        style: const TextStyle(color: Colors.white),
+        cursorColor: Colors.deepPurple,
+        style: const TextStyle(color: Colors.deepPurple),
         decoration: const InputDecoration(
           hintText: 'Character name',
-          hintStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.deepPurple),
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: Colors.deepPurple),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: Colors.deepPurple),
           ),
           border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(
+              color: Colors.deepPurple,
+            ),
           ),
         ),
       ),
@@ -431,17 +442,46 @@ class _CharactersDialogState extends State<CharactersDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+          child: const Text('Cancel',
+              style: TextStyle(
+                  color: Colors.deepPurple, fontWeight: FontWeight.bold)),
         ),
         TextButton(
           onPressed: () {
-            String characterName = characterNameController.text;
-            // Do something with the character name, like saving it to a list
+            if (gameMode == "Aliens") {
+              createAlien(characterNameController.text);
+            } else if (gameMode == "Dyd") {
+              createDyd(characterNameController.text);
+            } else if (gameMode == "Cthulhu") {
+              createCthulhu(characterNameController.text);
+            }
             Navigator.of(context).pop();
           },
-          child: const Text('Accept', style: TextStyle(color: Colors.white)),
-        ),
+          child: const Text(
+            'Accept',
+            style: TextStyle(
+                color: Colors.deepPurple, fontWeight: FontWeight.bold),
+          ),
+        )
       ],
     );
   }
+}
+
+void createAlien(String characterName) {
+  AliensCharacter newAlien = AliensCharacter.random();
+  newAlien.name = characterName;
+  firebase.createCharacter(newAlien.toMap());
+}
+
+void createDyd(String characterName) {
+  DydCharacter newAlien = DydCharacter.random();
+  newAlien.name = characterName;
+  firebase.createCharacter(newAlien.toMap());
+}
+
+void createCthulhu(String characterName) {
+  CthulhuCharacter newAlien = CthulhuCharacter.random();
+  newAlien.name = characterName;
+  firebase.createCharacter(newAlien.toMap());
 }

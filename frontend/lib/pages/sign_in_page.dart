@@ -28,7 +28,7 @@ class _SignInPageState extends State<SignInPage> {
       alignment: Alignment.center,
       padding: isMobile
           ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
-          : const EdgeInsets.symmetric(vertical: 110.0),
+          : const EdgeInsets.symmetric(vertical: 150.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
