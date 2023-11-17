@@ -271,6 +271,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                     ),
             ],
           ),
+          // TODO Refresh character data when gamemode changes
           charactersData == null
               ? Center(
                   child: Container(
@@ -287,7 +288,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                     itemBuilder: (context, index) {
                       final characterId = charactersData!.keys.elementAt(index);
                       final characterData = charactersData![characterId];
-
+                      print(singleton.gameMode);
                       singleton.selectedCharacterId =
                           charactersData!.keys.elementAt(selectedIndex);
                       if (singleton.gameMode == "Aliens") {
