@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
@@ -75,8 +76,6 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       UserStatistics userStats, String characterId) async {
     Map<String, dynamic> mapUserStats = userStats.toMap();
     mapUserStats["user"] = singleton.user!.uid;
-    // TODO: don't harcode this
-    print(singleton.history);
     Map<String, dynamic> gameConfig = {
       "role_system": "aliens",
       "num_players": 1,
@@ -108,12 +107,14 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     return Container(
       width: size.width,
       height: size.height,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/background2.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+      decoration: !kIsWeb
+          ? BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background2.png'),
+                fit: BoxFit.cover,
+              ),
+            )
+          : BoxDecoration(color: Colors.black87),
       child: Column(
         children: [
           Row(
@@ -127,11 +128,16 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button
+                    decoration: BoxDecoration(),
                     child: Card(
                       color: Colors.black,
                       margin: const EdgeInsets.all(10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Colors.deepPurple,
+                          width: 1,
+                        ),
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
@@ -158,99 +164,114 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    print("START GAME");
-                    final characterId =
-                        charactersData!.keys.elementAt(selectedIndex);
-                    final characterData = charactersData![characterId];
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        // TODO: robar el de Victor
-                        return AlertDialog(
-                          backgroundColor: Colors.deepPurple,
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Center(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              kIsWeb
+                  ? SizedBox()
+                  : Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          print("START GAME");
+                          final characterId =
+                              charactersData!.keys.elementAt(selectedIndex);
+                          final characterData = charactersData![characterId];
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.deepPurple,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: Image.asset(
+                                              'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                                        ),
+                                      ),
+                                    ),
+                                    LinearProgressIndicator(
+                                      color: Colors.amber,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      "Creating Game...",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            barrierDismissible:
+                                false, // Prevent closing the dialog by tapping outside.
+                          );
+                          createNewGame(UserStatistics.fromMap(characterData),
+                                  characterId)
+                              .then((value) {
+                            context.go("/game");
+                          });
+                        },
+                        child: Container(
+                          height: 100.0, // Set a fixed height for the button
+                          child: Card(
+                            color: Colors.black,
+                            margin: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Colors.deepPurple,
+                                width: 1,
+                              ),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.play_arrow_rounded,
+                                    color: Colors.white,
                                   ),
-                                ),
+                                  SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "Start Game",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18.0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              LinearProgressIndicator(color: Colors.amber, backgroundColor: Colors.white,),
-                              SizedBox(height: 16),
-                              Text("Creating Game...", style: TextStyle(color: Colors.white),),
-                            ],
+                            ),
                           ),
-                        );
-                      },
-                      barrierDismissible:
-                          false, // Prevent closing the dialog by tapping outside.
-                    );
-                    createNewGame(
-                            UserStatistics.fromMap(characterData), characterId)
-                        .then((value) {
-                      context.go("/game");
-                    });
-                  },
-                  child: Container(
-                    height: 100.0, // Set a fixed height for the button
-                    child: Card(
-                      color: Colors.black,
-                      margin: const EdgeInsets.all(10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.play_arrow_rounded,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 10.0),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "Start Game",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18.0),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
           charactersData == null
-              ? Center(child:
-                Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(
-                        'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              ? Center(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Image.asset(
+                          'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                    ),
                   ),
-                ),
-              )
+                )
               : Expanded(
                   child: ListView.builder(
                     itemCount: charactersData!.length,
                     itemBuilder: (context, index) {
                       final characterId = charactersData!.keys.elementAt(index);
                       final characterData = charactersData![characterId];
+
+                      singleton.selectedCharacterId = charactersData!.keys.elementAt(selectedIndex);
+                      singleton.selectedCharacter = UserStatistics.fromMap(charactersData![charactersData!.keys.elementAt(selectedIndex)]);
 
                       return InkWell(
                         onTap: () {
@@ -263,6 +284,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                           selected: selectedIndex == index,
                         ),
                       );
+                      
                     },
                   ),
                 ),
