@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     bool mobile = MediaQuery.of(context).size.width > 700 ? false : true;
-    if (mobile) {
+    if (mobile || !kIsWeb) {
       return Scaffold(
           appBar: const CustomAppBar(title: "Home"),
           drawer: customDrawer(context),
           body: ListView(
             children: const [
-              HomePage(),
+              HomePageMobile(),
             ],
           ));
     } else {

@@ -6,7 +6,7 @@ class RulesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    bool isMobile = size.width < 700;
     return Container(
       width: size.width,
       decoration: const BoxDecoration(
@@ -16,7 +16,7 @@ class RulesPage extends StatelessWidget {
             ),
           ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
+        padding: isMobile ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0) : const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),

@@ -89937,7 +89937,7 @@ A.Oj.prototype={
 F(a){return new A.uS(A.aNr().a,!1,null)}}
 A.oL.prototype={
 j(a){var s=this
-return"UserStatistics: { characterLevel: "+s.a+", career: "+s.b+", attributes: "+s.c.j(0)+", skills: "+s.d.j(0)+", talents: "+A.i(s.e)+", name: "+s.f+", appearance: "+s.r+", personalAgenda: "+s.w+", friend: "+s.x+", rival: "+s.y+", gear: "+A.i(s.z)+", signatureItem: "+s.Q+", cash: "+s.as+", hp: "+s.at+"}"}}
+return"AliensCharacter: { characterLevel: "+s.a+", career: "+s.b+", attributes: "+s.c.j(0)+", skills: "+s.d.j(0)+", talents: "+A.i(s.e)+", name: "+s.f+", appearance: "+s.r+", personalAgenda: "+s.w+", friend: "+s.x+", rival: "+s.y+", gear: "+A.i(s.z)+", signatureItem: "+s.Q+", cash: "+s.as+", hp: "+s.at+"}"}}
 A.ams.prototype={
 $2(a,b){return a+b},
 $S:178}

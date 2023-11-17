@@ -8,3 +8,6 @@ export 'contact_us_page.dart';
 export 'profile_page.dart';
 export 'register_page.dart';
 export 'guide_page.dart';
+export 'home_page_mobile.dart';
+export 'select_character_page_mobile.dart';
+export 'select_mode_mobile.dart';

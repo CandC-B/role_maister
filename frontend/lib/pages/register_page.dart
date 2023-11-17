@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
+import 'package:role_maister/models/player.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,25 +15,38 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController newPassword1 = TextEditingController();
   TextEditingController newPassword2 = TextEditingController();
   bool passwordError = false;
+  bool usernameError = false;
   bool emailError = false;
   bool firebaseAvailable = true;
   bool isPasswordVisible = false;
-  void checkRegisterInput() {
+  bool isRulesCheckBoxChecked = false;
+  void checkRegisterInput(bool isUsernameError) {
     setState(() {
       passwordError = !isPasswordValid(newPassword1.text);
       emailError = !isEmailValid(email.text);
+      usernameError = isUsernameError;
+    });
+  }
+
+  void emailAlreadyExist() {
+    setState(() {
+      emailError = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 150.0),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
+          : const EdgeInsets.symmetric(vertical: 170.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -37,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       child: Container(
         width: 450,
-        height: 550,
+        height: 600,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
@@ -70,13 +88,41 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 60,
+            height: 40,
+          ),
+          TextField(
+            cursorColor: Colors.deepPurple,
+            controller: username,
+            decoration: InputDecoration(
+              hintText: "Enter username",
+              counterText: usernameError ? "This username already exist" : null,
+              counterStyle: const TextStyle(color: Colors.red),
+              fillColor: Colors.blueGrey[50],
+              filled: true,
+              labelStyle: const TextStyle(fontSize: 12),
+              contentPadding: const EdgeInsets.only(left: 30),
+              enabledBorder: OutlineInputBorder(
+                borderSide: usernameError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: usernameError
+                    ? const BorderSide(color: Colors.red)
+                    : const BorderSide(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
           ),
           TextField(
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email or username",
+              hintText: "Enter email",
               counterText: emailError ? "Invalid Email" : null,
               counterStyle: const TextStyle(color: Colors.red),
               fillColor: Colors.blueGrey[50],
@@ -158,7 +204,45 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 20,
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: isRulesCheckBoxChecked,
+                  activeColor: Colors.deepPurple,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isRulesCheckBoxChecked = value!;
+                    });
+                  }),
+              RichText(
+                text: TextSpan(
+                  text: 'I accept the ',
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'game rules',
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // Aquí puedes manejar la acción cuando se hace clic en "game rules"
+                          context.go("/rules");
+                        },
+                    ),
+                    const TextSpan(
+                      text: ' *',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Container(
             decoration: BoxDecoration(
@@ -179,13 +263,29 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(15))),
               onPressed: () async {
                 // TODO remove comments in production
-                // if (newPassword1.text == newPassword2.text) {
-                //   checkRegisterInput();
-                //   if (!passwordError && !emailError) {
-                //     firebase.signUp(email.text, newPassword1.text,
-                //         context); // TODO Handle if email is already created
-                //   }
-                // }
+                if (newPassword1.text == newPassword2.text) {
+                  bool usernameError = await isUsernameValid(username.text);
+                  checkRegisterInput(usernameError);
+                  if (!passwordError &&
+                      !emailError &&
+                      !usernameError &&
+                      isRulesCheckBoxChecked) {
+                    User? user = await firebase.signUp(
+                        email.text, newPassword1.text, context);
+                      print("user");
+
+                    if (user != null) {
+                      print("user not null");
+                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliensCharacters: [], dydCharacters: [], cthulhuCharacters: [],gamesPlayed: 0, experience: 1);
+                      // singleton.user = user;
+                      singleton.player = player;
+                      firebase.saveUser(player);
+                    } else {
+                      print("user null");
+                      emailAlreadyExist();
+                    }
+                  }
+                }
               },
               child: const SizedBox(
                 width: double.infinity,

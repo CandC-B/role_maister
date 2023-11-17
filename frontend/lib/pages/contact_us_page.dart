@@ -5,6 +5,9 @@ class ContactUsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    bool isMobile = size.width < 700;
+
     return Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -14,7 +17,9 @@ class ContactUsPage extends StatelessWidget {
         ),
         child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
+                isMobile
+                    ? const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0)
+                    : const EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
@@ -130,8 +135,8 @@ class ContactUsPage extends StatelessWidget {
                         // Handle form submission or send email functionality
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.deepPurple), // Change the background color to blue
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors
+                            .deepPurple), // Change the background color to blue
                       ),
                       child: const Text('Submit'),
                     ),

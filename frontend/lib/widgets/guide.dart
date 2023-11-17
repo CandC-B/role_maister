@@ -1,6 +1,85 @@
+// import 'dart:math';
+// import 'dart:ui';
+
+// import 'package:flutter/material.dart';
+
+// class Guides extends StatefulWidget {
+//   const Guides({Key? key}) : super(key: key);
+
+//   @override
+//   _GuidesState createState() => _GuidesState();
+// }
+
+// class _GuidesState extends State<Guides> {
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+
+//     return Stack(
+//       children: [
+//         Positioned.fill(
+//           child: Image.asset(
+//             'assets/images/aliens_guide.png',
+//             fit: BoxFit.cover,
+//             width: double.infinity,
+//             height: double.infinity,
+//           ),
+//         ),
+//         Padding(
+//           padding:
+//               const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(10.0),
+//               border: Border.all(
+//                 color: Colors.deepPurple, // Border color
+//                 width: 2.0, // Border width
+//               ),
+//               color: Colors.white70,
+//             ),
+
+//             width: size.width,
+//             height: size.height - 150,
+//             // color: Colors.white70,
+//             child: const DefaultTabController(
+//               length: 3, // Número de pestañas
+//               child: Column(
+//                 children: [
+//                   TabBar(
+//                     indicatorColor: Colors.deepPurple,
+//                     labelColor: Colors.deepPurple,
+//                     labelStyle: TextStyle(
+//                       fontSize: 20,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.deepPurple,
+//                     ),
+//                     tabs: [
+//                       Tab(text: 'Aliens'),
+//                       Tab(text: 'DnD'),
+//                       Tab(text: 'Cthulhu'),
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: TabBarView(
+//                       children: [
+//                         AliensTab(),
+//                         DnDTab(),
+//                         CthulhuTab(),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class Guides extends StatefulWidget {
@@ -14,6 +93,7 @@ class _GuidesState extends State<Guides> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 700;
 
     return Stack(
       children: [
@@ -26,8 +106,10 @@ class _GuidesState extends State<Guides> {
           ),
         ),
         Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 200.0, vertical: 50.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: isSmallScreen ? 20.0 : 100.0,
+            vertical: isSmallScreen ? 20.0 : 50.0,
+          ),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -37,40 +119,76 @@ class _GuidesState extends State<Guides> {
               ),
               color: Colors.white70,
             ),
-
             width: size.width,
-            height: size.height - 150,
-            // color: Colors.white70,
-            child: const DefaultTabController(
-              length: 3, // Número de pestañas
-              child: Column(
-                children: [
-                  TabBar(
-                    indicatorColor: Colors.deepPurple,
-                    labelColor: Colors.deepPurple,
-                    labelStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple,
-                    ),
-                    tabs: [
-                      Tab(text: 'Aliens'),
-                      Tab(text: 'DnD'),
-                      Tab(text: 'Cthulhu'),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
+            height: size.height - (isSmallScreen ? 100 : 150),
+            // child: isSmallScreen
+              child: const DefaultTabController(
+                    length: 3,
+                    child: Column(
                       children: [
-                        AliensTab(),
-                        DnDTab(),
-                        CthulhuTab(),
+                        TabBar(
+                          indicatorColor: Colors.deepPurple,
+                          isScrollable: true,
+                          labelColor: Colors.deepPurple,
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepPurple,
+                          ),
+                          tabs: [
+                            Tab(text: 'Aliens'),
+                            Tab(text: 'DnD'),
+                            Tab(text: 'Cthulhu'),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              AliensTab(),
+                              DnDTab(),
+                              CthulhuTab(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  )
+                // : DefaultTabController(
+                //     length: 3,
+                //     child: Row(
+                //       children: [
+                //         Expanded(
+                //           child: Container(
+                //             color: Colors.white,
+                //             child: const TabBar(
+                //               indicatorColor: Colors.deepPurple,
+                //               labelColor: Colors.deepPurple,
+                //               labelStyle: TextStyle(
+                //                 fontSize: 20,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.deepPurple,
+                //               ),
+                //               tabs: [
+                //                 Tab(text: 'Aliens'),
+                //                 Tab(text: 'DnD'),
+                //                 Tab(text: 'Cthulhu'),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //         const Expanded(
+                //           flex: 4,
+                //           child: TabBarView(
+                //             children: [
+                //               AliensTab(),
+                //               DnDTab(),
+                //               CthulhuTab(),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
           ),
         ),
       ],
