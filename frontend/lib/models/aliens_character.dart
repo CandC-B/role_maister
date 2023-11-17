@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/models/character.dart';
 
-class AliensCharacter {
+class AliensCharacter extends Character {
   // TODO: de momento solo tenemos character level 1
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
   final Map<String, int> skills;
   final List<String> talents;
-  String name;
   final String appearance;
   final String personalAgenda;
   final String friend;
@@ -24,7 +24,7 @@ class AliensCharacter {
     required this.attributes,
     required this.skills,
     required this.talents,
-    required this.name,
+    required String name,
     required this.appearance,
     required this.personalAgenda,
     required this.friend,
@@ -33,7 +33,7 @@ class AliensCharacter {
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  });
+  }) : super(name);
 
   // Factory constructor to generate random AliensCharacter
   factory AliensCharacter.random() {

@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/models/character.dart';
 
-class CthulhuCharacter {
+class CthulhuCharacter extends Character{
   // TODO: de momento solo tenemos character level 1
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
   final Map<String, int> skills;
   final List<String> talents;
-  String name;
   final String appearance;
   final String personalAgenda;
   final String friend;
@@ -18,14 +18,14 @@ class CthulhuCharacter {
   final int cash;
   final int hp;
 
-  CthulhuCharacter({
+  CthulhuCharacter( {
     required this.characterLevel,
     required this.career,
     required this.attributes,
     required this.skills,
     required this.talents,
-    required this.name,
     required this.appearance,
+    required String name,
     required this.personalAgenda,
     required this.friend,
     required this.rival,
@@ -33,7 +33,7 @@ class CthulhuCharacter {
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  });
+  }): super(name);
 
   // Factory constructor to generate random AliensCharacter
   factory CthulhuCharacter.random() {
@@ -51,12 +51,12 @@ class CthulhuCharacter {
     final cash = _getRandomCash(career);
 
     return CthulhuCharacter(
+      name: name,
       characterLevel: 1,
       career: career,
       attributes: attributes,
       skills: skills,
       talents: talents,
-      name: name,
       appearance: appearance,
       personalAgenda: personalAgenda,
       friend: friend,

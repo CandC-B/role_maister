@@ -30,7 +30,7 @@ class InitGamePage extends StatelessWidget {
             child: Row(children: [
               Expanded(
                   flex: 2,
-                  child: GameForm(character: character, image_width: (size.width * 0.8 * 2 / 3) / 3, preset: false, mobile: false,), 
+                  child: GameForm( image_width: (size.width * 0.8 * 2 / 3) / 3, preset: false, mobile: false,), 
                 ),
               Expanded(flex: 1, child: SelectCharacterPageMobile()),
             ]),

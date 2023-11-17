@@ -19,9 +19,9 @@ class AppSingleton {
   Player? player;
   String? currentGame;
   String? history;
-  String? gameMode;
+  String? gameMode = "Aliens";
   String? selectedCharacterId;
-  AliensCharacter? alienCharacter;
-  DydCharacter? dydCharacter;
-  CthulhuCharacter? cthulhuCharacter;
+  AliensCharacter alienCharacter = AliensCharacter.random();
+  DydCharacter dydCharacter = DydCharacter.random();
+  CthulhuCharacter cthulhuCharacter = CthulhuCharacter.random();
 }

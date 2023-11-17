@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/models/character.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
+import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/config.dart';
@@ -40,8 +43,19 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   Future<void> createRandomPlayer() async {
     try {
-      UserStatistics newRandomUser = UserStatistics.random();
-      await firebase.createCharacter(newRandomUser.toMap());
+      if (singleton.gameMode == "Aliens") {
+        AliensCharacter newRandomUser = AliensCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else if (singleton.gameMode == "Dyd") {
+        DydCharacter newRandomUser = DydCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else if (singleton.gameMode == "Cthulhu") {
+        CthulhuCharacter newRandomUser = CthulhuCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      } else {
+        AliensCharacter newRandomUser = AliensCharacter.random();
+        await firebase.createCharacter(newRandomUser.toMap());
+      }
 
       // Reload character data to update the UI
       await loadCharacterData();
@@ -72,9 +86,15 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   // TODO: pasar la historia
-  Future<void> createNewGame(
-      UserStatistics userStats, String characterId) async {
-    Map<String, dynamic> mapUserStats = userStats.toMap();
+  Future<void> createNewGame(String characterId) async {
+    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    if (singleton.gameMode == "Aliens") {
+      Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    } else if (singleton.gameMode == "Dyd") {
+      Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
+    } else if (singleton.gameMode == "Cthulhu") {
+      Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
+    }
     mapUserStats["user"] = singleton.user!.uid;
     Map<String, dynamic> gameConfig = {
       "role_system": "aliens",
@@ -207,9 +227,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                             barrierDismissible:
                                 false, // Prevent closing the dialog by tapping outside.
                           );
-                          createNewGame(UserStatistics.fromMap(characterData),
-                                  characterId)
-                              .then((value) {
+                          createNewGame(characterId).then((value) {
                             context.go("/game");
                           });
                         },
@@ -270,8 +288,25 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                       final characterId = charactersData!.keys.elementAt(index);
                       final characterData = charactersData![characterId];
 
-                      singleton.selectedCharacterId = charactersData!.keys.elementAt(selectedIndex);
-                      singleton.selectedCharacter = UserStatistics.fromMap(charactersData![charactersData!.keys.elementAt(selectedIndex)]);
+                      singleton.selectedCharacterId =
+                          charactersData!.keys.elementAt(selectedIndex);
+                      if (singleton.gameMode == "Aliens") {
+                        singleton.alienCharacter = AliensCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else if (singleton.gameMode == "Dyd") {
+                        singleton.dydCharacter = DydCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else if (singleton.gameMode == "Cthulhu") {
+                        singleton.cthulhuCharacter = CthulhuCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      } else {
+                        singleton.alienCharacter = AliensCharacter.fromMap(
+                            charactersData![
+                                charactersData!.keys.elementAt(selectedIndex)]);
+                      }
 
                       return InkWell(
                         onTap: () {
@@ -279,12 +314,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                             selectedIndex = index;
                           });
                         },
-                        child: CharacterCard(
-                          character: UserStatistics.fromMap(characterData),
+                        child: AliensCharacterCard(
+                          character: AliensCharacter.fromMap(characterData),
                           selected: selectedIndex == index,
                         ),
                       );
-                      
                     },
                   ),
                 ),
