@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/pages/init_game.dart';
+import 'package:role_maister/pages/init_game_mobile.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -14,7 +15,7 @@ class InitGameScreen extends StatelessWidget {
           appBar: const CustomAppBar(title: "History Creator"),
           drawer: customDrawer(context),
           body: ListView(
-            children: const [InitGame()],
+            children: const [InitGamePageMobile()],
           ));
     } else {
       return Scaffold(
@@ -22,7 +23,7 @@ class InitGameScreen extends StatelessWidget {
           drawer: customDrawer(context),
           body: ListView(
             children: const [
-              InitGame(),
+              InitGamePage(),
               WebFooter(),
             ],
           ));

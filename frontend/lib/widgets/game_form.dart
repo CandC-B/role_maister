@@ -2,25 +2,31 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/widgets/role_tab.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/config/config.dart';
 
 class GameForm extends StatelessWidget {
-  GameForm({super.key, required this.character});
-  final AliensCharacter character;
+  GameForm(
+      {super.key,
+      required this.image_width,
+      required this.preset,
+      required this.mobile});
+  final double image_width;
+  final bool preset;
+  final bool mobile;
   var _storyController = TextEditingController();
 
-  Future<void> createNewGame(AliensCharacter userStats, String history) async {
-    Map<String, dynamic> mapUserStats = userStats.toMap();
+  Future<void> createNewGame(String history, String characterId) async {
+    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
     mapUserStats["user"] = singleton.user!.uid;
-    String character_uid = await firebase.createCharacter(mapUserStats);
     // TODO: don't harcode this
     Map<String, dynamic> gameConfig = {
       "role_system": "aliens",
       "num_players": 1,
       "story_description": history,
-      "players": [character_uid]
+      "players": [characterId]
     };
     String gameUid = await firebase.createGame(gameConfig);
 
@@ -29,7 +35,6 @@ class GameForm extends StatelessWidget {
     };
 
     gameConfig.remove("players");
-    print(gameConfig);
     mapUserStats.addAll(gameConfig);
     final response = await http.post(
         // TODO: add constants.dart in utils folder
@@ -39,7 +44,6 @@ class GameForm extends StatelessWidget {
     var coralMessage = json.decode(response.body)["message"];
     await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
     singleton.currentGame = gameUid;
-    print(singleton.currentGame);
   }
 
   @override
@@ -47,52 +51,13 @@ class GameForm extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      color: Colors.white,
+      color: Colors.black87,
       child: Column(children: [
         Expanded(
-          flex: 1,
-          child: Row(children: [
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/aliens.jpg',
-                routeName: '/game',
-                imageText: "ALIENS",
-                isAvailable: true,
-                height: size.height * 0.9 / 4,
-                width: size.width * 0.8 / 3,
-                isLink: false,
-                preset: true,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/dungeons_and_dragons.jpg',
-                routeName: '/game',
-                imageText: "DUNGEONS AND DRAGONS",
-                isAvailable: false,
-                height: size.height * 0.9 / 4,
-                width: (size.width * 0.8 * 2 / 3) / 3,
-                isLink: false,
-                preset: false,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/cthulhu.jpg',
-                routeName: '/game',
-                imageText: "THE CALL OF CTHULHU",
-                isAvailable: false,
-                height: size.height * 0.9 / 4,
-                width: (size.width * 0.8 * 2 / 3) / 3,
-                isLink: false,
-                preset: false,
-              ),
-            ),
-          ]),
-        ),
+            flex: 1,
+            child: RoleTab(
+              width: image_width,
+            )),
         Expanded(
           flex: 2,
           child: Container(
@@ -102,11 +67,17 @@ class GameForm extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text("Number of players: 1"),
+                  Text(
+                    "Number of players: 1",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  Text("Brief story description:"),
+                  Text(
+                    "Brief story description:",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -117,8 +88,12 @@ class GameForm extends StatelessWidget {
                         horizontal: size.width * 0.01),
                     decoration: BoxDecoration(
                       color: Colors.black87, // Set the background color to grey
-                      borderRadius: BorderRadius.circular(
-                          10), // Optionally, round the corners
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color:
+                            Colors.deepPurple, // Set the border color to purple
+                        width: 2.0, // Set the border width
+                      ), // Optionally, round the corners
                     ),
                     child: TextFormField(
                       cursorColor: Colors.deepPurple,
@@ -147,7 +122,10 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Text("Tokens required: 5"),
+              Text(
+                "Tokens required: 5",
+                style: TextStyle(color: Colors.white),
+              ),
               SizedBox(
                 height: size.height * 0.05,
               ),
@@ -158,28 +136,37 @@ class GameForm extends StatelessWidget {
                       textStyle: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(color: Colors.deepPurple,),
-                              SizedBox(height: 16),
-                              Text("Creating Game..."),
-                            ],
-                          ),
-                        );
-                      },
-                      barrierDismissible: false, // Prevent closing the dialog by tapping outside.
-                    );
-                    createNewGame(character, _storyController.text)
-                        .then((value) {
-                          _storyController.text = '';
-                          context.go("/game");
-                        }
-                    );
+                    if (mobile) {
+                      singleton.history = _storyController.text;
+                      context.go("/select_character");
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          // TODO: robar el de Victor
+                          return const AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Colors.deepPurple,
+                                ),
+                                SizedBox(height: 16),
+                                Text("Creating Game..."),
+                              ],
+                            ),
+                          );
+                        },
+                        barrierDismissible:
+                            false, // Prevent closing the dialog by tapping outside.
+                      );
+                      createNewGame(
+                              _storyController.text, singleton.selectedCharacterId!)
+                          .then((value) {
+                        _storyController.text = '';
+                        context.go("/game");
+                      });
+                    }
                   },
                   child: const FittedBox(
                       fit: BoxFit.contain, child: Text("Start Game"))),

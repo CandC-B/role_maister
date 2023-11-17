@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/config/config.dart';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({super.key, required this.gameId});
@@ -28,8 +28,16 @@ class _GamePlayersState extends State<GamePlayers> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
-          final userStats = snapshot.data ??
-              AliensCharacter.random(); // Usar datos o valor random
+          final userStatistics;
+          if (singleton.gameMode == "Aliens") {
+              userStatistics = singleton.alienCharacter;
+            } else if (singleton.gameMode == "Dyd") {
+              userStatistics = singleton.dydCharacter;
+            } else if (singleton.gameMode == "Cthulhu") {
+              userStatistics = singleton.cthulhuCharacter;
+            }else {
+            userStatistics = AliensCharacter.random();
+          }
           return DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -55,8 +63,8 @@ class _GamePlayersState extends State<GamePlayers> {
               ),
               body: TabBarView(
                 children: [
-                  Center(child: StatsTab(userStats: userStats)),
-                  Center(child: PlayersTab(userStats: userStats)),
+                  Center(child: StatsTab(userStats: userStatistics)),
+                  Center(child: PlayersTab(userStats: userStatistics)),
                 ],
               ),
             ),
