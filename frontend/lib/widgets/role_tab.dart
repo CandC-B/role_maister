@@ -28,15 +28,6 @@ class _RoleTabState extends State<RoleTab> {
       }
       presets[index] = true;
     });
-
-    // You can also perform other actions based on the selected image
-    // For example, navigate to a new route based on the selected image
-    switch (index) {
-      case 0:
-        Navigator.of(context).pushNamed('/game');
-        break;
-      // Add cases for the other images as needed
-    }
   }
 
   @override
