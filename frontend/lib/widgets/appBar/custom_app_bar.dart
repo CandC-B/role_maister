@@ -141,32 +141,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
               appBarInfoButtons(context)
             ]),
       actions: mobile || !kIsWeb
-          ? null
+          ? <Widget> [languagePicker(context, appState)]
           : <Widget>[
-              DropdownButton(
-                value: appState?.locale,
-                items: const [
-                  DropdownMenuItem(
-                    value: Locale('en'),
-                    child: Text('English'),
-                  ),
-                  DropdownMenuItem(
-                    value: Locale('es'),
-                    child: Text('Español'),
-                  ),
-                ],
-                onChanged: (locale) {
-                  if (locale == null) return;
-                  appState?.changeLanguage(locale);
-                },
-                style:
-                    const TextStyle(color: Colors.white), 
-                icon: const Icon(Icons.arrow_drop_down,
-                    color: Colors.white), 
-                underline: Container(), 
-                dropdownColor:
-                    Colors.deepPurple, 
-              ),
+              languagePicker(context, appState),
               Center(
                 child: singleton.user != null
                     ? const PopupMenuProfile()
@@ -178,6 +155,28 @@ class _CustomAppBarState extends State<CustomAppBar> {
       centerTitle: false,
     );
   }
+
+  Widget languagePicker(BuildContext context, appState) => DropdownButton(
+        value: appState?.locale,
+        items: const [
+          DropdownMenuItem(
+            value: Locale('en'),
+            child: Text('English'),
+          ),
+          DropdownMenuItem(
+            value: Locale('es'),
+            child: Text('Español'),
+          ),
+        ],
+        onChanged: (locale) {
+          if (locale == null) return;
+          appState?.changeLanguage(locale);
+        },
+        style: const TextStyle(color: Colors.white),
+        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+        underline: Container(),
+        dropdownColor: Colors.deepPurple,
+      );
 
   Widget appBarTitle(BuildContext context) => const Text(
         "Role MAIster",
