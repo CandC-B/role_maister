@@ -7,6 +7,10 @@ import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/pages/profile_characters_page.dart';
 import 'package:role_maister/widgets/aliens_characters_card.dart';
+import 'package:role_maister/widgets/characters_tab.dart';
+import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
+import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
+import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -236,242 +240,260 @@ class ProfileStats extends StatelessWidget {
   }
 }
 
-class CharactersTab extends StatelessWidget {
-  Map<String, dynamic>? aliensCharacters;
-  Map<String, dynamic>? dydCharacters;
-  Map<String, dynamic>? cthulhuCharacters;
+// class CharactersTab extends StatelessWidget {
+//   // Map<String, dynamic>? aliensCharacters;
+//   // Map<String, dynamic>? dydCharacters;
+//   // Map<String, dynamic>? cthulhuCharacters;
+//   List<QueryDocumentSnapshot> aliensCharacters = [];
+//   List<QueryDocumentSnapshot> dydCharacters = [];
+//   List<QueryDocumentSnapshot> cthulhuCharacters = [];
+//   CharactersTab({super.key});
 
-  CharactersTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    int selectedIndex = 0;
-    Size size = MediaQuery.of(context).size;
-    bool isSmallScreen = size.width < 700;
-    TextEditingController characterNameController = TextEditingController();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                const Text(
-                  "Aliens",
-                  style: TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Expanded(
-                  child: ProfileCharacterPage(mode: "Aliens")
-                  // child: FutureBuilder<Map<String, dynamic>>(
-                  //   future: firebase.getUserCharactersFromMode(singleton.user!.uid, "Aliens"),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return Center(
-                  //         child: Container(
-                  //           color: Colors.transparent,
-                  //           child: Center(
-                  //             child:
-                  //                 Image.asset('assets/images/small_logo.png'),
-                  //           ),
-                  //         ),
-                  //       ); // Muestra un indicador de carga mientras espera
-                  //     } else if (snapshot.hasError) {
-                  //       return Text('Error: ${snapshot.error}');
-                  //     } else {
-                  //       // Procesa los datos de snapshot.data
-                  //       aliensCharacters = snapshot.data;
-                  //       return ListView.builder(
-                  //       itemCount: aliensCharacters!.length,
-                  //       itemBuilder: (context, index) {
-                  //         final characterId =
-                  //             aliensCharacters!.keys.elementAt(index);
-                  //         final characterData = aliensCharacters![characterId];
-
-                  //         singleton.selectedCharacterId =
-                  //             aliensCharacters!.keys.elementAt(selectedIndex);
-                    
-                  //           singleton.alienCharacter = AliensCharacter.fromMap(
-                  //               aliensCharacters![aliensCharacters!.keys
-                  //                   .elementAt(selectedIndex)]);
-                  //           return InkWell(
-                  //             onTap: () {
-                  //               setState(() {
-                  //                 selectedIndex = index;
-                  //               });
-                  //             },
-                  //             child: AliensCharacterCard(
-                  //               character:
-                  //                   AliensCharacter.fromMap(characterData),
-                  //               selected: selectedIndex == index,
-                  //             ),
-                  //           );
-                  
-                          
-                  //       },
-                  //     );
-                  //     }
-                  //   },
-                  // ),
-
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CharactersDialog(gameMode: "Aliens");
-                        });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen
-                          ? const Size(100, 30)
-                          : const Size(250, 40)),
-                  child: Text(
-                    "Add Character",
-                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                const Text(
-                  "D&D",
-                  style: TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Expanded(child: ProfileCharacterPage(mode: "Dyd")),
-                // Expanded(
-                  // child: FutureBuilder<QuerySnapshot>(
-                  //   future: firebase.getUserCharactersDydMode(),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return Center(
-                  //         child: Container(
-                  //           color: Colors.transparent,
-                  //           child: Center(
-                  //             child:
-                  //                 Image.asset('assets/images/small_logo.png'),
-                  //           ),
-                  //         ),
-                  //       ); // Muestra un indicador de carga mientras espera
-                  //     } else if (snapshot.hasError) {
-                  //       return Text('Error: ${snapshot.error}');
-                  //     } else {
-                  //       // Procesa los datos de snapshot.data
-                  //       return ListView.builder(
-                  //         itemCount: dydCharacters.length,
-                  //         itemBuilder: (context, index) {
-                  //           return CharacterCard(
-                  //             characterName:
-                  //                 dydCharacters[index].get('name'),
-                  //           );
-                  //         },
-                  //       );
-                  //     }
-                  //   },
-                  // ),
-                // ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CharactersDialog(gameMode: "Dyd");
-                        });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen
-                          ? const Size(100, 30)
-                          : const Size(250, 40)),
-                  child: Text(
-                    "Add Character",
-                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-              child: Column(
-            children: [
-              const Text(
-                "Cthulhu",
-                style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-              const Expanded(child: ProfileCharacterPage(mode: "Cthulhu")),
-              // Expanded(
-              //   child: FutureBuilder<QuerySnapshot>(
-              //       future: firebase.getUserCharactersCthulhuMode(),
-              //       builder: (context, snapshot) {
-              //         if (snapshot.connectionState == ConnectionState.waiting) {
-              //           return Center(
-              //             child: Container(
-              //               color: Colors.transparent,
-              //               child: Center(
-              //                 child:
-              //                     Image.asset('assets/images/small_logo.png'),
-              //               ),
-              //             ),
-              //           ); // Muestra un indicador de carga mientras espera
-              //         } else if (snapshot.hasError) {
-              //           return Text('Error: ${snapshot.error}');
-              //         } else {
-              //           print("Hole");
-              //           // Procesa los datos de snapshot.data
-              //           return ListView.builder(
-              //             itemCount: cthulhuCharacters.length,
-              //             itemBuilder: (context, index) {
-              //               // return CharacterCard(
-              //               //   characterName:
-              //               //       cthulhuCharacters[index].get('name'),
-              //               // );
-                            
-              //               return Text("Hola");
-              //             },
-              //           );
-              //         }
-              //       },
-              //     ),
-              // ),
-              
-              ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CharactersDialog(gameMode: "Cthulhu");
-                      });
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    minimumSize: isSmallScreen
-                        ? const Size(100, 30)
-                        : const Size(250, 40)),
-                child: Text(
-                  "Add Character",
-                  style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                ),
-              ),
-            ],
-          ))
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//     bool isSmallScreen = size.width < 700;
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 20.0),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: Column(
+//               children: [
+//                 const Text(
+//                   "Aliens",
+//                   style: TextStyle(
+//                       color: Colors.deepPurple,
+//                       fontSize: 24,
+//                       fontWeight: FontWeight.bold),
+//                 ),
+//                 Expanded(
+//                   child: StreamBuilder<QuerySnapshot>(
+//                     stream: firestoreService.fetchCharactersByUserId(
+//                         singleton.user!.uid, "Aliens"),
+//                     builder: (BuildContext context,
+//                         AsyncSnapshot<QuerySnapshot> snapshot) {
+//                       if (snapshot.hasData) {
+//                         aliensCharacters = snapshot.data!.docs;
+//                         if (aliensCharacters.isNotEmpty) {
+//                           return ListView.builder(
+//                             padding: const EdgeInsets.all(10),
+//                             reverse: false,
+//                             // controller: scrollController,
+//                             itemBuilder: (context, index) {
+//                               if (index < aliensCharacters.length) {
+//                                 AliensCharacter aliensCharacter =
+//                                     AliensCharacter.fromMap(aliensCharacters[index]
+//                                         .data() as Map<String, dynamic>);
+//                                 return ProfileAliensCharacterCard(
+//                                   character: aliensCharacter,
+//                                 );
+//                                 // return messageBubble(
+//                                 //   chatContent: listMessages[index].get('text'),
+//                                 //   messageType: listMessages[index].get('sentBy'),
+//                                 // );
+//                               }
+//                             },
+//                           );
+//                         } else {
+//                           return const Center(
+//                             child: Text('No messages...'),
+//                           );
+//                         }
+//                       } else {
+//                         return Center(
+//                           child: Container(
+//                             color: Colors.transparent,
+//                             child: Center(
+//                               child:
+//                                   Image.asset('assets/images/small_logo.png'),
+//                             ),
+//                           ),
+//                         );
+//                       }
+//                     },
+//                   ),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     showDialog(
+//                         context: context,
+//                         builder: (BuildContext context) {
+//                           return CharactersDialog(gameMode: "Aliens", );
+//                         });
+//                   },
+//                   style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.deepPurple,
+//                       minimumSize: isSmallScreen
+//                           ? const Size(100, 30)
+//                           : const Size(250, 40)),
+//                   child: Text(
+//                     "Add Character",
+//                     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+//                   ),
+//                 )
+//               ],
+//             ),
+//           ),
+//           Expanded(
+//             child: Column(
+//               children: [
+//                 const Text(
+//                   "D&D",
+//                   style: TextStyle(
+//                       color: Colors.deepPurple,
+//                       fontSize: 24,
+//                       fontWeight: FontWeight.bold),
+//                 ),
+//                 Expanded(
+//                   child: StreamBuilder<QuerySnapshot>(
+//                     stream: firestoreService.fetchCharactersByUserId(
+//                         singleton.user!.uid, "Dyd"),
+//                     builder: (BuildContext context,
+//                         AsyncSnapshot<QuerySnapshot> snapshot) {
+//                       if (snapshot.hasData) {
+//                         dydCharacters = snapshot.data!.docs;
+//                         if (dydCharacters.isNotEmpty) {
+//                           return ListView.builder(
+//                             padding: const EdgeInsets.all(10),
+//                             reverse: false,
+//                             // controller: scrollController,
+//                             itemBuilder: (context, index) {
+//                               if (index < dydCharacters.length) {
+//                                 DydCharacter dydCharacter =
+//                                     DydCharacter.fromMap(dydCharacters[index]
+//                                         .data() as Map<String, dynamic>);
+//                                 return ProfileDydCharacterCard(
+//                                   character: dydCharacter,
+//                                 );
+//                                 // return messageBubble(
+//                                 //   chatContent: listMessages[index].get('text'),
+//                                 //   messageType: listMessages[index].get('sentBy'),
+//                                 // );
+//                               }
+//                             },
+//                           );
+//                         } else {
+//                           return const Center(
+//                             child: Text('No messages...'),
+//                           );
+//                         }
+//                       } else {
+//                         return Center(
+//                           child: Container(
+//                             color: Colors.transparent,
+//                             child: Center(
+//                               child:
+//                                   Image.asset('assets/images/small_logo.png'),
+//                             ),
+//                           ),
+//                         );
+//                       }
+//                     },
+//                   ),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     showDialog(
+//                         context: context,
+//                         builder: (BuildContext context) {
+//                           return CharactersDialog(gameMode: "Dyd");
+//                         });
+//                   },
+//                   style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.deepPurple,
+//                       minimumSize: isSmallScreen
+//                           ? const Size(100, 30)
+//                           : const Size(250, 40)),
+//                   child: Text(
+//                     "Add Character",
+//                     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+//                   ),
+//                 )
+//               ],
+//             ),
+//           ),
+//           Expanded(
+//               child: Column(
+//             children: [
+//               const Text(
+//                 "Cthulhu",
+//                 style: TextStyle(
+//                     color: Colors.deepPurple,
+//                     fontSize: 24,
+//                     fontWeight: FontWeight.bold),
+//               ),
+//               Expanded(
+//                 child: StreamBuilder<QuerySnapshot>(
+//                   stream: firestoreService.fetchCharactersByUserId(
+//                       singleton.user!.uid, "Cthulhu"),
+//                   builder: (BuildContext context,
+//                       AsyncSnapshot<QuerySnapshot> snapshot) {
+//                     if (snapshot.hasData) {
+//                       cthulhuCharacters = snapshot.data!.docs;
+//                       if (cthulhuCharacters.isNotEmpty) {
+//                         return ListView.builder(
+//                           padding: const EdgeInsets.all(10),
+//                           reverse: false,
+//                           // controller: scrollController,
+//                           itemBuilder: (context, index) {
+//                             if (index < cthulhuCharacters.length) {
+//                               CthulhuCharacter cthulhuCharacter =
+//                                   CthulhuCharacter.fromMap(cthulhuCharacters[index]
+//                                       .data() as Map<String, dynamic>);
+//                               return ProfileCthulhuCharacterCard(
+//                                 character: cthulhuCharacter,
+//                               );
+//                               // return messageBubble(
+//                               //   chatContent: listMessages[index].get('text'),
+//                               //   messageType: listMessages[index].get('sentBy'),
+//                               // );
+//                             }
+//                           },
+//                         );
+//                       } else {
+//                         return const Center(
+//                           child: Text('No messages...'),
+//                         );
+//                       }
+//                     } else {
+//                       return Center(
+//                         child: Container(
+//                           color: Colors.transparent,
+//                           child: Center(
+//                             child: Image.asset('assets/images/small_logo.png'),
+//                           ),
+//                         ),
+//                       );
+//                     }
+//                   },
+//                 ),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   showDialog(
+//                       context: context,
+//                       builder: (BuildContext context) {
+//                         return CharactersDialog(gameMode: "Cthulhu");
+//                       });
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                     backgroundColor: Colors.deepPurple,
+//                     minimumSize: isSmallScreen
+//                         ? const Size(100, 30)
+//                         : const Size(250, 40)),
+//                 child: Text(
+//                   "Add Character",
+//                   style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+//                 ),
+//               ),
+//             ],
+//           ))
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class TokenPackage {
   final String name;
@@ -596,14 +618,14 @@ void createAlien(String characterName) {
 
 void createDyd(String characterName) {
   singleton.gameMode.value = "Dyd";
-  DydCharacter newAlien = DydCharacter.random();
-  newAlien.name = characterName;
-  firebase.createCharacter(newAlien.toMap());
+  DydCharacter newDyd = DydCharacter.random();
+  newDyd.name = characterName;
+  firebase.createCharacter(newDyd.toMap());
 }
 
 void createCthulhu(String characterName) {
   singleton.gameMode.value = "Cthulhu";
-  CthulhuCharacter newAlien = CthulhuCharacter.random();
-  newAlien.name = characterName;
-  firebase.createCharacter(newAlien.toMap());
+  CthulhuCharacter newCthulhu = CthulhuCharacter.random();
+  newCthulhu.name = characterName;
+  firebase.createCharacter(newCthulhu.toMap());
 }

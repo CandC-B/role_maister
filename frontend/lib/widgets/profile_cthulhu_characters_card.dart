@@ -61,6 +61,7 @@ class ProfileCthulhuCharacterCard extends StatelessWidget {
         collapsedIconColor: Colors.white,
         iconColor: Colors.white,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(
               Icons.account_circle,
