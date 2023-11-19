@@ -129,7 +129,24 @@
   "guides_aliens_text41": "A heightened likelihood of fleeing from danger.\n\n",
   "guides_aliens_text42": "Increased vulnerability to status effects like fear or confusion.\n\n",
   "guides_aliens_text43": "Characters may have a chance to recover from panic over time, with support from other characters, or by taking specific actions to calm themselves.\n\n",
-  "guides_aliens_text44": "Feel encouraged to role-play your character’s fear and stress during panic situations. This adds depth to the narrative and immerses players in the game's atmosphere.\n\n"
+  "guides_aliens_text44": "Feel encouraged to role-play your character’s fear and stress during panic situations. This adds depth to the narrative and immerses players in the game's atmosphere.\n\n",
+
+  "enter_email": "Email",
+  "enter_password": "Password",
+  "forgot_password": "Forgot Password?",
+  "invalid_credentials": "Invalid Credentials",
+  "or_continue_with": "Or Continue With",
+  "does_not_have_account": "Does not have account? Register",
+  "recive_email": "Receive an email to reset your password",
+  "enter_email_or_username": "Enter email or username",
+  "reset_password": "Reset Password",
+  "enter_username": "Enter username",
+  "username_exists" : "This username already exist",
+  "invalid_email": "Invalid email",
+  "new_password": "New Password",
+  "password_info": "At least one letter, one digit and 8 characters",
+  "accept": "I accept the ",
+  "game_rules": "game rules"
 
 
 }

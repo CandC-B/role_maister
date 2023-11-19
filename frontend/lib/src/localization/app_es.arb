@@ -130,7 +130,24 @@
   "guides_aliens_text41": "Una mayor probabilidad de huir del peligro.\n\n",
   "guides_aliens_text42": "Mayor vulnerabilidad a efectos de estado como miedo o confusión.\n\n",
   "guides_aliens_text43": "Los personajes pueden tener la oportunidad de recuperarse del pánico con el tiempo, con el apoyo de otros personajes, o tomando acciones específicas para calmarse.\n\n",
-  "guides_aliens_text44": "Siéntete animado a interpretar el miedo y el estrés de tu personaje durante situaciones de pánico. Esto añade profundidad a la narrativa e sumerge a los jugadores en la atmósfera del juego.\n\n"
+  "guides_aliens_text44": "Siéntete animado a interpretar el miedo y el estrés de tu personaje durante situaciones de pánico. Esto añade profundidad a la narrativa e sumerge a los jugadores en la atmósfera del juego.\n\n",
+
+  "enter_email": "Correo Electrónico",
+  "enter_password": "Contraseña",
+  "forgot_password": "¿Olvidaste tu Contraseña?",
+  "invalid_credentials": "Credenciales Inválidas",
+  "or_continue_with": "O Continúa Con",
+  "does_not_have_account": "¿No tienes una cuenta? Regístrate",
+  "recive_email": "Recibe un correo electrónico para restablecer tu contraseña",
+  "enter_email_or_username": "Ingresa correo electrónico o nombre de usuario",
+  "reset_password": "Restablecer Contraseña",
+  "enter_username": "Ingresa nombre de usuario",
+  "username_exists": "Este nombre de usuario ya existe",
+  "invalid_email": "Correo electrónico inválido",
+  "new_password": "Nueva Contraseña",
+  "password_info": "Al menos una letra, un dígito y 8 caracteres",
+  "accept": "Acepto las ",
+  "game_rules": "reglas del juego"
 
 
 }
