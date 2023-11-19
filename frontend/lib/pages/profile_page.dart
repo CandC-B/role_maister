@@ -471,21 +471,21 @@ class _CharactersDialogState extends State<CharactersDialog> {
 }
 
 void createAlien(String characterName) {
-  singleton.gameMode = "Aliens";
+  singleton.gameMode.value = "Aliens";
   AliensCharacter newAlien = AliensCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());
 }
 
 void createDyd(String characterName) {
-  singleton.gameMode = "Dyd";
+  singleton.gameMode.value = "Dyd";
   DydCharacter newAlien = DydCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());
 }
 
 void createCthulhu(String characterName) {
-  singleton.gameMode = "Cthulhu";
+  singleton.gameMode.value = "Cthulhu";
   CthulhuCharacter newAlien = CthulhuCharacter.random();
   newAlien.name = characterName;
   firebase.createCharacter(newAlien.toMap());

@@ -31,7 +31,7 @@ class FirebaseService {
         if (userSnapshot.exists) {
           final Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-          if (singleton.gameMode == "Aliens") {
+          if (singleton.gameMode.value == "Aliens") {
             if (userData.containsKey("aliensCharacters")) {
               final List<dynamic> characters = userData["aliensCharacters"];
               characters.add(docRef.id);
@@ -41,7 +41,7 @@ class FirebaseService {
                 "aliensCharacters": [docRef.id]
               });
             }
-          } else if (singleton.gameMode == "Dyd") {
+          } else if (singleton.gameMode.value == "Dyd") {
             if (userData.containsKey("dydCharacters")) {
               final List<dynamic> characters = userData["dydCharacters"];
               characters.add(docRef.id);
@@ -51,7 +51,7 @@ class FirebaseService {
                 "dydCharacters": [docRef.id]
               });
             }
-          } else if (singleton.gameMode == "Cthulhu") {
+          } else if (singleton.gameMode.value == "Cthulhu") {
             if (userData.containsKey("cthulhuCharacters")) {
               final List<dynamic> characters = userData["cthulhuCharacters"];
               characters.add(docRef.id);
@@ -79,11 +79,10 @@ class FirebaseService {
       final DocumentReference userReference =
           _firestore.collection("user").doc(userId);
       final DocumentSnapshot userSnapshot = await userReference.get();
-      print(singleton.gameMode);
       if (userSnapshot.exists) {
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
-        if (singleton.gameMode == "Aliens") {
+        if (singleton.gameMode.value == "Aliens") {
           if (userData.containsKey("aliensCharacters")) {
             final List<dynamic> characterIds = userData["aliensCharacters"];
             // Create a map to store character data
@@ -110,7 +109,7 @@ class FirebaseService {
           } else {
             throw Exception("USER: Attribute 'characters' does not exist");
           }
-        } else if (singleton.gameMode == "Dyd") {
+        } else if (singleton.gameMode.value == "Dyd") {
           if (userData.containsKey("dydCharacters")) {
             final List<dynamic> characterIds = userData["dydCharacters"];
             // Create a map to store character data
@@ -137,7 +136,7 @@ class FirebaseService {
           } else {
             throw Exception("USER: Attribute 'characters' does not exist");
           }
-        } else if (singleton.gameMode == "Cthulhu") {
+        } else if (singleton.gameMode.value == "Cthulhu") {
           if (userData.containsKey("cthulhuCharacters")) {
             final List<dynamic> characterIds = userData["cthulhuCharacters"];
             // Create a map to store character data
