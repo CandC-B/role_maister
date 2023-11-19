@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
+import 'package:role_maister/main.dart';
 import 'package:role_maister/widgets/popup_menu_profile.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,6 +28,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
   AppSingleton singleton = AppSingleton();
   bool isLandScape = false;
 
+  late Locale _locale;
+
   checkCurrentPath(title) {
     switch (title) {
       case 'Guide':
@@ -45,7 +48,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     }
   }
 
-  String getLocation(String key, BuildContext context) {   
+  String getLocation(String key, BuildContext context) {
     if (key == 'Home') {
       return AppLocalizations.of(context)!.home;
     } else if (key == 'Guide') {
@@ -72,7 +75,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _locale = const Locale('en');
+  }
+
+  void changeLanguage(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+    // Puedes guardar la preferencia de idioma aquí si es necesario
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final appState = context.findAncestorStateOfType<MyAppState>();
+
     checkCurrentPath(widget.title);
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
@@ -99,7 +117,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(                    
+                  child: Text(
                     getLocation(widget.title, context),
                     style: const TextStyle(
                       color: Colors.white,
@@ -122,14 +140,38 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               appBarInfoButtons(context)
             ]),
-      actions: mobile || !kIsWeb 
+      actions: mobile || !kIsWeb
           ? null
           : <Widget>[
+              DropdownButton(
+                value: appState?.locale,
+                items: const [
+                  DropdownMenuItem(
+                    value: Locale('en'),
+                    child: Text('English'),
+                  ),
+                  DropdownMenuItem(
+                    value: Locale('es'),
+                    child: Text('Español'),
+                  ),
+                ],
+                onChanged: (locale) {
+                  if (locale == null) return;
+                  appState?.changeLanguage(locale);
+                },
+                style:
+                    const TextStyle(color: Colors.white), 
+                icon: const Icon(Icons.arrow_drop_down,
+                    color: Colors.white), 
+                underline: Container(), 
+                dropdownColor:
+                    Colors.deepPurple, 
+              ),
               Center(
                 child: singleton.user != null
                     ? const PopupMenuProfile()
                     : appBarAuthenticationButtons(context),
-              )
+              ),
             ],
       backgroundColor: Colors.deepPurple,
       elevation: 0,
