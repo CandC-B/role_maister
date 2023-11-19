@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
+import 'package:role_maister/models/player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -46,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
       alignment: Alignment.center,
       padding: isMobile
           ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
-          : const EdgeInsets.symmetric(vertical: 110.0),
+          : const EdgeInsets.symmetric(vertical: 170.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -272,9 +273,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       isRulesCheckBoxChecked) {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
+                      print("user");
+
                     if (user != null) {
-                      firebase.saveUser(user, username.text);
+                      print("user not null");
+                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliensCharacters: [], dydCharacters: [], cthulhuCharacters: [],gamesPlayed: 0, experience: 1);
+                      // singleton.user = user;
+                      singleton.player = player;
+                      firebase.saveUser(player);
                     } else {
+                      print("user null");
                       emailAlreadyExist();
                     }
                   }

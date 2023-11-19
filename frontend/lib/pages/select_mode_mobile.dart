@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-class SelectGameTypePageMobile extends StatelessWidget {
-  const SelectGameTypePageMobile({Key? key});
+class SelectModeMobilePage extends StatelessWidget {
+  const SelectModeMobilePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class SelectGameTypePageMobile extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () {
-                context.go("/form_singleplayer");
+                context.go("/select_character");
               },
               child: ImageColorFilter(
-                imagePath: 'assets/images/singleplayer_mobile.PNG',
+                imagePath: 'assets/images/aliens.jpg',
                 routeName: '/form_singleplayer',
-                imageText: "SINGLE PLAYER",
+                imageText: "ALIENS",
                 isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: size.width,
@@ -36,13 +36,13 @@ class SelectGameTypePageMobile extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () {
-                context.go("/form_multiplayer");
+                // context.go("/select_character");
               },
               child: ImageColorFilter(
-                imagePath: 'assets/images/multiplayer.png',
+                imagePath: 'assets/images/dungeons_and_dragons.jpg',
                 routeName: '/form_singleplayer',
-                imageText: "MULTIPLAYER",
-                isAvailable: true,
+                imageText: "DUNGEONS AND DRAGONS",
+                isAvailable: false,
                 height: size.height * 0.9 / 3,
                 width: size.width,
                 isLink: false,
@@ -53,9 +53,9 @@ class SelectGameTypePageMobile extends StatelessWidget {
           ),
           Expanded(
             child: ImageColorFilter(
-              imagePath: 'assets/images/pairingmode.PNG',
+              imagePath: 'assets/images/cthulhu.jpg',
               routeName: '/form_singleplayer',
-              imageText: "PAIRING MODE",
+              imageText: "THE CALL OF CTHULHU",
               isAvailable: false,
               height: size.height * 0.9 / 3,
               width: size.width,

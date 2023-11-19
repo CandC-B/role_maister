@@ -204,6 +204,22 @@ class ApplicationRouter {
             },
           ),
           GoRoute(
+            path: 'form_multiplayer',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: const SelectModeScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                      opacity: CurveTween(curve: Curves.easeInOutCirc)
+                          .animate(animation),
+                      child: child);
+                },
+              );
+            },
+          ),
+          GoRoute(
             path: 'game',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return CustomTransitionPage(

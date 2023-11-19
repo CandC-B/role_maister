@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
 
-class CharacterCard extends StatelessWidget {
-  final UserStatistics character;
+class CthulhuCharacterCard extends StatelessWidget {
+  final CthulhuCharacter character;
   final bool selected;
 
-  CharacterCard({super.key, required this.character, required this.selected});
+  CthulhuCharacterCard({super.key, required this.character, required this.selected});
 
   Widget _buildStatItem(
       String label, IconData icon, String value, Color textColor) {

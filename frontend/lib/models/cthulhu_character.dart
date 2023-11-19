@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/models/character.dart';
 
-class UserStatistics {
+class CthulhuCharacter extends Character{
   // TODO: de momento solo tenemos character level 1
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
   final Map<String, int> skills;
   final List<String> talents;
-  final String name;
   final String appearance;
   final String personalAgenda;
   final String friend;
@@ -18,14 +18,14 @@ class UserStatistics {
   final int cash;
   final int hp;
 
-  UserStatistics({
+  CthulhuCharacter( {
     required this.characterLevel,
     required this.career,
     required this.attributes,
     required this.skills,
     required this.talents,
-    required this.name,
     required this.appearance,
+    required String name,
     required this.personalAgenda,
     required this.friend,
     required this.rival,
@@ -33,15 +33,15 @@ class UserStatistics {
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  });
+  }): super(name);
 
-  // Factory constructor to generate random UserStatistics
-  factory UserStatistics.random() {
+  // Factory constructor to generate random AliensCharacter
+  factory CthulhuCharacter.random() {
     final career = _generateCareer();
     final attributes = _generateRandomAttributes(career);
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
-    final name = _getRandomName(career);
+    String name = _getRandomName(career);
     final appearance = _getRandomAppearance(career);
     final personalAgenda = _getRandomPersonalAgenda(career);
     final friend = _getRandomName(career);
@@ -50,13 +50,13 @@ class UserStatistics {
     final signatureItem = _getRandomSignatureItem(career);
     final cash = _getRandomCash(career);
 
-    return UserStatistics(
+    return CthulhuCharacter(
+      name: name,
       characterLevel: 1,
       career: career,
       attributes: attributes,
       skills: skills,
       talents: talents,
-      name: name,
       appearance: appearance,
       personalAgenda: personalAgenda,
       friend: friend,
@@ -550,7 +550,7 @@ class UserStatistics {
 
   @override
   String toString() {
-    return 'UserStatistics: {'
+    return 'AliensCharacter: {'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -588,7 +588,7 @@ class UserStatistics {
   }
 
   static fromMap(Map<String, dynamic> statsData) {
-    return UserStatistics(
+    return CthulhuCharacter(
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,7 +29,7 @@ class _SignInPageState extends State<SignInPage> {
       alignment: Alignment.center,
       padding: isMobile
           ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
-          : const EdgeInsets.symmetric(vertical: 110.0),
+          : const EdgeInsets.symmetric(vertical: 150.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/dnd.png'),
@@ -175,8 +176,12 @@ class _SignInPageState extends State<SignInPage> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-              onPressed: () async {                    
-                  checkRegisterInput(await firebase.signIn(email.text, password.text, context));
+              onPressed: () async {
+                checkRegisterInput(
+                    await firebase.signIn(email.text, password.text, context));
+                if (!(isInvalidCredentials ?? false)) {
+                  firebase.fetchPlayerData();
+                }
               },
               child:  SizedBox(
                 width: double.infinity,
