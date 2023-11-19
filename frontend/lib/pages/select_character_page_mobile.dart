@@ -5,6 +5,8 @@ import 'package:role_maister/models/character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/widgets/cthulhu_characters_card.dart';
+import 'package:role_maister/widgets/dyd_characters_card.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:http/http.dart' as http;
@@ -29,27 +31,25 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     loadCharacterData();
   }
 
-  Future<void> loadCharacterData() async {
+  Future<Map<String, dynamic>> loadCharacterData() async {
     try {
       final Map<String, dynamic> data =
           await firebase.getUserCharacters(singleton.user!.uid);
-      setState(() {
-        charactersData = data;
-      });
+      return data;
     } catch (error) {
-      print("Error loading character data: $error");
+      throw Exception("Error al obtener personajes del usuario: $error");
     }
   }
 
   Future<void> createRandomPlayer() async {
     try {
-      if (singleton.gameMode == "Aliens") {
+      if (singleton.gameMode.value == "Aliens") {
         AliensCharacter newRandomUser = AliensCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode == "Dyd") {
+      } else if (singleton.gameMode.value == "Dyd") {
         DydCharacter newRandomUser = DydCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode == "Cthulhu") {
+      } else if (singleton.gameMode.value == "Cthulhu") {
         CthulhuCharacter newRandomUser = CthulhuCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
       } else {
@@ -58,7 +58,10 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       }
 
       // Reload character data to update the UI
-      await loadCharacterData();
+      Map<String, dynamic> data = await loadCharacterData();
+      setState(() {
+        charactersData = data;
+      });
     } catch (error) {
       print("Error creating random player: $error");
     } finally {
@@ -88,11 +91,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
     Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    if (singleton.gameMode == "Aliens") {
+    if (singleton.gameMode.value == "Aliens") {
       Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    } else if (singleton.gameMode == "Dyd") {
+    } else if (singleton.gameMode.value == "Dyd") {
       Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    } else if (singleton.gameMode == "Cthulhu") {
+    } else if (singleton.gameMode.value == "Cthulhu") {
       Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
     }
     mapUserStats["user"] = singleton.user!.uid;
@@ -207,7 +210,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                                         color: Colors.transparent,
                                         child: Center(
                                           child: Image.asset(
-                                              'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+                                              'assets/images/small_logo.png'),
                                         ),
                                       ),
                                     ),
@@ -272,57 +275,110 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
             ],
           ),
           // TODO Refresh character data when gamemode changes
-          charactersData == null
-              ? Center(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Center(
-                      child: Image.asset(
-                          'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: charactersData!.length,
-                    itemBuilder: (context, index) {
-                      final characterId = charactersData!.keys.elementAt(index);
-                      final characterData = charactersData![characterId];
-                      print(singleton.gameMode);
-                      singleton.selectedCharacterId =
-                          charactersData!.keys.elementAt(selectedIndex);
-                      if (singleton.gameMode == "Aliens") {
-                        singleton.alienCharacter = AliensCharacter.fromMap(
-                            charactersData![
-                                charactersData!.keys.elementAt(selectedIndex)]);
-                      } else if (singleton.gameMode == "Dyd") {
-                        singleton.dydCharacter = DydCharacter.fromMap(
-                            charactersData![
-                                charactersData!.keys.elementAt(selectedIndex)]);
-                      } else if (singleton.gameMode == "Cthulhu") {
-                        singleton.cthulhuCharacter = CthulhuCharacter.fromMap(
-                            charactersData![
-                                charactersData!.keys.elementAt(selectedIndex)]);
-                      } else {
-                        singleton.alienCharacter = AliensCharacter.fromMap(
-                            charactersData![
-                                charactersData!.keys.elementAt(selectedIndex)]);
-                      }
-
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                        child: AliensCharacterCard(
-                          character: AliensCharacter.fromMap(characterData),
-                          selected: selectedIndex == index,
+          Expanded(
+              child: ValueListenableBuilder<String>(
+            valueListenable: singleton.gameMode,
+            builder: (BuildContext context, String mode, child) {
+              return FutureBuilder<Map<String, dynamic>>(
+                  future: loadCharacterData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // You can show a loading indicator while loading the data
+                      return Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Center(
+                            child: Image.asset('assets/images/small_logo.png'),
+                          ),
                         ),
                       );
-                    },
-                  ),
-                ),
+                    } else if (snapshot.hasError) {
+                      // Handle the error
+                      return Text(
+                          'Error loading character data: ${snapshot.error}');
+                    } else {
+                      charactersData = snapshot.data;
+                      // Data loaded successfully, build the list
+                      return ListView.builder(
+                        itemCount: charactersData!.length,
+                        itemBuilder: (context, index) {
+                          final characterId =
+                              charactersData!.keys.elementAt(index);
+                          final characterData = charactersData![characterId];
+
+                          singleton.selectedCharacterId =
+                              charactersData!.keys.elementAt(selectedIndex);
+                          if (singleton.gameMode.value == "Aliens") {
+                            singleton.alienCharacter = AliensCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: AliensCharacterCard(
+                                character:
+                                    AliensCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else if (singleton.gameMode.value == "Dyd") {
+                            singleton.dydCharacter = DydCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: DydCharacterCard(
+                                character: DydCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else if (singleton.gameMode.value == "Cthulhu") {
+                            singleton.cthulhuCharacter =
+                                CthulhuCharacter.fromMap(charactersData![
+                                    charactersData!.keys
+                                        .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: CthulhuCharacterCard(
+                                character:
+                                    CthulhuCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else {
+                            singleton.alienCharacter = AliensCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: AliensCharacterCard(
+                                character:
+                                    AliensCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    }
+                  });
+            },
+          )),
         ],
       ),
     );
