@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/pages/profile_characters_page.dart';
+import 'package:role_maister/widgets/aliens_characters_card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
 // TODO Stream builder para que se actualice la pagina cuando se cree un character
 class _ProfilePageState extends State<ProfilePage> {
   @override
@@ -30,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isSmallScreen ? 10.0 : 100.0,
+            horizontal: isSmallScreen ? 10.0 : 50.0,
             vertical: isSmallScreen ? 20.0 : 50.0,
           ),
           child: Container(
@@ -82,21 +86,29 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: ProfileIcon(),
-                  ),
-                  SingleChildScrollView(
-                    child: ProfileStats(),
-                  )
-                ] // Add more user information as needed
-                )));
+    Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 700;
+    return isSmallScreen
+        ? const Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                SingleChildScrollView(
+                  child: ProfileIcon(),
+                ),
+                SingleChildScrollView(
+                  child: ProfileStats(),
+                )
+              ])
+        : const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                SingleChildScrollView(
+                  child: ProfileIcon(),
+                ),
+                SingleChildScrollView(
+                  child: ProfileStats(),
+                )
+              ]);
   }
 }
 
@@ -194,7 +206,7 @@ class ProfileStats extends StatelessWidget {
         const SizedBox(height: 50),
         Container(
           height: 50,
-          width: 300,
+          width: 200,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
@@ -213,8 +225,8 @@ class ProfileStats extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15))),
             onPressed: () => (),
             child: const SizedBox(
-              width: double.infinity,
-              height: 50,
+              width: 150,
+              height: 40,
               child: Center(child: Text('Change Password')),
             ),
           ),
@@ -225,15 +237,16 @@ class ProfileStats extends StatelessWidget {
 }
 
 class CharactersTab extends StatelessWidget {
-  final List<AliensCharacter> aliensCharacters = [];
-  final List<DydCharacter> dydCharacters = [];
-  final List<CthulhuCharacter> cthulhuCharacters = [];
+  Map<String, dynamic>? aliensCharacters;
+  Map<String, dynamic>? dydCharacters;
+  Map<String, dynamic>? cthulhuCharacters;
 
   CharactersTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-        Size size = MediaQuery.of(context).size;
+    int selectedIndex = 0;
+    Size size = MediaQuery.of(context).size;
     bool isSmallScreen = size.width < 700;
     TextEditingController characterNameController = TextEditingController();
     return Padding(
@@ -250,13 +263,59 @@ class CharactersTab extends StatelessWidget {
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: aliensCharacters.length,
-                    itemBuilder: (context, index) {
-                      return CharacterCard(character: aliensCharacters[index]);
-                    },
-                  ),
+                const Expanded(
+                  child: ProfileCharacterPage(mode: "Aliens")
+                  // child: FutureBuilder<Map<String, dynamic>>(
+                  //   future: firebase.getUserCharactersFromMode(singleton.user!.uid, "Aliens"),
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.waiting) {
+                  //       return Center(
+                  //         child: Container(
+                  //           color: Colors.transparent,
+                  //           child: Center(
+                  //             child:
+                  //                 Image.asset('assets/images/small_logo.png'),
+                  //           ),
+                  //         ),
+                  //       ); // Muestra un indicador de carga mientras espera
+                  //     } else if (snapshot.hasError) {
+                  //       return Text('Error: ${snapshot.error}');
+                  //     } else {
+                  //       // Procesa los datos de snapshot.data
+                  //       aliensCharacters = snapshot.data;
+                  //       return ListView.builder(
+                  //       itemCount: aliensCharacters!.length,
+                  //       itemBuilder: (context, index) {
+                  //         final characterId =
+                  //             aliensCharacters!.keys.elementAt(index);
+                  //         final characterData = aliensCharacters![characterId];
+
+                  //         singleton.selectedCharacterId =
+                  //             aliensCharacters!.keys.elementAt(selectedIndex);
+                    
+                  //           singleton.alienCharacter = AliensCharacter.fromMap(
+                  //               aliensCharacters![aliensCharacters!.keys
+                  //                   .elementAt(selectedIndex)]);
+                  //           return InkWell(
+                  //             onTap: () {
+                  //               setState(() {
+                  //                 selectedIndex = index;
+                  //               });
+                  //             },
+                  //             child: AliensCharacterCard(
+                  //               character:
+                  //                   AliensCharacter.fromMap(characterData),
+                  //               selected: selectedIndex == index,
+                  //             ),
+                  //           );
+                  
+                          
+                  //       },
+                  //     );
+                  //     }
+                  //   },
+                  // ),
+
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -268,7 +327,9 @@ class CharactersTab extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                      minimumSize: isSmallScreen
+                          ? const Size(100, 30)
+                          : const Size(250, 40)),
                   child: Text(
                     "Add Character",
                     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
@@ -287,14 +348,38 @@ class CharactersTab extends StatelessWidget {
                       fontSize: 24,
                       fontWeight: FontWeight.bold),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: aliensCharacters.length,
-                    itemBuilder: (context, index) {
-                      return CharacterCard(character: aliensCharacters[index]);
-                    },
-                  ),
-                ),
+                const Expanded(child: ProfileCharacterPage(mode: "Dyd")),
+                // Expanded(
+                  // child: FutureBuilder<QuerySnapshot>(
+                  //   future: firebase.getUserCharactersDydMode(),
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.waiting) {
+                  //       return Center(
+                  //         child: Container(
+                  //           color: Colors.transparent,
+                  //           child: Center(
+                  //             child:
+                  //                 Image.asset('assets/images/small_logo.png'),
+                  //           ),
+                  //         ),
+                  //       ); // Muestra un indicador de carga mientras espera
+                  //     } else if (snapshot.hasError) {
+                  //       return Text('Error: ${snapshot.error}');
+                  //     } else {
+                  //       // Procesa los datos de snapshot.data
+                  //       return ListView.builder(
+                  //         itemCount: dydCharacters.length,
+                  //         itemBuilder: (context, index) {
+                  //           return CharacterCard(
+                  //             characterName:
+                  //                 dydCharacters[index].get('name'),
+                  //           );
+                  //         },
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                // ),
                 ElevatedButton(
                   onPressed: () {
                     showDialog(
@@ -305,7 +390,9 @@ class CharactersTab extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                      minimumSize: isSmallScreen
+                          ? const Size(100, 30)
+                          : const Size(250, 40)),
                   child: Text(
                     "Add Character",
                     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
@@ -324,14 +411,42 @@ class CharactersTab extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: aliensCharacters.length,
-                  itemBuilder: (context, index) {
-                    return CharacterCard(character: aliensCharacters[index]);
-                  },
-                ),
-              ),
+              const Expanded(child: ProfileCharacterPage(mode: "Cthulhu")),
+              // Expanded(
+              //   child: FutureBuilder<QuerySnapshot>(
+              //       future: firebase.getUserCharactersCthulhuMode(),
+              //       builder: (context, snapshot) {
+              //         if (snapshot.connectionState == ConnectionState.waiting) {
+              //           return Center(
+              //             child: Container(
+              //               color: Colors.transparent,
+              //               child: Center(
+              //                 child:
+              //                     Image.asset('assets/images/small_logo.png'),
+              //               ),
+              //             ),
+              //           ); // Muestra un indicador de carga mientras espera
+              //         } else if (snapshot.hasError) {
+              //           return Text('Error: ${snapshot.error}');
+              //         } else {
+              //           print("Hole");
+              //           // Procesa los datos de snapshot.data
+              //           return ListView.builder(
+              //             itemCount: cthulhuCharacters.length,
+              //             itemBuilder: (context, index) {
+              //               // return CharacterCard(
+              //               //   characterName:
+              //               //       cthulhuCharacters[index].get('name'),
+              //               // );
+                            
+              //               return Text("Hola");
+              //             },
+              //           );
+              //         }
+              //       },
+              //     ),
+              // ),
+              
               ElevatedButton(
                 onPressed: () {
                   showDialog(
@@ -342,7 +457,9 @@ class CharactersTab extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple,
-                    minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
+                    minimumSize: isSmallScreen
+                        ? const Size(100, 30)
+                        : const Size(250, 40)),
                 child: Text(
                   "Add Character",
                   style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
@@ -364,9 +481,9 @@ class TokenPackage {
 }
 
 class CharacterCard extends StatelessWidget {
-  final character;
+  final characterName;
 
-  CharacterCard({required this.character});
+  CharacterCard({required this.characterName});
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +499,7 @@ class CharacterCard extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          character.name,
+          characterName,
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
         // subtitle: Text(
