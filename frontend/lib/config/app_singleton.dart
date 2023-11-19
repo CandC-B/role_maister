@@ -19,8 +19,7 @@ class AppSingleton {
   User? user;
   Player? player;
   String? currentGame;
-  String? history;
-  // String? gameMode = "Aliens";
+  String history = "";
   final ValueNotifier<String> gameMode = ValueNotifier<String>("Aliens");
   String? selectedCharacterId;
   AliensCharacter alienCharacter = AliensCharacter.random();
