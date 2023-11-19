@@ -537,10 +537,20 @@ class FirebaseService {
   Future<void> saveMessage(String messageText, DateTime sentAt,
       String currentGameId, String sentBy) async {
     if (messageText.trim().isNotEmpty) {
+      String sender;
+      if (sentBy == "IA") {
+        sender = "IA";
+      } else {
+        sender = await getUsername(sentBy);
+      }
+      print(sentBy);
+      print(sender);
+
       Map<String, dynamic> message = {
         'text': messageText,
         'sentAt': sentAt,
         'sentBy': sentBy,
+        'senderName': sender,
       };
 
       try {
@@ -605,6 +615,42 @@ class FirebaseService {
     //     return allMessages;
     //   }
     // );
+  }
+
+  Future<String> getUsername(String userId) async {
+    try {
+      // Reference to the Firestore collection 'users' (adjust to your collection name)
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // Query to get the user document by user ID
+      QuerySnapshot userSnapshot = await usersCollection
+          .where('userId', isEqualTo: userId)
+          .limit(1)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        // If a user document is found, return the username
+        return userSnapshot.docs.first.get('username');
+      } else {
+        // If no user document is found, return an appropriate value (null or an empty string, for example)
+        return 'IA'; // You can change this based on your error handling strategy
+      }
+    } catch (error) {
+      print('Error getting username: $error');
+      throw error;
+    }
+  }
+
+  Future<List<String>> getUsernames(
+      List<QueryDocumentSnapshot<Object?>> messages) async {
+    List<String> usernames = [];
+    for (var message in messages) {
+      String userId = message.get('sentBy');
+      String username = await firebase.getUsername(userId);
+      usernames.add(username);
+    }
+    return usernames;
   }
 
   Future<bool?> signIn(

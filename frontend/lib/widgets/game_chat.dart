@@ -42,28 +42,28 @@ class _GameChatState extends State<GameChat> {
     };
 
     firestoreService.saveMessage(
-            text, DateTime.now(), widget.gameId, currentUserId);
+        text, DateTime.now(), widget.gameId, currentUserId);
     textEditingController.clear();
-  
+
     if (messages != null) {
       final response = await http.post(
           // TODO: add constants.dart in utils folder
           // Uri.http("localhost:8000", "/game/master?message=$text"),
-          Uri.parse("https://rolemaister.onrender.com/game/master?message=$text"),
+          Uri.parse(
+              "https://rolemaister.onrender.com/game/master?message=$text"),
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
-        firestoreService.saveMessage(
-            json.decode(response.body)["message"], DateTime.now(), widget.gameId, "IA");
+        firestoreService.saveMessage(json.decode(response.body)["message"],
+            DateTime.now(), widget.gameId, "IA");
         // scrollController.animateTo(0,
         //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-    }
+      }
     } else {
       // Handle the case where there was an error fetching messages
       // TODO: ni puta idea de que hacer
     }
 
-    
     // else {
     //   Fluttertoast.showToast(
     //       msg: 'Nothing to send', backgroundColor: Colors.grey);
@@ -116,17 +116,19 @@ class _GameChatState extends State<GameChat> {
                       // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < listMessages.length) {
-                          bool ai_msg =
-                              listMessages[index].get('sentBy') == "IA";
+                          bool others_msg = listMessages[index].get('sentBy') !=
+                              singleton.user!.uid;
                           return BubbleSpecialThree(
-                            text: listMessages[index].get('text'),
-                            color: ai_msg
+                            text:
+                                "${listMessages[index].get('senderName')}: ${listMessages[index].get('text')}",
+                            color: others_msg
                                 ? Color.fromARGB(255, 234, 226, 248)
                                 : Colors.deepPurple,
                             tail: true,
-                            isSender: !ai_msg,
-                            textStyle:
-                                TextStyle(color: ai_msg? Colors.black: Colors.white, fontSize: 16),
+                            isSender: !others_msg,
+                            textStyle: TextStyle(
+                                color: others_msg ? Colors.black : Colors.white,
+                                fontSize: 16),
                           );
                           // return messageBubble(
                           //   chatContent: listMessages[index].get('text'),
