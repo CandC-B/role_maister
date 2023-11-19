@@ -184,9 +184,10 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   ),
                 ),
               ),
-              kIsWeb
-                  ? SizedBox()
-                  : Expanded(
+              // kIsWeb
+              //     ? SizedBox()
+              //     : 
+              Expanded(
                       flex: 1,
                       child: GestureDetector(
                         onTap: () {
