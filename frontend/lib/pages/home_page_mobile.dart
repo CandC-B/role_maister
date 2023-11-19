@@ -60,9 +60,9 @@ class HomePageMobile extends StatelessWidget {
                       fontSize: 36, fontWeight: FontWeight.bold)),
               onPressed: () {
                 if (singleton.user != null) {
-                  context.go("/mode");
+                  context.push("/mode");
                 }else {
-                  context.go("/sign_in");
+                  context.push("/sign_in");
                 }
               },
               child: FittedBox(

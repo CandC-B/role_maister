@@ -2,13 +2,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/widgets/role_tab.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/config/config.dart';
 
 class GameForm extends StatelessWidget {
-  GameForm({super.key, required this.character});
+  GameForm(
+      {super.key,
+      required this.character,
+      required this.image_width,
+      required this.preset,
+      required this.mobile});
   final UserStatistics character;
+  final double image_width;
+  final bool preset;
+  final bool mobile;
   var _storyController = TextEditingController();
 
   Future<void> createNewGame(UserStatistics userStats, String history) async {
@@ -29,7 +38,6 @@ class GameForm extends StatelessWidget {
     };
 
     gameConfig.remove("players");
-    print(gameConfig);
     mapUserStats.addAll(gameConfig);
     final response = await http.post(
         // TODO: add constants.dart in utils folder
@@ -39,7 +47,6 @@ class GameForm extends StatelessWidget {
     var coralMessage = json.decode(response.body)["message"];
     await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
     singleton.currentGame = gameUid;
-    print(singleton.currentGame);
   }
 
   @override
@@ -50,49 +57,10 @@ class GameForm extends StatelessWidget {
       color: Colors.white,
       child: Column(children: [
         Expanded(
-          flex: 1,
-          child: Row(children: [
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/aliens.jpg',
-                routeName: '/game',
-                imageText: "ALIENS",
-                isAvailable: true,
-                height: size.height * 0.9 / 4,
-                width: size.width * 0.8 / 3,
-                isLink: false,
-                preset: true,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/dungeons_and_dragons.jpg',
-                routeName: '/game',
-                imageText: "DUNGEONS AND DRAGONS",
-                isAvailable: false,
-                height: size.height * 0.9 / 4,
-                width: (size.width * 0.8 * 2 / 3) / 3,
-                isLink: false,
-                preset: false,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ImageColorFilter(
-                imagePath: 'assets/images/cthulhu.jpg',
-                routeName: '/game',
-                imageText: "THE CALL OF CTHULHU",
-                isAvailable: false,
-                height: size.height * 0.9 / 4,
-                width: (size.width * 0.8 * 2 / 3) / 3,
-                isLink: false,
-                preset: false,
-              ),
-            ),
-          ]),
-        ),
+            flex: 1,
+            child: RoleTab(
+              width: image_width,
+            )),
         Expanded(
           flex: 2,
           child: Container(
@@ -158,28 +126,36 @@ class GameForm extends StatelessWidget {
                       textStyle: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(color: Colors.deepPurple,),
-                              SizedBox(height: 16),
-                              Text("Creating Game..."),
-                            ],
-                          ),
-                        );
-                      },
-                      barrierDismissible: false, // Prevent closing the dialog by tapping outside.
-                    );
-                    createNewGame(character, _storyController.text)
-                        .then((value) {
-                          _storyController.text = '';
-                          context.go("/game");
-                        }
-                    );
+                    if (mobile) {
+                      singleton.history = _storyController.text;
+                      context.go("/select_character");
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          // TODO: robar el de Victor
+                          return const AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Colors.deepPurple,
+                                ),
+                                SizedBox(height: 16),
+                                Text("Creating Game..."),
+                              ],
+                            ),
+                          );
+                        },
+                        barrierDismissible:
+                            false, // Prevent closing the dialog by tapping outside.
+                      );
+                      createNewGame(character, _storyController.text)
+                          .then((value) {
+                        _storyController.text = '';
+                        context.go("/game");
+                      });
+                    }
                   },
                   child: const FittedBox(
                       fit: BoxFit.contain, child: Text("Start Game"))),

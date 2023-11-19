@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/widgets/popup_menu_profile.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -24,6 +25,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool rulesScreen = false;
   bool pricingScreen = false;
   AppSingleton singleton = AppSingleton();
+  bool isLandScape = false;
 
   checkCurrentPath(title) {
     switch (title) {
@@ -75,7 +77,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     mobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return AppBar(
       automaticallyImplyLeading: mobile ? true : false,
-      leading: mobile
+      leading: mobile || !kIsWeb
           ? Builder(builder: (context) {
               return IconButton(
                 icon: const Icon(
@@ -88,7 +90,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               );
             })
           : null,
-      title: mobile
+      title: mobile || !kIsWeb
           ? Row(
               children: [
                 Image.asset(
@@ -120,7 +122,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               appBarInfoButtons(context)
             ]),
-      actions: mobile
+      actions: mobile || !kIsWeb 
           ? null
           : <Widget>[
               Center(
