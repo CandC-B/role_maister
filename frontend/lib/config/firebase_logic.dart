@@ -327,6 +327,39 @@ class FirebaseService {
     }
   }
 
+  // Function to modify the game by updating num_players and adding a player
+  Future<void> modifyGame(String gameId, String characterId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+        if (gameSnapshot.exists) {
+          // Modify the game data
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          gameData['num_players'] = 2;
+
+          // Add the current characterId to the list of players
+          List<String> players = List<String>.from(gameData['players'] ?? []);
+          players.add(characterId);
+          gameData['players'] = players;
+
+          // Update the game document
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error');
+      throw error;
+    }
+  }
+
   Future<void> createRandomPlayer() async {
     try {
       AliensCharacter newRandomUser = AliensCharacter.random();
@@ -335,6 +368,140 @@ class FirebaseService {
       // Reload character data to update the UI
     } catch (error) {
       print("Error creating random player: $error");
+    }
+  }
+
+  Future<void> emptyQueue() async {
+    try {
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      QuerySnapshot snapshot = await queueCollection.get();
+
+      // Delete each document in the 'queue' collection
+      snapshot.docs.forEach((doc) {
+        batch.delete(doc.reference);
+      });
+
+      // Commit the batched write
+      await batch.commit();
+    } catch (error) {
+      print('Error emptying the queue: $error');
+      throw error;
+    }
+  }
+
+  // Function to get the length of the queue
+  Future<int> getQueueLength() async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      // Fetch the documents from the 'queue' collection
+      QuerySnapshot snapshot = await queueCollection.get();
+
+      // Return the count of documents in the 'queue' collection
+      return snapshot.size;
+    } catch (error) {
+      print('Error getting queue length: $error');
+      throw error;
+    }
+  }
+
+  Future<void> addUserToQueue(String characterId) async {
+    try {
+      // Get the current user ID
+      String userId = singleton.user!.uid;
+
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+
+      // Add a new document to the 'queue' collection
+      await queueCollection.add({
+        'userId': userId,
+        'characterId': characterId,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      print('User added to the queue successfully.');
+    } catch (error) {
+      print('Error adding user to the queue: $error');
+      rethrow;
+    }
+  }
+
+  // Function to add a user to the 'queue' collection
+  Future<void> addGameToQueue(String characterId) async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+
+      // Get the current user ID
+      String userId = singleton.user!.uid;
+
+      // Check if the user already has a document in the 'queue' collection
+      QuerySnapshot<Map<String, dynamic>> existingUserDocs =
+          await queueCollection
+              .where('userId', isEqualTo: userId)
+              .limit(1)
+              .get() as QuerySnapshot<Map<String, dynamic>>;
+
+      if (existingUserDocs.docs.isNotEmpty) {
+        // User already exists in the 'queue', update the existing document
+        DocumentReference<Map<String, dynamic>> existingUserDoc =
+            existingUserDocs.docs.first.reference;
+
+        await existingUserDoc.update({
+          'gameId': singleton.currentGame,
+        });
+      } else {
+        // User doesn't exist in the 'queue', add a new document
+        await queueCollection.add({
+          'userId': userId,
+          'characterId': characterId,
+          'timestamp': FieldValue.serverTimestamp(),
+          'gameId': singleton.currentGame,
+        });
+      }
+
+      print('User added to the queue successfully.');
+    } catch (error) {
+      print('Error adding user to the queue: $error');
+      rethrow;
+    }
+  }
+
+  Future<String> getGameId() async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      // Query to get the first document ordered by timestamp
+      QuerySnapshot snapshot =
+          await queueCollection.orderBy('timestamp').limit(1).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Get the first document
+        Map<String, dynamic> firstDocument =
+            snapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Check if 'gameId' field exists in the first document
+        if (firstDocument.containsKey('gameId')) {
+          // Retrieve the 'gameId' attribute from the first document
+          String gameId = firstDocument['gameId'];
+          // Return the 'gameId' attribute
+          return gameId;
+        } else {
+          return '';
+        }
+      }
+      // Return null if there are no documents in the 'queue' collection
+      throw Exception("Queue not found");
+    } catch (error) {
+      print('Error getting current game Id: $error');
+      throw error;
     }
   }
 

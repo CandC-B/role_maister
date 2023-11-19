@@ -20,6 +20,7 @@ class AppSingleton {
   Player? player;
   String? currentGame;
   String history = "";
+  bool multiplayer = false;
   final ValueNotifier<String> gameMode = ValueNotifier<String>("Aliens");
   String? selectedCharacterId;
   AliensCharacter alienCharacter = AliensCharacter.random();

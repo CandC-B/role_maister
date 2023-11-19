@@ -123,6 +123,112 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     singleton.currentGame = gameUid;
   }
 
+  void startMultiPlayerGame() async {
+    print("START MULTI PLAYER GAME");
+    final characterId = charactersData!.keys.elementAt(selectedIndex);
+    final characterData = charactersData![characterId];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset('assets/images/small_logo.png'),
+                  ),
+                ),
+              ),
+              LinearProgressIndicator(
+                color: Colors.amber,
+                backgroundColor: Colors.white,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Creating Game...",
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+      barrierDismissible: false,
+    );
+    int queueLen = await firebase.getQueueLength();
+    if (queueLen == 0) {
+      await firebase.addUserToQueue(characterId);
+      // TODO: no llamar a Coral
+      await createNewGame(singleton.selectedCharacterId!);
+      await firebase.addGameToQueue(characterId);
+      while (await firebase.getQueueLength() < 2) {
+        await Future.delayed(const Duration(seconds: 1));
+      }
+      // ignore: use_build_context_synchronously
+      context.go("/game");
+    } else {
+      await firebase.addUserToQueue(characterId);
+      while (await firebase.getQueueLength() < 2) {
+        await Future.delayed(const Duration(seconds: 1));
+      }
+      String gameId = '';
+      do {
+        // Keep calling getGameId() until it returns a non-empty string
+        gameId = await firebase.getGameId();
+        await Future.delayed(const Duration(seconds: 1));
+      } while (gameId.isEmpty);
+      singleton.currentGame = gameId;
+      print(singleton.currentGame);
+      await firebase.modifyGame(gameId, singleton.selectedCharacterId!);
+      // ignore: use_build_context_synchronously
+      context.go("/game");
+      await firebase.emptyQueue();
+    }
+  }
+
+  void startSinglePlayerGame() async {
+    print("START GAME");
+    final characterId = charactersData!.keys.elementAt(selectedIndex);
+    final characterData = charactersData![characterId];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset('assets/images/small_logo.png'),
+                  ),
+                ),
+              ),
+              LinearProgressIndicator(
+                color: Colors.amber,
+                backgroundColor: Colors.white,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Creating Game...",
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+      barrierDismissible: false,
+    );
+    createNewGame(singleton.selectedCharacterId!).then((value) {
+      context.go("/game");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -192,45 +298,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 child: GestureDetector(
                   onTap: () {
                     print("START GAME");
-                    final characterId =
-                        charactersData!.keys.elementAt(selectedIndex);
-                    final characterData = charactersData![characterId];
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          backgroundColor: Colors.deepPurple,
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Center(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/images/small_logo.png'),
-                                  ),
-                                ),
-                              ),
-                              LinearProgressIndicator(
-                                color: Colors.amber,
-                                backgroundColor: Colors.white,
-                              ),
-                              SizedBox(height: 16),
-                              Text(
-                                "Creating Game...",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      barrierDismissible:
-                          false, // Prevent closing the dialog by tapping outside.
-                    );
-                    createNewGame(singleton.selectedCharacterId!).then((value) {
-                      context.go("/game");
-                    });
+                    if (singleton.multiplayer) {
+                      startMultiPlayerGame();
+                    } else {
+                      startSinglePlayerGame();
+                    }
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button
