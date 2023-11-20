@@ -27,7 +27,7 @@ class _SignInPageState extends State<SignInPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
+          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
           : const EdgeInsets.symmetric(vertical: 150.0),
       decoration: const BoxDecoration(
         image: DecorationImage(

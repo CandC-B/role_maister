@@ -513,7 +513,6 @@ class FirebaseService {
         await _firestore.collection('user').doc(singleton.user?.uid).get();
 
     Player player = Player.fromDocument(playerDocument);
-    print(player);
     singleton.player = player;
   }
 

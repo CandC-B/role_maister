@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
+          ? const EdgeInsets.symmetric(vertical: 110.0, horizontal: 15)
           : const EdgeInsets.symmetric(vertical: 170.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
