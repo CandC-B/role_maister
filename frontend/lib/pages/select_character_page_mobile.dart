@@ -74,13 +74,21 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(),
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset('assets/images/small_logo.png'),
+                  ),
+                ),
+              ),
               SizedBox(height: 16.0),
-              Text("Creating random player..."),
+              Text("Creating random player...", style: TextStyle(color: Colors.white),),
             ],
           ),
         );

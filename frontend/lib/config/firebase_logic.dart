@@ -175,48 +175,43 @@ class FirebaseService {
   }
 
   // TODO: modificar esta función para el multiplayer
-  Future<Map<String, dynamic>> getCharactersFromGameId(String gameId) async {
-    try {
-      final DocumentReference gameReference =
-          _firestore.collection("game").doc(gameId);
-      final DocumentSnapshot gameSnapshot = await gameReference.get();
+  Future<List<Map<String, dynamic>>> getCharactersFromGameId(String gameId) async {
+  try {
+    final DocumentReference gameReference = _firestore.collection("game").doc(gameId);
+    final DocumentSnapshot gameSnapshot = await gameReference.get();
 
-      if (gameSnapshot.exists) {
-        final Map<String, dynamic> gameData =
-            gameSnapshot.data() as Map<String, dynamic>;
+    if (gameSnapshot.exists) {
+      final Map<String, dynamic> gameData = gameSnapshot.data() as Map<String, dynamic>;
 
-        if (gameData.containsKey("players")) {
-          final List<dynamic> players = gameData["players"];
+      if (gameData.containsKey("players")) {
+        final List<dynamic> playerIds = gameData["players"];
+        List<Map<String, dynamic>> charactersData = [];
 
-          if (players.isNotEmpty) {
-            final String characterId = players[0];
-            final DocumentReference characterReference =
-                _firestore.collection('character').doc(characterId);
-            final DocumentSnapshot characterSnapshot =
-                await characterReference.get();
+        for (String playerId in playerIds) {
+          final DocumentReference characterReference = _firestore.collection('character').doc(playerId);
+          final DocumentSnapshot characterSnapshot = await characterReference.get();
 
-            if (characterSnapshot.exists) {
-              final Map<String, dynamic> characterData =
-                  characterSnapshot.data() as Map<String, dynamic>;
-
-              // print(characterData);
-              return characterData;
-            } else {
-              throw Exception("CHARACTER: Document does not exist");
-            }
+          if (characterSnapshot.exists) {
+            final Map<String, dynamic> characterData = characterSnapshot.data() as Map<String, dynamic>;
+            charactersData.add(characterData);
           } else {
-            throw Exception("GAME: 'players' list is empty");
+            // Handle the case where a character document does not exist
+            print("CHARACTER: Document does not exist for player ID: $playerId");
           }
-        } else {
-          throw Exception("GAME: Attribute 'players' does not exist");
         }
+
+        return charactersData;
       } else {
-        throw Exception("GAME: Document does not exist");
+        throw Exception("GAME: Attribute 'players' does not exist");
       }
-    } catch (error) {
-      rethrow;
+    } else {
+      throw Exception("GAME: Document does not exist");
     }
+  } catch (error) {
+    rethrow;
   }
+}
+
 
   Future<void> getAliensCharactersFromUserId(String userId) async {
     List<AliensCharacter> characters = [];
@@ -541,6 +536,7 @@ class FirebaseService {
       if (sentBy == "IA") {
         sender = "IA";
       } else {
+        print("ENTRA AQUÍ");
         sender = await getUsername(sentBy);
       }
       print(sentBy);
@@ -619,22 +615,20 @@ class FirebaseService {
 
   Future<String> getUsername(String userId) async {
     try {
+      print(userId);
       // Reference to the Firestore collection 'users' (adjust to your collection name)
       CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('users');
+          FirebaseFirestore.instance.collection('user');
 
       // Query to get the user document by user ID
-      QuerySnapshot userSnapshot = await usersCollection
-          .where('userId', isEqualTo: userId)
-          .limit(1)
-          .get();
+      DocumentSnapshot userSnapshot = await usersCollection.doc(userId).get();
 
-      if (userSnapshot.docs.isNotEmpty) {
+      if (userSnapshot.exists) {
         // If a user document is found, return the username
-        return userSnapshot.docs.first.get('username');
+        return userSnapshot.get('username');
       } else {
         // If no user document is found, return an appropriate value (null or an empty string, for example)
-        return 'IA'; // You can change this based on your error handling strategy
+        throw Exception("User not found");
       }
     } catch (error) {
       print('Error getting username: $error');

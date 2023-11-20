@@ -70,26 +70,6 @@ class _GameChatState extends State<GameChat> {
     // }
   }
 
-  // checking if sent message
-  // bool isMessageSent(int index) {
-  //   if ((index > 0 && listMessages[index - 1].get('sentBy') != currentUserId) ||
-  //       index == 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // // checking if received message
-  // bool isMessageReceived(int index) {
-  //   if ((index > 0 && listMessages[index - 1].get('sentBy') == currentUserId) ||
-  //       index == 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -120,7 +100,7 @@ class _GameChatState extends State<GameChat> {
                               singleton.user!.uid;
                           return BubbleSpecialThree(
                             text:
-                                "${listMessages[index].get('senderName')}: ${listMessages[index].get('text')}",
+                                "${listMessages[index].get('text')}",
                             color: others_msg
                                 ? Color.fromARGB(255, 234, 226, 248)
                                 : Colors.deepPurple,
@@ -130,10 +110,6 @@ class _GameChatState extends State<GameChat> {
                                 color: others_msg ? Colors.black : Colors.white,
                                 fontSize: 16),
                           );
-                          // return messageBubble(
-                          //   chatContent: listMessages[index].get('text'),
-                          //   messageType: listMessages[index].get('sentBy'),
-                          // );
                         }
                       },
                     );
