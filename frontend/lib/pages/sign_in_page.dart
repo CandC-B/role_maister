@@ -175,9 +175,6 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: () async {
                 checkRegisterInput(
                     await firebase.signIn(email.text, password.text, context));
-                if (!(isInvalidCredentials ?? false)) {
-                  firebase.fetchPlayerData();
-                }
               },
               child: const SizedBox(
                 width: double.infinity,

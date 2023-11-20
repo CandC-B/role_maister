@@ -177,8 +177,8 @@ class FirebaseService {
     }
   }
 
-
-  Future<Map<String, dynamic>> getUserCharactersFromMode(String userId, String mode) async {
+  Future<Map<String, dynamic>> getUserCharactersFromMode(
+      String userId, String mode) async {
     try {
       final DocumentReference userReference =
           _firestore.collection("user").doc(userId);
@@ -277,8 +277,9 @@ class FirebaseService {
       rethrow;
     }
   }
-  
-  Future<List<dynamic>> getUserCharactersIdFromMode(String userId, String mode) async {
+
+  Future<List<dynamic>> getUserCharactersIdFromMode(
+      String userId, String mode) async {
     try {
       final DocumentReference userReference =
           _firestore.collection("user").doc(userId);
@@ -315,10 +316,13 @@ class FirebaseService {
     }
   }
 
-  Stream<QuerySnapshot> fetchCharactersByUserId(String userId, String mode) async* {
-    print("actualización------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-    List<dynamic> charactersId = await getUserCharactersIdFromMode(userId, mode);
-    yield*  _firestore
+  Stream<QuerySnapshot> fetchCharactersByUserId(
+      String userId, String mode) async* {
+    print(
+        "actualización------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    List<dynamic> charactersId =
+        await getUserCharactersIdFromMode(userId, mode);
+    yield* _firestore
         .collection('character')
         .where(FieldPath.documentId, whereIn: charactersId)
         .snapshots();
@@ -508,12 +512,14 @@ class FirebaseService {
     }
   }
 
-  Future<void> fetchPlayerData() async {
+  Future<void> fetchPlayerData(BuildContext context) async {
     DocumentSnapshot<Map<String, dynamic>> playerDocument =
         await _firestore.collection('user').doc(singleton.user?.uid).get();
 
     Player player = Player.fromDocument(playerDocument);
     singleton.player = player;
+    context.go("/");
+    context.push("/");
   }
 
   Future<void> saveMessage(String messageText, DateTime sentAt,
@@ -589,18 +595,13 @@ class FirebaseService {
     // );
   }
 
-
-
   Future<bool?> signIn(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      User? user = credential.user;
-      AppSingleton singleton = AppSingleton();
-      singleton.user = user;
-      context.go("/");
-      context.push("/");
+      singleton.user = credential.user;
+      firebase.fetchPlayerData(context);
       return false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
