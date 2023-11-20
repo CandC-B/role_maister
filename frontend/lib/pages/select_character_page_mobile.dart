@@ -187,94 +187,91 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   ),
                 ),
               ),
-              kIsWeb
-                  ? SizedBox()
-                  : Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          print("START GAME");
-                          final characterId =
-                              charactersData!.keys.elementAt(selectedIndex);
-                          final characterData = charactersData![characterId];
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.deepPurple,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Center(
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: Center(
-                                          child: Image.asset(
-                                              'assets/images/small_logo.png'),
-                                        ),
-                                      ),
-                                    ),
-                                    LinearProgressIndicator(
-                                      color: Colors.amber,
-                                      backgroundColor: Colors.white,
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      "Creating Game...",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
+              Expanded(
+                flex: 1,
+                child: GestureDetector(
+                  onTap: () {
+                    print("START GAME");
+                    final characterId =
+                        charactersData!.keys.elementAt(selectedIndex);
+                    final characterData = charactersData![characterId];
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.deepPurple,
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Center(
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Center(
+                                    child: Image.asset(
+                                        'assets/images/small_logo.png'),
+                                  ),
                                 ),
-                              );
-                            },
-                            barrierDismissible:
-                                false, // Prevent closing the dialog by tapping outside.
-                          );
-                          createNewGame(characterId).then((value) {
-                            context.go("/game");
-                          });
-                        },
-                        child: Container(
-                          height: 100.0, // Set a fixed height for the button
-                          child: Card(
-                            color: Colors.black,
-                            margin: const EdgeInsets.all(10.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                color: Colors.deepPurple,
-                                width: 1,
                               ),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(16.0),
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.play_arrow_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 10.0),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        "Start Game",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.0),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              LinearProgressIndicator(
+                                color: Colors.amber,
+                                backgroundColor: Colors.white,
                               ),
-                            ),
+                              SizedBox(height: 16),
+                              Text(
+                                "Creating Game...",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
                           ),
+                        );
+                      },
+                      barrierDismissible:
+                          false, // Prevent closing the dialog by tapping outside.
+                    );
+                    createNewGame(singleton.selectedCharacterId!).then((value) {
+                      context.go("/game");
+                    });
+                  },
+                  child: Container(
+                    height: 100.0, // Set a fixed height for the button
+                    child: Card(
+                      color: Colors.black,
+                      margin: const EdgeInsets.all(10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Colors.deepPurple,
+                          width: 1,
+                        ),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10.0),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  "Start Game",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18.0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ),
             ],
           ),
-          // TODO Refresh character data when gamemode changes
+          // TODO: no reload when setstate index
           Expanded(
               child: ValueListenableBuilder<String>(
             valueListenable: singleton.gameMode,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
@@ -17,34 +18,6 @@ class GameForm extends StatelessWidget {
   final bool preset;
   final bool mobile;
   var _storyController = TextEditingController();
-
-  Future<void> createNewGame(String history, String characterId) async {
-    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    mapUserStats["user"] = singleton.user!.uid;
-    // TODO: don't harcode this
-    Map<String, dynamic> gameConfig = {
-      "role_system": "aliens",
-      "num_players": 1,
-      "story_description": history,
-      "players": [characterId]
-    };
-    String gameUid = await firebase.createGame(gameConfig);
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    gameConfig.remove("players");
-    mapUserStats.addAll(gameConfig);
-    final response = await http.post(
-        // TODO: add constants.dart in utils folder
-        Uri.https("rolemaister.onrender.com", "/game/"),
-        headers: headers,
-        body: jsonEncode(mapUserStats));
-    var coralMessage = json.decode(response.body)["message"];
-    await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
-    singleton.currentGame = gameUid;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +102,7 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
+              kIsWeb? SizedBox():
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
@@ -139,33 +113,6 @@ class GameForm extends StatelessWidget {
                     if (mobile) {
                       singleton.history = _storyController.text;
                       context.go("/select_character");
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          // TODO: robar el de Victor
-                          return const AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: Colors.deepPurple,
-                                ),
-                                SizedBox(height: 16),
-                                Text("Creating Game..."),
-                              ],
-                            ),
-                          );
-                        },
-                        barrierDismissible:
-                            false, // Prevent closing the dialog by tapping outside.
-                      );
-                      createNewGame(
-                              _storyController.text, singleton.selectedCharacterId!)
-                          .then((value) {
-                        _storyController.text = '';
-                        context.go("/game");
-                      });
                     }
                   },
                   child: const FittedBox(
