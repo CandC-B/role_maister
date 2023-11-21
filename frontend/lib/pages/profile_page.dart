@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/pages/profile_characters_page.dart';
+import 'package:role_maister/widgets/aliens_characters_card.dart';
+import 'package:role_maister/widgets/characters_tab.dart';
+import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
+import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
+import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +18,7 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
 // TODO Stream builder para que se actualice la pagina cuando se cree un character
 class _ProfilePageState extends State<ProfilePage> {
   @override
@@ -30,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: isSmallScreen ? 10.0 : 100.0,
+            horizontal: isSmallScreen ? 10.0 : 50.0,
             vertical: isSmallScreen ? 20.0 : 50.0,
           ),
           child: Container(
@@ -45,11 +53,11 @@ class _ProfilePageState extends State<ProfilePage> {
               width: size.width,
               height: size.height - (isSmallScreen ? 100 : 150),
               // child: isSmallScreen
-              child: DefaultTabController(
+              child: const DefaultTabController(
                 length: 3,
                 child: Column(
                   children: [
-                    const TabBar(
+                    TabBar(
                       indicatorColor: Colors.deepPurple,
                       isScrollable: true,
                       labelColor: Colors.deepPurple,
@@ -65,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Expanded(
                       child: TabBarView(
-                        children: [const ProfileTab(), CharactersTab()],
+                        children: [ProfileTab(), CharactersTab()],
                       ),
                     ),
                   ],
@@ -82,21 +90,28 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: ProfileIcon(),
-                  ),
-                  SingleChildScrollView(
-                    child: ProfileStats(),
-                  )
-                ] // Add more user information as needed
-                )));
+    Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 700;
+    return isSmallScreen
+        ? 
+                const SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    ProfileIcon(),
+                    ProfileStats(),
+                  ],
+                ))
+              
+        : const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                SingleChildScrollView(
+                  child: ProfileIcon(),
+                ),
+                SingleChildScrollView(
+                  child: ProfileStats(),
+                )
+              ]);
   }
 }
 
@@ -194,7 +209,7 @@ class ProfileStats extends StatelessWidget {
         const SizedBox(height: 50),
         Container(
           height: 50,
-          width: 300,
+          width: 200,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
@@ -213,145 +228,14 @@ class ProfileStats extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15))),
             onPressed: () => (),
             child: const SizedBox(
-              width: double.infinity,
-              height: 50,
+              width: 150,
+              height: 40,
               child: Center(child: Text('Change Password')),
             ),
           ),
         ),
+        const SizedBox(height: 20),
       ],
-    );
-  }
-}
-
-class CharactersTab extends StatelessWidget {
-  final List<AliensCharacter> aliensCharacters = [];
-  final List<DydCharacter> dydCharacters = [];
-  final List<CthulhuCharacter> cthulhuCharacters = [];
-
-  CharactersTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-        Size size = MediaQuery.of(context).size;
-    bool isSmallScreen = size.width < 700;
-    TextEditingController characterNameController = TextEditingController();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                const Text(
-                  "Aliens",
-                  style: TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: aliensCharacters.length,
-                    itemBuilder: (context, index) {
-                      return CharacterCard(character: aliensCharacters[index]);
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CharactersDialog(gameMode: "Aliens");
-                        });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
-                  child: Text(
-                    "Add Character",
-                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                const Text(
-                  "D&D",
-                  style: TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: aliensCharacters.length,
-                    itemBuilder: (context, index) {
-                      return CharacterCard(character: aliensCharacters[index]);
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CharactersDialog(gameMode: "Dyd");
-                        });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
-                  child: Text(
-                    "Add Character",
-                    style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-              child: Column(
-            children: [
-              const Text(
-                "Cthulhu",
-                style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: aliensCharacters.length,
-                  itemBuilder: (context, index) {
-                    return CharacterCard(character: aliensCharacters[index]);
-                  },
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CharactersDialog(gameMode: "Cthulhu");
-                      });
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    minimumSize: isSmallScreen ? const Size(100, 30) : const Size(250, 40)),
-                child: Text(
-                  "Add Character",
-                  style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-                ),
-              ),
-            ],
-          ))
-        ],
-      ),
     );
   }
 }
@@ -364,9 +248,9 @@ class TokenPackage {
 }
 
 class CharacterCard extends StatelessWidget {
-  final character;
+  final characterName;
 
-  CharacterCard({required this.character});
+  CharacterCard({required this.characterName});
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +266,7 @@ class CharacterCard extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          character.name,
+          characterName,
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
         // subtitle: Text(
@@ -479,14 +363,14 @@ void createAlien(String characterName) {
 
 void createDyd(String characterName) {
   singleton.gameMode.value = "Dyd";
-  DydCharacter newAlien = DydCharacter.random();
-  newAlien.name = characterName;
-  firebase.createCharacter(newAlien.toMap());
+  DydCharacter newDyd = DydCharacter.random();
+  newDyd.name = characterName;
+  firebase.createCharacter(newDyd.toMap());
 }
 
 void createCthulhu(String characterName) {
   singleton.gameMode.value = "Cthulhu";
-  CthulhuCharacter newAlien = CthulhuCharacter.random();
-  newAlien.name = characterName;
-  firebase.createCharacter(newAlien.toMap());
+  CthulhuCharacter newCthulhu = CthulhuCharacter.random();
+  newCthulhu.name = characterName;
+  firebase.createCharacter(newCthulhu.toMap());
 }

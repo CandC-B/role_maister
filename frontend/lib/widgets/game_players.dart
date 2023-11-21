@@ -17,7 +17,8 @@ class _GamePlayersState extends State<GamePlayers> {
   Widget build(BuildContext context) {
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
-      builder: (BuildContext context, AsyncSnapshot<AliensCharacter?> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<AliensCharacter?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             color: Colors.transparent,
@@ -31,12 +32,12 @@ class _GamePlayersState extends State<GamePlayers> {
         } else if (snapshot.hasData) {
           final userStatistics;
           if (singleton.gameMode.value == "Aliens") {
-              userStatistics = singleton.alienCharacter;
-            } else if (singleton.gameMode.value == "Dyd") {
-              userStatistics = singleton.dydCharacter;
-            } else if (singleton.gameMode.value == "Cthulhu") {
-              userStatistics = singleton.cthulhuCharacter;
-            }else {
+            userStatistics = singleton.alienCharacter;
+          } else if (singleton.gameMode.value == "Dyd") {
+            userStatistics = singleton.dydCharacter;
+          } else if (singleton.gameMode.value == "Cthulhu") {
+            userStatistics = singleton.cthulhuCharacter;
+          } else {
             userStatistics = AliensCharacter.random();
           }
           return DefaultTabController(
@@ -79,10 +80,10 @@ class _GamePlayersState extends State<GamePlayers> {
 
   Future<AliensCharacter> getUserStats(String gameId) async {
     try {
-      final Map<String, dynamic> statsData =
+      final List<Map<String, dynamic>> statsData =
           await firestoreService.getCharactersFromGameId(gameId);
       try {
-        return AliensCharacter.fromMap(statsData);
+        return AliensCharacter.fromMap(statsData[0]);
       } catch (e) {
         print("Error: $e");
         return AliensCharacter.random();
@@ -129,11 +130,34 @@ class PlayersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: PlayerCard(
-            playerName: userStats.name) // TODO: REPLACE WITH REAL DATA
-
-        );
+      backgroundColor: Colors.black,
+      body: FutureBuilder(
+        future:
+            firestoreService.getCharactersFromGameId(singleton.currentGame!),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(
+                    'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return PlayerCard(playerName: snapshot.data![index]["name"]);
+              },
+            );
+          } else {
+            return const Text('No se encontraron estadísticas.');
+          }
+        }),
+      ),
+    );
   }
 }
 

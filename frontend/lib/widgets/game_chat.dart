@@ -50,6 +50,7 @@ class _GameChatState extends State<GameChat> {
         text, DateTime.now(), widget.gameId, currentUserId);
     textEditingController.clear();
 
+
     if (messages != null) {
       final response = await http.post(
           // TODO: add constants.dart in utils folder
@@ -74,26 +75,6 @@ class _GameChatState extends State<GameChat> {
     //       msg: 'Nothing to send', backgroundColor: Colors.grey);
     // }
   }
-
-  // checking if sent message
-  // bool isMessageSent(int index) {
-  //   if ((index > 0 && listMessages[index - 1].get('sentBy') != currentUserId) ||
-  //       index == 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // // checking if received message
-  // bool isMessageReceived(int index) {
-  //   if ((index > 0 && listMessages[index - 1].get('sentBy') == currentUserId) ||
-  //       index == 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +109,8 @@ class _GameChatState extends State<GameChat> {
                       // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < listMessages.length) {
-                          bool ai_msg =
-                              listMessages[index].get('sentBy') == "IA";
+                          bool others_msg = listMessages[index].get('sentBy') !=
+                              singleton.user!.uid;
 
                           return FutureBuilder<String>(
                             // future: translateText(listMessages[index].get('text'), locale.languageCode),
@@ -144,13 +125,13 @@ class _GameChatState extends State<GameChat> {
                                 // Mostrar el mensaje original mientras espera la traducción
                                 return BubbleSpecialThree(
                                   text: listMessages[index].get('text'),
-                                  color: ai_msg
+                                  color: others_msg
                                       ? const Color.fromARGB(255, 234, 226, 248)
                                       : Colors.deepPurple,
                                   tail: true,
-                                  isSender: !ai_msg,
+                                  isSender: !others_msg,
                                   textStyle: TextStyle(
-                                    color: ai_msg ? Colors.black : Colors.white,
+                                    color: others_msg ? Colors.black : Colors.white,
                                     fontSize: 16,
                                   ),
                                 );
@@ -162,13 +143,13 @@ class _GameChatState extends State<GameChat> {
                                 // Mostrar la burbuja del mensaje traducido
                                 return BubbleSpecialThree(
                                   text: translateSnapshot.data ?? '',
-                                  color: ai_msg
+                                  color: others_msg
                                       ? const Color.fromARGB(255, 234, 226, 248)
                                       : Colors.deepPurple,
                                   tail: true,
-                                  isSender: !ai_msg,
+                                  isSender: !others_msg,
                                   textStyle: TextStyle(
-                                    color: ai_msg ? Colors.black : Colors.white,
+                                    color: others_msg ? Colors.black : Colors.white,
                                     fontSize: 16,
                                   ),
                                 );

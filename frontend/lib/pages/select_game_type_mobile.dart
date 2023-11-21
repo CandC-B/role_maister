@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -37,6 +38,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () {
+                singleton.multiplayer = true;
                 context.go("/form_multiplayer");
               },
               child: ImageColorFilter(

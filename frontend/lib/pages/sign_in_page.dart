@@ -28,7 +28,7 @@ class _SignInPageState extends State<SignInPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 72.0, horizontal: 15)
+          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
           : const EdgeInsets.symmetric(vertical: 150.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -179,9 +179,6 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: () async {
                 checkRegisterInput(
                     await firebase.signIn(email.text, password.text, context));
-                if (!(isInvalidCredentials ?? false)) {
-                  firebase.fetchPlayerData();
-                }
               },
               child:  SizedBox(
                 width: double.infinity,
