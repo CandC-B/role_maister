@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -50,17 +51,19 @@ class AboutUsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Text(
-                    'At our core, we are a dedicated group of passionate role-playing enthusiasts who share a common goal: to make the enchanting world of role-playing games accessible to everyone. We believe that the magic of storytelling and immersive adventures should be within reach of all who yearn for the thrill of creating and embarking on epic quests. Whether you are a seasoned veteran or a complete novice, our mission is to provide the tools, guidance, and resources to help you dive into the captivating realm of role-playing games. We are here to foster creativity, spark imaginations, and build a welcoming community where the wonders of role-playing are celebrated.',
-                    style: TextStyle(
+                  Text(
+                    // 'At our core, we are a dedicated group of passionate role-playing enthusiasts who share a common goal: to make the enchanting world of role-playing games accessible to everyone. We believe that the magic of storytelling and immersive adventures should be within reach of all who yearn for the thrill of creating and embarking on epic quests. Whether you are a seasoned veteran or a complete novice, our mission is to provide the tools, guidance, and resources to help you dive into the captivating realm of role-playing games. We are here to foster creativity, spark imaginations, and build a welcoming community where the wonders of role-playing are celebrated.',
+                    AppLocalizations.of(context)!.aboutUs_text1,
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                     textAlign: TextAlign.justify,
                   ),
                   const SizedBox(height: 60),
-                  const Text(
-                    'Our journey is fueled by a deep-rooted love for storytelling, a commitment to inclusivity, and a desire to connect with like-minded individuals who share our passion. With a wealth of experience and boundless enthusiasm, we endeavor to break down barriers, simplify the learning curve, and empower you to embark on your own unique adventures. Whether you are a dungeon master, a player, or someone just curious about this captivating world, join us on this epic quest as we strive to make role-playing games a delightful and accessible experience for all.',
-                    style: TextStyle(
+                  Text(
+                    // 'Our journey is fueled by a deep-rooted love for storytelling, a commitment to inclusivity, and a desire to connect with like-minded individuals who share our passion. With a wealth of experience and boundless enthusiasm, we endeavor to break down barriers, simplify the learning curve, and empower you to embark on your own unique adventures. Whether you are a dungeon master, a player, or someone just curious about this captivating world, join us on this epic quest as we strive to make role-playing games a delightful and accessible experience for all.',
+                    AppLocalizations.of(context)!.aboutUs_text2,
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                     textAlign: TextAlign.justify,

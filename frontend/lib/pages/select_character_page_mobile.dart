@@ -12,6 +12,7 @@ import 'package:role_maister/config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectCharacterPageMobile extends StatefulWidget {
   const SelectCharacterPageMobile({super.key});
@@ -88,7 +89,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Text("Creating random player...", style: TextStyle(color: Colors.white),),
+              Text(AppLocalizations.of(context)!.random_character, style: TextStyle(color: Colors.white),),
             ],
           ),
         );
@@ -157,7 +158,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
               ),
               SizedBox(height: 16),
               Text(
-                "Creating Game...",
+                AppLocalizations.of(context)!.creating_game,
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -223,7 +224,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
               ),
               SizedBox(height: 16),
               Text(
-                "Creating Game...",
+                AppLocalizations.of(context)!.creating_game,
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -245,13 +246,13 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       width: size.width,
       height: size.height,
       decoration: !kIsWeb
-          ? BoxDecoration(
+          ? const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background2.png'),
                 fit: BoxFit.cover,
               ),
             )
-          : BoxDecoration(color: Colors.black87),
+          : const BoxDecoration(color: Colors.black87),
       child: Column(
         children: [
           Row(
@@ -265,31 +266,32 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button
-                    decoration: BoxDecoration(),
+                    decoration: const BoxDecoration(),
                     child: Card(
                       color: Colors.black,
                       margin: const EdgeInsets.all(10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.deepPurple,
                           width: 1,
                         ),
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.casino_rounded,
                               color: Colors.white,
                             ),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: Center(
                                 child: Text(
-                                  "Random Player",
-                                  style: TextStyle(
+                                  AppLocalizations.of(context)!
+                                      .random_character,
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 18.0),
                                 ),
                               ),
@@ -319,25 +321,25 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                       margin: const EdgeInsets.all(10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.deepPurple,
                           width: 1,
                         ),
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.play_arrow_rounded,
                               color: Colors.white,
                             ),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: Center(
                                 child: Text(
-                                  "Start Game",
-                                  style: TextStyle(
+                                  AppLocalizations.of(context)!.start_game,
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 18.0),
                                 ),
                               ),
@@ -372,7 +374,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                     } else if (snapshot.hasError) {
                       // Handle the error
                       return Text(
-                          'Error loading character data: ${snapshot.error}');
+                          '${AppLocalizations.of(context)!.error_loading_character}${snapshot.error}');
+                      // 'Error loading character data: ${snapshot.error}');
                     } else {
                       charactersData = snapshot.data;
                       // Data loaded successfully, build the list

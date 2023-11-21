@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WebFooter extends StatefulWidget {
   const WebFooter({super.key});
@@ -198,9 +199,9 @@ class AboutUsIconAndText extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => context.go('/about_us'),
-          child: const Text(
-            "About Us",
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.about_us,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),
@@ -228,9 +229,9 @@ class ContactUsIconAndText extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => context.go('/contact_us'),
-          child: const Text(
-            "Contact Us",
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.contact_us,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),
@@ -258,9 +259,9 @@ class TermsIconAndText extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => context.go('/terms_conditions'),
-          child: const Text(
-            "Terms & Conditions",
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.terms_and_conditions,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),

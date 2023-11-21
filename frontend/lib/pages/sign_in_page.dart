@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -66,9 +67,9 @@ class _SignInPageState extends State<SignInPage> {
       height: 570,
       child: Column(
         children: [
-          const Text(
-            "Sign In",
-            style: TextStyle(
+           Text(
+            AppLocalizations.of(context)!.sign_in,
+            style: const TextStyle(
               color: Colors.deepPurple,
               fontSize: 50,
               fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class _SignInPageState extends State<SignInPage> {
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email",
+              hintText: AppLocalizations.of(context)!.enter_email,
               fillColor: Colors.blueGrey[50],
               filled: true,
               labelStyle: const TextStyle(fontSize: 12),
@@ -104,7 +105,7 @@ class _SignInPageState extends State<SignInPage> {
             obscureText: !isPasswordVisible,
             controller: password,
             decoration: InputDecoration(
-              hintText: "Password",
+              hintText: AppLocalizations.of(context)!.enter_password,
               suffixIcon: passwordVisionIcon(),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -136,7 +137,10 @@ class _SignInPageState extends State<SignInPage> {
                   });
                 },
                 child:
-                    const Text("Forgot Password?", textAlign: TextAlign.end)),
+                    Text(
+                    AppLocalizations.of(context)!.forgot_password,
+                    textAlign: TextAlign.end)
+                  ),
           ),
           const SizedBox(
             height: 20,
@@ -144,8 +148,8 @@ class _SignInPageState extends State<SignInPage> {
           Visibility(
             visible: isInvalidCredentials ??
                 false, // Controla la visibilidad del widget
-            child: const Text(
-              "Invalid Credentials",
+            child: Text(
+              AppLocalizations.of(context)!.invalid_credentials,
               style: TextStyle(
                 color: Colors.red,
                 fontSize: 16,
@@ -176,10 +180,10 @@ class _SignInPageState extends State<SignInPage> {
                 checkRegisterInput(
                     await firebase.signIn(email.text, password.text, context));
               },
-              child: const SizedBox(
+              child:  SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: Center(child: Text('Sign In')),
+                child: Center(child: Text(AppLocalizations.of(context)!.sign_in)),
               ),
             ),
           ),
@@ -197,9 +201,9 @@ class _SignInPageState extends State<SignInPage> {
                 height: 50,
                 color: Colors.grey.shade300,
               )),
-              const Padding(
+               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text("Or continue with"),
+                child: Text(AppLocalizations.of(context)!.or_continue_with),
               ),
               Expanded(
                   child: Divider(
@@ -277,6 +281,6 @@ class _SignInPageState extends State<SignInPage> {
         onTap: () {
           isMobile ? context.push("/register") : context.go("/register");
         },
-        child: const Text("Does not have account? Register"));
+        child: Text(AppLocalizations.of(context)!.does_not_have_account));
   }
 }

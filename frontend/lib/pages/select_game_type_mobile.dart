@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectGameTypePageMobile extends StatelessWidget {
   const SelectGameTypePageMobile({Key? key});
@@ -24,7 +25,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
               child: ImageColorFilter(
                 imagePath: 'assets/images/singleplayer_mobile.PNG',
                 routeName: '/form_singleplayer',
-                imageText: "SINGLE PLAYER",
+                imageText: AppLocalizations.of(context)!.single_player,
                 isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: size.width,
@@ -43,7 +44,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
               child: ImageColorFilter(
                 imagePath: 'assets/images/multiplayer.png',
                 routeName: '/form_singleplayer',
-                imageText: "MULTIPLAYER",
+                imageText: AppLocalizations.of(context)!.multi_player,
                 isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: size.width,
@@ -57,7 +58,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
             child: ImageColorFilter(
               imagePath: 'assets/images/pairingmode.PNG',
               routeName: '/form_singleplayer',
-              imageText: "PAIRING MODE",
+              imageText: AppLocalizations.of(context)!.pairing_mode,
               isAvailable: false,
               height: size.height * 0.9 / 3,
               width: size.width,
