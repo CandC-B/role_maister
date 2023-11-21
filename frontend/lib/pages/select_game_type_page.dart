@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectGameTypePage extends StatefulWidget {
   const SelectGameTypePage({super.key});
@@ -39,7 +40,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
               child: ImageColorFilter(
                 imagePath: 'assets/images/singleplayer.PNG',
                 routeName: '/form_singleplayer',
-                imageText: "SINGLE PLAYER",
+                imageText: AppLocalizations.of(context)!.single_player,
                 isAvailable: true,
                 height: size.height * 0.9,
                 width: size.width * 0.8 / 3,
@@ -51,7 +52,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
             ImageColorFilter(
               imagePath: 'assets/images/multiplayer.png',
               routeName: 'FantasyHome',
-              imageText: "MULTIPLAYER",
+              imageText: AppLocalizations.of(context)!.multi_player,
               isAvailable: false,
               height: size.height * 0.9,
               width: size.width * 0.8 / 3,
@@ -62,7 +63,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
             ImageColorFilter(
                 imagePath: 'assets/images/pairingmode.PNG',
                 routeName: 'FantasyHome',
-                imageText: "PAIRING MODE",
+                imageText: AppLocalizations.of(context)!.pairing_mode,
                 isAvailable: false,
                 height: size.height * 0.9,
                 width: size.width * 0.8 / 3,
