@@ -48,14 +48,14 @@ class GameForm extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  Text(
+                  singleton.multiplayer? SizedBox() : Text(
                     AppLocalizations.of(context)!.brief_description,
                     style: TextStyle(color: Colors.white),
                   ),
-                  SizedBox(
+                  singleton.multiplayer? SizedBox(): SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Expanded(
+                  singleton.multiplayer? SizedBox() : Expanded(
                       child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: size.height * 0.01,
