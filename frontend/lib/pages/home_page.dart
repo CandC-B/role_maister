@@ -60,16 +60,15 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 if (singleton.user != null) {
                   context.go("/mode");
-                }else {
+                } else {
                   context.go("/sign_in");
                 }
               },
               child: FittedBox(
-                  fit: BoxFit.contain, child: Text(AppLocalizations.of(context)!.playGame))),
+                  fit: BoxFit.contain,
+                  child: Text(AppLocalizations.of(context)!.playGame))),
         ),
-        
       ],
     );
   }
 }
-
