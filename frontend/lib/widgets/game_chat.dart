@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
+import 'package:role_maister/main.dart';
 import '../models/models.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameChat extends StatefulWidget {
   final String gameId;
@@ -19,7 +21,8 @@ class _GameChatState extends State<GameChat> {
   _GameChatState(String gameId);
 
   late String currentUserId = singleton.user!.uid;
-
+  Map<String, String> translationCache = {};
+  List<String> translatedMessages = [];
   // final List<Message> messages = [];
   List<QueryDocumentSnapshot> listMessages = [];
   final TextEditingController textEditingController = TextEditingController();
@@ -33,6 +36,8 @@ class _GameChatState extends State<GameChat> {
   }
 
   void onSendMessage(String text) async {
+    text = await translateText(text, 'en');
+
     // TODO: mandar todo pal BE primero
     List<Map<String, dynamic>>? messages =
         await firebase.fetchConversationByGameID(singleton.currentGame!);
@@ -42,28 +47,28 @@ class _GameChatState extends State<GameChat> {
     };
 
     firestoreService.saveMessage(
-            text, DateTime.now(), widget.gameId, currentUserId);
+        text, DateTime.now(), widget.gameId, currentUserId);
     textEditingController.clear();
-  
+
     if (messages != null) {
       final response = await http.post(
           // TODO: add constants.dart in utils folder
           // Uri.http("localhost:8000", "/game/master?message=$text"),
-          Uri.parse("https://rolemaister.onrender.com/game/master?message=$text"),
+          Uri.parse(
+              "https://rolemaister.onrender.com/game/master?message=$text"),
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
-        firestoreService.saveMessage(
-            json.decode(response.body)["message"], DateTime.now(), widget.gameId, "IA");
+        firestoreService.saveMessage(json.decode(response.body)["message"],
+            DateTime.now(), widget.gameId, "IA");
         // scrollController.animateTo(0,
         //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-    }
+      }
     } else {
       // Handle the case where there was an error fetching messages
       // TODO: ni puta idea de que hacer
     }
 
-    
     // else {
     //   Fluttertoast.showToast(
     //       msg: 'Nothing to send', backgroundColor: Colors.grey);
@@ -92,6 +97,13 @@ class _GameChatState extends State<GameChat> {
 
   @override
   Widget build(BuildContext context) {
+
+    MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
+    Locale locale = appState?.locale ?? const Locale('en');
+
+    // print ('LOCALE: $locale');
+
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -118,26 +130,57 @@ class _GameChatState extends State<GameChat> {
                         if (index < listMessages.length) {
                           bool ai_msg =
                               listMessages[index].get('sentBy') == "IA";
-                          return BubbleSpecialThree(
-                            text: listMessages[index].get('text'),
-                            color: ai_msg
-                                ? Color.fromARGB(255, 234, 226, 248)
-                                : Colors.deepPurple,
-                            tail: true,
-                            isSender: !ai_msg,
-                            textStyle:
-                                TextStyle(color: ai_msg? Colors.black: Colors.white, fontSize: 16),
+
+                          return FutureBuilder<String>(
+                            // future: translateText(listMessages[index].get('text'), locale.languageCode),
+                            future: getTranslation(
+                                listMessages[index].get('text'),
+                                locale.languageCode),
+                            builder: (context, translateSnapshot) {
+                              if (translateSnapshot.connectionState ==
+                                      ConnectionState.waiting ||
+                                  translateSnapshot.connectionState ==
+                                      ConnectionState.none) {
+                                // Mostrar el mensaje original mientras espera la traducción
+                                return BubbleSpecialThree(
+                                  text: listMessages[index].get('text'),
+                                  color: ai_msg
+                                      ? const Color.fromARGB(255, 234, 226, 248)
+                                      : Colors.deepPurple,
+                                  tail: true,
+                                  isSender: !ai_msg,
+                                  textStyle: TextStyle(
+                                    color: ai_msg ? Colors.black : Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                );
+                              } else if (translateSnapshot.hasError) {
+                                // En caso de error durante la traducción
+                                return Text(
+                                    'Error de traducción: ${translateSnapshot.error}');
+                              } else {
+                                // Mostrar la burbuja del mensaje traducido
+                                return BubbleSpecialThree(
+                                  text: translateSnapshot.data ?? '',
+                                  color: ai_msg
+                                      ? const Color.fromARGB(255, 234, 226, 248)
+                                      : Colors.deepPurple,
+                                  tail: true,
+                                  isSender: !ai_msg,
+                                  textStyle: TextStyle(
+                                    color: ai_msg ? Colors.black : Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                );
+                              }
+                            },
                           );
-                          // return messageBubble(
-                          //   chatContent: listMessages[index].get('text'),
-                          //   messageType: listMessages[index].get('sentBy'),
-                          // );
                         }
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text('No messages...'),
+                    return  Center(
+                      child: Text(AppLocalizations.of(context)!.game_no_messages),
                     );
                   }
                 } else {
@@ -161,22 +204,22 @@ class _GameChatState extends State<GameChat> {
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller: textEditingController,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       hintText:
-                          "Craft the destiny of your character's journey...",
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: UnderlineInputBorder(
+                          AppLocalizations.of(context)!.game_epic_phase,
+                      hintStyle: const TextStyle(color: Colors.white),
+                      enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors
                                 .white), // Set the underline color to white
                       ),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors
                                 .deepPurple), // Set the underline color to white when focused
                       ),
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     // kTextInputDecoration.copyWith(hintText: 'write here...'),
                     onSubmitted: (value) {
                       onSendMessage(textEditingController.text);
@@ -262,5 +305,51 @@ class _GameChatState extends State<GameChat> {
               ),
             ),
           );
+  }
+
+  Future<String> translateText(String text, String targetLocale) async {
+    if (translationCache.containsKey('$text-$targetLocale')) {
+      return translationCache['$text-$targetLocale']!;
+    } else {
+      final url = Uri.parse(
+          'https://google-translate113.p.rapidapi.com/api/v1/translator/text');
+      final headers = {
+        'content-type': 'application/x-www-form-urlencoded',
+        'X-RapidAPI-Key': 'caf9b2a90emsh35ef4bc666f9d1ap107021jsnb69346f6591e',
+        'X-RapidAPI-Host': 'google-translate113.p.rapidapi.com',
+      };
+
+      final body = {
+        'from': 'auto',
+        'to': targetLocale,
+        'text': text,
+      };
+
+      try {
+        final response = await http.post(url, headers: headers, body: body);
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData.containsKey('trans')) {
+          translationCache['$text-$targetLocale'] = responseData['trans'];
+          return responseData['trans'];
+        } else {
+          throw Exception('Campo "trans" no encontrado en la respuesta');
+        }
+      } catch (error) {
+        throw Exception('Error en la solicitud de traducción: $error');
+      }
+    }
+  }
+
+  Future<String> getTranslation(String text, String targetLocale) async {
+    if (translationCache.containsKey('$text-$targetLocale')) {
+      return translationCache['$text-$targetLocale']!;
+    } else {
+      String translation = await translateText(text, targetLocale);
+
+      translationCache['$text-$targetLocale'] = translation;
+
+      return translation;
+    }
   }
 }
