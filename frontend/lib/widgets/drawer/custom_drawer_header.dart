@@ -6,7 +6,7 @@ import 'package:role_maister/config/app_singleton.dart';
 Widget drawerHeader(BuildContext context) {
     String text = "Sign In";
     if(singleton.user != null) {
-      text = "Profile";
+      text = singleton.player!.username;
     }
     bool isMobile = MediaQuery.of(context).size.width > 700 ? false : true;
     return Material(

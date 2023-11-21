@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
+          ? const EdgeInsets.symmetric(vertical: 110.0, horizontal: 15)
           : const EdgeInsets.symmetric(vertical: 170.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -272,16 +272,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       isRulesCheckBoxChecked) {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
-                      print("user");
-
                     if (user != null) {
-                      print("user not null");
                       Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliensCharacters: [], dydCharacters: [], cthulhuCharacters: [],gamesPlayed: 0, experience: 1);
                       // singleton.user = user;
                       singleton.player = player;
                       firebase.saveUser(player);
                     } else {
-                      print("user null");
                       emailAlreadyExist();
                     }
                   }
