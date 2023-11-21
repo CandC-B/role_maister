@@ -147,7 +147,51 @@
   "new_password": "Nueva Contraseña",
   "password_info": "Al menos una letra, un dígito y 8 caracteres",
   "accept": "Acepto las ",
-  "game_rules": "reglas del juego"
+  "game_rules": "reglas del juego",
+
+  "single_player": "UN JUGADOR",
+  "multi_player": "MULTIJUGADOR",
+  "pairing_mode": "MODO DE EMPAREJAMIENTO",
+  "coming_soon": "PRÓXIMAMENTE",
+  "number_of_players": "Número de jugadores: ",
+  "brief_description": "Breve descripción de la historia:",
+  "required": "Requerido",
+  "tokens_required": "Tokens requeridos: ",
+  "start_game": "Comenzar Juego",
+  "creating_random_character": "Creando personaje aleatorio...",
+  "random_character": "Personaje Aleatorio",
+  "creating_game": "Creando partida...",
+  "error_loading_character": "Error al cargar datos del jugador: ",
+
+  "aliens_attributes": "Atributos",
+  "aliens_strength": "Fuerza",
+  "aliens_agility": "Agilidad",
+  "aliens_empathy": "Empatía",
+  "aliens_wits": "Inteligencia",
+  "aliens_character_level": "Nivel del Personaje",
+  "aliens_career": "Carrera",
+  "aliens_skills": "Habilidades",
+  "aliens_talents": "Talentos",
+  "aliens_appearance": "Apariencia",
+  "aliens_personal_agenda": "Agenda Personal",
+  "aliens_friend": "Amigo",
+  "aliens_rival": "Rival",
+  "aliens_signature_item": "Objeto Distintivo",
+  "aliens_cash": "Dinero",
+  "aliens_gear": "Equipo",
+  "aliens_hp": "Vida",
+
+  "buyButton": "Comprar",
+  "confirmButton": "Confirmar Compra",
+  "confirmPurchaseText": "¿Quieres comprar ",
+  "cancel": "Cancelar",
+
+  "game_stats": "Estadísticas",
+  "game_players": "Jugadores",
+  "game_epic_phase": "Da forma al destino del viaje de tu personaje...",
+  "game_no_messages": "Sin mensajes...",
+  "no_stats_found": "No se encontraron estadísticas..."
+
 
 
 }
