@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageColorFilter extends StatefulWidget {
   ImageColorFilter({
@@ -93,7 +94,7 @@ class _ImageColorFilterState extends State<ImageColorFilter> {
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: Text(
-                      "COMING SOON",
+                      AppLocalizations.of(context)!.coming_soon,
                       style: TextStyle(
                           fontSize: 40,
                           color: widget.isAvailable

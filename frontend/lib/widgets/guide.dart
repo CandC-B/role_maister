@@ -820,11 +820,11 @@ class DnDTab extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Transform.rotate(
                 angle: -atan(200 / 200),
-                child: const FittedBox(
+                child:  FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
-                    "COMING SOON",
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.coming_soon,
+                    style: const TextStyle(
                       fontSize: 5,
                       color: Colors.deepPurple,
                       fontWeight: FontWeight.w900,
@@ -871,11 +871,11 @@ class CthulhuTab extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Transform.rotate(
                 angle: -atan(200 / 200),
-                child: const FittedBox(
+                child:  FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
-                    "COMING SOON",
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.coming_soon,
+                    style: const TextStyle(
                       fontSize: 5,
                       color: Colors.deepPurple,
                       fontWeight: FontWeight.w900,
