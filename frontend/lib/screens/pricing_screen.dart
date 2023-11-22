@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/widgets/appBar/custom_app_bar.dart';
 import 'package:role_maister/widgets/drawer/custom_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ShopScreen extends StatelessWidget {
   final List<TokenPackage> tokenPackages = [
@@ -77,7 +79,7 @@ class TokenPackageCard extends StatelessWidget {
             // For simplicity, you can show a confirmation dialog here.
             showConfirmationDialog(context);
           },
-          child: Text("Buy"),
+          child: Text(AppLocalizations.of(context)!.buyButton),
         ),
       ),
     );
@@ -89,18 +91,19 @@ class TokenPackageCard extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
             backgroundColor: Colors.deepPurple,
-            title: const Text(
-              "Confirm Purchase",
+            title:  Text(
+              AppLocalizations.of(context)!.confirmButton,
               style: TextStyle(color: Colors.white),
             ),
             content: Text(
-              "Do you want to buy ${tokenPackage.name}?",
-              style: TextStyle(color: Colors.white),
+              // "Do you want to buy ${tokenPackage.name}?",
+              "${AppLocalizations.of(context)!.confirmPurchaseText} ${tokenPackage.name}?",
+              style: const TextStyle(color: Colors.white),
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text(
-                  "Cancel",
+                child:  Text(
+                  AppLocalizations.of(context)!.cancel,
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
@@ -108,9 +111,9 @@ class TokenPackageCard extends StatelessWidget {
                 },
               ),
               TextButton(
-                child: const Text(
-                  "Buy",
-                  style: TextStyle(color: Colors.white),
+                child:  Text(
+                  AppLocalizations.of(context)!.buyButton,
+                  style: const TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   // TODO: Implement actual payment processing here

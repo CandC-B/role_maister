@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/config/config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({super.key, required this.gameId});
@@ -16,7 +17,8 @@ class _GamePlayersState extends State<GamePlayers> {
   Widget build(BuildContext context) {
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
-      builder: (BuildContext context, AsyncSnapshot<AliensCharacter?> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<AliensCharacter?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             color: Colors.transparent,
@@ -29,13 +31,13 @@ class _GamePlayersState extends State<GamePlayers> {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final userStatistics;
-          if (singleton.gameMode == "Aliens") {
-              userStatistics = singleton.alienCharacter;
-            } else if (singleton.gameMode == "Dyd") {
-              userStatistics = singleton.dydCharacter;
-            } else if (singleton.gameMode == "Cthulhu") {
-              userStatistics = singleton.cthulhuCharacter;
-            }else {
+          if (singleton.gameMode.value == "Aliens") {
+            userStatistics = singleton.alienCharacter;
+          } else if (singleton.gameMode.value == "Dyd") {
+            userStatistics = singleton.dydCharacter;
+          } else if (singleton.gameMode.value == "Cthulhu") {
+            userStatistics = singleton.cthulhuCharacter;
+          } else {
             userStatistics = AliensCharacter.random();
           }
           return DefaultTabController(
@@ -53,11 +55,11 @@ class _GamePlayersState extends State<GamePlayers> {
                 ],
                 title: const Text('Role MAIster'),
                 backgroundColor: Colors.deepPurple,
-                bottom: const TabBar(
+                bottom:  TabBar(
                   indicatorColor: Colors.white,
                   tabs: [
-                    Tab(text: 'Stats'),
-                    Tab(text: 'Players'),
+                    Tab(text: AppLocalizations.of(context)!.game_stats),
+                    Tab(text: AppLocalizations.of(context)!.game_players),
                   ],
                 ),
               ),
@@ -70,7 +72,7 @@ class _GamePlayersState extends State<GamePlayers> {
             ),
           );
         } else {
-          return const Text('No se encontraron estadísticas.');
+          return  Text(AppLocalizations.of(context)!.no_stats_found);
         }
       },
     );
@@ -78,10 +80,10 @@ class _GamePlayersState extends State<GamePlayers> {
 
   Future<AliensCharacter> getUserStats(String gameId) async {
     try {
-      final Map<String, dynamic> statsData =
+      final List<Map<String, dynamic>> statsData =
           await firestoreService.getCharactersFromGameId(gameId);
       try {
-        return AliensCharacter.fromMap(statsData);
+        return AliensCharacter.fromMap(statsData[0]);
       } catch (e) {
         print("Error: $e");
         return AliensCharacter.random();
@@ -128,11 +130,34 @@ class PlayersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: PlayerCard(
-            playerName: userStats.name) // TODO: REPLACE WITH REAL DATA
-
-        );
+      backgroundColor: Colors.black,
+      body: FutureBuilder(
+        future:
+            firestoreService.getCharactersFromGameId(singleton.currentGame!),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(
+                    'assets/images/small_logo.png'), // Reemplaza 'assets/loading_image.png' con la ruta de tu imagen
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return PlayerCard(playerName: snapshot.data![index]["name"]);
+              },
+            );
+          } else {
+            return const Text('No se encontraron estadísticas.');
+          }
+        }),
+      ),
+    );
   }
 }
 
@@ -200,36 +225,55 @@ class Stats extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildStatItem(
-                  'HP', Icons.favorite, userStats.hp.toString(), Colors.white),
-              _buildStatItem('Character Level', Icons.bar_chart,
-                  userStats.characterLevel.toString(), Colors.white),
-              _buildStatItem(
-                  'Career', Icons.school, userStats.career, Colors.white),
-              _buildAttributeStats(userStats.attributes),
-              _buildStatItem(
-                  'Skills',
-                  Icons.list,
-                  userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
-                  Colors.white),
-              _buildStatItem('Talents', Icons.star,
-                  userStats.talents.join(', '), Colors.white),
-              _buildStatItem(
-                  'Appearance', Icons.face, userStats.appearance, Colors.white),
-              _buildStatItem('Personal Agenda', Icons.assignment,
-                  userStats.personalAgenda, Colors.white),
-              _buildStatItem('Friend', Icons.sentiment_very_satisfied,
-                  userStats.friend, Colors.white),
-              _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
-                  userStats.rival, Colors.white),
-              _buildStatItem('Gear', Icons.accessibility,
-                  userStats.gear.join(', '), Colors.white),
-              _buildStatItem('Signature Item', Icons.edit,
-                  userStats.signatureItem, Colors.white),
-              _buildStatItem('Cash', Icons.attach_money, '\$${userStats.cash}',
-                  Colors.white),
-            ],
+             children: [
+          _buildStatItem(
+              AppLocalizations.of(context)!.aliens_hp,
+              Icons.favorite, userStats.hp.toString(), Colors.white),
+          // _buildStatItem('userStats Level', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_character_level,
+          Icons.bar_chart,
+              userStats.characterLevel.toString(), Colors.white),
+          _buildStatItem(
+              AppLocalizations.of(context)!.aliens_career,
+              Icons.school, userStats.career, Colors.white),
+          _buildAttributeStats(userStats.attributes, context),
+          _buildStatItem(
+              AppLocalizations.of(context)!.aliens_skills,
+              Icons.list,
+              userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
+              Colors.white),
+          _buildStatItem(
+              AppLocalizations.of(context)!.aliens_talents, 
+          Icons.star, userStats.talents.join(', '),
+              Colors.white),
+          _buildStatItem(
+              // 'Appearance', 
+              AppLocalizations.of(context)!.aliens_appearance,
+              Icons.face, userStats.appearance, Colors.white),
+          // _buildStatItem('Personal Agenda', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_personal_agenda,
+          Icons.assignment,
+              userStats.personalAgenda, Colors.white),
+          // _buildStatItem('Friend', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_friend,
+          Icons.sentiment_very_satisfied,
+              userStats.friend, Colors.white),
+          // _buildStatItem('Rival', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_rival,
+          Icons.sentiment_very_dissatisfied,
+              userStats.rival, Colors.white),
+          // _buildStatItem('Gear', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_gear,
+          Icons.accessibility, userStats.gear.join(', '),
+              Colors.white),
+          // _buildStatItem('Signature Item', 
+          _buildStatItem(AppLocalizations.of(context)!.aliens_signature_item,
+          Icons.edit, userStats.signatureItem,
+              Colors.white),
+          _buildStatItem(
+              AppLocalizations.of(context)!.aliens_cash, 
+              Icons.attach_money, '\$${userStats.cash}', Colors.white),
+        ],
           ),
         ),
       ),
@@ -245,32 +289,33 @@ class Stats extends StatelessWidget {
     );
   }
 
-  Widget _buildAttributeStats(Map<String, int> attributes) {
+  Widget _buildAttributeStats(Map<String, int> attributes, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ListTile(
+        ListTile(
           leading: Icon(Icons.insert_chart, color: Colors.white),
-          title: Text('Attributes', style: TextStyle(color: Colors.white)),
+          title: Text(AppLocalizations.of(context)!.aliens_attributes,
+          style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text('Strength: ${attributes['Strength']}',
+          title: Text(AppLocalizations.of(context)!.aliens_strength + ': ${attributes['Strength']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text('Agility: ${attributes['Agility']}',
+          title: Text(AppLocalizations.of(context)!.aliens_agility + ': ${attributes['Agility']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text('Empathy: ${attributes['Empathy']}',
+          title: Text(AppLocalizations.of(context)!.aliens_empathy + ': ${attributes['Empathy']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('Wits: ${attributes['Wits']}',
+          title: Text(AppLocalizations.of(context)!.aliens_wits + ': ${attributes['Wits']}',
               style: const TextStyle(color: Colors.white)),
         ),
       ],

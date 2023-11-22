@@ -6,6 +6,7 @@ import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/config/utils.dart';
 import 'package:role_maister/models/player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -45,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       alignment: Alignment.center,
       padding: isMobile
-          ? const EdgeInsets.symmetric(vertical: 100.0, horizontal: 15)
+          ? const EdgeInsets.symmetric(vertical: 110.0, horizontal: 15)
           : const EdgeInsets.symmetric(vertical: 170.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -79,9 +80,9 @@ class _RegisterPageState extends State<RegisterPage> {
         width: 500,
         height: 500,
         child: Column(children: [
-          const Text(
-            "Register",
-            style: TextStyle(
+           Text(
+            AppLocalizations.of(context)!.register,
+            style: const TextStyle(
               color: Colors.deepPurple,
               fontSize: 50,
               fontWeight: FontWeight.bold,
@@ -94,8 +95,8 @@ class _RegisterPageState extends State<RegisterPage> {
             cursorColor: Colors.deepPurple,
             controller: username,
             decoration: InputDecoration(
-              hintText: "Enter username",
-              counterText: usernameError ? "This username already exist" : null,
+              hintText: AppLocalizations.of(context)!.enter_username,
+              counterText: usernameError ? AppLocalizations.of(context)!.username_exists : null,
               counterStyle: const TextStyle(color: Colors.red),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -122,8 +123,8 @@ class _RegisterPageState extends State<RegisterPage> {
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email",
-              counterText: emailError ? "Invalid Email" : null,
+              hintText: AppLocalizations.of(context)!.enter_email,
+              counterText: emailError ? AppLocalizations.of(context)!.invalid_email : null,
               counterStyle: const TextStyle(color: Colors.red),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -151,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
             obscureText: !isPasswordVisible,
             controller: newPassword1,
             decoration: InputDecoration(
-              hintText: "New password",
+              hintText: AppLocalizations.of(context)!.new_password,
               suffixIcon: passwordVisionIcon(),
               fillColor: Colors.blueGrey[50],
               filled: true,
@@ -179,9 +180,9 @@ class _RegisterPageState extends State<RegisterPage> {
             obscureText: !isPasswordVisible,
             controller: newPassword2,
             decoration: InputDecoration(
-              hintText: "New password",
+              hintText: AppLocalizations.of(context)!.new_password,
               counterText: passwordError
-                  ? "At least one letter, one digit and 8 characters"
+                  ? AppLocalizations.of(context)!.password_info
                   : null,
               counterStyle: const TextStyle(color: Colors.red),
               suffixIcon: passwordVisionIcon(),
@@ -218,11 +219,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   }),
               RichText(
                 text: TextSpan(
-                  text: 'I accept the ',
+                  text: AppLocalizations.of(context)!.accept,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'game rules',
+                      text: AppLocalizations.of(context)!.game_rules,
                       style: const TextStyle(
                         decoration: TextDecoration.underline,
                         color: Colors.blue,
@@ -272,25 +273,21 @@ class _RegisterPageState extends State<RegisterPage> {
                       isRulesCheckBoxChecked) {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
-                      print("user");
-
                     if (user != null) {
-                      print("user not null");
                       Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliensCharacters: [], dydCharacters: [], cthulhuCharacters: [],gamesPlayed: 0, experience: 1);
                       // singleton.user = user;
                       singleton.player = player;
                       firebase.saveUser(player);
                     } else {
-                      print("user null");
                       emailAlreadyExist();
                     }
                   }
                 }
               },
-              child: const SizedBox(
+              child:  SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: Center(child: Text('Register')),
+                child: Center(child: Text(AppLocalizations.of(context)!.register)),
               ),
             ),
           )

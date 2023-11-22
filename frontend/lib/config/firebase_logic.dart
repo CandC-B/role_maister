@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/player.dart';
+import 'package:role_maister/widgets/aliens_characters_card.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -31,7 +34,7 @@ class FirebaseService {
         if (userSnapshot.exists) {
           final Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-          if (singleton.gameMode == "Aliens") {
+          if (singleton.gameMode.value == "Aliens") {
             if (userData.containsKey("aliensCharacters")) {
               final List<dynamic> characters = userData["aliensCharacters"];
               characters.add(docRef.id);
@@ -41,7 +44,7 @@ class FirebaseService {
                 "aliensCharacters": [docRef.id]
               });
             }
-          } else if (singleton.gameMode == "Dyd") {
+          } else if (singleton.gameMode.value == "Dyd") {
             if (userData.containsKey("dydCharacters")) {
               final List<dynamic> characters = userData["dydCharacters"];
               characters.add(docRef.id);
@@ -51,7 +54,7 @@ class FirebaseService {
                 "dydCharacters": [docRef.id]
               });
             }
-          } else if (singleton.gameMode == "Cthulhu") {
+          } else if (singleton.gameMode.value == "Cthulhu") {
             if (userData.containsKey("cthulhuCharacters")) {
               final List<dynamic> characters = userData["cthulhuCharacters"];
               characters.add(docRef.id);
@@ -79,11 +82,10 @@ class FirebaseService {
       final DocumentReference userReference =
           _firestore.collection("user").doc(userId);
       final DocumentSnapshot userSnapshot = await userReference.get();
-      print(singleton.gameMode);
       if (userSnapshot.exists) {
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
-        if (singleton.gameMode == "Aliens") {
+        if (singleton.gameMode.value == "Aliens") {
           if (userData.containsKey("aliensCharacters")) {
             final List<dynamic> characterIds = userData["aliensCharacters"];
             // Create a map to store character data
@@ -110,7 +112,7 @@ class FirebaseService {
           } else {
             throw Exception("USER: Attribute 'characters' does not exist");
           }
-        } else if (singleton.gameMode == "Dyd") {
+        } else if (singleton.gameMode.value == "Dyd") {
           if (userData.containsKey("dydCharacters")) {
             final List<dynamic> characterIds = userData["dydCharacters"];
             // Create a map to store character data
@@ -137,7 +139,7 @@ class FirebaseService {
           } else {
             throw Exception("USER: Attribute 'characters' does not exist");
           }
-        } else if (singleton.gameMode == "Cthulhu") {
+        } else if (singleton.gameMode.value == "Cthulhu") {
           if (userData.containsKey("cthulhuCharacters")) {
             final List<dynamic> characterIds = userData["cthulhuCharacters"];
             // Create a map to store character data
@@ -175,49 +177,195 @@ class FirebaseService {
     }
   }
 
-  // TODO: modificar esta función para el multiplayer
-  Future<Map<String, dynamic>> getCharactersFromGameId(String gameId) async {
+  Future<Map<String, dynamic>> getUserCharactersFromMode(
+      String userId, String mode) async {
     try {
-      final DocumentReference gameReference =
-          _firestore.collection("game").doc(gameId);
-      final DocumentSnapshot gameSnapshot = await gameReference.get();
+      final DocumentReference userReference =
+          _firestore.collection("user").doc(userId);
+      final DocumentSnapshot userSnapshot = await userReference.get();
+      if (userSnapshot.exists) {
+        final Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        if (mode == "Aliens") {
+          if (userData.containsKey("aliensCharacters")) {
+            final List<dynamic> characterIds = userData["aliensCharacters"];
+            // Create a map to store character data
+            Map<String, dynamic> charactersData = {};
 
-      if (gameSnapshot.exists) {
-        final Map<String, dynamic> gameData =
-            gameSnapshot.data() as Map<String, dynamic>;
-
-        if (gameData.containsKey("players")) {
-          final List<dynamic> players = gameData["players"];
-
-          if (players.isNotEmpty) {
-            final String characterId = players[0];
-            final DocumentReference characterReference =
-                _firestore.collection('character').doc(characterId);
-            final DocumentSnapshot characterSnapshot =
-                await characterReference.get();
-
-            if (characterSnapshot.exists) {
-              final Map<String, dynamic> characterData =
-                  characterSnapshot.data() as Map<String, dynamic>;
-
-              // print(characterData);
-              return characterData;
-            } else {
-              throw Exception("CHARACTER: Document does not exist");
+            // Iterate over character IDs
+            for (String characterId in characterIds) {
+              // Retrieve the character document
+              final DocumentReference characterReference =
+                  _firestore.collection("character").doc(characterId);
+              final DocumentSnapshot characterSnapshot =
+                  await characterReference.get();
+              if (characterSnapshot.exists) {
+                // Add character data to the map
+                charactersData[characterId] = characterSnapshot.data();
+              } else {
+                // Handle the case where a character document does not exist
+                throw Exception(
+                    "Character with ID $characterId does not exist");
+              }
             }
+            // Return the map of character data
+            return charactersData;
           } else {
-            throw Exception("GAME: 'players' list is empty");
+            throw Exception("USER: Attribute 'characters' does not exist");
+          }
+        } else if (mode == "Dyd") {
+          if (userData.containsKey("dydCharacters")) {
+            final List<dynamic> characterIds = userData["dydCharacters"];
+            // Create a map to store character data
+            Map<String, dynamic> charactersData = {};
+
+            // Iterate over character IDs
+            for (String characterId in characterIds) {
+              // Retrieve the character document
+              final DocumentReference characterReference =
+                  _firestore.collection("character").doc(characterId);
+              final DocumentSnapshot characterSnapshot =
+                  await characterReference.get();
+              if (characterSnapshot.exists) {
+                // Add character data to the map
+                charactersData[characterId] = characterSnapshot.data();
+              } else {
+                // Handle the case where a character document does not exist
+                throw Exception(
+                    "Character with ID $characterId does not exist");
+              }
+            }
+            // Return the map of character data
+            return charactersData;
+          } else {
+            throw Exception("USER: Attribute 'characters' does not exist");
+          }
+        } else if (mode == "Cthulhu") {
+          if (userData.containsKey("cthulhuCharacters")) {
+            final List<dynamic> characterIds = userData["cthulhuCharacters"];
+            // Create a map to store character data
+            Map<String, dynamic> charactersData = {};
+
+            // Iterate over character IDs
+            for (String characterId in characterIds) {
+              // Retrieve the character document
+              final DocumentReference characterReference =
+                  _firestore.collection("character").doc(characterId);
+              final DocumentSnapshot characterSnapshot =
+                  await characterReference.get();
+              if (characterSnapshot.exists) {
+                // Add character data to the map
+                charactersData[characterId] = characterSnapshot.data();
+              } else {
+                // Handle the case where a character document does not exist
+                throw Exception(
+                    "Character with ID $characterId does not exist");
+              }
+            }
+            // Return the map of character data
+            return charactersData;
+          } else {
+            throw Exception("USER: Attribute 'characters' does not exist");
           }
         } else {
-          throw Exception("GAME: Attribute 'players' does not exist");
+          throw Exception("USER: Game mode not selected");
         }
       } else {
-        throw Exception("GAME: Document does not exist");
+        throw Exception("USER: Document does not exist");
       }
     } catch (error) {
       rethrow;
     }
   }
+
+  Future<List<dynamic>> getUserCharactersIdFromMode(
+      String userId, String mode) async {
+    try {
+      final DocumentReference userReference =
+          _firestore.collection("user").doc(userId);
+      final DocumentSnapshot userSnapshot = await userReference.get();
+      if (userSnapshot.exists) {
+        final Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        if (mode == "Aliens") {
+          if (userData.containsKey("aliensCharacters")) {
+            return userData["aliensCharacters"];
+          } else {
+            throw Exception("USER: Attribute 'characters' does not exist");
+          }
+        } else if (mode == "Dyd") {
+          if (userData.containsKey("dydCharacters")) {
+            return userData["dydCharacters"];
+          } else {
+            throw Exception("USER: Attribute 'characters' does not exist");
+          }
+        } else if (mode == "Cthulhu") {
+          if (userData.containsKey("cthulhuCharacters")) {
+            return userData["cthulhuCharacters"];
+          } else {
+            throw Exception("USER: Attribute 'characters' does not exist");
+          }
+        } else {
+          throw Exception("USER: Game mode not selected");
+        }
+      } else {
+        throw Exception("USER: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Stream<QuerySnapshot> fetchCharactersByUserId(
+      String userId, String mode) async* {
+    print(
+        "actualización------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    List<dynamic> charactersId =
+        await getUserCharactersIdFromMode(userId, mode);
+    yield* _firestore
+        .collection('character')
+        .where(FieldPath.documentId, whereIn: charactersId)
+        .snapshots();
+  }
+
+  // TODO: modificar esta función para el multiplayer
+  Future<List<Map<String, dynamic>>> getCharactersFromGameId(String gameId) async {
+  try {
+    final DocumentReference gameReference = _firestore.collection("game").doc(gameId);
+    final DocumentSnapshot gameSnapshot = await gameReference.get();
+
+    if (gameSnapshot.exists) {
+      final Map<String, dynamic> gameData = gameSnapshot.data() as Map<String, dynamic>;
+
+      if (gameData.containsKey("players")) {
+        final List<dynamic> playerIds = gameData["players"];
+        List<Map<String, dynamic>> charactersData = [];
+
+        for (String playerId in playerIds) {
+          final DocumentReference characterReference = _firestore.collection('character').doc(playerId);
+          final DocumentSnapshot characterSnapshot = await characterReference.get();
+
+          if (characterSnapshot.exists) {
+            final Map<String, dynamic> characterData = characterSnapshot.data() as Map<String, dynamic>;
+            charactersData.add(characterData);
+          } else {
+            // Handle the case where a character document does not exist
+            print("CHARACTER: Document does not exist for player ID: $playerId");
+          }
+        }
+
+        return charactersData;
+      } else {
+        throw Exception("GAME: Attribute 'players' does not exist");
+      }
+    } else {
+      throw Exception("GAME: Document does not exist");
+    }
+  } catch (error) {
+    rethrow;
+  }
+}
+
 
   Future<void> getAliensCharactersFromUserId(String userId) async {
     List<AliensCharacter> characters = [];
@@ -328,6 +476,39 @@ class FirebaseService {
     }
   }
 
+  // Function to modify the game by updating num_players and adding a player
+  Future<void> modifyGame(String gameId, String characterId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+        if (gameSnapshot.exists) {
+          // Modify the game data
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          gameData['num_players'] = 2;
+
+          // Add the current characterId to the list of players
+          List<String> players = List<String>.from(gameData['players'] ?? []);
+          players.add(characterId);
+          gameData['players'] = players;
+
+          // Update the game document
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error');
+      throw error;
+    }
+  }
+
   Future<void> createRandomPlayer() async {
     try {
       AliensCharacter newRandomUser = AliensCharacter.random();
@@ -336,6 +517,140 @@ class FirebaseService {
       // Reload character data to update the UI
     } catch (error) {
       print("Error creating random player: $error");
+    }
+  }
+
+  Future<void> emptyQueue() async {
+    try {
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      QuerySnapshot snapshot = await queueCollection.get();
+
+      // Delete each document in the 'queue' collection
+      snapshot.docs.forEach((doc) {
+        batch.delete(doc.reference);
+      });
+
+      // Commit the batched write
+      await batch.commit();
+    } catch (error) {
+      print('Error emptying the queue: $error');
+      throw error;
+    }
+  }
+
+  // Function to get the length of the queue
+  Future<int> getQueueLength() async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      // Fetch the documents from the 'queue' collection
+      QuerySnapshot snapshot = await queueCollection.get();
+
+      // Return the count of documents in the 'queue' collection
+      return snapshot.size;
+    } catch (error) {
+      print('Error getting queue length: $error');
+      throw error;
+    }
+  }
+
+  Future<void> addUserToQueue(String characterId) async {
+    try {
+      // Get the current user ID
+      String userId = singleton.user!.uid;
+
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+
+      // Add a new document to the 'queue' collection
+      await queueCollection.add({
+        'userId': userId,
+        'characterId': characterId,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      print('User added to the queue successfully.');
+    } catch (error) {
+      print('Error adding user to the queue: $error');
+      rethrow;
+    }
+  }
+
+  // Function to add a user to the 'queue' collection
+  Future<void> addGameToQueue(String characterId) async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+
+      // Get the current user ID
+      String userId = singleton.user!.uid;
+
+      // Check if the user already has a document in the 'queue' collection
+      QuerySnapshot<Map<String, dynamic>> existingUserDocs =
+          await queueCollection
+              .where('userId', isEqualTo: userId)
+              .limit(1)
+              .get() as QuerySnapshot<Map<String, dynamic>>;
+
+      if (existingUserDocs.docs.isNotEmpty) {
+        // User already exists in the 'queue', update the existing document
+        DocumentReference<Map<String, dynamic>> existingUserDoc =
+            existingUserDocs.docs.first.reference;
+
+        await existingUserDoc.update({
+          'gameId': singleton.currentGame,
+        });
+      } else {
+        // User doesn't exist in the 'queue', add a new document
+        await queueCollection.add({
+          'userId': userId,
+          'characterId': characterId,
+          'timestamp': FieldValue.serverTimestamp(),
+          'gameId': singleton.currentGame,
+        });
+      }
+
+      print('User added to the queue successfully.');
+    } catch (error) {
+      print('Error adding user to the queue: $error');
+      rethrow;
+    }
+  }
+
+  Future<String> getGameId() async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      // Query to get the first document ordered by timestamp
+      QuerySnapshot snapshot =
+          await queueCollection.orderBy('timestamp').limit(1).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Get the first document
+        Map<String, dynamic> firstDocument =
+            snapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Check if 'gameId' field exists in the first document
+        if (firstDocument.containsKey('gameId')) {
+          // Retrieve the 'gameId' attribute from the first document
+          String gameId = firstDocument['gameId'];
+          // Return the 'gameId' attribute
+          return gameId;
+        } else {
+          return '';
+        }
+      }
+      // Return null if there are no documents in the 'queue' collection
+      throw Exception("Queue not found");
+    } catch (error) {
+      print('Error getting current game Id: $error');
+      throw error;
     }
   }
 
@@ -359,22 +674,34 @@ class FirebaseService {
     }
   }
 
-  Future<void> fetchPlayerData() async {
+  Future<void> fetchPlayerData(BuildContext context) async {
     DocumentSnapshot<Map<String, dynamic>> playerDocument =
         await _firestore.collection('user').doc(singleton.user?.uid).get();
 
     Player player = Player.fromDocument(playerDocument);
-    print(player);
     singleton.player = player;
+    context.go("/");
+    context.push("/");
   }
 
   Future<void> saveMessage(String messageText, DateTime sentAt,
       String currentGameId, String sentBy) async {
     if (messageText.trim().isNotEmpty) {
+      String sender;
+      if (sentBy == "IA") {
+        sender = "IA";
+      } else {
+        print("ENTRA AQUÍ");
+        sender = await getUsername(sentBy);
+      }
+      print(sentBy);
+      print(sender);
+
       Map<String, dynamic> message = {
         'text': messageText,
         'sentAt': sentAt,
         'sentBy': sentBy,
+        'senderName': sender,
       };
 
       try {
@@ -441,16 +768,47 @@ class FirebaseService {
     // );
   }
 
+  Future<String> getUsername(String userId) async {
+    try {
+      print(userId);
+      // Reference to the Firestore collection 'users' (adjust to your collection name)
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('user');
+
+      // Query to get the user document by user ID
+      DocumentSnapshot userSnapshot = await usersCollection.doc(userId).get();
+
+      if (userSnapshot.exists) {
+        // If a user document is found, return the username
+        return userSnapshot.get('username');
+      } else {
+        // If no user document is found, return an appropriate value (null or an empty string, for example)
+        throw Exception("User not found");
+      }
+    } catch (error) {
+      print('Error getting username: $error');
+      throw error;
+    }
+  }
+
+  Future<List<String>> getUsernames(
+      List<QueryDocumentSnapshot<Object?>> messages) async {
+    List<String> usernames = [];
+    for (var message in messages) {
+      String userId = message.get('sentBy');
+      String username = await firebase.getUsername(userId);
+      usernames.add(username);
+    }
+    return usernames;
+  }
+
   Future<bool?> signIn(
       String email, String password, BuildContext context) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      User? user = credential.user;
-      AppSingleton singleton = AppSingleton();
-      singleton.user = user;
-      context.go("/");
-      context.push("/");
+      singleton.user = credential.user;
+      firebase.fetchPlayerData(context);
       return false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

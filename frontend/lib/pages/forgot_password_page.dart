@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/firebase_logic.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -60,8 +61,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            "Receive an email to reset your password",
+           Text(
+            AppLocalizations.of(context)!.recive_email,
             style: TextStyle(
               color: Colors.deepPurple,
               fontSize: 30,
@@ -76,7 +77,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             cursorColor: Colors.deepPurple,
             controller: email,
             decoration: InputDecoration(
-              hintText: "Enter email or username",
+              hintText: AppLocalizations.of(context)!.enter_email_or_username,
               fillColor: Colors.blueGrey[50],
               filled: true,
               labelStyle: const TextStyle(fontSize: 12),
@@ -113,10 +114,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       borderRadius: BorderRadius.circular(15))),
               onPressed: () =>
                   firebase.sendPasswordResetEmail(email.text, context),
-              child: const SizedBox(
+              child:  SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: Center(child: Text('Reset password')),
+                child: Center(child: Text(AppLocalizations.of(context)!.reset_password)),
               ),
             ),
           ),
@@ -173,6 +174,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         onTap: () {
           context.go("/register");
         },
-        child: const Text("Does not have account? Register"));
+        child:  Text(AppLocalizations.of(context)!.does_not_have_account));
   }
 }

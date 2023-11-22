@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/pages/pages.dart';
@@ -21,7 +22,25 @@ class InitGamePage extends StatelessWidget {
             ),
           ),
         alignment: Alignment.center,
-        child: ClipRRect(
+        child: 
+        
+        singleton.multiplayer? 
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            height: size.height * 0.9,
+            width: size.width * 0.8,
+            color: Colors.white,
+            child: Row(children: [
+              Expanded(
+                  flex: 2,
+                  child: SelectModeMobilePage(), 
+                ),
+              Expanded(flex: 1, child: SelectCharacterPageMobile()),
+            ]),
+          ),
+        )
+        :ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
             height: size.height * 0.9,

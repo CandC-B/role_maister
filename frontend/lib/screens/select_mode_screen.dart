@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/pages/init_game.dart';
 import 'package:role_maister/pages/pages.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -22,7 +23,7 @@ class SelectModeScreen extends StatelessWidget {
           drawer: customDrawer(context),
           body: ListView(
             children: const [
-              SelectModeMobilePage(),
+              InitGamePage(),
               WebFooter(),
             ],
           ));

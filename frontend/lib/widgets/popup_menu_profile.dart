@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/firebase_logic.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ProfileItems { profile, logout }
 FirebaseService firebase = FirebaseService();
@@ -32,23 +33,25 @@ class _PopupMenuProfileState extends State<PopupMenuProfile> {
           },
           offset: const Offset(0, 50),
           itemBuilder: (BuildContext context) => <PopupMenuEntry<ProfileItems>>[
-            const PopupMenuItem<ProfileItems>(
+             PopupMenuItem<ProfileItems>(
               value: ProfileItems.profile,
               child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      Icon(Icons.account_circle_outlined, color: Colors.white,),
-                      Text('Profile', style: TextStyle(color: Colors.white),)
+                      const Icon(Icons.account_circle_outlined, color: Colors.white,),
+                      Text(AppLocalizations.of(context)!.profile,
+                      style: const TextStyle(color: Colors.white),)
                     ],
                   ),
             ),
-            const PopupMenuItem<ProfileItems>(
+            PopupMenuItem<ProfileItems>(
               value: ProfileItems.logout,
               child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      Icon(Icons.logout_outlined, color: Colors.white,),
-                      Text('Log Out', style: TextStyle(color: Colors.white),)
+                      const Icon(Icons.logout_outlined, color: Colors.white,),
+                      Text(AppLocalizations.of(context)!.sign_out,
+                      style: const TextStyle(color: Colors.white),)
                     ],
                   ),
             ),

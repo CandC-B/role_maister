@@ -3,6 +3,7 @@ import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/player.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:flutter/material.dart';
 
 AppSingleton singleton = AppSingleton();
 
@@ -18,8 +19,9 @@ class AppSingleton {
   User? user;
   Player? player;
   String? currentGame;
-  String? history;
-  String? gameMode = "Aliens";
+  String history = "";
+  bool multiplayer = false;
+  final ValueNotifier<String> gameMode = ValueNotifier<String>("Aliens");
   String? selectedCharacterId;
   AliensCharacter alienCharacter = AliensCharacter.random();
   DydCharacter dydCharacter = DydCharacter.random();

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
@@ -6,6 +7,7 @@ import 'package:role_maister/widgets/role_tab.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/config/config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameForm extends StatelessWidget {
   GameForm(
@@ -17,34 +19,6 @@ class GameForm extends StatelessWidget {
   final bool preset;
   final bool mobile;
   var _storyController = TextEditingController();
-
-  Future<void> createNewGame(String history, String characterId) async {
-    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    mapUserStats["user"] = singleton.user!.uid;
-    // TODO: don't harcode this
-    Map<String, dynamic> gameConfig = {
-      "role_system": "aliens",
-      "num_players": 1,
-      "story_description": history,
-      "players": [characterId]
-    };
-    String gameUid = await firebase.createGame(gameConfig);
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    gameConfig.remove("players");
-    mapUserStats.addAll(gameConfig);
-    final response = await http.post(
-        // TODO: add constants.dart in utils folder
-        Uri.https("rolemaister.onrender.com", "/game/"),
-        headers: headers,
-        body: jsonEncode(mapUserStats));
-    var coralMessage = json.decode(response.body)["message"];
-    await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
-    singleton.currentGame = gameUid;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +42,20 @@ class GameForm extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    "Number of players: 1",
-                    style: TextStyle(color: Colors.white),
+                    "${AppLocalizations.of(context)!.number_of_players}1",
+                    style: const TextStyle(color: Colors.white),
                   ),
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  Text(
-                    "Brief story description:",
+                  singleton.multiplayer? SizedBox() : Text(
+                    AppLocalizations.of(context)!.brief_description,
                     style: TextStyle(color: Colors.white),
                   ),
-                  SizedBox(
+                  singleton.multiplayer? SizedBox(): SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Expanded(
+                  singleton.multiplayer? SizedBox() : Expanded(
                       child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: size.height * 0.01,
@@ -106,7 +80,7 @@ class GameForm extends StatelessWidget {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Required';
+                          return AppLocalizations.of(context)!.required;
                         }
                       },
                     ),
@@ -122,16 +96,17 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Text(
-                "Tokens required: 5",
+               Text(
+                "${AppLocalizations.of(context)!.tokens_required}5",
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(
                 height: size.height * 0.05,
               ),
+              kIsWeb? const SizedBox():
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       backgroundColor: Colors.deepPurple,
                       textStyle: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
@@ -139,37 +114,10 @@ class GameForm extends StatelessWidget {
                     if (mobile) {
                       singleton.history = _storyController.text;
                       context.go("/select_character");
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          // TODO: robar el de Victor
-                          return const AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: Colors.deepPurple,
-                                ),
-                                SizedBox(height: 16),
-                                Text("Creating Game..."),
-                              ],
-                            ),
-                          );
-                        },
-                        barrierDismissible:
-                            false, // Prevent closing the dialog by tapping outside.
-                      );
-                      createNewGame(
-                              _storyController.text, singleton.selectedCharacterId!)
-                          .then((value) {
-                        _storyController.text = '';
-                        context.go("/game");
-                      });
                     }
                   },
-                  child: const FittedBox(
-                      fit: BoxFit.contain, child: Text("Start Game"))),
+                  child:  FittedBox(
+                      fit: BoxFit.contain, child: Text(AppLocalizations.of(context)!.start_game))),
             ]),
           ),
         ),
