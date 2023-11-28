@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/cohere_logic.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:role_maister/models/cohere_models.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
@@ -125,12 +127,20 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
     gameConfig.remove("players");
     mapUserStats.addAll(gameConfig);
-    final response = await http.post(
-        // TODO: add constants.dart in utils folder
-        Uri.https("rolemaister.onrender.com", "/game/"),
-        headers: headers,
-        body: jsonEncode(mapUserStats));
-    var coralMessage = json.decode(response.body)["message"];
+    // final response = await http.post(
+    //     // TODO: add constants.dart in utils folder
+    //     Uri.https("rolemaister.onrender.com", "/game/"),
+    //     headers: headers,
+    //     body: jsonEncode(mapUserStats));
+    // TODO: CHAYMAA DO THIS
+    String response;
+    if (singleton.gameMode.value == "Aliens") {
+      response = await createGame(AliensGameSettings.fromMap(mapUserStats));
+    } else {
+      throw Exception("Tonto el que lo lea");
+    }
+    // var coralMessage = json.decode(response.body)["message"];
+    var coralMessage = response;
     await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
     singleton.currentGame = gameUid;
   }
