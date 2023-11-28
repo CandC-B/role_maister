@@ -4,6 +4,14 @@
     "description": "The title of the application"
   },
 
+  "english": "English",
+  "spanish": "Spanish",
+  "portuguese": "Portuguese",
+  "french": "French",
+  "german": "German",
+  "italian": "Italian",
+  "russian": "Russian",
+
   "playGame": "Play Game",
   "homePageText": "Let an AI be the master \n and enjoy a role session \n alone or with your friends",
   "homePageText_mobile": "Let an AI be the \n master and enjoy \na role session \nalone or with \nyour friends",
@@ -147,9 +155,9 @@
   "password_info": "At least one letter, one digit and 8 characters",
   "accept": "I accept the ",
   "game_rules": "game rules",
-  "single_player": "SINGLE PLAYER",
-  "multi_player": "MULTI PLAYER",
-  "pairing_mode": "PAIRING MODE",
+  "single_player": "SOLO GAME",
+  "multi_player": "MATCHMAKING",
+  "pairing_mode": "LOBBIES",
   "coming_soon": "COMING SOON",
   "number_of_players": "Number of players: ",
   "brief_description": "Brief story description:",
