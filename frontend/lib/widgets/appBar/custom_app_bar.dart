@@ -158,14 +158,34 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget languagePicker(BuildContext context, appState) => DropdownButton(
         value: appState?.locale,
-        items: const [
+        items:  [
           DropdownMenuItem(
-            value: Locale('en'),
-            child: Text('English'),
+            value: const Locale('en'),
+            child: Text(AppLocalizations.of(context)!.english),
           ),
           DropdownMenuItem(
-            value: Locale('es'),
-            child: Text('Español'),
+            value: const Locale('es'),
+            child: Text(AppLocalizations.of(context)!.spanish),
+          ),
+          DropdownMenuItem(
+            value: const Locale('pt'),
+            child: Text(AppLocalizations.of(context)!.portuguese),
+          ),
+          DropdownMenuItem(
+            value: const Locale('fr'),
+            child: Text(AppLocalizations.of(context)!.french),
+          ),
+          DropdownMenuItem(
+            value: const Locale('de'),
+            child: Text(AppLocalizations.of(context)!.german),
+          ),
+          DropdownMenuItem(
+            value: const Locale('it'),
+            child: Text(AppLocalizations.of(context)!.italian),
+          ),
+          DropdownMenuItem(
+            value: const Locale('ru'),
+            child: Text(AppLocalizations.of(context)!.russian),
           ),
         ],
         onChanged: (locale) {
