@@ -1,16 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
-import 'package:role_maister/pages/profile_characters_page.dart';
-import 'package:role_maister/widgets/aliens_characters_card.dart';
 import 'package:role_maister/widgets/characters_tab.dart';
-import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
-import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
-import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -45,14 +39,13 @@ class _ProfilePageState extends State<ProfilePage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 border: Border.all(
-                  color: Colors.deepPurple, // Border color
-                  width: 2.0, // Border width
+                  color: Colors.deepPurple,
+                  width: 2.0,
                 ),
                 color: Colors.white70,
               ),
               width: size.width,
               height: size.height - (isSmallScreen ? 100 : 150),
-              // child: isSmallScreen
               child: const DefaultTabController(
                 length: 3,
                 child: Column(
@@ -127,7 +120,7 @@ class ProfileIcon extends StatelessWidget {
           backgroundColor: Colors.transparent,
           radius: 150,
           backgroundImage: AssetImage(
-              'assets/images/bot_master.png'), // Replace with the path to your profile picture
+              'assets/images/bot_master.png'),
         ),
         Text(
           singleton.player?.username ?? "John Doe",
@@ -151,7 +144,7 @@ class ProfileStats extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         const Text(
-          'Email: ', // Add user's location or other information
+          'Email: ',
           style: TextStyle(
             fontSize: 20,
             color: Colors.deepPurple,
@@ -161,7 +154,7 @@ class ProfileStats extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           singleton.player?.email ??
-              "candcompany@gmail.com", // Add user's location or other information
+              "candcompany@gmail.com",
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
@@ -258,11 +251,11 @@ class CharacterCard extends StatelessWidget {
       color: Colors.deepPurple,
       shape: RoundedRectangleBorder(
         side: const BorderSide(
-          color: Colors.deepPurple, // Change the border color to red
-          width: 2.0, // Set the border width as needed
+          color: Colors.deepPurple,
+          width: 2.0,
         ),
         borderRadius:
-            BorderRadius.circular(12.0), // Adjust the border radius as needed
+            BorderRadius.circular(12.0),
       ),
       child: ListTile(
         title: Text(
@@ -291,7 +284,6 @@ class _CharactersDialogState extends State<CharactersDialog> {
   @override
   void initState() {
     super.initState();
-    // Configurar el controlador con el valor inicial recibido
     gameMode = widget.gameMode;
   }
 

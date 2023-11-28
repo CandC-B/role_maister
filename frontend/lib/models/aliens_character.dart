@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:uuid/uuid.dart';
 
 class AliensCharacter extends Character {
   // TODO: de momento solo tenemos character level 1
+  
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
@@ -17,8 +19,10 @@ class AliensCharacter extends Character {
   final String signatureItem;
   final int cash;
   final int hp;
+  final String mode = "Aliens";
 
   AliensCharacter({
+    String? id,
     required this.characterLevel,
     required this.career,
     required this.attributes,
@@ -551,6 +555,8 @@ class AliensCharacter extends Character {
   @override
   String toString() {
     return 'AliensCharacter: {'
+        ' id: $id,'
+        ' mode: $mode,'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -570,6 +576,8 @@ class AliensCharacter extends Character {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
+      'mode': mode,
       'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
@@ -589,6 +597,7 @@ class AliensCharacter extends Character {
 
   static fromMap(Map<String, dynamic> statsData) {
     return AliensCharacter(
+      id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,

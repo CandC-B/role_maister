@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:uuid/uuid.dart';
 
-class DydCharacter extends Character{
+class DydCharacter extends Character {
   // TODO: de momento solo tenemos character level 1
   final int characterLevel;
   final String career;
@@ -17,8 +18,10 @@ class DydCharacter extends Character{
   final String signatureItem;
   final int cash;
   final int hp;
+  final String mode = "Dyd";
 
   DydCharacter({
+    String? id,
     required this.characterLevel,
     required this.career,
     required this.attributes,
@@ -33,7 +36,7 @@ class DydCharacter extends Character{
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  }): super(name);
+  }) : super(name);
 
   // Factory constructor to generate random AliensCharacter
   factory DydCharacter.random() {
@@ -551,6 +554,8 @@ class DydCharacter extends Character{
   @override
   String toString() {
     return 'AliensCharacter: {'
+        ' id: $id,'
+        'mode: $mode,'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -570,6 +575,8 @@ class DydCharacter extends Character{
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
+      'mode': mode,
       'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
@@ -589,6 +596,7 @@ class DydCharacter extends Character{
 
   static fromMap(Map<String, dynamic> statsData) {
     return DydCharacter(
+      id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,

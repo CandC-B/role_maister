@@ -90,6 +90,7 @@ class ProfileAliensCharacter extends StatelessWidget {
                             aliensCharacters[index].data()
                                 as Map<String, dynamic>,
                           );
+                          print("FromMap:" + aliensCharacter.id);
                           return ProfileAliensCharacterCard(
                             character: aliensCharacter,
                           );

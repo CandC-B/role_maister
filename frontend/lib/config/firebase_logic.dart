@@ -10,6 +10,7 @@ import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/player.dart';
 import 'package:role_maister/widgets/aliens_characters_card.dart';
+import 'package:uuid/uuid.dart';
 
 FirebaseService firebase = FirebaseService();
 
@@ -19,12 +20,12 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<String> createCharacter(Map<String, dynamic> character) async {
+  Future<void> createCharacter(Map<String, dynamic> character) async {
     try {
-      DocumentReference docRef =
-          await _firestore.collection('character').add(character);
-
-      // add the character id to the user's list of characters
+      await _firestore
+          .collection('character')
+          .doc(character["id"])
+          .set(character);
       final User? user = _auth.currentUser;
       if (user != null) {
         final DocumentReference userReference =
@@ -37,31 +38,31 @@ class FirebaseService {
           if (singleton.gameMode.value == "Aliens") {
             if (userData.containsKey("aliensCharacters")) {
               final List<dynamic> characters = userData["aliensCharacters"];
-              characters.add(docRef.id);
+              characters.add(character["id"]);
               await userReference.update({"aliensCharacters": characters});
             } else {
               await userReference.update({
-                "aliensCharacters": [docRef.id]
+                "aliensCharacters": [character["id"]]
               });
             }
           } else if (singleton.gameMode.value == "Dyd") {
             if (userData.containsKey("dydCharacters")) {
               final List<dynamic> characters = userData["dydCharacters"];
-              characters.add(docRef.id);
+              characters.add(character["id"]);
               await userReference.update({"dydCharacters": characters});
             } else {
               await userReference.update({
-                "dydCharacters": [docRef.id]
+                "dydCharacters": [character["id"]]
               });
             }
           } else if (singleton.gameMode.value == "Cthulhu") {
             if (userData.containsKey("cthulhuCharacters")) {
               final List<dynamic> characters = userData["cthulhuCharacters"];
-              characters.add(docRef.id);
+              characters.add(character["id"]);
               await userReference.update({"cthulhuCharacters": characters});
             } else {
               await userReference.update({
-                "cthulhuCharacters": [docRef.id]
+                "cthulhuCharacters": [character["id"]]
               });
             }
           }
@@ -71,8 +72,51 @@ class FirebaseService {
       } else {
         throw Exception("USER: User is null");
       }
-      return docRef.id;
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateCharacter(Map<String, dynamic> character) async {
+    try {
+      final DocumentReference characterReference =
+          _firestore.collection("character").doc(character["id"]);
+      await characterReference.update(character);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteCharacter(Map<String, dynamic> character) async {
+    try {
+      final DocumentReference characterReference =
+          _firestore.collection("character").doc(character["id"]);
+
+      await characterReference.delete();
+      final DocumentReference userReference =
+          _firestore.collection("user").doc(singleton.user!.uid);
+      String list = "";
+      if (character["mode"] == "Aliens") {
+        list = "aliensCharacters";
+      } else if (character["mode"] == "Dyd") {
+        list = "dydCharacters";
+      } else if (character["mode"] == "Cthulhu") {
+        list = "cthulhuCharacters";
+      }
+      final DocumentSnapshot userSnapshot = await userReference.get();
+      final Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      final List<String> characterIds = List<String>.from(
+        userData?["$list"] ?? [],
+      );
+      print(character["id"]);
+      print(characterIds);
+      characterIds.remove(character["id"]);
+      print(characterIds);
+      await userReference.update({list: characterIds});
+      print("Character deleted successfully");
+    } catch (error) {
+      print("Error deleting character: $error");
       rethrow;
     }
   }
@@ -318,8 +362,6 @@ class FirebaseService {
 
   Stream<QuerySnapshot> fetchCharactersByUserId(
       String userId, String mode) async* {
-    print(
-        "actualización------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     List<dynamic> charactersId =
         await getUserCharactersIdFromMode(userId, mode);
     yield* _firestore
@@ -329,43 +371,49 @@ class FirebaseService {
   }
 
   // TODO: modificar esta función para el multiplayer
-  Future<List<Map<String, dynamic>>> getCharactersFromGameId(String gameId) async {
-  try {
-    final DocumentReference gameReference = _firestore.collection("game").doc(gameId);
-    final DocumentSnapshot gameSnapshot = await gameReference.get();
+  Future<List<Map<String, dynamic>>> getCharactersFromGameId(
+      String gameId) async {
+    try {
+      final DocumentReference gameReference =
+          _firestore.collection("game").doc(gameId);
+      final DocumentSnapshot gameSnapshot = await gameReference.get();
 
-    if (gameSnapshot.exists) {
-      final Map<String, dynamic> gameData = gameSnapshot.data() as Map<String, dynamic>;
+      if (gameSnapshot.exists) {
+        final Map<String, dynamic> gameData =
+            gameSnapshot.data() as Map<String, dynamic>;
 
-      if (gameData.containsKey("players")) {
-        final List<dynamic> playerIds = gameData["players"];
-        List<Map<String, dynamic>> charactersData = [];
+        if (gameData.containsKey("players")) {
+          final List<dynamic> playerIds = gameData["players"];
+          List<Map<String, dynamic>> charactersData = [];
 
-        for (String playerId in playerIds) {
-          final DocumentReference characterReference = _firestore.collection('character').doc(playerId);
-          final DocumentSnapshot characterSnapshot = await characterReference.get();
+          for (String playerId in playerIds) {
+            final DocumentReference characterReference =
+                _firestore.collection('character').doc(playerId);
+            final DocumentSnapshot characterSnapshot =
+                await characterReference.get();
 
-          if (characterSnapshot.exists) {
-            final Map<String, dynamic> characterData = characterSnapshot.data() as Map<String, dynamic>;
-            charactersData.add(characterData);
-          } else {
-            // Handle the case where a character document does not exist
-            print("CHARACTER: Document does not exist for player ID: $playerId");
+            if (characterSnapshot.exists) {
+              final Map<String, dynamic> characterData =
+                  characterSnapshot.data() as Map<String, dynamic>;
+              charactersData.add(characterData);
+            } else {
+              // Handle the case where a character document does not exist
+              print(
+                  "CHARACTER: Document does not exist for player ID: $playerId");
+            }
           }
+
+          return charactersData;
+        } else {
+          throw Exception("GAME: Attribute 'players' does not exist");
         }
-
-        return charactersData;
       } else {
-        throw Exception("GAME: Attribute 'players' does not exist");
+        throw Exception("GAME: Document does not exist");
       }
-    } else {
-      throw Exception("GAME: Document does not exist");
+    } catch (error) {
+      rethrow;
     }
-  } catch (error) {
-    rethrow;
   }
-}
-
 
   Future<void> getAliensCharactersFromUserId(String userId) async {
     List<AliensCharacter> characters = [];

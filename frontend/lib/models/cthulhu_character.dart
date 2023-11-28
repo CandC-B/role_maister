@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:uuid/uuid.dart';
 
 class CthulhuCharacter extends Character{
   // TODO: de momento solo tenemos character level 1
@@ -17,8 +18,10 @@ class CthulhuCharacter extends Character{
   final String signatureItem;
   final int cash;
   final int hp;
+  final String mode = "Cthulhu";
 
   CthulhuCharacter( {
+    String? id,
     required this.characterLevel,
     required this.career,
     required this.attributes,
@@ -551,6 +554,8 @@ class CthulhuCharacter extends Character{
   @override
   String toString() {
     return 'AliensCharacter: {'
+        ' id: $id,'
+        ' mode: $mode,'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -570,6 +575,8 @@ class CthulhuCharacter extends Character{
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
+      'mode': mode,
       'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
@@ -589,6 +596,7 @@ class CthulhuCharacter extends Character{
 
   static fromMap(Map<String, dynamic> statsData) {
     return CthulhuCharacter(
+      id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,
