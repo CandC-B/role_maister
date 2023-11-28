@@ -24,6 +24,7 @@ class GameForm extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    print(singleton.multiplayer);
     return Container(
       color: Colors.black87,
       child: Column(children: [
@@ -48,43 +49,50 @@ class GameForm extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  singleton.multiplayer? SizedBox() : Text(
-                    AppLocalizations.of(context)!.brief_description,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  singleton.multiplayer? SizedBox(): SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  singleton.multiplayer? SizedBox() : Expanded(
-                      child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: size.height * 0.01,
-                        horizontal: size.width * 0.01),
-                    decoration: BoxDecoration(
-                      color: Colors.black87, // Set the background color to grey
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color:
-                            Colors.deepPurple, // Set the border color to purple
-                        width: 2.0, // Set the border width
-                      ), // Optionally, round the corners
-                    ),
-                    child: TextFormField(
-                      cursorColor: Colors.deepPurple,
-                      controller: _storyController,
-                      keyboardType: TextInputType.multiline,
-                      style: const TextStyle(color: Colors.white),
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.required;
-                        }
-                      },
-                    ),
-                  )),
+                  singleton.multiplayer
+                      ? SizedBox()
+                      : Text(
+                          AppLocalizations.of(context)!.brief_description,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                  singleton.multiplayer
+                      ? SizedBox()
+                      : SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                  singleton.multiplayer
+                      ? SizedBox()
+                      : Expanded(
+                          child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: size.height * 0.01,
+                              horizontal: size.width * 0.01),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .black87, // Set the background color to grey
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors
+                                  .deepPurple, // Set the border color to purple
+                              width: 2.0, // Set the border width
+                            ), // Optionally, round the corners
+                          ),
+                          child: TextFormField(
+                            cursorColor: Colors.deepPurple,
+                            controller: _storyController,
+                            keyboardType: TextInputType.multiline,
+                            style: const TextStyle(color: Colors.white),
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)!.required;
+                              }
+                            },
+                          ),
+                        )),
                 ]),
           ),
         ),
@@ -96,28 +104,31 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-               Text(
+              Text(
                 "${AppLocalizations.of(context)!.tokens_required}5",
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(
                 height: size.height * 0.05,
               ),
-              kIsWeb? const SizedBox():
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      backgroundColor: Colors.deepPurple,
-                      textStyle: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    if (mobile) {
-                      singleton.history = _storyController.text;
-                      context.go("/select_character");
-                    }
-                  },
-                  child:  FittedBox(
-                      fit: BoxFit.contain, child: Text(AppLocalizations.of(context)!.start_game))),
+              kIsWeb
+                  ? const SizedBox()
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          backgroundColor: Colors.deepPurple,
+                          textStyle: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        if (mobile) {
+                          singleton.history = _storyController.text;
+                          context.go("/select_character");
+                        }
+                      },
+                      child: FittedBox(
+                          fit: BoxFit.contain,
+                          child:
+                              Text(AppLocalizations.of(context)!.start_game))),
             ]),
           ),
         ),
