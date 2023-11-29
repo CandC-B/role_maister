@@ -200,6 +200,7 @@
 
     "exit_game_dialog_title": "Выход из игры",
     "exit_game_dialog_text": "Вы уверены, что хотите выйти из игры?",
+    "exit_game_dialog_autosave": "(Игра будет сохранена автоматически)",
     "exit_game_dialog_cancel": "Отмена",
     "exit_game_dialog_exit": "Выход"
 

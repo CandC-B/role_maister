@@ -201,6 +201,7 @@
 
   "exit_game_dialog_title": "Salir del Juego",
   "exit_game_dialog_text": "¿Estás seguro de que quieres salir del juego?",
+  "exit_game_dialog_autosave": "(El juego se guardará automáticamente)",
   "exit_game_dialog_cancel": "Cancelar",
   "exit_game_dialog_exit": "Salir"
 

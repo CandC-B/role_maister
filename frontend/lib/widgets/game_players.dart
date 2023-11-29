@@ -106,9 +106,27 @@ class _GamePlayersState extends State<GamePlayers> {
             AppLocalizations.of(context)!.exit_game_dialog_title,
             style: const TextStyle(color: Colors.white),
           ),
-          content: Text(
-            AppLocalizations.of(context)!.exit_game_dialog_text,
-            style: const TextStyle(color: Colors.white),
+          // content: Text(
+          //   AppLocalizations.of(context)!.exit_game_dialog_text,
+          //   style: const TextStyle(color: Colors.white),
+          // ),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.exit_game_dialog_text,
+                style: const TextStyle(color: Colors.white),
+              ),
+              const SizedBox(
+                  height:
+                      8.0), // Espacio entre el texto principal y el texto en cursiva
+              Text(
+                AppLocalizations.of(context)!.exit_game_dialog_autosave,
+                style:
+                    const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+              ),
+            ],
           ),
           backgroundColor: Colors.deepPurple,
           actions: [
@@ -345,9 +363,9 @@ class Stats extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
-          leading: Icon(Icons.insert_chart, color: Colors.white),
+          leading: const Icon(Icons.insert_chart, color: Colors.white),
           title: Text(AppLocalizations.of(context)!.aliens_attributes,
-              style: TextStyle(color: Colors.white)),
+              style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),

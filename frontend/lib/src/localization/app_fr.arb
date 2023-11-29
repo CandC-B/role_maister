@@ -200,6 +200,7 @@
 
     "exit_game_dialog_title": "Quitter le Jeu",
     "exit_game_dialog_text": "Êtes-vous sûr de vouloir quitter le jeu?",
+    "exit_game_dialog_autosave": "(Le jeu sera enregistré automatiquement)",
     "exit_game_dialog_cancel": "Annuler",
     "exit_game_dialog_exit": "Quitter"
 
