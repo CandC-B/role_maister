@@ -196,7 +196,12 @@
     "game_players": "Игроки",
     "game_epic_phase": "Воплотите судьбу путешествия вашего персонажа...",
     "game_no_messages": "Нет сообщений...",
-    "no_stats_found": "Статистика не найдена..."
+    "no_stats_found": "Статистика не найдена...",
+
+    "exit_game_dialog_title": "Выход из игры",
+    "exit_game_dialog_text": "Вы уверены, что хотите выйти из игры?",
+    "exit_game_dialog_cancel": "Отмена",
+    "exit_game_dialog_exit": "Выход"
 
 
 }

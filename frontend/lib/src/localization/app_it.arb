@@ -196,6 +196,11 @@
     "game_players": "Giocatori",
     "game_epic_phase": "Plasma il destino del viaggio del tuo personaggio...",
     "game_no_messages": "Nessun messaggio...",
-    "no_stats_found": "Nessuna statistica trovata..."
+    "no_stats_found": "Nessuna statistica trovata...",
+
+     "exit_game_dialog_title": "Esci dal Gioco",
+    "exit_game_dialog_text": "Sei sicuro di voler uscire dal gioco?",
+    "exit_game_dialog_cancel": "Annulla",
+    "exit_game_dialog_exit": "Esci"
 
 }
