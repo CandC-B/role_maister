@@ -102,22 +102,34 @@ class _GamePlayersState extends State<GamePlayers> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.exit_game_dialog_title),
-          content: Text(AppLocalizations.of(context)!.exit_game_dialog_text),
+          title: Text(
+            AppLocalizations.of(context)!.exit_game_dialog_title,
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.exit_game_dialog_text,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.deepPurple,
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child:
-                  Text(AppLocalizations.of(context)!.exit_game_dialog_cancel),
+              child: Text(
+                AppLocalizations.of(context)!.exit_game_dialog_cancel,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             TextButton(
               onPressed: () {
                 context.go('/');
                 context.push('/');
               },
-              child: Text(AppLocalizations.of(context)!.exit_game_dialog_exit),
+              child: Text(
+                AppLocalizations.of(context)!.exit_game_dialog_exit,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
