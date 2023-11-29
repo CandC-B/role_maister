@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/pages/profile_page.dart';
 import 'package:role_maister/widgets/widgets.dart';
-
-class ProfileCthulhuCharacterCard extends StatelessWidget {
+import 'package:role_maister/config/firebase_logic.dart';
+class ProfileCthulhuCharacterCard extends StatefulWidget {
   final CthulhuCharacter character;
+  const ProfileCthulhuCharacterCard({super.key, required this.character});
 
-  ProfileCthulhuCharacterCard({super.key, required this.character});
+  @override
+  State<ProfileCthulhuCharacterCard> createState() =>
+      _ProfileCthulhuCharacterCardState();
+}
+
+class _ProfileCthulhuCharacterCardState
+    extends State<ProfileCthulhuCharacterCard> {
+  bool isExpanded = false;
 
   Widget _buildStatItem(
       String label, IconData icon, String value, Color textColor) {
@@ -59,8 +68,12 @@ class ProfileCthulhuCharacterCard extends StatelessWidget {
       child: ExpansionTile(
         collapsedIconColor: Colors.white,
         iconColor: Colors.white,
+        onExpansionChanged: (value) {
+          setState(() {
+            isExpanded = value;
+          });
+        },
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(
               Icons.account_circle,
@@ -69,52 +82,81 @@ class ProfileCthulhuCharacterCard extends StatelessWidget {
             const SizedBox(width: 10.0),
             Expanded(
               child: Text(
-                character.name,
+                widget.character.name,
                 style: const TextStyle(color: Colors.white, fontSize: 18.0),
               ),
             ),
           ],
         ),
-        trailing: IconButton(
-          icon: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            // Lógica para eliminar el elemento
-          },
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: true);
+                },
+              );
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: false);
+                },
+              );
+              },
+            ),
+            Icon(
+              isExpanded ? Icons.expand_less : Icons.expand_more,
+              color: Colors.white,
+            ),
+          ],
         ),
         children: [
-          _buildStatItem(
-              'HP', Icons.favorite, character.hp.toString(), Colors.white),
+          _buildStatItem('HP', Icons.favorite, widget.character.hp.toString(),
+              Colors.white),
           _buildStatItem('Character Level', Icons.bar_chart,
-              character.characterLevel.toString(), Colors.white),
+              widget.character.characterLevel.toString(), Colors.white),
           _buildStatItem(
-              'Career', Icons.school, character.career, Colors.white),
-          _buildAttributeStats(character.attributes),
+              'Career', Icons.school, widget.character.career, Colors.white),
+          _buildAttributeStats(widget.character.attributes),
           _buildStatItem(
               'Skills',
               Icons.list,
-              character.skills.toString().replaceAll(RegExp("[{}]"), ""),
+              widget.character.skills.toString().replaceAll(RegExp("[{}]"), ""),
               Colors.white),
-          _buildStatItem('Talents', Icons.star, character.talents.join(', '),
+          _buildStatItem('Talents', Icons.star,
+              widget.character.talents.join(', '), Colors.white),
+          _buildStatItem('Appearance', Icons.face, widget.character.appearance,
               Colors.white),
-          _buildStatItem(
-              'Appearance', Icons.face, character.appearance, Colors.white),
           _buildStatItem('Personal Agenda', Icons.assignment,
-              character.personalAgenda, Colors.white),
+              widget.character.personalAgenda, Colors.white),
           _buildStatItem('Friend', Icons.sentiment_very_satisfied,
-              character.friend, Colors.white),
+              widget.character.friend, Colors.white),
           _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
-              character.rival, Colors.white),
-          _buildStatItem('Gear', Icons.accessibility, character.gear.join(', '),
-              Colors.white),
-          _buildStatItem('Signature Item', Icons.edit, character.signatureItem,
-              Colors.white),
-          _buildStatItem(
-              'Cash', Icons.attach_money, '\$${character.cash}', Colors.white),
+              widget.character.rival, Colors.white),
+          _buildStatItem('Gear', Icons.accessibility,
+              widget.character.gear.join(', '), Colors.white),
+          _buildStatItem('Signature Item', Icons.edit,
+              widget.character.signatureItem, Colors.white),
+          _buildStatItem('Cash', Icons.attach_money,
+              '\$${widget.character.cash}', Colors.white),
         ],
       ),
     );
   }
 }
+

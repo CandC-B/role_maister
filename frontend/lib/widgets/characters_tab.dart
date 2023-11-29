@@ -145,7 +145,7 @@ class ProfileAliensCharacter extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CharactersDialog(gameMode: "aliens");
+                  return CharactersCreationDialog(gameMode: "aliens");
                 },
               );
             },
@@ -243,7 +243,7 @@ class ProfileDydCharacter extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CharactersDialog(gameMode: "dyd");
+                  return CharactersCreationDialog(gameMode: "dyd");
                 },
               );
             },
@@ -342,7 +342,7 @@ class ProfileCthulhuCharacter extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CharactersDialog(gameMode: "cthulhu");
+                  return CharactersCreationDialog(gameMode: "cthulhu");
                 },
               );
             },
