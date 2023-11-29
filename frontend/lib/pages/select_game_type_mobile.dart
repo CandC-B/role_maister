@@ -20,6 +20,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () {
+                singleton.multiplayer = false;
                 context.go("/form_singleplayer");
               },
               child: ImageColorFilter(

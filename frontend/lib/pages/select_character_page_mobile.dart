@@ -23,7 +23,7 @@ class SelectCharacterPageMobile extends StatefulWidget {
 }
 
 class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
-  Map<String, dynamic>? charactersData;
+  Map<String, dynamic>? charactersData = {};
   int selectedIndex = 0;
 
   @override
@@ -89,7 +89,10 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Text(AppLocalizations.of(context)!.random_character, style: TextStyle(color: Colors.white),),
+              Text(
+                AppLocalizations.of(context)!.random_character,
+                style: TextStyle(color: Colors.white),
+              ),
             ],
           ),
         );
@@ -362,14 +365,81 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   future: loadCharacterData(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      // You can show a loading indicator while loading the data
-                      return Center(
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Center(
-                            child: Image.asset('assets/images/small_logo.png'),
-                          ),
-                        ),
+                      return ListView.builder(
+                        itemCount: charactersData!.length,
+                        itemBuilder: (context, index) {
+                          final characterId =
+                              charactersData!.keys.elementAt(index);
+                          final characterData = charactersData![characterId];
+
+                          singleton.selectedCharacterId =
+                              charactersData!.keys.elementAt(selectedIndex);
+                          if (singleton.gameMode.value == "Aliens") {
+                            singleton.alienCharacter = AliensCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: AliensCharacterCard(
+                                character:
+                                    AliensCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else if (singleton.gameMode.value == "Dyd") {
+                            singleton.dydCharacter = DydCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: DydCharacterCard(
+                                character: DydCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else if (singleton.gameMode.value == "Cthulhu") {
+                            singleton.cthulhuCharacter =
+                                CthulhuCharacter.fromMap(charactersData![
+                                    charactersData!.keys
+                                        .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: CthulhuCharacterCard(
+                                character:
+                                    CthulhuCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          } else {
+                            singleton.alienCharacter = AliensCharacter.fromMap(
+                                charactersData![charactersData!.keys
+                                    .elementAt(selectedIndex)]);
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: AliensCharacterCard(
+                                character:
+                                    AliensCharacter.fromMap(characterData),
+                                selected: selectedIndex == index,
+                              ),
+                            );
+                          }
+                        },
                       );
                     } else if (snapshot.hasError) {
                       // Handle the error

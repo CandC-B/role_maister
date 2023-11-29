@@ -4,6 +4,14 @@
     "description": "El título de la aplicación"
   },
 
+  "english": "Inglés",
+  "spanish": "Español",
+  "portuguese": "Portugués",
+  "french": "Francés",
+  "german": "Alemán",
+  "italian": "Italiano",
+  "russian": "Ruso",
+
   "playGame": "Jugar",
   "homePageText": "Deja que una IA sea el maestro \n y disfruta de una sesión de rol \n solo o con tus amigos",
   "homePageText_mobile": "Deja que una IA sea el \n maestro y disfruta \n de una sesión de rol \n solo o con \n tus amigos",
@@ -148,10 +156,9 @@
   "password_info": "Al menos una letra, un dígito y 8 caracteres",
   "accept": "Acepto las ",
   "game_rules": "reglas del juego",
-
-  "single_player": "UN JUGADOR",
-  "multi_player": "MULTIJUGADOR",
-  "pairing_mode": "MODO DE EMPAREJAMIENTO",
+  "single_player": "JUEGO EN SOLITARIO",
+  "multi_player": "EMPAREJAMIENTO",
+  "pairing_mode": "SALAS",
   "coming_soon": "PRÓXIMAMENTE",
   "number_of_players": "Número de jugadores: ",
   "brief_description": "Breve descripción de la historia:",
