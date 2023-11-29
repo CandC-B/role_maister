@@ -31,11 +31,11 @@ class _GamePlayersState extends State<GamePlayers> {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final userStatistics;
-          if (singleton.gameMode.value == "Aliens") {
+          if (singleton.gameMode.value == "aliens") {
             userStatistics = singleton.alienCharacter;
-          } else if (singleton.gameMode.value == "Dyd") {
+          } else if (singleton.gameMode.value == "dyd") {
             userStatistics = singleton.dydCharacter;
-          } else if (singleton.gameMode.value == "Cthulhu") {
+          } else if (singleton.gameMode.value == "cthulhu") {
             userStatistics = singleton.cthulhuCharacter;
           } else {
             userStatistics = AliensCharacter.random();

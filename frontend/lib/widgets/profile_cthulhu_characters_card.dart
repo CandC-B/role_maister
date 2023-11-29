@@ -6,8 +6,7 @@ import 'package:role_maister/widgets/widgets.dart';
 class ProfileCthulhuCharacterCard extends StatelessWidget {
   final CthulhuCharacter character;
 
-  ProfileCthulhuCharacterCard(
-      {super.key, required this.character});
+  ProfileCthulhuCharacterCard({super.key, required this.character});
 
   Widget _buildStatItem(
       String label, IconData icon, String value, Color textColor) {
@@ -55,8 +54,8 @@ class ProfileCthulhuCharacterCard extends StatelessWidget {
     return Card(
       color: Colors.deepPurple,
       shape: new RoundedRectangleBorder(
-              side: new BorderSide(color: Colors.deepPurple, width: 2.0),
-              borderRadius: BorderRadius.circular(4.0)),
+          side: new BorderSide(color: Colors.deepPurple, width: 2.0),
+          borderRadius: BorderRadius.circular(4.0)),
       child: ExpansionTile(
         collapsedIconColor: Colors.white,
         iconColor: Colors.white,
@@ -75,6 +74,15 @@ class ProfileCthulhuCharacterCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            // Lógica para eliminar el elemento
+          },
         ),
         children: [
           _buildStatItem(
