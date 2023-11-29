@@ -6,8 +6,7 @@ import 'package:role_maister/widgets/widgets.dart';
 class ProfileDydCharacterCard extends StatelessWidget {
   final DydCharacter character;
 
-  ProfileDydCharacterCard(
-      {super.key, required this.character});
+  ProfileDydCharacterCard({super.key, required this.character});
 
   Widget _buildStatItem(
       String label, IconData icon, String value, Color textColor) {
@@ -54,9 +53,9 @@ class ProfileDydCharacterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.deepPurple,
-      shape:new RoundedRectangleBorder(
-              side: new BorderSide(color: Colors.deepPurple, width: 2.0),
-              borderRadius: BorderRadius.circular(4.0)),
+      shape: new RoundedRectangleBorder(
+          side: new BorderSide(color: Colors.deepPurple, width: 2.0),
+          borderRadius: BorderRadius.circular(4.0)),
       child: ExpansionTile(
         collapsedIconColor: Colors.white,
         iconColor: Colors.white,
@@ -74,6 +73,15 @@ class ProfileDydCharacterCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            // Lógica para eliminar el elemento
+          },
         ),
         children: [
           _buildStatItem(
