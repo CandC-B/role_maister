@@ -99,13 +99,9 @@ class ProfileAliensCharacter extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       reverse: false,
                       itemBuilder: (context, index) {
-                        print("aliensCharacters.length " + aliensCharacters.length.toString());
                         if (index < aliensCharacters.length) {
-                          print("INDEX " + index.toString());
                           var data = aliensCharacters[index].data()
                               as Map<String, dynamic>;
-                              print("DATA userid " + data['userId']);
-                              print("Singleton.player " + singleton.player!.uid);
                             if (data['userId'] == singleton.player!.uid) {
                               AliensCharacter aliensCharacter =
                                   AliensCharacter.fromMap(
@@ -346,7 +342,7 @@ class ProfileCthulhuCharacter extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CharactersDialog(gameMode: "dthulhu");
+                  return CharactersDialog(gameMode: "cthulhu");
                 },
               );
             },
