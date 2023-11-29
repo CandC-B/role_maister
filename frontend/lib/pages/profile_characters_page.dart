@@ -33,7 +33,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
   @override
   void initState() {
     super.initState();
-    firebase.getUserCharactersFromMode(singleton.user!.uid, "Aliens");
+    firebase.getUserCharactersFromMode(singleton.user!.uid, "aliens");
   }
 
   @override
@@ -84,7 +84,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                           final characterData = charactersData![characterId];
                           singleton.selectedCharacterId =
                               charactersData!.keys.elementAt(selectedIndex);
-                          if (widget.mode == "Aliens") {
+                          if (widget.mode == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);

@@ -1,9 +1,12 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:uuid/uuid.dart';
 
-class CthulhuCharacter extends Character{
+class CthulhuCharacter extends Character {
   // TODO: de momento solo tenemos character level 1
+  
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
@@ -17,15 +20,18 @@ class CthulhuCharacter extends Character{
   final String signatureItem;
   final int cash;
   final int hp;
+  final String mode = "aliens";
 
-  CthulhuCharacter( {
+  CthulhuCharacter({
+    String? id,
     required this.characterLevel,
     required this.career,
     required this.attributes,
     required this.skills,
     required this.talents,
-    required this.appearance,
     required String name,
+    required String userId,
+    required this.appearance,
     required this.personalAgenda,
     required this.friend,
     required this.rival,
@@ -33,7 +39,7 @@ class CthulhuCharacter extends Character{
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  }): super(name);
+  }) : super(name, userId , id: id);
 
   // Factory constructor to generate random AliensCharacter
   factory CthulhuCharacter.random() {
@@ -42,6 +48,7 @@ class CthulhuCharacter extends Character{
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
     String name = _getRandomName(career);
+    String userId = "test";
     final appearance = _getRandomAppearance(career);
     final personalAgenda = _getRandomPersonalAgenda(career);
     final friend = _getRandomName(career);
@@ -51,12 +58,12 @@ class CthulhuCharacter extends Character{
     final cash = _getRandomCash(career);
 
     return CthulhuCharacter(
-      name: name,
       characterLevel: 1,
       career: career,
       attributes: attributes,
       skills: skills,
       talents: talents,
+      name: name,
       appearance: appearance,
       personalAgenda: personalAgenda,
       friend: friend,
@@ -65,6 +72,7 @@ class CthulhuCharacter extends Character{
       signatureItem: signatureItem,
       cash: cash,
       hp: 2 * attributes["Strength"]!,
+      userId: userId,
     );
   }
 
@@ -551,6 +559,9 @@ class CthulhuCharacter extends Character{
   @override
   String toString() {
     return 'AliensCharacter: {'
+        'userId: $userId,'
+        ' id: $id,'
+        ' mode: $mode,'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -570,6 +581,9 @@ class CthulhuCharacter extends Character{
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
+      'id': id,
+      'mode': mode,
       'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
@@ -589,6 +603,8 @@ class CthulhuCharacter extends Character{
 
   static fromMap(Map<String, dynamic> statsData) {
     return CthulhuCharacter(
+      userId: statsData['userId'] as String,
+      id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,

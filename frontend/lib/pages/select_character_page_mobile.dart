@@ -44,13 +44,13 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   Future<void> createRandomPlayer() async {
     try {
-      if (singleton.gameMode.value == "Aliens") {
+      if (singleton.gameMode.value == "aliens") {
         AliensCharacter newRandomUser = AliensCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode.value == "Dyd") {
+      } else if (singleton.gameMode.value == "dyd") {
         DydCharacter newRandomUser = DydCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode.value == "Cthulhu") {
+      } else if (singleton.gameMode.value == "cthulhu") {
         CthulhuCharacter newRandomUser = CthulhuCharacter.random();
         await firebase.createCharacter(newRandomUser.toMap());
       } else {
@@ -103,11 +103,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
     Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    if (singleton.gameMode.value == "Aliens") {
+    if (singleton.gameMode.value == "aliens") {
       Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    } else if (singleton.gameMode.value == "Dyd") {
+    } else if (singleton.gameMode.value == "dyd") {
       Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    } else if (singleton.gameMode.value == "Cthulhu") {
+    } else if (singleton.gameMode.value == "cthulhu") {
       Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
     }
     mapUserStats["user"] = singleton.user!.uid;
@@ -458,7 +458,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
                           singleton.selectedCharacterId =
                               charactersData!.keys.elementAt(selectedIndex);
-                          if (singleton.gameMode.value == "Aliens") {
+                          if (singleton.gameMode.value == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -474,7 +474,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                                 selected: selectedIndex == index,
                               ),
                             );
-                          } else if (singleton.gameMode.value == "Dyd") {
+                          } else if (singleton.gameMode.value == "dyd") {
                             singleton.dydCharacter = DydCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -489,7 +489,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                                 selected: selectedIndex == index,
                               ),
                             );
-                          } else if (singleton.gameMode.value == "Cthulhu") {
+                          } else if (singleton.gameMode.value == "cthulhu") {
                             singleton.cthulhuCharacter =
                                 CthulhuCharacter.fromMap(charactersData![
                                     charactersData!.keys

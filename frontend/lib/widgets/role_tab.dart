@@ -38,7 +38,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            singleton.gameMode.value = "Aliens";
+            singleton.gameMode.value = "aliens";
             handleImageSelection(
                 0); // Call the function with the index of the selected image
           },
@@ -59,7 +59,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            singleton.gameMode.value = "Dyd";
+            singleton.gameMode.value = "dyd";
             handleImageSelection(
                 1); // Call the function with the index of the selected image
           },
@@ -80,7 +80,7 @@ class _RoleTabState extends State<RoleTab> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            singleton.gameMode.value = "Cthulhu";
+            singleton.gameMode.value = "cthulhu";
             handleImageSelection(
                 2); // Call the function with the index of the selected image
           },
