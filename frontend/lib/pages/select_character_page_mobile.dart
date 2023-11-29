@@ -46,15 +46,19 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     try {
       if (singleton.gameMode.value == "aliens") {
         AliensCharacter newRandomUser = AliensCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       } else if (singleton.gameMode.value == "dyd") {
         DydCharacter newRandomUser = DydCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       } else if (singleton.gameMode.value == "cthulhu") {
         CthulhuCharacter newRandomUser = CthulhuCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       } else {
         AliensCharacter newRandomUser = AliensCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       }
 
