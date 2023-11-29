@@ -5,13 +5,13 @@ class Player {
   final String username;
   final String? email;
   final int tokens;
-  final List aliensCharacters;
-  final List dydCharacters;
-  final List cthulhuCharacters;
+  final List aliens;
+  final List dyd;
+  final List cthulhu;
   final int gamesPlayed;
   final int experience;
 
-  Player({required this.uid, required this.username, required this.email, required this.tokens ,required this.aliensCharacters ,required this.dydCharacters ,required this.cthulhuCharacters, required this.gamesPlayed, required this.experience});
+  Player({required this.uid, required this.username, required this.email, required this.tokens ,required this.aliens ,required this.dyd ,required this.cthulhu, required this.gamesPlayed, required this.experience});
 
   factory Player.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
@@ -21,9 +21,9 @@ class Player {
       String username = data['username'] ?? '';
       String email = data['email'] ?? '';
       int tokens = data['tokens'] ?? 0;
-      List<String> aliensCharacters = List<String>.from(data['aliensCharacters'] ?? []);
-      List<String> dydCharacters = List<String>.from(data['characters'] ?? []);
-      List<String> cthulhuCharacters = List<String>.from(data['characters'] ?? []);
+      List<String> aliens = List<String>.from(data['aliens'] ?? []);
+      List<String> dyd = List<String>.from(data['dyd'] ?? []);
+      List<String> cthulhu = List<String>.from(data['cthulhu'] ?? []);
       int gamesPlayed = data['gamesPlayed'] ?? 0;
       int experience = data['experience'] ?? 0;
 
@@ -33,9 +33,9 @@ class Player {
         username: username,
         email: email,
         tokens: tokens,
-        aliensCharacters: aliensCharacters,
-        dydCharacters: dydCharacters,
-        cthulhuCharacters: cthulhuCharacters,
+        aliens: aliens,
+        dyd: dyd,
+        cthulhu: cthulhu,
         gamesPlayed: gamesPlayed,
         experience: experience
       );

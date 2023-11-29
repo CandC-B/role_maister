@@ -290,27 +290,27 @@ class _CharactersDialogState extends State<CharactersDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.deepPurple,
       title: const Text(
         'Enter your new character name',
-        style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       content: TextField(
         controller: characterNameController,
-        cursorColor: Colors.deepPurple,
-        style: const TextStyle(color: Colors.deepPurple),
+        cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
         decoration: const InputDecoration(
           hintText: 'Character name',
-          hintStyle: TextStyle(color: Colors.deepPurple),
+          hintStyle: TextStyle(color: Colors.white),
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
+            borderSide: BorderSide(color: Colors.white),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepPurple),
+            borderSide: BorderSide(color: Colors.white),
           ),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.deepPurple,
+              color: Colors.white,
             ),
           ),
         ),
@@ -322,15 +322,15 @@ class _CharactersDialogState extends State<CharactersDialog> {
           },
           child: const Text('Cancel',
               style: TextStyle(
-                  color: Colors.deepPurple, fontWeight: FontWeight.bold)),
+                  color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         TextButton(
           onPressed: () {
-            if (gameMode == "Aliens") {
+            if (gameMode == "aliens") {
               createAlien(characterNameController.text);
-            } else if (gameMode == "Dyd") {
+            } else if (gameMode == "dyd") {
               createDyd(characterNameController.text);
-            } else if (gameMode == "Cthulhu") {
+            } else if (gameMode == "cthulhu") {
               createCthulhu(characterNameController.text);
             }
             Navigator.of(context).pop();
@@ -338,7 +338,7 @@ class _CharactersDialogState extends State<CharactersDialog> {
           child: const Text(
             'Accept',
             style: TextStyle(
-                color: Colors.deepPurple, fontWeight: FontWeight.bold),
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
         )
       ],
@@ -347,22 +347,25 @@ class _CharactersDialogState extends State<CharactersDialog> {
 }
 
 void createAlien(String characterName) {
-  singleton.gameMode.value = "Aliens";
+  singleton.gameMode.value = "aliens";
   AliensCharacter newAlien = AliensCharacter.random();
   newAlien.name = characterName;
+  newAlien.userId = singleton.user!.uid;
   firebase.createCharacter(newAlien.toMap());
 }
 
 void createDyd(String characterName) {
-  singleton.gameMode.value = "Dyd";
+  singleton.gameMode.value = "dyd";
   DydCharacter newDyd = DydCharacter.random();
   newDyd.name = characterName;
+  newDyd.userId = singleton.user!.uid;
   firebase.createCharacter(newDyd.toMap());
 }
 
 void createCthulhu(String characterName) {
-  singleton.gameMode.value = "Cthulhu";
+  singleton.gameMode.value = "cthulhu";
   CthulhuCharacter newCthulhu = CthulhuCharacter.random();
   newCthulhu.name = characterName;
+  newCthulhu.userId = singleton.user!.uid;
   firebase.createCharacter(newCthulhu.toMap());
 }

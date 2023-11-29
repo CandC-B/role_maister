@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/models/character.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,7 +20,7 @@ class AliensCharacter extends Character {
   final String signatureItem;
   final int cash;
   final int hp;
-  final String mode = "Aliens";
+  final String mode = "aliens";
 
   AliensCharacter({
     String? id,
@@ -29,6 +30,7 @@ class AliensCharacter extends Character {
     required this.skills,
     required this.talents,
     required String name,
+    required String userId,
     required this.appearance,
     required this.personalAgenda,
     required this.friend,
@@ -37,7 +39,7 @@ class AliensCharacter extends Character {
     required this.signatureItem,
     required this.cash,
     required this.hp,
-  }) : super(name);
+  }) : super(name, userId , id: id);
 
   // Factory constructor to generate random AliensCharacter
   factory AliensCharacter.random() {
@@ -46,6 +48,7 @@ class AliensCharacter extends Character {
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
     String name = _getRandomName(career);
+    String userId = "test";
     final appearance = _getRandomAppearance(career);
     final personalAgenda = _getRandomPersonalAgenda(career);
     final friend = _getRandomName(career);
@@ -69,6 +72,7 @@ class AliensCharacter extends Character {
       signatureItem: signatureItem,
       cash: cash,
       hp: 2 * attributes["Strength"]!,
+      userId: userId,
     );
   }
 
@@ -555,6 +559,7 @@ class AliensCharacter extends Character {
   @override
   String toString() {
     return 'AliensCharacter: {'
+        'userId: $userId,'
         ' id: $id,'
         ' mode: $mode,'
         ' characterLevel: $characterLevel,'
@@ -576,6 +581,7 @@ class AliensCharacter extends Character {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'id': id,
       'mode': mode,
       'character_level': characterLevel,
@@ -597,6 +603,7 @@ class AliensCharacter extends Character {
 
   static fromMap(Map<String, dynamic> statsData) {
     return AliensCharacter(
+      userId: statsData['userId'] as String,
       id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
@@ -620,4 +627,5 @@ class AliensCharacter extends Character {
       cash: statsData['cash'] as int,
     );
   }
+  
 }

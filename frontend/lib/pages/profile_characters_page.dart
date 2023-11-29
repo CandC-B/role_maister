@@ -33,7 +33,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
   @override
   void initState() {
     super.initState();
-    firebase.getUserCharactersFromMode(singleton.user!.uid, "Aliens");
+    firebase.getUserCharactersFromMode(singleton.user!.uid, "aliens");
   }
 
   @override

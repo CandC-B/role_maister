@@ -42,7 +42,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
                 if (!kIsWeb) {
                   context.go("/select_character");
                 } else {
-                  singleton.gameMode.value = "Aliens";
+                  singleton.gameMode.value = "aliens";
                   handleImageSelection(0);
                 }
               },
@@ -66,7 +66,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
               onTap: () {
                 // context.go("/select_character");
                 if (kIsWeb) {
-                  singleton.gameMode.value = "Dyd";
+                  singleton.gameMode.value = "dyd";
                   handleImageSelection(1);
                 }
               },
@@ -90,7 +90,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
               onTap: () {
                 // context.go("/select_character");
                 if (kIsWeb) {
-                  singleton.gameMode.value = "Cthulhu";
+                  singleton.gameMode.value = "cthulhu";
                   handleImageSelection(2);
                 }
               },
