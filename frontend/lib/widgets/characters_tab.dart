@@ -99,19 +99,25 @@ class ProfileAliensCharacter extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       reverse: false,
                       itemBuilder: (context, index) {
+                        print("aliensCharacters.length " + aliensCharacters.length.toString());
                         if (index < aliensCharacters.length) {
+                          print("INDEX " + index.toString());
                           var data = aliensCharacters[index].data()
                               as Map<String, dynamic>;
-                          if (data['userId'] == singleton.player!.uid) {
-                            AliensCharacter aliensCharacter =
-                                AliensCharacter.fromMap(
-                              aliensCharacters[index].data()
-                                  as Map<String, dynamic>,
-                            );
-                            return ProfileAliensCharacterCard(
-                              character: aliensCharacter,
-                            );
-                          }
+                              print("DATA userid " + data['userId']);
+                              print("Singleton.player " + singleton.player!.uid);
+                            if (data['userId'] == singleton.player!.uid) {
+                              AliensCharacter aliensCharacter =
+                                  AliensCharacter.fromMap(
+                                aliensCharacters[index].data()
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileAliensCharacterCard(
+                                character: aliensCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );

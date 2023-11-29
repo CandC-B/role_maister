@@ -130,6 +130,7 @@ class FirebaseService {
           _firestore.collection("user").doc(userId);
       final DocumentSnapshot userSnapshot = await userReference.get();
       if (userSnapshot.exists) {
+        print("Gamemode" + singleton.gameMode.value);
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
         if (userData.containsKey(singleton.gameMode.value)) {
