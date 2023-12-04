@@ -62,6 +62,8 @@ class CthulhuCharacterCard extends StatelessWidget {
               side: new BorderSide(color: Colors.deepPurple, width: 2.0),
               borderRadius: BorderRadius.circular(4.0)),
       child: ExpansionTile(
+        collapsedIconColor: Colors.white,
+        iconColor: Colors.white,
         title: Row(
           children: [
             const Icon(
