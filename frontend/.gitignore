@@ -31,16 +31,14 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
-/build/*
-!/build/web/
-#/build/app/
-#/build/f3224a505bd94d8b4705e6c3ecfc0373
-#/build/fba5d04ae4e599bde82da3cfb707b2f7
-#/build/cloud_firestore/
-#/build/firebase_auth/
-#/build/firebase_core/
-#/build/flutter_assets/
-#/build/kotlin/
+/build/app/
+/build/f3224a505bd94d8b4705e6c3ecfc0373
+/build/fba5d04ae4e599bde82da3cfb707b2f7
+/build/cloud_firestore/
+/build/firebase_auth/
+/build/firebase_core/
+/build/flutter_assets/
+/build/kotlin/
 
 
 # Symbolication related
