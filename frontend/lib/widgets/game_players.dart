@@ -53,7 +53,7 @@ class _GamePlayersState extends State<GamePlayers> {
                     onPressed: () {
                       // context.go('/');
                       // context.push('/');
-                      _mostrarDialogo(context);
+                      _showDialog(context);
                     },
                   ),
                 ],
@@ -97,7 +97,7 @@ class _GamePlayersState extends State<GamePlayers> {
     }
   }
 
-  void _mostrarDialogo(BuildContext context) {
+  void _showDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
