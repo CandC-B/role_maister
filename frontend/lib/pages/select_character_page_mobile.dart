@@ -138,7 +138,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     //     body: jsonEncode(mapUserStats));
     // TODO: CHAYMAA DO THIS
     String response;
-    if (singleton.gameMode.value == "Aliens") {
+    if (singleton.gameMode.value == "aliens") {
       response = await createGame(AliensGameSettings.fromMap(mapUserStats));
     } else {
       throw Exception("Tonto el que lo lea");
