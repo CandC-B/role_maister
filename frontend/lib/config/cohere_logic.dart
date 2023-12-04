@@ -1,12 +1,23 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:role_maister/models/cohere_models.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 // Function to create a new game
 Future<String> createGame(AliensGameSettings game_settings) async {
+  await dotenv.load(fileName: ".env");
+  var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
+  final Map<String, String> headers = {
+  'Content-Type': 'application/json', 
+  'Authorization': 'Bearer YourAccessToken', 
+  'Accept': 'application/json'
+  };
   final response = await http.post(
     Uri.parse('https://api.cohere.ai/v1/chat'),
-    body: {"chat_history": [], "message": "Hello"},
+    body: {
+      "message": "Hello"
+    },
   );
   if (response.statusCode != 201) {
     throw Exception('Failed to create game');
