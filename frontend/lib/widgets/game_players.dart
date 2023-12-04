@@ -48,8 +48,9 @@ class _GamePlayersState extends State<GamePlayers> {
                   IconButton(
                     icon: const Icon(Icons.exit_to_app),
                     onPressed: () {
-                      context.go('/');
-                      context.push('/');
+                      // context.go('/');
+                      // context.push('/');
+                      _showDialog(context);
                     },
                   ),
                 ],
@@ -91,6 +92,64 @@ class _GamePlayersState extends State<GamePlayers> {
     } catch (error) {
       throw Exception("Error al obtener estadísticas del usuario: $error");
     }
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.of(context)!.exit_game_dialog_title,
+            style: const TextStyle(color: Colors.white),
+          ),
+          // content: Text(
+          //   AppLocalizations.of(context)!.exit_game_dialog_text,
+          //   style: const TextStyle(color: Colors.white),
+          // ),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.exit_game_dialog_text,
+                style: const TextStyle(color: Colors.white),
+              ),
+              const SizedBox(
+                  height:
+                      8.0), // Espacio entre el texto principal y el texto en cursiva
+              Text(
+                AppLocalizations.of(context)!.exit_game_dialog_autosave,
+                style:
+                    const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.deepPurple,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                AppLocalizations.of(context)!.exit_game_dialog_cancel,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                context.go('/');
+                context.push('/');
+              },
+              child: Text(
+                AppLocalizations.of(context)!.exit_game_dialog_exit,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
