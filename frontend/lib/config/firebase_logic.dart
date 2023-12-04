@@ -26,8 +26,8 @@ class FirebaseService {
       if (user != null) {
         await _firestore
             .collection('character')
-            .doc(singleton.gameMode.value)
-            .collection(singleton.gameMode.value)
+            .doc(character["mode"])
+            .collection(character["mode"])
             .doc(character["id"])
             .set(character);
         final DocumentReference userReference =

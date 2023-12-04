@@ -293,7 +293,7 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
       backgroundColor: Colors.deepPurple,
       title: const Text(
         'Enter your new character name',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.white),
       ),
       content: TextField(
         controller: characterNameController,
@@ -322,7 +322,7 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
           },
           child: const Text('Cancel',
               style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
+                  color: Colors.white)),
         ),
         TextButton(
           onPressed: () {
@@ -338,7 +338,7 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
           child: const Text(
             'Accept',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
+                color: Colors.white),
           ),
         )
       ],
@@ -389,11 +389,11 @@ class _CharactersEditionOrDeletionDialogState extends State<CharactersEditionOrD
       title: widget.isEdition ? 
       const Text(
         'Enter your new character name',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.white),
       )
       : const Text(
         'Are you sure you want to delete this character?',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.white),
       ),
       content: widget.isEdition ? TextField(
         controller: characterNameController,
@@ -422,13 +422,13 @@ class _CharactersEditionOrDeletionDialogState extends State<CharactersEditionOrD
           },
           child: const Text('Cancel',
               style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
+                  color: Colors.white)),
         ),
         TextButton(
           onPressed: () {
             if (widget.isEdition) {
               widget.character['name'] = characterNameController.text;
-              firebase.updateCharacter(widget.character); // TODO fix update character for dyd & cthulhu
+              firebase.updateCharacter(widget.character);
             } else {
               firebase.deleteCharacter(widget.character);
             }
@@ -437,7 +437,7 @@ class _CharactersEditionOrDeletionDialogState extends State<CharactersEditionOrD
           child: const Text(
             'Accept',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
+                color: Colors.white),
           ),
         )
       ],

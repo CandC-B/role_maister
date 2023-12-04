@@ -20,7 +20,7 @@ class CthulhuCharacter extends Character {
   final String signatureItem;
   final int cash;
   final int hp;
-  final String mode = "aliens";
+  final String mode = "cthulhu";
 
   CthulhuCharacter({
     String? id,
