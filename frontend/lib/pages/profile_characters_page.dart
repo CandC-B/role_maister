@@ -96,7 +96,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                                     AliensCharacter.fromMap(characterData)
                               ),
                             );
-                          } else if (widget.mode == "Dyd") {
+                          } else if (widget.mode == "dyd") {
                             singleton.dydCharacter = DydCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -105,7 +105,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                                 character: DydCharacter.fromMap(characterData)
                               ),
                             );
-                          } else if (widget.mode == "Cthulhu") {
+                          } else if (widget.mode == "cthulhu") {
                             singleton.cthulhuCharacter =
                                 CthulhuCharacter.fromMap(charactersData![
                                     charactersData!.keys

@@ -271,14 +271,14 @@ class CharacterCard extends StatelessWidget {
   }
 }
 
-class CharactersDialog extends StatefulWidget {
+class CharactersCreationDialog extends StatefulWidget {
   final String gameMode;
-  CharactersDialog({Key? key, required this.gameMode}) : super(key: key);
+  CharactersCreationDialog({Key? key, required this.gameMode}) : super(key: key);
   @override
-  _CharactersDialogState createState() => _CharactersDialogState();
+  _CharactersCreationDialogState createState() => _CharactersCreationDialogState();
 }
 
-class _CharactersDialogState extends State<CharactersDialog> {
+class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
   TextEditingController characterNameController = TextEditingController();
   String gameMode = "";
   @override
@@ -293,7 +293,7 @@ class _CharactersDialogState extends State<CharactersDialog> {
       backgroundColor: Colors.deepPurple,
       title: const Text(
         'Enter your new character name',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.white),
       ),
       content: TextField(
         controller: characterNameController,
@@ -322,7 +322,7 @@ class _CharactersDialogState extends State<CharactersDialog> {
           },
           child: const Text('Cancel',
               style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
+                  color: Colors.white)),
         ),
         TextButton(
           onPressed: () {
@@ -338,13 +338,15 @@ class _CharactersDialogState extends State<CharactersDialog> {
           child: const Text(
             'Accept',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
+                color: Colors.white),
           ),
         )
       ],
     );
   }
 }
+
+
 
 void createAlien(String characterName) {
   singleton.gameMode.value = "aliens";
@@ -368,4 +370,77 @@ void createCthulhu(String characterName) {
   newCthulhu.name = characterName;
   newCthulhu.userId = singleton.user!.uid;
   firebase.createCharacter(newCthulhu.toMap());
+}
+
+class CharactersEditionOrDeletionDialog extends StatefulWidget {
+  final Map<String, dynamic> character;
+  final bool isEdition;
+  CharactersEditionOrDeletionDialog({Key? key, required this.character, required this.isEdition}) : super(key: key);
+  @override
+  _CharactersEditionOrDeletionDialogState createState() => _CharactersEditionOrDeletionDialogState();
+}
+
+class _CharactersEditionOrDeletionDialogState extends State<CharactersEditionOrDeletionDialog> {
+  TextEditingController characterNameController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.deepPurple,
+      title: widget.isEdition ? 
+      const Text(
+        'Enter your new character name',
+        style: TextStyle(color: Colors.white),
+      )
+      : const Text(
+        'Are you sure you want to delete this character?',
+        style: TextStyle(color: Colors.white),
+      ),
+      content: widget.isEdition ? TextField(
+        controller: characterNameController,
+        cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
+        decoration: const InputDecoration(
+          hintText: 'Character name',
+          hintStyle: TextStyle(color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ) : const SizedBox(),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel',
+              style: TextStyle(
+                  color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            if (widget.isEdition) {
+              widget.character['name'] = characterNameController.text;
+              firebase.updateCharacter(widget.character);
+            } else {
+              firebase.deleteCharacter(widget.character);
+            }
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Accept',
+            style: TextStyle(
+                color: Colors.white),
+          ),
+        )
+      ],
+    );
+  }
 }
