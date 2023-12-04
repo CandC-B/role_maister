@@ -3,37 +3,43 @@ import 'dart:convert';
 import 'package:role_maister/models/cohere_models.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
 // Function to create a new game
 Future<String> createGame(AliensGameSettings game_settings) async {
   await dotenv.load(fileName: ".env");
   var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
   final Map<String, String> headers = {
-  'Content-Type': 'application/json', 
-  'Authorization': 'Bearer YourAccessToken', 
-  'Accept': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $access_token',
+    'Accept': 'application/json'
   };
-  final response = await http.post(
-    Uri.parse('https://api.cohere.ai/v1/chat'),
-    body: {
-      "message": "Hello"
-    },
-  );
-  if (response.statusCode != 201) {
-    throw Exception('Failed to create game');
-  }
-  print(response);
-  return "hello";
+  final Map<String, dynamic> requestBody = {
+    "chat_history": [],
+    "message": "Hello",
+  };
+  final response = await http.post(Uri.parse('https://api.cohere.ai/v1/chat'),
+      headers: headers, body: jsonEncode(requestBody));
+  var json_response = jsonDecode(response.body);
+  // TODO: descomentar cuando esté el prompting
+  // return json_response['text'];
+  return "This is an automatic message: The game creation is incomplete since there is no prompting done yet.";
 }
 
 // Function to update the game data
-Future<void> resumeGame(Map<String, dynamic> data) async {
-  final response = await http.put(
-    Uri.parse('http://your-backend-url/game'),
-    body: json.encode(data),
-    headers: {'Content-Type': 'application/json'},
-  );
-  if (response.statusCode != 200) {
-    throw Exception('Failed to update game data');
-  }
+Future<void> resumeGame(List<Map<String,dynamic>> chat_history, String message) async {
+  await dotenv.load(fileName: ".env");
+  var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $access_token',
+    'Accept': 'application/json'
+  };
+
+  final Map<String, dynamic> requestBody = {
+    "chat_history": chat_history,
+    "message": message,
+  };
+  final response = await http.post(Uri.parse('https://api.cohere.ai/v1/chat'),
+      headers: headers, body: jsonEncode(requestBody));
+  var json_response = jsonDecode(response.body);
+  return json_response['text'];
 }
