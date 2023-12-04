@@ -392,12 +392,10 @@ class FirebaseService {
       rethrow;
     }
   }
-
-  Future<String> createGame(Map<String, dynamic> gameConfig) async {
+// TODO I have changed this
+  Future<void> createGame(Map<String, dynamic> gameConfig) async {
     try {
-      DocumentReference docRef =
-          await _firestore.collection('game').add(gameConfig);
-      return docRef.id;
+          await _firestore.collection('game').doc(gameConfig['uid']).set(gameConfig);
     } catch (error) {
       rethrow;
     }
@@ -435,6 +433,8 @@ class FirebaseService {
       throw error;
     }
   }
+
+  // Function to get the game data from the Firestore collection 'game' by user ID
 
   Future<void> createRandomPlayer() async {
     try {
