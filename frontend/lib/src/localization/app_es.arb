@@ -197,13 +197,7 @@
   "game_players": "Jugadores",
   "game_epic_phase": "Da forma al destino del viaje de tu personaje...",
   "game_no_messages": "Sin mensajes...",
-  "no_stats_found": "No se encontraron estadísticas...",
-
-  "exit_game_dialog_title": "Salir del Juego",
-  "exit_game_dialog_text": "¿Estás seguro de que quieres salir del juego?",
-  "exit_game_dialog_autosave": "(El juego se guardará automáticamente)",
-  "exit_game_dialog_cancel": "Cancelar",
-  "exit_game_dialog_exit": "Salir"
+  "no_stats_found": "No se encontraron estadísticas..."
 
 
 
