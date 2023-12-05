@@ -274,7 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
                     if (user != null) {
-                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliens: [], dyd: [], cthulhu: [],gamesPlayed: 0, experience: 1);
+                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliens: [], dyd: [], cthulhu: [],gamesPlayed: 0, experience: 1, photoUrl: "small_logo.png", games: []);
                       // singleton.user = user;
                       singleton.player = player;
                       firebase.saveUser(player);

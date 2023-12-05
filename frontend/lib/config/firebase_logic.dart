@@ -130,7 +130,6 @@ class FirebaseService {
           _firestore.collection("user").doc(userId);
       final DocumentSnapshot userSnapshot = await userReference.get();
       if (userSnapshot.exists) {
-        print("Gamemode" + singleton.gameMode.value);
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
         if (userData.containsKey(singleton.gameMode.value)) {
@@ -582,19 +581,8 @@ class FirebaseService {
   }
 
   Future<void> saveUser(Player player) async {
-    Map<String, dynamic> currentPlayer = {
-      'uid': player.uid,
-      'username': player.username,
-      'email': player.email,
-      'tokens': player.tokens,
-      'aliens': player.aliens,
-      'dyd': player.dyd,
-      'cthulhu': player.cthulhu,
-      'gamesPlayed': player.gamesPlayed,
-      'experience': player.experience
-    };
     try {
-      _firestore.collection('user').doc(player.uid).set(currentPlayer);
+      _firestore.collection('user').doc(player.uid).set(player.toMap());
       // TODO error contorl if user cannot be created
     } catch (error) {
       rethrow;
@@ -618,11 +606,8 @@ class FirebaseService {
       if (sentBy == "IA") {
         sender = "IA";
       } else {
-        print("ENTRA AQUÍ");
         sender = await getUsername(sentBy);
       }
-      print(sentBy);
-      print(sender);
 
       Map<String, dynamic> message = {
         'text': messageText,
