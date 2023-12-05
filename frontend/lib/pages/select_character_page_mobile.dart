@@ -6,6 +6,7 @@ import 'package:role_maister/models/character.dart';
 import 'package:role_maister/models/cohere_models.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/cthulhu_characters_card.dart';
 import 'package:role_maister/widgets/dyd_characters_card.dart';
@@ -108,29 +109,38 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
-    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    if (singleton.gameMode.value == "aliens") {
-      Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    } else if (singleton.gameMode.value == "dyd") {
-      Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    } else if (singleton.gameMode.value == "cthulhu") {
-      Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
-    }
-    mapUserStats["user"] = singleton.user!.uid;
-    Map<String, dynamic> gameConfig = {
-      "role_system": "aliens",
-      "num_players": 1,
-      "story_description": singleton.history,
-      "players": [characterId]
-    };
-    String gameUid = await firebase.createGame(gameConfig);
+    // Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    // if (singleton.gameMode.value == "aliens") {
+    //   Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    // } else if (singleton.gameMode.value == "dyd") {
+    //   Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
+    // } else if (singleton.gameMode.value == "cthulhu") {
+    //   Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
+    // }
+    // mapUserStats["user"] = singleton.user!.uid;
+    Game newGame = Game(
+      num_players: 1,
+      role_system: singleton.gameMode.value,
+      players: [characterId],
+      story_description: singleton.history,
+    );
+    singleton.currentGame = newGame.uid;
+    // Map<String, dynamic> gameConfig = {
+    //   "role_system": "aliens",
+    //   "num_players": 1,
+    //   "story_description": singleton.history,
+    //   "players": [characterId]
+    // };
+    await firebase.createGame(newGame.toMap());
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
 
-    gameConfig.remove("players");
-    mapUserStats.addAll(gameConfig);
+    // TODO : remove this
+    // gameConfig.remove("players");
+    // mapUserStats.addAll(gameConfig);
+
     // final response = await http.post(
     //     // TODO: add constants.dart in utils folder
     //     Uri.https("rolemaister.onrender.com", "/game/"),
@@ -139,14 +149,13 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     // TODO: CHAYMAA DO THIS
     String response;
     if (singleton.gameMode.value == "aliens") {
-      response = await createGame(AliensGameSettings.fromMap(mapUserStats));
+      response = await createGame(newGame);
     } else {
       throw Exception("Tonto el que lo lea");
     }
     // var coralMessage = json.decode(response.body)["message"];
     var coralMessage = response;
-    await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
-    singleton.currentGame = gameUid;
+    await firebase.saveMessage(coralMessage, DateTime.now(),  newGame.uid, "IA");
   }
 
   void startMultiPlayerGame() async {

@@ -2,9 +2,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:role_maister/models/cohere_models.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:role_maister/models/game.dart';
 
-// Function to create a new game
-Future<String> createGame(AliensGameSettings game_settings) async {
+// Function to create a new game // TODO comentar que se pasa game y no lo que había antes
+Future<String> createGame(Game game) async {
   await dotenv.load(fileName: ".env");
   var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
   final Map<String, String> headers = {
