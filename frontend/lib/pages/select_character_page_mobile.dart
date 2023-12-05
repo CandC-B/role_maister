@@ -109,21 +109,22 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
-    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    if (singleton.gameMode.value == "aliens") {
-      Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    } else if (singleton.gameMode.value == "dyd") {
-      Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    } else if (singleton.gameMode.value == "cthulhu") {
-      Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
-    }
-    mapUserStats["user"] = singleton.user!.uid;
+    // Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    // if (singleton.gameMode.value == "aliens") {
+    //   Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
+    // } else if (singleton.gameMode.value == "dyd") {
+    //   Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
+    // } else if (singleton.gameMode.value == "cthulhu") {
+    //   Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
+    // }
+    // mapUserStats["user"] = singleton.user!.uid;
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
       players: [characterId],
       story_description: singleton.history,
     );
+    singleton.currentGame = newGame.uid;
     // Map<String, dynamic> gameConfig = {
     //   "role_system": "aliens",
     //   "num_players": 1,
@@ -155,7 +156,6 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     // var coralMessage = json.decode(response.body)["message"];
     var coralMessage = response;
     await firebase.saveMessage(coralMessage, DateTime.now(),  newGame.uid, "IA");
-    singleton.currentGame = newGame.uid;
   }
 
   void startMultiPlayerGame() async {
