@@ -13,11 +13,12 @@ Future<String> generateAliensPrompt(Game game) async {
   if (gameSettings['num_players'] > 1) {
     // Multiplayer sentence
     newGameInstruction +=
-        "There are ${gameSettings['num_players']} players: player1, player2, player3, player4 and player5.\n";
+        "There are ${gameSettings['num_players']} players.\n";
     newGameInstruction +=
         "To distinguish their actions, each message will start with 'playerX: (message)', being X the user index.\n";
     // Get all player features
     for (int i = 0; i < gameSettings['num_players']; i++) {
+      newGameInstruction += "There are player${i+1} features:.\n";
       String characterId = gameSettings['players'][i];
       Map<String, dynamic> characterData =
           await firebase.getCharacter(characterId, gameSettings['role_system']);
@@ -33,10 +34,12 @@ Future<String> generateAliensPrompt(Game game) async {
     newGameInstruction += getAliensCharacterFeatures(aliensCharacter);
     newGameInstruction +=
         "The story will develop as it follows:${gameSettings['story_description']}.\n";
-    newGameInstruction +=
-        "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
   }
 
+  newGameInstruction +=
+      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
+
+  print(newGameInstruction);
   return newGameInstruction;
 }
 

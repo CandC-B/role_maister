@@ -107,17 +107,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     );
   }
 
-  // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
-    // Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    // if (singleton.gameMode.value == "aliens") {
-    //   Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    // } else if (singleton.gameMode.value == "dyd") {
-    //   Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    // } else if (singleton.gameMode.value == "cthulhu") {
-    //   Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
-    // }
-    // mapUserStats["user"] = singleton.user!.uid;
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
@@ -125,37 +115,19 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       story_description: singleton.history,
     );
     singleton.currentGame = newGame.uid;
-    // Map<String, dynamic> gameConfig = {
-    //   "role_system": "aliens",
-    //   "num_players": 1,
-    //   "story_description": singleton.history,
-    //   "players": [characterId]
-    // };
     await firebase.createGame(newGame.toMap());
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
-
-    // TODO : remove this
-    // gameConfig.remove("players");
-    // mapUserStats.addAll(gameConfig);
-
-    // final response = await http.post(
-    //     // TODO: add constants.dart in utils folder
-    //     Uri.https("rolemaister.onrender.com", "/game/"),
-    //     headers: headers,
-    //     body: jsonEncode(mapUserStats));
-    // TODO: CHAYMAA DO THIS
     String response;
     if (singleton.gameMode.value == "aliens") {
       response = await createGame(newGame);
     } else {
       throw Exception("Tonto el que lo lea");
     }
-    // var coralMessage = json.decode(response.body)["message"];
     var coralMessage = response;
-    await firebase.saveMessage(coralMessage, DateTime.now(),  newGame.uid, "IA");
+    await firebase.saveMessage(coralMessage, DateTime.now(), newGame.uid, "IA");
   }
 
   void startMultiPlayerGame() async {
@@ -193,34 +165,57 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       },
       barrierDismissible: false,
     );
+
     int queueLen = await firebase.getQueueLength();
+    // TODO: para partidas con más jugadores lo único que hará falta
+    // distingir el primer jugador y el último del resto
+    // primero --> crea el game en firebase
+    // medio --> añade su id al juego
+    // último --> añade su id y llama a Coral
+    // TODO: esto no escala a multiples partidas a la vez (se necesiaría una cola por partida multi)
     if (queueLen == 0) {
+      // First user to enter the queue
       await firebase.addUserToQueue(characterId);
-      // TODO: no llamar a Coral
-      await createNewGame(singleton.selectedCharacterId!);
+      Game newGame = Game(
+        num_players: 1,
+        role_system: singleton.gameMode.value,
+        players: [characterId],
+        story_description: singleton.history,
+      );
+      singleton.currentGame = newGame.uid;
+      await firebase.createGame(newGame.toMap());
       await firebase.addGameToQueue(characterId);
-      while (await firebase.getQueueLength() < 2) {
+      while (!await firebase.checkIfReady()) {
+        print("Waiting...");
         await Future.delayed(const Duration(seconds: 1));
       }
+      print('Empty queue');
+      await firebase.emptyQueue();
       // ignore: use_build_context_synchronously
       context.go("/game");
     } else {
+      // Second user to enter the queue
       await firebase.addUserToQueue(characterId);
-      while (await firebase.getQueueLength() < 2) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
       String gameId = '';
       do {
         // Keep calling getGameId() until it returns a non-empty string
-        gameId = await firebase.getGameId();
+        gameId = await firebase.getGameIdFromQueue();
         await Future.delayed(const Duration(seconds: 1));
       } while (gameId.isEmpty);
+
       singleton.currentGame = gameId;
       print(singleton.currentGame);
       await firebase.modifyGame(gameId, singleton.selectedCharacterId!);
+      // Prompt Coral to start the game
+      Game currentGame = Game.fromMap(await firebase.getGame(gameId));
+      var coralMessage = await createGame(currentGame);
+      await firebase.saveMessage(
+          coralMessage, DateTime.now(), singleton.currentGame!, "IA");
+      print("LAST USER");
+      await firebase.addReadyToQueue();
+
       // ignore: use_build_context_synchronously
       context.go("/game");
-      await firebase.emptyQueue();
     }
   }
 
