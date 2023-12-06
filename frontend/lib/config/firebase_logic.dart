@@ -20,6 +20,25 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<Map<String, dynamic>> getCharacter(String characterId, String gameMode) async {
+    try {
+      final DocumentReference characterReference = _firestore
+          .collection('character')
+          .doc(gameMode)
+          .collection(gameMode)
+          .doc(characterId);
+      final DocumentSnapshot characterSnapshot =
+          await characterReference.get();
+      if (characterSnapshot.exists) {
+        return characterSnapshot.data() as Map<String, dynamic>;
+      } else {
+        throw Exception("CHARACTER: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> createCharacter(Map<String, dynamic> character) async {
     try {
       final User? user = _auth.currentUser;
