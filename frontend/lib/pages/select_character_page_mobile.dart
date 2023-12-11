@@ -108,11 +108,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   Future<void> createNewGame(String characterId) async {
+    Map<String, String> game_players = {singleton.player!.uid: characterId};
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
-      users: [singleton.player!.uid],
-      players: [characterId],
+      players: game_players,
       story_description: singleton.history,
     );
     singleton.currentGame = newGame.uid;
@@ -177,11 +177,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     if (queueLen == 0) {
       // First user to enter the queue
       await firebase.addUserToQueue(characterId);
+      Map<String, String> game_players = {singleton.player!.uid: characterId};
       Game newGame = Game(
         num_players: 1,
         role_system: singleton.gameMode.value,
-        users: [singleton.player!.uid],
-        players: [characterId],
+        players: game_players,
         story_description: singleton.history,
       );
       singleton.currentGame = newGame.uid;
