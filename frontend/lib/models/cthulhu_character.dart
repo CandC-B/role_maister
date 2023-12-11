@@ -18,6 +18,7 @@ class CthulhuCharacter extends Character {
   final String rival;
   final List<String> gear;
   final String signatureItem;
+  final String? photoUrl;
   final int cash;
   final int hp;
   final String mode = "cthulhu";
@@ -38,6 +39,7 @@ class CthulhuCharacter extends Character {
     required this.gear,
     required this.signatureItem,
     required this.cash,
+    required this.photoUrl,
     required this.hp,
   }) : super(name, userId , id: id);
 
@@ -56,7 +58,7 @@ class CthulhuCharacter extends Character {
     final gear = _getRandomGear(career);
     final signatureItem = _getRandomSignatureItem(career);
     final cash = _getRandomCash(career);
-
+    final photoUrl = "small_logo.png";
     return CthulhuCharacter(
       characterLevel: 1,
       career: career,
@@ -71,6 +73,7 @@ class CthulhuCharacter extends Character {
       gear: gear,
       signatureItem: signatureItem,
       cash: cash,
+      photoUrl: photoUrl,
       hp: 2 * attributes["Strength"]!,
       userId: userId,
     );
@@ -573,6 +576,7 @@ class CthulhuCharacter extends Character {
         ' friend: $friend,'
         ' rival: $rival,'
         ' gear: $gear,'
+        'photoUrl: $photoUrl,'
         ' signatureItem: $signatureItem,'
         ' cash: $cash,'
         ' hp: $hp'
@@ -595,6 +599,7 @@ class CthulhuCharacter extends Character {
       'friend': friend,
       'rival': rival,
       'gear': gear,
+      'photoUrl': photoUrl,
       'signature_item': signatureItem,
       'cash': cash,
       'hp': hp,
@@ -623,6 +628,7 @@ class CthulhuCharacter extends Character {
       gear: (statsData['gear'] as List<dynamic>)
           .map((value) => value as String)
           .toList(),
+      photoUrl: statsData['photoUrl'] as String,
       signatureItem: statsData['signature_item'] as String,
       cash: statsData['cash'] as int,
     );

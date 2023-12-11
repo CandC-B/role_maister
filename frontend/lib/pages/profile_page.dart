@@ -496,12 +496,11 @@ class TokenPackageCard extends StatelessWidget {
         trailing: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.deepPurple),
-            side: MaterialStateProperty.all(BorderSide(
+            side: MaterialStateProperty.all(const BorderSide(
                 color: Colors.white,
                 width: 1.0)), // Change the border color and width
           ),
           onPressed: () {
-            // TODO: Implement payment processing logic here
             showConfirmationDialog(context);
           },
           child: Text("Resume", style: TextStyle(color: Colors.white)),
@@ -516,13 +515,13 @@ class TokenPackageCard extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.deepPurple,
-          title: Text(
+          title: const Text(
             "Resume Game",
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
-          content: Text(
+          content: const Text(
             "Are you sure you want to resume this game?",
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
           actions: <Widget>[
             TextButton(
@@ -535,12 +534,11 @@ class TokenPackageCard extends StatelessWidget {
               },
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 "Resume",
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                // TODO: Implement actual payment processing here
                 // Once payment is successful, you can update the user's token balance.
                 // For this example, you can just close the dialog.
                 Navigator.of(context).pop();
