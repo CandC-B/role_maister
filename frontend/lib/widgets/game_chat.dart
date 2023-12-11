@@ -46,10 +46,16 @@ class _GameChatState extends State<GameChat> {
       'Content-Type': 'application/json',
     };
 
-    firestoreService.saveMessage(
-        text, DateTime.now(), widget.gameId, currentUserId);
-    textEditingController.clear();
+    // firestoreService.saveMessage(
+    //     text, DateTime.now(), widget.gameId, currentUserId);
 
+
+    firestoreService.saveMessage(
+      ChatMessages(sentBy: currentUserId, sentAt: DateTime.now().toString(), text: text), 
+      widget.gameId,
+    );
+
+    textEditingController.clear();
 
     if (messages != null) {
       final response = await http.post(
@@ -60,10 +66,13 @@ class _GameChatState extends State<GameChat> {
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
-        firestoreService.saveMessage(json.decode(response.body)["message"],
-            DateTime.now(), widget.gameId, "IA");
-        // scrollController.animateTo(0,
-        //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+        // firestoreService.saveMessage(json.decode(response.body)["message"],
+        //     DateTime.now(), widget.gameId, "IA");
+       
+        firestoreService.saveMessage(
+          ChatMessages(sentBy: 'IA', sentAt: DateTime.now().toString(), text: json.decode(response.body)["message"]), 
+          widget.gameId,
+        );
       }
     } else {
       // Handle the case where there was an error fetching messages
@@ -78,20 +87,19 @@ class _GameChatState extends State<GameChat> {
 
   @override
   Widget build(BuildContext context) {
-
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
     Locale locale = appState?.locale ?? const Locale('en');
 
     // print ('LOCALE: $locale');
 
-
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/background4.png'),
-          fit: BoxFit.cover,
-          opacity: 0.9,
-        ),
+        // image: DecorationImage(
+        //   image: AssetImage('assets/images/background4.png'),
+        //   fit: BoxFit.cover,
+        //   opacity: 0.9,
+        // ),
+        color: Colors.black87,
       ),
       child: Column(
         children: [
@@ -112,6 +120,9 @@ class _GameChatState extends State<GameChat> {
                           bool others_msg = listMessages[index].get('sentBy') !=
                               singleton.user!.uid;
 
+                          print ('listMessages[index]: ${listMessages[index]}');
+                          print ('listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
+
                           return FutureBuilder<String>(
                             // future: translateText(listMessages[index].get('text'), locale.languageCode),
                             future: getTranslation(
@@ -123,36 +134,93 @@ class _GameChatState extends State<GameChat> {
                                   translateSnapshot.connectionState ==
                                       ConnectionState.none) {
                                 // Mostrar el mensaje original mientras espera la traducción
-                                return BubbleSpecialThree(
-                                  text: listMessages[index].get('text'),
-                                  color: others_msg
-                                      ? const Color.fromARGB(255, 234, 226, 248)
-                                      : Colors.deepPurple,
-                                  tail: true,
+                                // return BubbleSpecialThree(
+                                //   text: listMessages[index].get('text'),
+                                //   color: others_msg
+                                //       ? const Color.fromARGB(255, 234, 226, 248)
+                                //       : Colors.deepPurple,
+                                //   tail: true,
+                                //   isSender: !others_msg,
+                                //   textStyle: TextStyle(
+                                //     color: others_msg ? Colors.black : Colors.white,
+                                //     fontSize: 16,
+                                //   ),
+                                // );
+
+
+
+                                // TODO 
+                                // return DiscordChatBubble(
+                                //   username: 'Usuario1',
+                                //   message: 'Hola, ¿cómo estás?',
+                                //   isSender: true,
+                                // );
+
+                                // return DiscordChatMessage(
+                                //   username: 'Usuario1',
+                                //   message: 'Hola, ¿cómo estás?',
+                                //   isSender: true,
+                                // );
+
+                                return DiscordChatMessage(
+                                  username: listMessages[index].get('sentBy'),
+                                  message: listMessages[index].get('text'),
                                   isSender: !others_msg,
-                                  textStyle: TextStyle(
-                                    color: others_msg ? Colors.black : Colors.white,
-                                    fontSize: 16,
-                                  ),
+                                  senderName: listMessages[index].get('senderName'),
                                 );
+
+
+
+
                               } else if (translateSnapshot.hasError) {
                                 // En caso de error durante la traducción
                                 return Text(
                                     'Error de traducción: ${translateSnapshot.error}');
                               } else {
                                 // Mostrar la burbuja del mensaje traducido
-                                return BubbleSpecialThree(
-                                  text: translateSnapshot.data ?? '',
-                                  color: others_msg
-                                      ? const Color.fromARGB(255, 234, 226, 248)
-                                      : Colors.deepPurple,
-                                  tail: true,
+                                // return BubbleSpecialThree(
+                                //   text: translateSnapshot.data ?? '',
+                                //   color: others_msg
+                                //       ? const Color.fromARGB(255, 234, 226, 248)
+                                //       : Colors.deepPurple,
+                                //   tail: true,
+                                //   isSender: !others_msg,
+                                //   textStyle: TextStyle(
+                                //     color: others_msg
+                                //         ? Colors.black
+                                //         : Colors.white,
+                                //     fontSize: 16,
+                                //   ),
+                                // );
+
+
+
+                                // TODO
+                                // return DiscordChatBubble(
+                                //   username: 'Usuario1',
+                                //   message: 'Hola, ¿cómo estás?',
+                                //   isSender: true,
+                                // );
+
+
+                                // return DiscordChatMessage(
+                                //   username: 'Usuario1',
+                                //   message: 'Hola, ¿cómo estás?',
+                                //   isSender: true,
+                                // );
+
+                                return DiscordChatMessage(
+                                  username: listMessages[index].get('sentBy'),
+                                  message: translateSnapshot.data ?? '',
                                   isSender: !others_msg,
-                                  textStyle: TextStyle(
-                                    color: others_msg ? Colors.black : Colors.white,
-                                    fontSize: 16,
-                                  ),
+                                  senderName: listMessages[index].get('senderName'),
                                 );
+
+
+
+
+
+
                               }
                             },
                           );
@@ -160,8 +228,9 @@ class _GameChatState extends State<GameChat> {
                       },
                     );
                   } else {
-                    return  Center(
-                      child: Text(AppLocalizations.of(context)!.game_no_messages),
+                    return Center(
+                      child:
+                          Text(AppLocalizations.of(context)!.game_no_messages),
                     );
                   }
                 } else {
@@ -185,9 +254,8 @@ class _GameChatState extends State<GameChat> {
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller: textEditingController,
-                    decoration:  InputDecoration(
-                      hintText:
-                          AppLocalizations.of(context)!.game_epic_phase,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.game_epic_phase,
                       hintStyle: const TextStyle(color: Colors.white),
                       enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -334,3 +402,64 @@ class _GameChatState extends State<GameChat> {
     }
   }
 }
+
+class DiscordChatMessage extends StatelessWidget {
+  final String username;
+  final String message;
+  final bool isSender;
+  final String senderName;
+
+  DiscordChatMessage({required this.username, required this.message, this.isSender = false, required this.senderName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 16.0), // Aumenté el espacio entre el Divider y el mensaje
+        Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+          leading: CircleAvatar(
+            backgroundColor: Colors.deepPurple,
+            child: Text(
+              username.substring(0, 1), // Mostrar la primera letra del nombre de usuario
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          title: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      // '$username${isSender ? " (You)" : ""}',
+                      '$senderName${isSender ? " (You)" : ""}',
+                      style: TextStyle(
+                        color: Colors.deepPurple,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      message,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+
+

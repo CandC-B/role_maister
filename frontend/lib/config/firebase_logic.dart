@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/models/aliens_character.dart';
+import 'package:role_maister/models/chat_messages.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/player.dart';
@@ -93,20 +94,20 @@ class FirebaseService {
       // ----
       final DocumentSnapshot userSnapshot = await userReference.get();
 
-    if (userSnapshot.exists) {
-      // Obtener la lista actual
-      List<dynamic> currentList = userSnapshot.get(character["mode"]);
+      if (userSnapshot.exists) {
+        // Obtener la lista actual
+        List<dynamic> currentList = userSnapshot.get(character["mode"]);
 
-      // Eliminar el elemento de la lista en memoria
-      currentList.remove(character["id"]);
+        // Eliminar el elemento de la lista en memoria
+        currentList.remove(character["id"]);
 
-      // Actualizar el documento en Firestore con la lista modificada
-      await userReference.update({
-        character["mode"]: currentList,
-      });
-    } else {
-      print('El documento con ID no existe.');
-    }
+        // Actualizar el documento en Firestore con la lista modificada
+        await userReference.update({
+          character["mode"]: currentList,
+        });
+      } else {
+        print('El documento con ID no existe.');
+      }
 
       // ----
       // final DocumentSnapshot userSnapshot = await userReference.get();
@@ -223,11 +224,11 @@ class FirebaseService {
       if (userSnapshot.exists) {
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
-          if (userData.containsKey(mode)) {
-            return userData[mode];
-          } else {
-            throw Exception("USER: Attribute 'characters' does not exist");
-          }
+        if (userData.containsKey(mode)) {
+          return userData[mode];
+        } else {
+          throw Exception("USER: Attribute 'characters' does not exist");
+        }
       } else {
         throw Exception("USER: Document does not exist");
       }
@@ -611,35 +612,71 @@ class FirebaseService {
     context.push("/");
   }
 
-  Future<void> saveMessage(String messageText, DateTime sentAt,
-      String currentGameId, String sentBy) async {
-    if (messageText.trim().isNotEmpty) {
-      String sender;
-      if (sentBy == "IA") {
-        sender = "IA";
-      } else {
-        print("ENTRA AQUÍ");
-        sender = await getUsername(sentBy);
-      }
-      print(sentBy);
-      print(sender);
+  Future<void> saveMessage(
+    // String messageText, DateTime sentAt,
+    //   String currentGameId, String sentBy) async {
+    // if (messageText.trim().isNotEmpty) {
+    //   String sender;
+    //   if (sentBy == "IA") {
+    //     sender = "IA";
+    //   } else {
+    //     print("ENTRA AQUÍ");
+    //     sender = await getUsername(sentBy);
+    //   }
+    //   print(sentBy);
+    //   print(sender);
 
-      Map<String, dynamic> message = {
-        'text': messageText,
-        'sentAt': sentAt,
-        'sentBy': sentBy,
+    //   Map<String, dynamic> message = {
+    //     'text': messageText,
+    //     'sentAt': sentAt,
+    //     'sentBy': sentBy,
+    //     'senderName': sender,
+    //   };
+
+    //   try {
+    //     DocumentReference docRef = await _firestore
+    //         .collection('message')
+    //         .doc(currentGameId)
+    //         .collection('messages')
+    //         .add(message);
+    //   } catch (error) {
+    //     rethrow;
+    //   }
+    // }
+
+    ChatMessages message, String currentGameId) async {
+    // get the text from message
+    // String messageText = message.text;
+
+
+
+
+    if (message.text.trim().isNotEmpty) {
+      String sender;
+      if (message.sentBy == "IA") {
+        sender = 'IA';
+      } else {
+        sender = await getUsername(message.sentBy);
+      }
+
+      Map<String, dynamic> messageData = {
+        'text': message.text,
+        'sentAt': message.sentAt,
+        'sentBy': message.sentBy,
         'senderName': sender,
       };
 
       try {
-        DocumentReference docRef = await _firestore
+        await _firestore
             .collection('message')
             .doc(currentGameId)
             .collection('messages')
-            .add(message);
+            .add(messageData);
       } catch (error) {
+        print('Error saving message: $error');
         rethrow;
       }
+        
     }
   }
 
@@ -660,6 +697,7 @@ class FirebaseService {
           final data = doc.data() as Map<String, dynamic>;
           final sentBy = data['sentBy'] as String;
           final text = data['text'] as String;
+          // final senderName = data['senderName'] as String;
           if (sentBy == "IA") {
             allMessages.add({"role": "CHATBOT", "message": text});
           }
