@@ -111,6 +111,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
+      users: [singleton.player!.uid],
       players: [characterId],
       story_description: singleton.history,
     );
@@ -179,6 +180,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       Game newGame = Game(
         num_players: 1,
         role_system: singleton.gameMode.value,
+        users: [singleton.player!.uid],
         players: [characterId],
         story_description: singleton.history,
       );

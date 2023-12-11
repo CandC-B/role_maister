@@ -82,8 +82,8 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                           final characterId =
                               charactersData!.keys.elementAt(index);
                           final characterData = charactersData![characterId];
-                          singleton.selectedCharacterId =
-                              charactersData!.keys.elementAt(selectedIndex);
+                          // singleton.selectedCharacterId =
+                          //     charactersData!.keys.elementAt(selectedIndex);
                           if (widget.mode == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys

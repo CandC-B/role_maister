@@ -5,6 +5,7 @@ class Game {
   final String uid;
   final int num_players;
   final String role_system;
+  final List users;
   final List players;
   final String story_description;
 
@@ -13,6 +14,7 @@ class Game {
     required this.num_players,
     required this.role_system,
     required this.players,
+    required this.users,
     required this.story_description,
   }) : uid = uid ?? const Uuid().v4();
 
@@ -24,6 +26,7 @@ class Game {
       int num_players = data['num_players'] ?? 0;
       String role_system = data['role_system'] ?? '';
       List<String> players = List<String>.from(data['players'] ?? []);
+      List<String> users = List<String>.from(data['users'] ?? []);
       String story_description = data['story_description'] ?? '';
 
       return Game(
@@ -31,6 +34,7 @@ class Game {
         num_players: num_players,
         role_system: role_system,
         players: players,
+        users: users,
         story_description: story_description,
       );
     } else {
@@ -45,6 +49,7 @@ class Game {
       'num_players': this.num_players,
       'role_system': this.role_system,
       'players': this.players,
+      'users': this.users,
       'story_description': this.story_description,
     };
   }
@@ -54,6 +59,7 @@ class Game {
       num_players: statsData['num_players'],
       role_system: statsData['role_system'],
       players: statsData['players'],
+      users: statsData['users'],
       story_description: statsData['story_description'],
     );
   }

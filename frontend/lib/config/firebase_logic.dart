@@ -8,6 +8,7 @@ import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/models/aliens_character.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player.dart';
 import 'package:role_maister/widgets/aliens_characters_card.dart';
 import 'package:uuid/uuid.dart';
@@ -836,6 +837,27 @@ class FirebaseService {
       return true;
     }
   }
+
+  Future<List<Game>> fetchGamesByUserId(String userId) async {
+  List<Game> games = [];
+
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('game') // replace with your collection name
+        .where('users', arrayContains: userId)
+        .get();
+
+    for (QueryDocumentSnapshot document in querySnapshot.docs) {
+      // Assuming 'name' is the field containing game information
+      Game game = Game.fromMap(document.data() as Map<String, dynamic>);
+      games.add(game);
+    }
+  } catch (e) {
+    print('Error fetching games: $e');
+  }
+
+  return games;
+}
 
   Future<User?> signUp(
       String email, String password, BuildContext context) async {

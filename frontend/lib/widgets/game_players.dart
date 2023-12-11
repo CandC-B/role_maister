@@ -138,7 +138,6 @@ class _GamePlayersState extends State<GamePlayers> {
             ),
             TextButton(
               onPressed: () {
-                context.go('/');
                 context.push('/');
               },
               child: Text(
