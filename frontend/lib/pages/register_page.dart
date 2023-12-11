@@ -263,7 +263,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
               onPressed: () async {
-                // TODO remove comments in production
                 if (newPassword1.text == newPassword2.text) {
                   bool usernameError = await isUsernameValid(username.text);
                   checkRegisterInput(usernameError);
@@ -275,7 +274,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         email.text, newPassword1.text, context);
                     if (user != null) {
                       Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliens: [], dyd: [], cthulhu: [],gamesPlayed: 0, experience: 1, photoUrl: "small_logo.png", games: []);
-                      // singleton.user = user;
                       singleton.player = player;
                       firebase.saveUser(player);
                     } else {
