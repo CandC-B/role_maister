@@ -21,6 +21,25 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<Map<String, dynamic>> getCharacter(
+      String characterId, String gameMode) async {
+    try {
+      final DocumentReference characterReference = _firestore
+          .collection('character')
+          .doc(gameMode)
+          .collection(gameMode)
+          .doc(characterId);
+      final DocumentSnapshot characterSnapshot = await characterReference.get();
+      if (characterSnapshot.exists) {
+        return characterSnapshot.data() as Map<String, dynamic>;
+      } else {
+        throw Exception("CHARACTER: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> createCharacter(Map<String, dynamic> character) async {
     try {
       final User? user = _auth.currentUser;
@@ -131,7 +150,6 @@ class FirebaseService {
           _firestore.collection("user").doc(userId);
       final DocumentSnapshot userSnapshot = await userReference.get();
       if (userSnapshot.exists) {
-        print("Gamemode" + singleton.gameMode.value);
         final Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
         if (userData.containsKey(singleton.gameMode.value)) {
@@ -394,11 +412,28 @@ class FirebaseService {
     }
   }
 
-  Future<String> createGame(Map<String, dynamic> gameConfig) async {
+  Future<Map<String, dynamic>> getGame(String gameId) async {
     try {
-      DocumentReference docRef =
-          await _firestore.collection('game').add(gameConfig);
-      return docRef.id;
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('game').doc(gameId).get();
+
+      if (documentSnapshot.exists) {
+        return documentSnapshot.data() as Map<String, dynamic>;
+      } else {
+        throw Exception("GAME: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+// TODO I have changed this
+  Future<void> createGame(Map<String, dynamic> gameConfig) async {
+    try {
+      await _firestore
+          .collection('game')
+          .doc(gameConfig['uid'])
+          .set(gameConfig);
     } catch (error) {
       rethrow;
     }
@@ -420,7 +455,7 @@ class FirebaseService {
         if (gameSnapshot.exists) {
           // Modify the game data
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          gameData['num_players'] = 2;
+          gameData['num_players'] += 1;
 
           // Add the current characterId to the list of players
           List<String> players = List<String>.from(gameData['players'] ?? []);
@@ -436,6 +471,8 @@ class FirebaseService {
       throw error;
     }
   }
+
+  // Function to get the game data from the Firestore collection 'game' by user ID
 
   Future<void> createRandomPlayer() async {
     try {
@@ -499,6 +536,7 @@ class FirebaseService {
         'userId': userId,
         'characterId': characterId,
         'timestamp': FieldValue.serverTimestamp(),
+        'ready': false,
       });
 
       print('User added to the queue successfully.');
@@ -508,7 +546,7 @@ class FirebaseService {
     }
   }
 
-  // Function to add a user to the 'queue' collection
+  // Function to add the game id to the queue
   Future<void> addGameToQueue(String characterId) async {
     try {
       // Reference to the Firestore collection 'queue'
@@ -550,7 +588,7 @@ class FirebaseService {
     }
   }
 
-  Future<String> getGameId() async {
+  Future<String> getGameIdFromQueue() async {
     try {
       // Reference to the Firestore collection 'queue'
       CollectionReference queueCollection =
@@ -582,20 +620,75 @@ class FirebaseService {
     }
   }
 
-  Future<void> saveUser(Player player) async {
-    Map<String, dynamic> currentPlayer = {
-      'uid': player.uid,
-      'username': player.username,
-      'email': player.email,
-      'tokens': player.tokens,
-      'aliens': player.aliens,
-      'dyd': player.dyd,
-      'cthulhu': player.cthulhu,
-      'gamesPlayed': player.gamesPlayed,
-      'experience': player.experience
-    };
+  Future<void> addReadyToQueue() async {
     try {
-      _firestore.collection('user').doc(player.uid).set(currentPlayer);
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+
+      // Get the current user ID
+      String userId = singleton.user!.uid;
+
+      // Check if the user already has a document in the 'queue' collection
+      QuerySnapshot<Map<String, dynamic>> existingUserDocs =
+          await queueCollection
+              .orderBy('timestamp')
+              .limit(1)
+              .get() as QuerySnapshot<Map<String, dynamic>>;
+
+      if (existingUserDocs.docs.isNotEmpty) {
+        // User already exists in the 'queue', update the existing document
+        DocumentReference<Map<String, dynamic>> existingUserDoc =
+            existingUserDocs.docs.first.reference;
+
+        await existingUserDoc.update({
+          'ready': true,
+        });
+      } else {
+        // User doesn't exist in the 'queue', add a new document
+        throw Exception("User not found");
+      }
+    } catch (error) {
+      print('Error adding user to the queue: $error');
+      rethrow;
+    }
+  }
+
+  Future<bool> checkIfReady() async {
+    try {
+      // Reference to the Firestore collection 'queue'
+      CollectionReference queueCollection =
+          FirebaseFirestore.instance.collection('queue');
+      // Query to get the first document ordered by timestamp
+      QuerySnapshot snapshot =
+          await queueCollection.orderBy('timestamp').limit(1).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Get the first document
+        Map<String, dynamic> firstDocument =
+            snapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Check if 'gameId' field exists in the first document
+        if (firstDocument.containsKey('ready')) {
+          // Retrieve the 'gameId' attribute from the first document
+          bool ready = firstDocument['ready'];
+          // Return the 'gameId' attribute
+          return ready;
+        } else {
+          return false;
+        }
+      }
+      // Return null if there are no documents in the 'queue' collection
+      throw Exception("Queue not found");
+    } catch (error) {
+      print('Error getting current game Id: $error');
+      throw error;
+    }
+  }
+
+  Future<void> saveUser(Player player) async {
+    try {
+      _firestore.collection('user').doc(player.uid).set(player.toMap());
       // TODO error contorl if user cannot be created
     } catch (error) {
       rethrow;

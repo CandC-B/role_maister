@@ -20,6 +20,7 @@ class DydCharacter extends Character {
   final String signatureItem;
   final int cash;
   final int hp;
+  final String photoUrl;
   final String mode = "dyd";
 
   DydCharacter({
@@ -39,6 +40,7 @@ class DydCharacter extends Character {
     required this.signatureItem,
     required this.cash,
     required this.hp,
+    required this.photoUrl,
   }) : super(name, userId , id: id);
 
   // Factory constructor to generate random AliensCharacter
@@ -56,7 +58,7 @@ class DydCharacter extends Character {
     final gear = _getRandomGear(career);
     final signatureItem = _getRandomSignatureItem(career);
     final cash = _getRandomCash(career);
-
+    final photoUrl = "small_logo.png";
     return DydCharacter(
       characterLevel: 1,
       career: career,
@@ -69,6 +71,7 @@ class DydCharacter extends Character {
       friend: friend,
       rival: enemy,
       gear: gear,
+      photoUrl: photoUrl,
       signatureItem: signatureItem,
       cash: cash,
       hp: 2 * attributes["Strength"]!,
@@ -573,6 +576,7 @@ class DydCharacter extends Character {
         ' friend: $friend,'
         ' rival: $rival,'
         ' gear: $gear,'
+        ' photoUrl: $photoUrl,'
         ' signatureItem: $signatureItem,'
         ' cash: $cash,'
         ' hp: $hp'
@@ -595,6 +599,7 @@ class DydCharacter extends Character {
       'friend': friend,
       'rival': rival,
       'gear': gear,
+      'photo_url': photoUrl,
       'signature_item': signatureItem,
       'cash': cash,
       'hp': hp,
@@ -623,6 +628,7 @@ class DydCharacter extends Character {
       gear: (statsData['gear'] as List<dynamic>)
           .map((value) => value as String)
           .toList(),
+      photoUrl: statsData['photo_url'] as String,
       signatureItem: statsData['signature_item'] as String,
       cash: statsData['cash'] as int,
     );
