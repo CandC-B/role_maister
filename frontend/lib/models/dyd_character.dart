@@ -8,133 +8,602 @@ class DydCharacter extends Character {
   // TODO: de momento solo tenemos character level 1
   
   final int characterLevel;
-  final String career;
-  final Map<String, int> attributes;
-  final Map<String, int> skills;
-  final List<String> talents;
-  final String appearance;
-  final String personalAgenda;
-  final String friend;
-  final String rival;
-  final List<String> gear;
-  final String signatureItem;
-  final int cash;
+  final String race;
+  final Map<String, int> abilities;
+  // final String name;
+  final int age;
+  final String alignment;
+  final double height;
+  final double weight;
+  final String size;
+  final List<String> traits;
+  final List<String> languages;
+  final String characterClass;
+  final String description;
+  final String hitDie;
+  final List<String> proficiencies;
+  final String tools;
   final int hp;
+  final Map<String, int> skills;
+  final List<String> equipment;
+  //TODO
+  final String sex;
+  final String background;
+  final String eyesColor;
+  final String hairColor;
+  final String skinColor;
+  final String appearance;
   final String photoUrl;
   final String mode = "dyd";
 
   DydCharacter({
     String? id,
     required this.characterLevel,
-    required this.career,
-    required this.attributes,
-    required this.skills,
-    required this.talents,
+    required this.race,
+    required this.abilities,
+    required this.age,
     required String name,
     required String userId,
-    required this.appearance,
-    required this.personalAgenda,
-    required this.friend,
-    required this.rival,
-    required this.gear,
-    required this.signatureItem,
-    required this.cash,
+    required this.alignment,
+    required this.height, //metros
+    required this.weight, // Kg
+    required this.size,
+    required this.traits,
+    required this.languages,
+    required this.characterClass,
+    required this.description,
+    required this.hitDie,
+    required this.proficiencies,
+    required this.tools,
     required this.hp,
+    required this.skills,
+    required this.equipment,
     required this.photoUrl,
   }) : super(name, userId , id: id);
 
   // Factory constructor to generate random AliensCharacter
   factory DydCharacter.random() {
-    final career = _generateCareer();
-    final attributes = _generateRandomAttributes(career);
-    final skills = _generateRandomSkills(career);
-    final talents = _generateRandomTalents(career);
-    String name = _getRandomName(career);
+    final race = _generateRandomRace();
+    final abilities = _generateRandomAbilities(race);
+    final age = _getRandomAge(race);
+    final alignment = _getRandomAlignment(race);
+    String name = _getRandomName(race);
     String userId = "test";
-    final appearance = _getRandomAppearance(career);
-    final personalAgenda = _getRandomPersonalAgenda(career);
-    final friend = _getRandomName(career);
-    final enemy = _getRandomName(career);
-    final gear = _getRandomGear(career);
-    final signatureItem = _getRandomSignatureItem(career);
-    final cash = _getRandomCash(career);
-    final photoUrl = "small_logo.png";
+    final height = _getRandomHeight(race);
+    final weight = _getRandomWeight(race);
+    final size = _getRandomSize(race);
+    final traits = _generateRandomTraits(race);
+    final languages = _generateRandomLanguages(race);
+    final characterClass = _generateRandomClass();
+    final description = _getRandomDescription(characterClass);
+    final hitDie = _getRandomHitDie(characterClass);
+    final proficiencies = _getRandomCash(characterClass);
+    final tools = _getRandomCash(characterClass);
+    final hp = _getRandomCash(characterClass, abilities);
+    final skills = _getRandomCash(characterClass);
+    final equipment = _getRandomCash(characterClass);
+    const photoUrl = "small_logo.png";
     return DydCharacter(
       characterLevel: 1,
-      career: career,
-      attributes: attributes,
-      skills: skills,
-      talents: talents,
+      race: race,
+      abilities: abilities,
+      age: age,
+      alignment: alignment,
       name: name,
-      appearance: appearance,
-      personalAgenda: personalAgenda,
-      friend: friend,
-      rival: enemy,
-      gear: gear,
+      height: height,
+      weight: weight,
+      size: size,
+      traits: traits,
+      languages: languages,
       photoUrl: photoUrl,
-      signatureItem: signatureItem,
-      cash: cash,
-      hp: 2 * attributes["Strength"]!,
+      characterClass: characterClass,
+      description: description,
+      hitDie: hitDie,
+      proficiencies: proficiencies,
+      tools: tools,
+      hp: hp,
+      skills: skills,
+      equipment: equipment,
       userId: userId,
     );
   }
 
-  static String _generateCareer() {
-    List<String> careers = [
-      "Colonial marine",
-      "Colonial marshall",
-      "Agent",
-      "Kid",
-      "Medic",
-      "Official",
-      "Pilot",
-      "Roughneck",
-      "Scientific"
+  static int makeRoll(int times, int dice) {
+    int result = 1;
+    for (int i = 0; i < times; i++) {
+      result += Random().nextInt(dice + 1);
+    }
+    return result;
+  }
+  
+  static String _generateRandomRace() {
+    List<String> races = [
+      "Dwarf",
+      "Elf",
+      "Halfling",
+      "Human",
+      "Dragonborn",
+      "Gnome",
+      "Half-elf",
+      "Half-orc",
+      "Tiefling"
     ];
-    return randomChoice(careers);
+    return randomChoice(races);
   }
 
-  static Map<String, int> _generateRandomAttributes(String selectedCareer) {
-    Map<String, int> attributes = {
-      "Strength": 0,
-      "Agility": 0,
-      "Wits": 0,
-      "Empathy": 0
+  static Map<String, int> _generateRandomAbilities(String selectedRace) {
+    Map<String, int> abilities = {
+      "STR": makeRoll(3, 6),
+      "DEX": makeRoll(3, 6),
+      "CON": makeRoll(3, 6),
+      "INT": makeRoll(3, 6),
+      "WIS": makeRoll(3, 6),
+      "CHA": makeRoll(3, 6)
     };
-    int remainingPoints = 14;
 
-    if (selectedCareer == "Colonial marine" || selectedCareer == "Roughneck") {
-      attributes["Strength"] = 5;
+    if (selectedRace == "Human") {
+      abilities["STR"] = (abilities["STR"] ?? 0) + 1;
+      abilities["DEX"] = (abilities["DEX"] ?? 0) + 1;
+      abilities["CON"] = (abilities["CON"] ?? 0) + 1;
+      abilities["INT"] = (abilities["INT"] ?? 0) + 1;
+      abilities["WIS"] = (abilities["WIS"] ?? 0) + 1;
+      abilities["CHA"] = (abilities["CHA"] ?? 0) + 1;
     }
 
-    if (selectedCareer == "Kid" || selectedCareer == "Pilot") {
-      attributes["Agility"] = 5;
+    if (selectedRace == "Dragonborn") {
+      abilities["STR"] = (abilities["STR"] ?? 0) + 2;
+      abilities["CHA"] = (abilities["CHA"] ?? 0) + 2;
     }
 
-    if (selectedCareer == "Colonial marshall" ||
-        selectedCareer == "Scientific" ||
-        selectedCareer == "Agent") {
-      attributes["Wits"] = 5;
+    if (selectedRace == "Half-orc") {
+      abilities["STR"] = (abilities["STR"] ?? 0) + 2;
+      abilities["CON"] = (abilities["CON"] ?? 0) + 1;
     }
 
-    if (selectedCareer == "Medic" || selectedCareer == "Official") {
-      attributes["Empathy"] = 5;
+    if (selectedRace == "Elf") {
+      abilities["DEX"] = (abilities["DEX"] ?? 0) + 2;
     }
-
-    // Assign the remaining attributes randomly so that they sum 14
-    remainingPoints -= attributes.values.reduce((a, b) => a + b);
-    while (remainingPoints > 0) {
-      String attributeToIncrement = randomChoice(attributes.keys.toList());
-      if (attributes[attributeToIncrement]! < 5) {
-        attributes[attributeToIncrement] =
-            (attributes[attributeToIncrement] ?? 0) + 1;
-        remainingPoints--;
+    
+    if (selectedRace == "Halfling") {
+      abilities["DEX"] = (abilities["DEX"] ?? 0) + 2;
+    }
+    
+    if (selectedRace == "Dwarf") {
+      abilities["CON"] = (abilities["CON"] ?? 0) + 2;
+    }
+    
+    if (selectedRace == "Gnome") {
+      abilities["INT"] = (abilities["INT"] ?? 0) + 2;
+    }
+    
+    if (selectedRace == "Tiefling") {
+      abilities["INT"] = (abilities["INT"] ?? 0) + 1;
+      abilities["CHA"] = (abilities["CHA"] ?? 0) + 2;
+    }
+    
+    if (selectedRace == "Half-elf") {
+      abilities["CHA"] = (abilities["CHA"] ?? 0) + 2;
+      for(int i=0; i<2; i++) {
+        int randomIndex = Random().nextInt(6);
+        List<String> randomAbilityKeys = abilities.keys.toList();
+        String randomAbility = randomAbilityKeys[randomIndex];
+        abilities[randomAbility] = (abilities[randomAbility] ?? 0) + 1;
       }
     }
 
-    return attributes;
+    return abilities;
   }
 
+  static String _getRandomName(String selectedRace) {
+    Map<String, List<String>> names = {
+      "Dwarf": [
+        "Thoradin",
+        "Orsik",
+        "Gardain",
+        "Sannl",
+        "Kathra",
+        "Riswynn"
+      ],
+      "Elf": [
+        "Aelar",
+        "Riardon",
+        "Thamior",
+        "Bethrynna",
+        "Queleena",
+        "Althaea"
+      ],
+      "Halfling": [
+        "Garret",
+        "Milo",
+        "Finnan",
+        "Cora",
+        "Jillian",
+        "Lavinia"
+      ],
+      "Human": [
+        "Paco",
+        "Jose Luis",
+        "Antonio",
+        "Mari Carmen",
+        "Lola",
+        "Paquita"
+      ],
+      "Dragonborn": [
+        "Arjhan",
+        "Medrash",
+        "Torinn",
+        "Kava",
+        "Uady",
+        "Harann"
+      ],
+      "Gnome": [
+        "Alston",
+        "Warryn",
+        "Gerbo",
+        "Donella",
+        "Nissa",
+        "Nyx"
+      ],
+      "Half-elf": [
+        "Aelar",
+        "Riardon",
+        "Thamior",
+        "Bethrynna",
+        "Queleena",
+        "Althaea",
+        "Paco",
+        "Jose Luis",
+        "Antonio",
+        "Mari Carmen",
+        "Lola",
+        "Paquita"
+      ],
+      "Half-orc": [
+        "Dench",
+        "Feng",
+        "Mhurren",
+        "Kansif",
+        "Sutha",
+        "Yevelda"
+      ],
+      "Tiefling": [
+        "Akmenos",
+        "Mordai",
+        "Therai",
+        "Kallista",
+        "Orianna",
+        "Anakis"
+      ]
+    };
+
+    if (names.containsKey(selectedRace)) {
+      return randomChoice(names[selectedRace]!);
+    }
+    throw Exception("Unsupported race selected");
+  }
+
+  static int _getRandomAge(String selectedRace) {
+    if (selectedRace == "Dwarf") {
+      return 50 + Random().nextInt(301);
+    } else if (selectedRace == "Elf") {
+      return 100 + Random().nextInt(651);
+    } else if (selectedRace == "Halfling") {
+      return 20 + Random().nextInt(131);
+    } else if (selectedRace == "Human") {
+      return 18 + Random().nextInt(63);
+    } else if (selectedRace == "Dragonborn") {
+      return 3 + Random().nextInt(78);
+    } else if (selectedRace == "Gnome") {
+      return 40 + Random().nextInt(461);
+    } else if (selectedRace == "Half-elf") {
+      return 20 + Random().nextInt(151);
+    } else if (selectedRace == "Half-orc") {
+      return 15 + Random().nextInt(61);
+    } else { // if (selectedRace == "Tiefling") 
+      return 18 + Random().nextInt(77);
+    }  
+  }
+
+  static String _getRandomAlignment(String selectedRace) {
+    Map<String, List<String>> alignments = {
+      "Dwarf": [
+        "Lawful good",
+        "Lawful neutral",
+        "Lawfuk evil",
+      ],
+      "Elf": [
+        "Chaotic good",
+      ],
+      "Halfling": [
+        "Lawful good",
+      ],
+      "Human": [
+        "Lawful good",
+        "Neutral good",
+        "Chaotic good",
+        "Lawful neutral",
+        "Neutral",
+        "Chaotic neutral",
+        "Lawful evil",
+        "Neutral evil",
+        "Chaotic evil",
+      ],
+      "Dragonborn": [
+        "Lawful good",
+        "Neutral good",
+        "Chaotic good",
+        "Lawful evil",
+        "Neutral evil",
+        "Chaotic evil",
+      ],
+      "Gnome": [
+        "Lawful good",
+        "Chaotic good",
+      ],
+      "Half-elf": [
+        "Chaotic neutral",
+      ],
+      "Half-orc": [
+        "Chaotic evil",
+      ],
+      "Tiefling": [
+        "Chaotic evil",
+      ]
+    };
+
+    if (alignments.containsKey(selectedRace)) {
+      return randomChoice(alignments[selectedRace]!);
+    }
+    throw Exception("Unsupported race selected");
+  }
+
+  static double _getRandomHeight(String selectedRace) {
+    if (selectedRace == "Dwarf") {
+      return 1.12 + (makeRoll(2, 4) * 2.5);
+    } else if (selectedRace == "Elf") {
+      return 1.37 + (makeRoll(2, 10) * 2.5);
+    } else if (selectedRace == "Halfling") {
+      return 0.79 + (makeRoll(2, 4) * 2.5);
+    } else if (selectedRace == "Human") {
+      return 1.45 + (makeRoll(2, 10) * 2.5);
+    } else if (selectedRace == "Dragonborn") {
+      return 1.68 + (makeRoll(2, 8) * 2.5);
+    } else if (selectedRace == "Gnome") {
+      return 0.89 + (makeRoll(2, 4) * 2.5);
+    } else if (selectedRace == "Half-elf") {
+      return 1.45 + (makeRoll(2, 8) * 2.5);
+    } else if (selectedRace == "Half-orc") {
+      return 1.47 + (makeRoll(2, 10) * 2.5);
+    } else { // if (selectedRace == "Tiefling") 
+      return 1.45 + (makeRoll(2, 8) * 2.5);
+    }  
+  }
+
+  static double _getRandomWeight(String selectedRace) {
+    if (selectedRace == "Dwarf") {
+      return 52 + (makeRoll(2, 4) * makeRoll(2, 6) * 2.2);
+    } else if (selectedRace == "Elf") {
+      return 40 + (makeRoll(2, 10) * makeRoll(1, 4) * 2.2);
+    } else if (selectedRace == "Halfling") {
+      return 16 + (makeRoll(2, 4) * 2.2);
+    } else if (selectedRace == "Human") {
+      return 50 + (makeRoll(2, 10) * makeRoll(2, 4) * 2.2);
+    } else if (selectedRace == "Dragonborn") {
+      return 80 + (makeRoll(2, 8) * makeRoll(2, 6) * 2.2);
+    } else if (selectedRace == "Gnome") {
+      return 16 + (makeRoll(2, 4) * 2.2);
+    } else if (selectedRace == "Half-elf") {
+      return 50 + (makeRoll(2, 8) * makeRoll(2, 4) * 2.2);
+    } else if (selectedRace == "Half-orc") {
+      return 63.5 + (makeRoll(2, 10) * makeRoll(2, 6) * 2.2);
+    } else { // if (selectedRace == "Tiefling") 
+      return 50 + (makeRoll(2, 8) * makeRoll(2, 4) * 2.2);
+    }  
+  }
+
+  static String _getRandomSize(String selectedRace) {
+    if (selectedRace == "Dwarf") {
+      return "Medium";
+    } else if (selectedRace == "Elf") {
+      return "Medium";
+    } else if (selectedRace == "Halfling") {
+      return "Small";
+    } else if (selectedRace == "Human") {
+      return "Medium";
+    } else if (selectedRace == "Dragonborn") {
+      return "Medium";
+    } else if (selectedRace == "Gnome") {
+      return "Small";
+    } else if (selectedRace == "Half-elf") {
+      return "Medium";
+    } else if (selectedRace == "Half-orc") {
+      return "Medium";
+    } else { // if (selectedRace == "Tiefling") 
+      return "Medium";
+    }  
+  }
+
+  static List<String> _generateRandomTraits(String selectedRace) {
+    Map<String, List<String>> alignments = {
+      "Dwarf": [
+        "Dark vision",
+        "Poison resistance",
+        "Combat proficiency with battleaxe, handaxe, throwing hammer and war hammer"
+      ],
+      "Elf": [
+        "Dark vision",
+        "Keen Senses: Perception proficiency",
+        "Trance: you don't need to sleep. You may meditate for 4 hours instead of sleeping for 8 hours",
+      ],
+      "Halfling": [
+        "Lucky: When you roll a 1 on a die throw, you can reroll the die and must use a new roll",
+        "Lucky: Brave: you can't be frightened",
+      ],
+      "Human": [
+        "None",
+      ],
+      "Dragonborn": [
+        "Damage resistance",
+        "Breath weapon: you can use your action to exhale destructive energy. After you use your breath weapon, you can't use it again until you finish a short or long rest",
+      ],
+      "Gnome": [
+        "Dark vision",
+      ],
+      "Half-elf": [ //TODO
+        "Dark vision",
+        "Skill versatility: you gain proficiency in two extra skills"
+      ],
+      "Half-orc": [
+        "Dark vision",
+        "Menacing: You gain proficiency in intimidation skill", //TODO
+        "Relentless Endurance: When you are reduced to 0 HP, you can drop to 1 hit point instead. You can't use this again until you finish a long rest"
+      ],
+      "Tiefling": [
+        "Dark vision",
+        "Hellish resistance: You have resistance to fire damage"
+      ]
+    };
+
+    if (alignments.containsKey(selectedRace)) {
+      return alignments[selectedRace]!;
+    }
+    throw Exception("Unsupported race selected");
+  }
+
+  static String _extraRandomLanguage(List<String> currentLanguages) {
+    String newLanguage;
+    List<String> extraLanguages = ["Common", "Dwarvish", "Elvish", "Halfling", "Draconic", "Gnomish", "Orc", "Infernal"];
+    do {
+      int randomIndex = Random().nextInt(7);
+      newLanguage = extraLanguages[randomIndex];
+    } while(extraLanguages.contains(newLanguage));
+    return newLanguage;
+  }
+
+  static List<String> _generateRandomLanguages(String selectedRace) {
+    Map<String, List<String>> languages = {
+      "Dwarf": [
+        "Common",
+        "Dwarvish",
+      ],
+      "Elf": [
+        "Common",
+        "Elvish",
+      ],
+      "Halfling": [
+        "Common",
+        "Halfling",
+      ],
+      "Human": [ 
+        "Common",
+        _extraRandomLanguage(["Common"]),
+      ],
+      "Dragonborn": [
+        "Common",
+        "Draconic",
+      ],
+      "Gnome": [
+        "Common",
+        "Gnomish",
+      ],
+      "Half-elf": [ 
+        "Common",
+        "Elvish",
+        _extraRandomLanguage(["Common", "Elvish"])
+      ],
+      "Half-orc": [
+        "Common",
+        "Orc", 
+      ],
+      "Tiefling": [
+        "Common",
+        "Infernal"
+      ]
+    };
+
+    if (languages.containsKey(selectedRace)) {
+      return languages[selectedRace]!;
+    }
+    throw Exception("Unsupported language selected");
+  }
+
+  static String _generateRandomClass() {
+    List<String> classes = [
+      "Barbarian",
+      "Bard",
+      "Cleric",
+      "Druid",
+      "Fighter",
+      "Monk",
+      "Paladin",
+      "Ranger",
+      "Rogue",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ];
+    return randomChoice(classes);
+  }
+
+  static String _getRandomDescription(String selectedClass) {
+    if (selectedClass == "Barbarian") {
+      return "A fierce warrior of primitive background who can enter a battle rage";
+    } else if (selectedClass == "Bard") {
+      return "An inspiring magician whose power echoes the music of creation";
+    } else if (selectedClass == "Cleric") {
+      return "A priestly champion who wields divine magic in service of a higher power";
+    } else if (selectedClass == "Druid") {
+      return "A priest of the Old Faith, wielding the powers of nature— moonlight and plant growth, fire and lightning— and adopting animal forms";
+    } else if (selectedClass == "Fighter") {
+      return "A master of martial combat, skilled with a variety of weapons and armor";
+    } else if (selectedClass == "Monk") {
+      return "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection";
+    } else if (selectedClass == "Paladin") {
+      return "A holy warrior bound to a sacred oath";
+    } else if (selectedClass == "Ranger") {
+      return "A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization";
+    } else if (selectedClass == "Rogue") {
+      return "A scoundrel who uses stealth and trickery to overcome obstacles and enemies";
+    } else if (selectedClass == "Sorcerer") {
+      return "A spellcaster who draws on inherent magic from a gift or bloodline";
+    } else if (selectedClass == "Warlock") {
+      return "A wielder of magic that is derived from a bargain with an extraplanar entity";
+    } else { // if (selectedClass == "Wizard")  
+      return "A scholarly magic-user capable of manipulating the structures of reality";
+    }  
+  }
+
+  static String _getRandomHitDie(String selectedClass) {
+    if (selectedClass == "Barbarian") {
+      return "d12";
+    } else if (selectedClass == "Bard") {
+       return "d8";
+    } else if (selectedClass == "Cleric") {
+       return "d8";
+    } else if (selectedClass == "Druid") {
+       return "d8";
+    } else if (selectedClass == "Fighter") {
+       return "d10";
+    } else if (selectedClass == "Monk") {
+       return "d8";
+    } else if (selectedClass == "Paladin") {
+       return "d10";
+    } else if (selectedClass == "Ranger") {
+       return "d10";
+    } else if (selectedClass == "Rogue") {
+       return "d8";
+    } else if (selectedClass == "Sorcerer") {
+       return "d6";
+    } else if (selectedClass == "Warlock") {
+       return "d8";
+    } else { // if (selectedClass == "Wizard")  
+       return "d6";
+    }  
+  }
+
+
+
+//old
   static Map<String, int> _generateRandomSkills(String selectedCareer) {
     // TODO: make random but to sum 9
     if (selectedCareer == "Colonial marine" || selectedCareer == "Roughneck") {
@@ -172,90 +641,7 @@ class DydCharacter extends Character {
     }
     throw Exception("Unsupported career selected");
   }
-
-  static String _getRandomName(String selectedCareer) {
-    Map<String, List<String>> names = {
-      "Colonial marine": [
-        "Marcus Mullaney",
-        "Nik Elson",
-        "Vic Pasengrau",
-        "Kimi Diem",
-        "Tara Zanelli",
-        "Chrissy López"
-      ],
-      "Colonial marshall": [
-        "Jack Kitani",
-        "Barrell Klein",
-        "Ivan Mankov",
-        "Akira Kano",
-        "Angela Harris",
-        "Lee-Ann Jenkins"
-      ],
-      "Agent": [
-        "Conrad Schmidt",
-        "Alexander Balconi",
-        "Ryan Middlebrook",
-        "Michiko Nogumi",
-        "Sheridan Lampara",
-        "Mercedes Prince"
-      ],
-      "Kid": [
-        "Chip Harrington",
-        "Hugo Turner",
-        "Jakey Myers",
-        "Meggie Wu",
-        "Maisie Kelly",
-        "Becca David"
-      ],
-      "Medic": [
-        "Cho Hadfield",
-        "Ken Ibana",
-        "Sullivan Ward",
-        "Ana Kasnavik",
-        "Juno Blanchard",
-        "Katie Aberly"
-      ],
-      "Official": [
-        "Eugene Proctor",
-        "Oliver Bryant",
-        "Lloyd T. Darrington",
-        "Wendy Stern",
-        "Julia Kwang",
-        "Camille Kirschner"
-      ],
-      "Pilot": [
-        "Casper Edmonton",
-        "Sven Stackman",
-        "Kiel Avari",
-        "Fiona O'Neill",
-        "Constance Navona",
-        "Igraine Turner"
-      ],
-      "Roughneck": [
-        "Mac Masterton",
-        "Kip Tranter",
-        "Charlie Stead",
-        "Sassy Díaz",
-        "Kat Longridge",
-        "Jayden Pace"
-      ],
-      "Scientific": [
-        "Viggo Kowalski",
-        "Drew Lancaster",
-        "Travis Torrence",
-        "Elena Sánchez",
-        "Louise Mallory",
-        "Karima Yusef"
-      ]
-    };
-
-    if (names.containsKey(selectedCareer)) {
-      return randomChoice(names[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomAppearance(String selectedCareer) {
+ static String _getRandomAppearance(String selectedCareer) {
     Map<String, List<String>> appearance = {
       "Colonial marine": [
         "Brush haircut",
