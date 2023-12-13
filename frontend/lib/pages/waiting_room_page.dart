@@ -5,7 +5,10 @@ class WaitingRoomPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
+      width: size.width,
+      height: size.height,
       color: const Color.fromARGB(255, 202, 198, 162),
     );
   }

@@ -256,7 +256,7 @@ class ApplicationRouter {
             pageBuilder: (BuildContext context, GoRouterState state) {
               return CustomTransitionPage(
                 key: state.pageKey,
-                child: const GameScreen(),
+                child: const WaitingRoomScreen(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
