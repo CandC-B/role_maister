@@ -84,7 +84,7 @@ class _GamePlayersState extends State<GamePlayers> {
       final List<Map<String, dynamic>> statsData =
           await firestoreService.getCharactersFromGameId(gameId);
       try {
-        return AliensCharacter.fromMap(statsData[0]);
+        return AliensCharacter.fromMap(statsData.first);
       } catch (e) {
         print("Error: $e");
         return AliensCharacter.random();

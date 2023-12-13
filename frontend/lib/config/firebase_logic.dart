@@ -10,6 +10,7 @@ import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player.dart';
+import 'package:role_maister/models/player_game_data.dart';
 import 'package:role_maister/widgets/aliens_characters_card.dart';
 import 'package:uuid/uuid.dart';
 
@@ -265,31 +266,31 @@ class FirebaseService {
         .snapshots();
   }
 
-  // TODO: modificar esta función para el multiplayer
   Future<List<Map<String, dynamic>>> getCharactersFromGameId(
       String gameId) async {
     try {
       final DocumentReference gameReference =
           _firestore.collection("game").doc(gameId);
       final DocumentSnapshot gameSnapshot = await gameReference.get();
-
       if (gameSnapshot.exists) {
         final Map<String, dynamic> gameData =
             gameSnapshot.data() as Map<String, dynamic>;
 
         if (gameData.containsKey("players")) {
-          final List<dynamic> playerIds = gameData["players"];
+          print("test");
+          final playerIds = gameData["players"];
           List<Map<String, dynamic>> charactersData = [];
-
-          for (String playerId in playerIds) {
+          for (int i = 0; i < playerIds.values.length; i++) {
+            PlayerGameData playerGameData =
+                PlayerGameData.fromMap(playerIds.values.elementAt(i));
+            print(playerGameData);
             final DocumentReference characterReference = _firestore
                 .collection('character')
                 .doc(singleton.gameMode.value)
                 .collection(singleton.gameMode.value)
-                .doc(playerId);
+                .doc(playerGameData.characterId);
             final DocumentSnapshot characterSnapshot =
                 await characterReference.get();
-
             if (characterSnapshot.exists) {
               final Map<String, dynamic> characterData =
                   characterSnapshot.data() as Map<String, dynamic>;
@@ -297,9 +298,12 @@ class FirebaseService {
             } else {
               // Handle the case where a character document does not exist
               print(
-                  "CHARACTER: Document does not exist for player ID: $playerId");
+                  "CHARACTER: Document does not exist for player ID: " + playerGameData.characterId);
             }
           }
+          // final List<String> characterIdsList =
+          //     List<String>.from(playerIds.values);
+          // print(characterIdsList);
 
           return charactersData;
         } else {
@@ -430,6 +434,7 @@ class FirebaseService {
 // TODO I have changed this
   Future<void> createGame(Map<String, dynamic> gameConfig) async {
     try {
+      print(gameConfig);
       await _firestore
           .collection('game')
           .doc(gameConfig['uid'])
@@ -456,13 +461,12 @@ class FirebaseService {
           // Modify the game data
           Map<String, dynamic> gameData = gameSnapshot.data()!;
           gameData['num_players'] += 1;
-
+          PlayerGameData playerGameData = PlayerGameData(characterId: characterId);
           // Add the current characterId to the list of players
-          List<String> players = List<String>.from(gameData['players'] ?? []);
-          players.add(characterId);
+          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          players[singleton.player!.uid] = playerGameData.toMap();
           gameData['players'] = players;
 
-          // Update the game document
           tx.update(gameRef, gameData);
         }
       });
@@ -631,10 +635,8 @@ class FirebaseService {
 
       // Check if the user already has a document in the 'queue' collection
       QuerySnapshot<Map<String, dynamic>> existingUserDocs =
-          await queueCollection
-              .orderBy('timestamp')
-              .limit(1)
-              .get() as QuerySnapshot<Map<String, dynamic>>;
+          await queueCollection.orderBy('timestamp').limit(1).get()
+              as QuerySnapshot<Map<String, dynamic>>;
 
       if (existingUserDocs.docs.isNotEmpty) {
         // User already exists in the 'queue', update the existing document
@@ -839,25 +841,25 @@ class FirebaseService {
   }
 
   Future<List<Game>> fetchGamesByUserId(String userId) async {
-  List<Game> games = [];
+    List<Game> games = [];
 
-  try {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('game') // replace with your collection name
-        .where('users', arrayContains: userId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('game') // replace with your collection name
+          .where('users', arrayContains: userId)
+          .get();
 
-    for (QueryDocumentSnapshot document in querySnapshot.docs) {
-      // Assuming 'name' is the field containing game information
-      Game game = Game.fromMap(document.data() as Map<String, dynamic>);
-      games.add(game);
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        // Assuming 'name' is the field containing game information
+        Game game = Game.fromMap(document.data() as Map<String, dynamic>);
+        games.add(game);
+      }
+    } catch (e) {
+      print('Error fetching games: $e');
     }
-  } catch (e) {
-    print('Error fetching games: $e');
-  }
 
-  return games;
-}
+    return games;
+  }
 
   Future<User?> signUp(
       String email, String password, BuildContext context) async {

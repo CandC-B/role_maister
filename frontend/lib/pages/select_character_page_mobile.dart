@@ -8,6 +8,7 @@ import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/models/player_game_data.dart';
 import 'package:role_maister/widgets/cthulhu_characters_card.dart';
 import 'package:role_maister/widgets/dyd_characters_card.dart';
 import 'package:role_maister/widgets/widgets.dart';
@@ -108,7 +109,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   Future<void> createNewGame(String characterId) async {
-    Map<String, String> game_players = {singleton.player!.uid: characterId};
+    Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
@@ -177,7 +178,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     if (queueLen == 0) {
       // First user to enter the queue
       await firebase.addUserToQueue(characterId);
-      Map<String, String> game_players = {singleton.player!.uid: characterId};
+      Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
       Game newGame = Game(
         num_players: 1,
         role_system: singleton.gameMode.value,
