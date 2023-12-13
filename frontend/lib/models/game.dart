@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:role_maister/models/player_game_data.dart';
 import 'package:uuid/uuid.dart';
-
 class Game {
   final String uid;
   final int num_players;
   final String role_system;
-  final List players;
+  final Map<String, dynamic> players;
   final String story_description;
 
   Game({
@@ -19,11 +19,10 @@ class Game {
   factory Game.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
     if (data != null) {
-      // Extract the necessary fields from the Firestore document
       String uid = data['uid'] ?? '';
       int num_players = data['num_players'] ?? 0;
       String role_system = data['role_system'] ?? '';
-      List<String> players = List<String>.from(data['players'] ?? []);
+      Map<String, dynamic> players = Map<String, dynamic>.from(data['players'] ?? []);
       String story_description = data['story_description'] ?? '';
 
       return Game(
@@ -34,7 +33,6 @@ class Game {
         story_description: story_description,
       );
     } else {
-      // Handle the case where data is null
       throw Exception('Failed to parse document data');
     }
   }
