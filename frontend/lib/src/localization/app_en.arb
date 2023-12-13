@@ -202,6 +202,8 @@
   "exit_game_dialog_text": "Are you sure you want to exit the game?",
   "exit_game_dialog_autosave": "(The game will be saved automatically)",
   "exit_game_dialog_cancel": "Cancel",
-  "exit_game_dialog_exit": "Exit"
+  "exit_game_dialog_exit": "Exit",
 
+  "pairing_mode_create": "Create Game",
+  "pairing_mode_join": "Join Game"
 }

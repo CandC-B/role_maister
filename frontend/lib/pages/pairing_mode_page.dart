@@ -37,15 +37,16 @@ class _PairingModePageState extends State<PairingModePage> {
             InkWell(
               onTap: () {
                 singleton.multiplayer = false;
+                singleton.pairingMode = true;
                 context.go("/form_singleplayer");
               },
               child: ImageColorFilter(
-                imagePath: 'assets/images/singleplayer.PNG',
+                imagePath: 'assets/images/create_game_pairing_mode.jpg',
                 routeName: '/form_singleplayer',
-                imageText: AppLocalizations.of(context)!.single_player,
+                imageText: AppLocalizations.of(context)!.pairing_mode_create,
                 isAvailable: true,
                 height: size.height * 0.9,
-                width: size.width * 0.8 / 3,
+                width: size.width * 0.8 / 2,
                 isLink: true,
                 preset: false,
                 isHovering: false,
@@ -53,16 +54,17 @@ class _PairingModePageState extends State<PairingModePage> {
             ),
             InkWell(
               onTap: () {
-                singleton.multiplayer = true;
+                singleton.multiplayer = false;
+                singleton.pairingMode = true;
                 context.go("/form_multiplayer");
               },
               child: ImageColorFilter(
-                imagePath: 'assets/images/multiplayer.png',
+                imagePath: 'assets/images/join_game_pairing_mode.jpg',
                 routeName: 'FantasyHome',
-                imageText: AppLocalizations.of(context)!.multi_player,
+                imageText: AppLocalizations.of(context)!.pairing_mode_join,
                 isAvailable: true,
                 height: size.height * 0.9,
-                width: size.width * 0.8 / 3,
+                width: size.width * 0.8 / 2,
                 isLink: false,
                 preset: false,
                 isHovering: false,

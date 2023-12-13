@@ -202,7 +202,10 @@
     "exit_game_dialog_text": "Вы уверены, что хотите выйти из игры?",
     "exit_game_dialog_autosave": "(Игра будет сохранена автоматически)",
     "exit_game_dialog_cancel": "Отмена",
-    "exit_game_dialog_exit": "Выход"
+    "exit_game_dialog_exit": "Выход",
+
+    "pairing_mode_create": "Создать игру",
+    "pairing_mode_join": "Присоединиться к игре"
 
 
 }

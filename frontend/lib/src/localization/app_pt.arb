@@ -202,5 +202,8 @@
     "exit_game_dialog_text": "Tem certeza de que deseja sair do jogo?",
     "exit_game_dialog_autosave": "(Il gioco verrà salvato automaticamente)",
     "exit_game_dialog_cancel": "Cancelar",
-    "exit_game_dialog_exit": "Sair"
+    "exit_game_dialog_exit": "Sair",
+
+    "pairing_mode_create": "Criar jogo",
+    "pairing_mode_join": "Entrar no jogo"
 }
