@@ -49,6 +49,7 @@ class Game {
 
   static fromMap(Map<String, dynamic> statsData) {
     return Game(
+      uid: statsData['uid'],
       num_players: statsData['num_players'],
       role_system: statsData['role_system'],
       players: statsData['players'],

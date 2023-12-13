@@ -850,13 +850,14 @@ class FirebaseService {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('game') // replace with your collection name
-          .where('users', arrayContains: userId)
           .get();
 
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        // Assuming 'name' is the field containing game information
-        Game game = Game.fromMap(document.data() as Map<String, dynamic>);
-        games.add(game);
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        if (data['players'].keys.contains(userId)) {
+          Game game = Game.fromMap(document.data() as Map<String, dynamic>);
+          games.add(game);
+        }
       }
     } catch (e) {
       print('Error fetching games: $e');
