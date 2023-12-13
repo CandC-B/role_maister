@@ -12,24 +12,26 @@ Future<String> generateAliensPrompt(Game game) async {
 
   if (gameSettings['num_players'] > 1) {
     // Multiplayer sentence
-    newGameInstruction +=
-        "There are ${gameSettings['num_players']} players.\n";
+    newGameInstruction += "There are ${gameSettings['num_players']} players.\n";
     newGameInstruction +=
         "To distinguish their actions, each message will start with 'playerX: (message)', being X the user index.\n";
     // Get all player features
-    for (int i = 0; i < gameSettings['num_players']; i++) {
-      newGameInstruction += "There are player${i+1} features:.\n";
-      String characterId = gameSettings['players'][i];
-      Map<String, dynamic> characterData =
-          await firebase.getCharacter(characterId, gameSettings['role_system']);
-      AliensCharacter aliensCharacter = AliensCharacter.fromMap(characterData);
-      newGameInstruction += getAliensCharacterFeatures(aliensCharacter);
-    }
+      int i = 0;
+      Map<String, dynamic> players = gameSettings['players'];
+      players.forEach((userId, playerGameData) async {
+        newGameInstruction += "There are player${i + 1} features:.\n";
+        i++;
+        Map<String, dynamic> characterData =
+            await firebase.getCharacter(playerGameData["characterId"], gameSettings['role_system']);
+        AliensCharacter aliensCharacter =
+            AliensCharacter.fromMap(characterData);
+        newGameInstruction += getAliensCharacterFeatures(aliensCharacter);
+      });
   } else {
     // Singleplayer sentence
-    String characterId = gameSettings['players'][0];
-    Map<String, dynamic> characterData =
-        await firebase.getCharacter(characterId, gameSettings['role_system']);
+    Map<String, dynamic> userInfo = gameSettings['players'];
+    Map<String, dynamic> characterData = await firebase.getCharacter(
+        userInfo.values.first["characterId"], gameSettings['role_system']);
     AliensCharacter aliensCharacter = AliensCharacter.fromMap(characterData);
     newGameInstruction += getAliensCharacterFeatures(aliensCharacter);
     newGameInstruction +=

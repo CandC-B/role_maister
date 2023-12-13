@@ -466,8 +466,12 @@ class DiscordChatMessage extends StatelessWidget {
                   children: [
                     Text(
                       
-                      '$senderName${isSender ? " (You)" : characterName}',
-                      // '$senderName${isSender ? " (You)" : ""}',
+
+                      senderName == 'IA' ? 
+                        'IA'
+                      :
+                        '$senderName${isSender ? " (You)" : " ($characterName)"}',
+
                       style: TextStyle(
                         color: Colors.deepPurple,
                         fontWeight: FontWeight.bold,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/pages/profile_page.dart';
+import 'package:role_maister/widgets/characters_tab.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 
