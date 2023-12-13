@@ -706,65 +706,28 @@ class FirebaseService {
   }
 
   Future<void> saveMessage(
-    // String messageText, DateTime sentAt,
-    //   String currentGameId, String sentBy) async {
-    // if (messageText.trim().isNotEmpty) {
-    //   String sender;
-    //   if (sentBy == "IA") {
-    //     sender = "IA";
-    //   } else {
-    //     print("ENTRA AQUÍ");
-    //     sender = await getUsername(sentBy);
-    //   }
-    //   print(sentBy);
-    //   print(sender);
-
-    //   Map<String, dynamic> message = {
-    //     'text': messageText,
-    //     'sentAt': sentAt,
-    //     'sentBy': sentBy,
-    //     'senderName': sender,
-    //   };
-
-    //   try {
-    //     DocumentReference docRef = await _firestore
-    //         .collection('message')
-    //         .doc(currentGameId)
-    //         .collection('messages')
-    //         .add(message);
-    //   } catch (error) {
-    //     rethrow;
-    //   }
-    // }
-
     ChatMessages message, String currentGameId) async {
-    // get the text from message
-    // String messageText = message.text;
-
-
-
-
     if (message.text.trim().isNotEmpty) {
-      String sender;
-      if (message.sentBy == "IA") {
-        sender = 'IA';
-      } else {
-        sender = await getUsername(message.sentBy);
-      }
+      // String sender;
+      // if (message.sentBy == "IA") {
+      //   sender = 'IA';
+      // } else {
+      //   sender = await getUsername(message.sentBy);
+      // }
 
-      Map<String, dynamic> messageData = {
-        'text': message.text,
-        'sentAt': message.sentAt,
-        'sentBy': message.sentBy,
-        'senderName': sender,
-      };
+      // Map<String, dynamic> messageData = {
+      //   'text': message.text,
+      //   'sentAt': message.sentAt,
+      //   'sentBy': message.sentBy,
+      //   'senderName': sender,
+      // };
 
       try {
         await _firestore
             .collection('message')
             .doc(currentGameId)
             .collection('messages')
-            .add(messageData);
+            .add(message.toMap());
       } catch (error) {
         print('Error saving message: $error');
         rethrow;

@@ -49,9 +49,13 @@ class _GameChatState extends State<GameChat> {
     // firestoreService.saveMessage(
     //     text, DateTime.now(), widget.gameId, currentUserId);
 
-
     firestoreService.saveMessage(
-      ChatMessages(sentBy: currentUserId, sentAt: DateTime.now().toString(), text: text), 
+      ChatMessages(
+          sentBy: currentUserId,
+          sentAt: DateTime.now(),
+          text: text,
+          senderName: singleton.player!.username,
+          characterName: singleton.selectedCharacterName!),
       widget.gameId,
     );
 
@@ -68,9 +72,14 @@ class _GameChatState extends State<GameChat> {
       if (text.trim().isNotEmpty) {
         // firestoreService.saveMessage(json.decode(response.body)["message"],
         //     DateTime.now(), widget.gameId, "IA");
-       
+
         firestoreService.saveMessage(
-          ChatMessages(sentBy: 'IA', sentAt: DateTime.now().toString(), text: json.decode(response.body)["message"]), 
+          ChatMessages(
+              sentBy: 'IA',
+              sentAt: DateTime.now(),
+              text: json.decode(response.body)["message"],
+              senderName: 'IA',
+              characterName: ''),
           widget.gameId,
         );
       }
@@ -120,8 +129,9 @@ class _GameChatState extends State<GameChat> {
                           bool others_msg = listMessages[index].get('sentBy') !=
                               singleton.user!.uid;
 
-                          print ('listMessages[index]: ${listMessages[index]}');
-                          print ('listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
+                          print('listMessages[index]: ${listMessages[index]}');
+                          print(
+                              'listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
 
                           return FutureBuilder<String>(
                             // future: translateText(listMessages[index].get('text'), locale.languageCode),
@@ -147,9 +157,7 @@ class _GameChatState extends State<GameChat> {
                                 //   ),
                                 // );
 
-
-
-                                // TODO 
+                                // TODO
                                 // return DiscordChatBubble(
                                 //   username: 'Usuario1',
                                 //   message: 'Hola, ¿cómo estás?',
@@ -166,12 +174,11 @@ class _GameChatState extends State<GameChat> {
                                   username: listMessages[index].get('sentBy'),
                                   message: listMessages[index].get('text'),
                                   isSender: !others_msg,
-                                  senderName: listMessages[index].get('senderName'),
+                                  senderName:
+                                      listMessages[index].get('senderName'),
+                                  characterName:
+                                      listMessages[index].get('characterName'),
                                 );
-
-
-
-
                               } else if (translateSnapshot.hasError) {
                                 // En caso de error durante la traducción
                                 return Text(
@@ -193,15 +200,12 @@ class _GameChatState extends State<GameChat> {
                                 //   ),
                                 // );
 
-
-
                                 // TODO
                                 // return DiscordChatBubble(
                                 //   username: 'Usuario1',
                                 //   message: 'Hola, ¿cómo estás?',
                                 //   isSender: true,
                                 // );
-
 
                                 // return DiscordChatMessage(
                                 //   username: 'Usuario1',
@@ -213,14 +217,11 @@ class _GameChatState extends State<GameChat> {
                                   username: listMessages[index].get('sentBy'),
                                   message: translateSnapshot.data ?? '',
                                   isSender: !others_msg,
-                                  senderName: listMessages[index].get('senderName'),
+                                  senderName:
+                                      listMessages[index].get('senderName'),
+                                  characterName:
+                                      listMessages[index].get('characterName'),
                                 );
-
-
-
-
-
-
                               }
                             },
                           );
@@ -408,22 +409,52 @@ class DiscordChatMessage extends StatelessWidget {
   final String message;
   final bool isSender;
   final String senderName;
+  final String characterName;
 
-  DiscordChatMessage({required this.username, required this.message, this.isSender = false, required this.senderName});
+  DiscordChatMessage(
+      {required this.username,
+      required this.message,
+      this.isSender = false,
+      this.characterName = '',
+      required this.senderName});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16.0), // Aumenté el espacio entre el Divider y el mensaje
+        SizedBox(
+            height: 16.0), // Aumenté el espacio entre el Divider y el mensaje
         Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          leading: CircleAvatar(
+          leading: 
+
+            senderName == 'IA' ?
+              // CircleAvatar(
+              //   backgroundColor: Colors.deepPurple,
+              //   child: Image.asset(
+              //     'assets/images/bot_master.png',
+              //     width: 100.0,
+              //     height: 100.0,
+              //   ),
+              // )
+
+              CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/bot_master.png',
+                  width: 100.0,
+                  height: 100.0,
+                ),
+              )
+            : 
+
+          CircleAvatar(
             backgroundColor: Colors.deepPurple,
             child: Text(
-              username.substring(0, 1), // Mostrar la primera letra del nombre de usuario
+              senderName.substring(
+                  0, 1), // Mostrar la primera letra del nombre de usuario
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -434,8 +465,9 @@ class DiscordChatMessage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      // '$username${isSender ? " (You)" : ""}',
-                      '$senderName${isSender ? " (You)" : ""}',
+                      
+                      '$senderName${isSender ? " (You)" : characterName}',
+                      // '$senderName${isSender ? " (You)" : ""}',
                       style: TextStyle(
                         color: Colors.deepPurple,
                         fontWeight: FontWeight.bold,
@@ -459,7 +491,3 @@ class DiscordChatMessage extends StatelessWidget {
     );
   }
 }
-
-
-
-
