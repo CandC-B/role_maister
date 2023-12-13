@@ -4,14 +4,15 @@ import 'package:role_maister/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SelectGameTypePage extends StatefulWidget {
-  const SelectGameTypePage({super.key});
+class PairingModePage extends StatefulWidget {
+  const PairingModePage({super.key});
 
   @override
-  State<SelectGameTypePage> createState() => _SelectGameTypePageState();
+  State<PairingModePage> createState() => _PairingModePageState();
 }
 
-class _SelectGameTypePageState extends State<SelectGameTypePage> {
+class _PairingModePageState extends State<PairingModePage> {
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,8 +33,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
           height: size.height * 0.9,
           width: size.width * 0.8,
           color: Colors.black87,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             InkWell(
               onTap: () {
                 singleton.multiplayer = false;
@@ -60,24 +60,6 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
                 imagePath: 'assets/images/multiplayer.png',
                 routeName: 'FantasyHome',
                 imageText: AppLocalizations.of(context)!.multi_player,
-                isAvailable: true,
-                height: size.height * 0.9,
-                width: size.width * 0.8 / 3,
-                isLink: false,
-                preset: false,
-                isHovering: false,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                singleton.multiplayer = true;
-                print("pairing mode");
-                context.go("/form_pairing_mode");
-              },
-              child: ImageColorFilter(
-                imagePath: 'assets/images/pairingmode.PNG',
-                routeName: 'FantasyHome',
-                imageText: AppLocalizations.of(context)!.pairing_mode,
                 isAvailable: true,
                 height: size.height * 0.9,
                 width: size.width * 0.8 / 3,
