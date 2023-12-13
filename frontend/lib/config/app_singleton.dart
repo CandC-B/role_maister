@@ -24,6 +24,7 @@ class AppSingleton {
   bool pairingMode = false;
   final ValueNotifier<String> gameMode = ValueNotifier<String>("aliens");
   String? selectedCharacterId;
+  String? selectedCharacterName;
   AliensCharacter alienCharacter = AliensCharacter.random();
   DydCharacter dydCharacter = DydCharacter.random();
   CthulhuCharacter cthulhuCharacter = CthulhuCharacter.random();

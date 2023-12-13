@@ -10,8 +10,10 @@ class Player {
   final List cthulhu;
   final int gamesPlayed;
   final int experience;
+  final String? photoUrl;
+  final List games;
 
-  Player({required this.uid, required this.username, required this.email, required this.tokens ,required this.aliens ,required this.dyd ,required this.cthulhu, required this.gamesPlayed, required this.experience});
+  Player({required this.uid, required this.username, required this.email, required this.tokens ,required this.aliens ,required this.dyd ,required this.cthulhu, required this.gamesPlayed, required this.experience, required this.photoUrl, required this.games});
 
   factory Player.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
@@ -26,6 +28,8 @@ class Player {
       List<String> cthulhu = List<String>.from(data['cthulhu'] ?? []);
       int gamesPlayed = data['gamesPlayed'] ?? 0;
       int experience = data['experience'] ?? 0;
+      String? photoUrl = data['photoUrl'];
+      List games = List.from(data['games'] ?? []);
 
       // Return a new Player instance
       return Player(
@@ -37,11 +41,46 @@ class Player {
         dyd: dyd,
         cthulhu: cthulhu,
         gamesPlayed: gamesPlayed,
-        experience: experience
+        experience: experience,
+        photoUrl: photoUrl,
+        games: games,
       );
     } else {
       // Handle the case where data is null
       throw Exception('Failed to parse document data');
     }
+
+    
+}
+Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'username': username,
+      'email': email,
+      'tokens': tokens,
+      'aliens': aliens,
+      'dyd': dyd,
+      'cthulhu': cthulhu,
+      'gamesPlayed': gamesPlayed,
+      'experience': experience,
+      'photoUrl': photoUrl,
+      'games': games,
+    };
+  }
+
+  static fromMap(Map<String, dynamic> map) {
+    return Player(
+      uid: map['uid'],
+      username: map['username'],
+      email: map['email'],
+      tokens: map['tokens'],
+      aliens: map['aliens'],
+      dyd: map['dyd'],
+      cthulhu: map['cthulhu'],
+      gamesPlayed: map['gamesPlayed'],
+      experience: map['experience'],
+      photoUrl: map['photoUrl'],
+      games: map['games'],
+    );
   }
 }

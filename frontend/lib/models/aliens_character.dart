@@ -5,8 +5,6 @@ import 'package:role_maister/models/character.dart';
 import 'package:uuid/uuid.dart';
 
 class AliensCharacter extends Character {
-  // TODO: de momento solo tenemos character level 1
-  
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
@@ -19,6 +17,7 @@ class AliensCharacter extends Character {
   final List<String> gear;
   final String signatureItem;
   final int cash;
+  final String? photoUrl;
   final int hp;
   final String mode = "aliens";
 
@@ -38,6 +37,7 @@ class AliensCharacter extends Character {
     required this.gear,
     required this.signatureItem,
     required this.cash,
+    required this.photoUrl,
     required this.hp,
   }) : super(name, userId , id: id);
 
@@ -56,7 +56,7 @@ class AliensCharacter extends Character {
     final gear = _getRandomGear(career);
     final signatureItem = _getRandomSignatureItem(career);
     final cash = _getRandomCash(career);
-
+    final photoUrl = "small_logo.png";
     return AliensCharacter(
       characterLevel: 1,
       career: career,
@@ -70,6 +70,7 @@ class AliensCharacter extends Character {
       rival: enemy,
       gear: gear,
       signatureItem: signatureItem,
+      photoUrl: photoUrl,
       cash: cash,
       hp: 2 * attributes["Strength"]!,
       userId: userId,
@@ -573,6 +574,7 @@ class AliensCharacter extends Character {
         ' friend: $friend,'
         ' rival: $rival,'
         ' gear: $gear,'
+        ' photoUrl: $photoUrl,'
         ' signatureItem: $signatureItem,'
         ' cash: $cash,'
         ' hp: $hp'
@@ -595,6 +597,7 @@ class AliensCharacter extends Character {
       'friend': friend,
       'rival': rival,
       'gear': gear,
+      'photoUrl': photoUrl,
       'signature_item': signatureItem,
       'cash': cash,
       'hp': hp,
@@ -623,6 +626,7 @@ class AliensCharacter extends Character {
       gear: (statsData['gear'] as List<dynamic>)
           .map((value) => value as String)
           .toList(),
+      photoUrl: statsData['photoUrl'] as String,
       signatureItem: statsData['signature_item'] as String,
       cash: statsData['cash'] as int,
     );

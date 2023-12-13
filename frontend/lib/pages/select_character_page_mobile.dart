@@ -127,7 +127,16 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       throw Exception("Tonto el que lo lea");
     }
     var coralMessage = response;
-    await firebase.saveMessage(coralMessage, DateTime.now(), newGame.uid, "IA");
+    // await firebase.saveMessage(coralMessage, DateTime.now(), newGame.uid, "IA");
+    await firebase.saveMessage(
+      ChatMessages(
+          sentBy: "IA",
+          sentAt: DateTime.now(),
+          text: coralMessage,
+          characterName: "",
+          senderName: "IA"),
+      newGame.uid,
+    );
   }
 
   void startMultiPlayerGame() async {
@@ -208,8 +217,18 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       // Prompt Coral to start the game
       Game currentGame = Game.fromMap(await firebase.getGame(gameId));
       var coralMessage = await createGame(currentGame);
+      // await firebase.saveMessage(
+      //     coralMessage, DateTime.now(), singleton.currentGame!, "IA");
       await firebase.saveMessage(
-          coralMessage, DateTime.now(), singleton.currentGame!, "IA");
+        ChatMessages(
+            sentBy: "IA",
+            sentAt: DateTime.now(),
+            text: coralMessage,
+            characterName: "",
+            senderName: "IA"),
+        singleton.currentGame!,
+      );
+
       print("LAST USER");
       await firebase.addReadyToQueue();
 
@@ -443,6 +462,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
                           singleton.selectedCharacterId =
                               charactersData!.keys.elementAt(selectedIndex);
+
+                          singleton.selectedCharacterName =
+                              charactersData![singleton.selectedCharacterId]
+                                  ?['name'];
+
                           if (singleton.gameMode.value == "Aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
@@ -527,6 +551,11 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
                           singleton.selectedCharacterId =
                               charactersData!.keys.elementAt(selectedIndex);
+
+                          singleton.selectedCharacterName =
+                              charactersData![singleton.selectedCharacterId]
+                                  ?['name'];
+
                           if (singleton.gameMode.value == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
