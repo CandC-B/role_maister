@@ -58,6 +58,12 @@ class DydCharacter extends Character {
     required this.hp,
     required this.skills,
     required this.equipment,
+    required this.sex,
+    required this.background,
+    required this.eyesColor,
+    required this.hairColor,
+    required this.skinColor,
+    required this.appearance,
     required this.photoUrl,
   }) : super(name, userId , id: id);
 
@@ -77,11 +83,17 @@ class DydCharacter extends Character {
     final characterClass = _generateRandomClass();
     final description = _getRandomDescription(characterClass);
     final hitDie = _getRandomHitDie(characterClass);
-    final proficiencies = _getRandomCash(characterClass);
-    final tools = _getRandomCash(characterClass);
-    final hp = _getRandomCash(characterClass, abilities);
+    final proficiencies = _generateRandomProficiencies(characterClass);
+    final tools = _getRandomTools(characterClass);
+    final hp = _getRandomHp(characterClass, abilities["CON"]!);
     final skills = _getRandomCash(characterClass);
     final equipment = _getRandomCash(characterClass);
+    final sex = _getRandomSex();
+    final background = _getRandomBackground();
+    final eyesColor = _getRandomEyesColor();
+    final hairColor = _getRandomHairColor();
+    final skinColor = _getRandomSkinColor();
+    final appearance = _getRandomAppearance(characterClass, race, sex);
     const photoUrl = "small_logo.png";
     return DydCharacter(
       characterLevel: 1,
@@ -104,6 +116,12 @@ class DydCharacter extends Character {
       hp: hp,
       skills: skills,
       equipment: equipment,
+      sex: sex,
+      background: background,
+      eyesColor: eyesColor,
+      hairColor: hairColor,
+      skinColor: skinColor,
+      appearance: appearance,
       userId: userId,
     );
   }
@@ -601,6 +619,168 @@ class DydCharacter extends Character {
     }  
   }
 
+  static List<String> _generateRandomProficiencies(String selectedClass) {
+    Map<String, List<String>> languages = {
+      "Barbarian": [
+        "Light and medium armor",
+        "Shields",
+        "Simple and martial weapons",
+      ],
+      "Bard": [
+        "Light armor",
+        "Simple weapons",
+        "Hand crossbows",
+        "Longswords",
+        "Rapiers",
+        "Shortsword",
+      ],
+      "Cleric": [
+        "Light and medium armor",
+        "Shields",
+        "Simple weapons",
+      ],
+      "Druid": [ 
+        "Light and medium armor (nonmetal)",
+        "Shields (nonmetal)",
+        "Clubs",
+        "Daggers",
+        "Darts",
+        "Javelins",
+        "Maces",
+        "Quarterstaffs",
+        "Scimitars",
+        "Sickles",
+        "Slings",
+        "Spears",
+      ],
+      "Fighter": [
+        "All armor",
+        "Shields",
+        "Simple and martial weapons",
+      ],
+      "Monk": [
+        "Simple weapons",
+        "Shortswords",
+      ],
+      "Paladin": [ 
+        "All armor",
+        "Shields",
+        "Simple and martial weapons",
+      ],
+      "Ranger": [
+        "Light and medium armor",
+        "Shields",
+        "Simple and martial weapons", 
+      ],
+      "Rogue": [
+        "Light armor",
+        "Simple weapons"
+        "Hand crossbows",
+        "Longswords",
+        "Rapiers",
+        "Shortswords",
+      ],
+      "Sorcerer": [
+        "Daggers",
+        "Darts"
+        "Slings",
+        "Quarterstaff",
+        "Light crossbows",
+      ],
+      "Warlock": [
+        "Light armor",
+        "Simple weapons"
+      ],
+      "Wizard": [
+        "Daggers",
+        "Darts"
+        "Slings",
+        "Quarterstaff",
+        "Light crossbows",
+      ]
+    };
+
+    if (languages.containsKey(selectedClass)) {
+      return languages[selectedClass]!;
+    }
+    throw Exception("Unsupported language selected");
+  }
+
+  static List<String> _getRandomTools(String selectedClass) {
+    Map<String, List<List<String>>> tools = {
+      "Barbarian": [
+        ["Nothing"],
+      ],
+      "Bard": [
+        ["Lira", "Harp", "Lute"],
+        ["Bagpipe", "Flute", "Gemshorn"],
+        ["Cymbals", "Pandeiro", "Tambourine"],
+      ],
+      "Cleric": [
+        ["Nothing"],
+      ],
+      "Druid": [
+        ["Herbalism kit"],
+      ],
+      "Fighter": [
+        ["Nothing"],
+      ],
+      "Monk": [
+        ["Artisan's tools", "A musical instrument"],
+      ],
+      "Paladin": [
+        ["Nothing"],
+      ],
+      "Ranger": [
+        ["Nothing"],
+      ],
+      "Rogue": [
+        ["Thieve's tools"],
+      ],
+      "Sorcerer": [
+        ["Nothing"],
+      ],
+      "Warlock": [
+        ["Nothing"],
+      ],
+      "Wizard": [
+        ["Nothing"],
+      ],
+    };
+
+    List<String> randomTools = [];
+    if (tools.containsKey(selectedClass)) {
+      tools[selectedClass]!.forEach((element) {
+        String choice = randomChoice(element);
+        randomTools.add(choice);
+      });
+      return randomTools;
+    }
+    throw Exception("Unsupported career selected");
+  }
+
+  static int _getRandomHp(String selectedClass, int con) {
+    Map<String, int> hp = {
+      "Barbarian": 12 + con,
+      "Bard": 8 + con,
+      "Cleric": 8 + con,
+      "Druid": 8 + con,
+      "Fighter": 10 + con,
+      "Monk": 8 + con,
+      "Paladin": 10 + con,
+      "Ranger": 10 + con,
+      "Rogue": 8 + con,
+      "Sorcerer": 6 + con,
+      "Warlock": 8 + con,
+      "Wizard": 6 + con,
+    };
+
+    if (hp.containsKey(selectedClass)) {
+      return hp[selectedClass]!;
+    }
+    throw Exception("Unsupported language selected");
+  }
+  
 
 
 //old
