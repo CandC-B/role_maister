@@ -22,9 +22,9 @@ class DydCharacter extends Character {
   final String description;
   final String hitDie;
   final List<String> proficiencies;
-  final String tools;
+  final List<String> tools;
   final int hp;
-  final Map<String, int> skills;
+  final List<String> skills;
   final List<String> equipment;
   //TODO
   final String sex;
@@ -86,14 +86,14 @@ class DydCharacter extends Character {
     final proficiencies = _generateRandomProficiencies(characterClass);
     final tools = _getRandomTools(characterClass);
     final hp = _getRandomHp(characterClass, abilities["CON"]!);
-    final skills = _getRandomCash(characterClass);
-    final equipment = _getRandomCash(characterClass);
+    final skills = _generateRandomSkills(characterClass);
+    final equipment = _getRandomEquipment(characterClass);
     final sex = _getRandomSex();
     final background = _getRandomBackground();
     final eyesColor = _getRandomEyesColor();
     final hairColor = _getRandomHairColor();
     final skinColor = _getRandomSkinColor();
-    final appearance = _getRandomAppearance(characterClass, race, sex);
+    final appearance = _getRandomAppearance();
     const photoUrl = "small_logo.png";
     return DydCharacter(
       characterLevel: 1,
@@ -377,23 +377,23 @@ class DydCharacter extends Character {
 
   static double _getRandomHeight(String selectedRace) {
     if (selectedRace == "Dwarf") {
-      return 1.12 + (makeRoll(2, 4) * 2.5);
+      return 1.12 + (makeRoll(2, 4) * 0.025);
     } else if (selectedRace == "Elf") {
-      return 1.37 + (makeRoll(2, 10) * 2.5);
+      return 1.37 + (makeRoll(2, 10) * 0.025);
     } else if (selectedRace == "Halfling") {
-      return 0.79 + (makeRoll(2, 4) * 2.5);
+      return 0.79 + (makeRoll(2, 4) * 0.025);
     } else if (selectedRace == "Human") {
-      return 1.45 + (makeRoll(2, 10) * 2.5);
+      return 1.45 + (makeRoll(2, 10) * 0.025);
     } else if (selectedRace == "Dragonborn") {
-      return 1.68 + (makeRoll(2, 8) * 2.5);
+      return 1.68 + (makeRoll(2, 8) * 0.025);
     } else if (selectedRace == "Gnome") {
-      return 0.89 + (makeRoll(2, 4) * 2.5);
+      return 0.89 + (makeRoll(2, 4) * 0.025);
     } else if (selectedRace == "Half-elf") {
-      return 1.45 + (makeRoll(2, 8) * 2.5);
+      return 1.45 + (makeRoll(2, 8) * 0.025);
     } else if (selectedRace == "Half-orc") {
-      return 1.47 + (makeRoll(2, 10) * 2.5);
+      return 1.47 + (makeRoll(2, 10) * 0.025);
     } else { // if (selectedRace == "Tiefling") 
-      return 1.45 + (makeRoll(2, 8) * 2.5);
+      return 1.45 + (makeRoll(2, 8) * 0.025);
     }  
   }
 
@@ -693,7 +693,7 @@ class DydCharacter extends Character {
       ],
       "Wizard": [
         "Daggers",
-        "Darts"
+        "Darts",
         "Slings",
         "Quarterstaff",
         "Light crossbows",
@@ -778,91 +778,237 @@ class DydCharacter extends Character {
     if (hp.containsKey(selectedClass)) {
       return hp[selectedClass]!;
     }
-    throw Exception("Unsupported language selected");
-  }
-  
-
-
-//old
-  static Map<String, int> _generateRandomSkills(String selectedCareer) {
-    // TODO: make random but to sum 9
-    if (selectedCareer == "Colonial marine" || selectedCareer == "Roughneck") {
-      return {"Close combat": 3, "Stamina": 3, "Heavy Machinery": 3};
-    }
-    if (selectedCareer == "Kid" || selectedCareer == "Pilot") {
-      return {"Ranged combat": 3, "Mobility": 3, "Piloting": 3};
-    }
-    if (selectedCareer == "Colonial marshall" ||
-        selectedCareer == "Scientific" ||
-        selectedCareer == "Agent") {
-      return {"Observation": 3, "Survival": 3, "Comtech": 3};
-    }
-    if (selectedCareer == "Medic" || selectedCareer == "Official") {
-      return {"Command": 3, "Manipulation": 3, "Medical aid": 3};
-    }
-    throw Exception("Unsupported career selected");
+    throw Exception("Unsupported HP selected");
   }
 
-  static List<String> _generateRandomTalents(String selectedCareer) {
-    Map<String, List<String>> talents = {
-      "Colonial marine": ["Banter", "Overkill", "Past the limit"],
-      "Colonial marshall": ["Authority", "Investigator", "Subdue"],
-      "Agent": ["Cunning", "Personal safety", "Take control"],
-      "Kid": ["Beneath notice", "Dodge", "Nimble"],
-      "Medic": ["Calming presence", "Investigator", "Subdue"],
-      "Official": ["Field commander", "Influence", "Pull rank"],
-      "Pilot": ["Full throttle", "Like the back of your hand", "Reckless"],
-      "Roughneck": ["Resilient", "The long haul", "True grit"],
-      "Scientific": ["Analysis", "Breakthrough", "Inquisitive"]
+  static List<String> _getExtraRandomSkills(int num, List<String> availableSkills) {
+    List<String> newExtraSkills = [];
+    List<String> extraSkills = availableSkills;
+    for(int i=0; i<num; i++) {
+      String newRandomSkill = randomChoice(extraSkills);
+      newExtraSkills.add(newRandomSkill);
+      extraSkills.remove(newRandomSkill);
+    }
+    return newExtraSkills;
+  }
+
+  static List<String> _getAnyExtraRandomSkills(int num) {
+    List<String> newExtraSkills = [];
+    List<String> extraSkills = ["Acrobatics", "Animal handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"];
+    for(int i=0; i<num; i++) {
+      String newRandomSkill = randomChoice(extraSkills);
+      newExtraSkills.add(newRandomSkill);
+      extraSkills.remove(newRandomSkill);
+    }
+    return newExtraSkills;
+  }
+
+  static List<String> _generateRandomSkills(String selectedClass) {
+    Map<String, List<String>> skills = {
+      "Barbarian": _getExtraRandomSkills(2, ["Animal handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"]),
+      "Bard": _getAnyExtraRandomSkills(3),
+      "Cleric": _getExtraRandomSkills(2, ["History", "Insight", "Medicine", "Persuasion", "Religion"]),
+      "Druid": _getExtraRandomSkills(2, ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"]),
+      "Fighter": _getExtraRandomSkills(2, ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]),
+      "Monk": _getExtraRandomSkills(2, ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"]),
+      "Paladin": _getExtraRandomSkills(2, ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"]),
+      "Ranger": _getExtraRandomSkills(3, ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"]),
+      "Rogue": _getExtraRandomSkills(4, ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"]),
+      "Sorcerer": _getExtraRandomSkills(2, ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"]),
+      "Warlock": _getExtraRandomSkills(2, ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"]),
+      "Wizard": _getExtraRandomSkills(2, ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"])
     };
 
-    if (talents.containsKey(selectedCareer)) {
-      return [randomChoice(talents[selectedCareer]!)];
+    if (skills.containsKey(selectedClass)) {
+      return skills[selectedClass]!;
     }
-    throw Exception("Unsupported career selected");
+    throw Exception("Unsupported skills selected");
   }
- static String _getRandomAppearance(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
+
+  static List<String> _getRandomEquipment(String selectedClass) {
+    Map<String, List<List<String>>> equipments = {
+      "Barbarian": [
+        ["A greataxe", "Any martial melee weapon"],
+        ["Two hand axes ", "Any simple weapon "],
+        ["An explorer’s pack and four javelins"],
+      ],
+      "Bard": [
+        ["A rapier", "A longsword", "Any simple weapon"],
+        ["A diplomat's pack ", "An entertainer's pack"],
+        ["A lute", "Any other musical instrument"],
+        ["Leather armor and a dagger"],
+      ],
+      "Cleric": [
+        ["A mace", "A warhammer"],
+        ["A scale mail", "A leather armor", "Chain mail"],
+        [
+          "A light crossbow and 20 bolts",
+          "Any simple weapon"
+        ],
+        ["A priest's pack", "An explorer's pack "]
+      ],
+      "Druid": [
+        ["A wooden shield ", "Any simple weapon"],
+        ["A scimitar", "Any simple melee weapone."],
+        ["Leather armor, an explorer’s pack, and a druidic focus"]
+      ],
+      "Fighter": [
+        ["Chain mail", "A leather longbow and 20 arrows."],
+        ["A martial weapon and a shield", "Two martial weapons"],
+        ["A light crossbow and 20 bolts", "Two handaxes"],
+        ["A dungeoneer's pack", "An explorer's pack"],
+      ],
+      "Monk": [
+        ["A shortsword ", "Any simple weapon"],
+        ["A dungeoneer's pack", "An explorer's pack"],
+        ["10 darts"]
+      ],
+      "Paladin": [
+        ["A martial weapon and a shield", "Two martial weapons"],
+        ["Five javelins", "Any simple melee weapon"],
+        ["A priest's pack", "An explorer's pack"],
+        ["Chain mail and a holy symbol"]
+      ],
+      "Ranger": [
+        ["Scale mail", "A leather armor"],
+        ["Two shortswords", "Two simple melee weapons"],
+        ["A dungeoneer's pack", "An explorer's pack"],
+        ["A longbow and a quiver of 20 arrows"]
+      ],
+      "Rogue": [
+        ["A rapier", "A shortsword"],
+        ["A shortbow and quiver of 20 arrows", "A shortsword"],
+        ["A burglar's pack", "A dungeoneer's pack"],
+        ["Leather armor, two daggers, and thieves' tools"],
+      ],
+      "Sorcerer": [
+        ["A light crossbow and 20 bolts", "Any simple weapon"],
+        ["A component pouch", "An arcane focus"],
+        ["A dungeoneer's pack", "An explorer's pack"],
+        ["Two daggers"]
+      ],
+      "Warlock": [
+        ["A light crossbow and 20 bolts", "Any simple weapon"],
+        ["A component pouch", "An arcane focus"],
+        ["A scholar's pack", "A dungeoneer's pack"],
+        ["Leather armor, any simple weapon, and two daggers"]
+      ],
+      "Wizard": [
+        ["A quarterstaff", "A dagger"],
+        ["A component pouch", "An arcane focus"],
+        ["A scholar's pack", "An explorer's pack"],
+        ["A spellbook"]
+      ]
+    };
+
+    List<String> equipment = [];
+    if (equipments.containsKey(selectedClass)) {
+      equipments[selectedClass]!.forEach((element) {
+        String choice = randomChoice(element);
+        equipment.add(choice);
+      });
+      return equipment;
+    }
+    throw Exception("Unsupported class selected");
+  }
+
+  static String _getRandomSex() {
+    return randomChoice(["Male", "Female"]);
+  }
+
+  static String _getRandomBackground() {
+    List<String> backgrounds = [
+      "You are a decorated hero and you have to defend your reputation. At all costs.",
+      "You once covered up a war crime. No one should ever know.",
+      "The death of your companion has traumatized you, and now you are terrified of the possibility of entering combat. You have to overcome your fears.",
+      "After a long time together, your partner betrayed you and joined a criminal syndicate. He will have to answer you.",
+      "You dream of handing in your badge and retiring to a place where you can live in peace. Do everything possible to achieve it.",
+      "You did something terrible in the past and now it is taking its toll on you. You will have to decide what material you are made of.",
+      "You crave power and never pass up an opportunity to advance.",
+      "Your family is hiding information from you. What will it be? Why?",
+      "You want to find someone you can really trust.",
+      "Your whole family has died. Make sure you are never left alone again.",
+      "Nobody gives you any tasks, so dedicate yourself to exploring, trying things, finding life to have fun.",
+      "You are hooked on a strong painkiller. You have to keep your stock (and the secret) well.",
+      "You have some unusual (and confidential) medical reports that the local sheriff is looking for. Find out why they are so important.",
+      "You swore you would never take a life, and you intend to honor that oath.",
+      "You come from a family of officers. You have to earn a promotion or some decoration, and tomorrow is too late.",
+      "You screwed up once. Make sure no more shit happens to you.",
+      "Mistakes are costly, don't let any of your subordinates screw up. And make sure they understand why.",
+      "You only think about exceeding the limit, about taking risks and taking risks, so take risks.",
+      "You are stubborn and do not shy away from anything, even if your friends may be hurt.",
+      "You are a loner and prefer to act without depending on others.",
+      "You seek strong emotions compulsively. If there is something that entails a risk, you are there to assume it.",
+      "You once gave up your family for work. Now you don't plan to disappoint your friends. Never.",
+      "You like to enjoy your free time. If you can grab a can of beer and spend some time alone, you are the happiest person in the world."
+      "Your last project was stolen, so now you keep most of your findings a secret.",
+      "You hate authority; Do your best to appear uncooperative.",
+      "It is very difficult for you to delegate to others, even when it makes you work more than necessary."
+    ];
+    return randomChoice(backgrounds);
+  }
+
+
+  static String _getRandomEyesColor() {
+    List<String> eyes = [
+      "Dark Brown",
+      "Brown",
+      "Light brown",
+      "Hazel",
+      "Amber",
+      "Green"
+      "Turquoise", 
+      "Bluish gray",
+      "Gray",
+      "Icy blue",
+      "Violet"
+    ];
+    return randomChoice(eyes);
+  }
+
+  static String _getRandomHairColor() {
+    List<String> hairs = ["Black", "Brown", "Blonde", "Red", "Gray", "Brunette", "Silver"];
+    return randomChoice(hairs);
+  }
+
+  static String _getRandomSkinColor() {
+    List<String> skinTones = [
+    "Fair", 
+    "Light", 
+    "Medium", 
+    "Olive", 
+    "Tan", 
+    "Deep", 
+    "Ebony",
+  ];
+    return randomChoice(skinTones);
+  }
+
+  static String _getRandomAppearance() {
+    List<String> appearance = [
         "Brush haircut",
         "Tattoo on the arm",
         "Scar",
         "Cold look",
         "Haughty smile",
         "Custom armor"
-      ],
-      "Colonial marshall": [
         "Toothpick in the mouth",
-        "Cigarette in mouth",
         "Imposing mustache",
-        "Old cap",
+        "Old clothes",
         "Scar that crosses your face",
-        "Gray hair",
         "Brush haircut",
         "Inquisitive look",
         "Worn leather jacket"
-      ],
-      "Agent": [
         "Cold gaze",
         "Captivating smile",
-        "Expensive watch",
         "Signet ring",
         "Tan",
         "Elaborate hairstyle",
         "Vacant expression",
-        "Monogrammed silk tie"
-      ],
-      "Kid": [
         "Dirty and disheveled",
-        "Cool sneakers that light up when you walk",
-        "Jeans with slits at the knees",
-        "T-shirt with a group logo",
         "Shorts with many pockets",
         "Hair in a ponytail",
         "Bored face",
-        "Baseball cap"
-      ],
-      "Medic": [
         "Compassionate smile",
         "Short",
         "Well-combed hair",
@@ -873,28 +1019,17 @@ class DydCharacter extends Character {
         "Cold and indifferent gaze",
         "Glasses",
         "White coat"
-      ],
-      "Official": [
         "Hair cut with a brush or collected in a bun",
         "Intense and severe expression",
         "Impeccable uniform",
         "Looks like working a lot and sleeping little",
         "Stretched posture",
         "Serene and relaxing voice",
-        "Flight suit with identification patch",
         "Impatient tapping of the foot"
-      ],
-      "Pilot": [
         "Arrogant walk",
-        "Piercing blue eyes",
-        "Flight suit with many pockets",
-        "Sunglasses",
         "Identifying patches from previous missions",
         "Expressionless face",
-        "Always chewing gum",
         "Look of skepticism"
-      ],
-      "Roughneck": [
         "Tattoos",
         "Scar",
         "Broken nose",
@@ -902,250 +1037,55 @@ class DydCharacter extends Character {
         "Mocking smile",
         "Loud laughter",
         "Calloused and bruised hands",
-        "Safety glasses that cover your eyes",
         "Dirty boots that echo with each step",
         "Disheveled hair"
-      ],
-      "Scientific": [
         "Disheveled and unkempt appearance",
-        "Stained lab coat",
+        "Stained coat",
         "Nervous attitude",
         "Hands always in pockets",
         "Neat and well-trimmed hairstyle",
         "Thoughtful look",
         "Always clears throat before speaking",
         "Eyes tired from overwork"
-      ]
-    };
+      ];
 
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
+      return randomChoice(appearance);
     }
-    throw Exception("Unsupported career selected");
-  }
 
-  static String _getRandomPersonalAgenda(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
-        "You are a decorated hero and you have to defend your reputation. At all costs.",
-        "You once covered up a war crime. No one should ever know.",
-        "The death of your companion has traumatized you, and now you are terrified of the possibility of entering combat. you have to overcome your fears."
-      ],
-      "Colonial marshall": [
-        "After a long time together, your partner betrayed you and joined a criminal syndicate. He will have to answer you.",
-        "You dream of handing in your badge and retiring to a place where you can live in peace. Do everything possible to achieve it.",
-        "You did something terrible in the past and now it is taking its toll on you. You will have to decide what material you are made of."
-      ],
-      "Agent": [
-        "You crave power and never pass up an opportunity to advance.",
-        "The company is hiding information from you. What will it be? Why?",
-        "You are a good person, but the company is blackmailing you to do their dirty work. Get even as you can."
-      ],
-      "Kid": [
-        "You want to find an adult you can really trust.",
-        "Your whole family has died. Make sure you are never left alone again.",
-        "Nobody gives you any tasks, so dedicate yourself to exploring, trying things, finding life to have fun."
-      ],
-      "Medic": [
-        "You are hooked on a strong painkiller. You have to keep your stock (and the secret) well.",
-        "You have some unusual (and confidential) medical reports that the company is looking for. Find out why they are so important.",
-        "You swore you would never take a life, and you intend to honor that oath."
-      ],
-      "Official": [
-        "You come from a family of officers. You have to earn a promotion or some decoration, and tomorrow is too late.",
-        "You screwed up once. Make sure no more shit happens to you.",
-        "Mistakes are costly, don't let any of your subordinates screw up. And make sure they understand why."
-      ],
-      "Pilot": [
-        "You only think about exceeding the limit, about taking risks and taking risks, so take risks.",
-        "You are stubborn and do not shy away from anything, even if your friends may be hurt.",
-        "You are a loner and prefer to act without depending on others."
-      ],
-      "Roughneck": [
-        "You seek strong emotions compulsively. If there is something that entails a risk, you are there to assume it.",
-        "You once gave up your family for work. Now you don't plan to disappoint your friends. Never.",
-        "You like to enjoy your free time. If you can grab a can of beer and spend some time alone, you are the happiest person in the world."
-      ],
-      "Scientific": [
-        "Your last project was stolen, so now you keep most of your findings a secret.",
-        "You hate authority; Do your best to appear uncooperative.",
-        "It is very difficult for you to delegate to others, even when it makes you work more than necessary."
-      ],
-    };
 
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static List<String> _getRandomGear(String selectedCareer) {
-    Map<String, List<List<String>>> appearance = {
-      "Colonial marine": [
-        ["A pulse rifle", "A smart machine gun"],
-        ["A motion tracker", "2 electroshock grenades"],
-        ["A pressure suit", "Armor"],
-        ["A sparkler", "A deck of cards"]
-      ],
-      "Colonial marshall": [
-        ["A .357 Magnum revolver", "A pump-action shotgun."],
-        ["Some binoculars", "A high-power flashlight."],
-        ["A first aid kit", "An electric baton."],
-        ["1D6 Sleep Remover pills", "A personal communicator."],
-      ],
-      "Agent": [
-        ["A leather briefcase", "A chrome briefcase."],
-        ["A gold-plated fountain pen", "A luxury watch."],
-        [
-          "A data transmission card with corporate accreditation",
-          "A service pistol."
-        ],
-        ["1D6 sleep reliever pills", "1D6 dose of Naproleve."]
-      ],
-      "Kid": [
-        ["A fishing line", "a laser pointer."],
-        ["A magnet", "A remote-controlled car."],
-        ["A yo-yo", "An electronic game."],
-        ["A personal locator", "colored pencils."]
-      ],
-      "Medic": [
-        ["Surgical instruments", "A compression suit."],
-        ["1D6 doses of Naproleve", "1D6 Quitaseño pills"],
-        ["A first aid kit", "1D6 doses of experimental drugs."],
-        ["A Samani E series watch", "A personal communicator."]
-      ],
-      "Official": [
-        ["A service gun", "A high-tech gun"],
-        ["A watch", "binoculars"],
-        ["A motion tracker", "Compression suit"],
-        ["A personal tablet", "A friend-enemy transponder"]
-      ],
-      "Pilot": [
-        ["A service pistol", "A portable remote control terminal."],
-        ["A personal communicator", "1D6 flares."],
-        ["A maintenance tool", "A personal tablet."],
-        ["A systems diagnostic tool", "A compression suit."]
-      ],
-      "Roughneck": [
-        ["A blowtorch", "A pneumatic riveter."],
-        ["1D6 dose of Hydroctin", "A maintenance tool."],
-        ["High-proof liquor", "A compression suit."],
-        ["A high-powered flashlight", "Magnetic tape recorder"]
-      ],
-      "Scientific": [
-        ["A digital video camera", "A personal communicator."],
-        ["A personal tablet", "A neurovisor."],
-        ["A system diagnostic tool", "Personal data transmitter."],
-        ["A motion tracker", "First aid kit."]
-      ],
-    };
-
-    List<String> gear = [];
-    if (appearance.containsKey(selectedCareer)) {
-      appearance[selectedCareer]!.forEach((element) {
-        String choice = randomChoice(element);
-        gear.add(choice);
-      });
-      return gear;
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomSignatureItem(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
-        "The bullet that almost killed you",
-        "The dog tags of a fallen comrade",
-        "A trophy of a defeated enemy",
-      ],
-      "Colonial marshall": [
-        "A photograph of a loved one.",
-        "A dented flask with an inscription on the front.",
-        "Newspaper clippings about an unsolved case.",
-      ],
-      "Agent": [
-        "A written corporate authorization.",
-        "Your divorce papers.",
-        "An employee of the year award.",
-      ],
-      "Kid": [
-        "A lunch box covered in stickers.",
-        "Your favorite doll or action figure.",
-        "The bracelet your older sibling made you.",
-      ],
-      "Medic": [
-        "A framed medical certificate.",
-        "A letter from your son (or daughter).",
-        "Your last psychological evaluation. \"Everything's finally over\"",
-      ],
-      "Official": [
-        "The on-board cat.",
-        "A recommendation letter.",
-        "A commercial flight officer license.",
-      ],
-      "Pilot": [
-        "A bobblehead doll for the dashboard.",
-        "A flight log.",
-        "Some aviator sunglasses.",
-      ],
-      "Roughneck": [
-        "A tool belt.",
-        "Your partner's photograph.",
-        "A crucifix or any other religious icon.",
-      ],
-      "Scientific": [
-        "An albert einstein award.",
-        "A half-written scientific article.",
-        "Blackmail letters.",
-      ],
-    };
-
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static int _getRandomCash(String selectedCareer) {
-    Map<String, int> cash = {
-      "Colonial marine": Random().nextInt(6) * 100,
-      "Colonial marshall": Random().nextInt(6) * 100,
-      "Agent": (Random().nextInt(6) + Random().nextInt(6)) * 100,
-      "Kid": Random().nextInt(6) * 100,
-      "Medic": Random().nextInt(6) * 100,
-      "Official": (Random().nextInt(6) + Random().nextInt(6)) * 100,
-      "Pilot": Random().nextInt(6) * 100,
-      "Roughneck": Random().nextInt(6) * 100,
-      "Scientific": Random().nextInt(6) * 100
-    };
-
-    if (cash.containsKey(selectedCareer)) {
-      return cash[selectedCareer]!;
-    }
-    throw Exception("Unsupported career selected");
-  }
 
   @override
   String toString() {
-    return 'AliensCharacter: {'
+    return 'DyDCharacter: {'
         'userId: $userId,'
         ' id: $id,'
         ' mode: $mode,'
         ' characterLevel: $characterLevel,'
-        ' career: $career,'
-        ' attributes: $attributes,'
-        ' skills: $skills,'
-        ' talents: $talents,'
+        ' race: $race,'
+        ' abilities: $abilities,'
+        ' age: $age,'
+        ' alignment: $alignment,'
         ' name: $name,'
-        ' appearance: $appearance,'
-        ' personalAgenda: $personalAgenda,'
-        ' friend: $friend,'
-        ' rival: $rival,'
-        ' gear: $gear,'
+        ' height: $height,'
+        ' weight: $weight,'
+        ' size: $size,'
+        ' traits: $traits,'
+        ' languages: $languages,'
         ' photoUrl: $photoUrl,'
-        ' signatureItem: $signatureItem,'
-        ' cash: $cash,'
-        ' hp: $hp'
+        ' characterClass: $characterClass,'
+        ' description: $description,'
+        ' hitDie: $hitDie,'
+        ' proficiencies: $proficiencies,'
+        ' tools: $tools,'
+        ' hp: $hp,'
+        ' skills: $skills,'
+        ' equipment: $equipment,'
+        ' sex: $sex,'
+        ' background: $background,'
+        ' eyesColor: $eyesColor,'
+        ' hairColor: $hairColor,'
+        ' skinColor: $skinColor,'
+        ' appearance: $appearance,'
         '}';
   }
 
@@ -1155,20 +1095,31 @@ class DydCharacter extends Character {
       'id': id,
       'mode': mode,
       'character_level': characterLevel,
-      'career': career,
-      'attributes': attributes,
-      'skills': skills,
-      'talents': talents,
+      'race': race,
+      'abilities': abilities,
+      'age': age,
+      'alignment': alignment,
       'name': name,
-      'appearance': appearance,
-      'personal_agenda': personalAgenda,
-      'friend': friend,
-      'rival': rival,
-      'gear': gear,
+      'height': height,
+      'weight': weight,
+      'size': size,
+      'traits': traits,
+      'languages': languages,
       'photo_url': photoUrl,
-      'signature_item': signatureItem,
-      'cash': cash,
+      'characterClass': characterClass,
+      'description': description,
+      'hitDie': hitDie,
+      'proficiencies': proficiencies,
+      'tools': tools,
       'hp': hp,
+      'skills': skills,
+      'equipment': equipment,
+      'sex': sex,
+      'background': background,
+      'eyesColor': eyesColor,
+      'hairColor': hairColor,
+      'skinColor': skinColor,
+      'appearance': appearance
     };
   }
 
@@ -1177,26 +1128,45 @@ class DydCharacter extends Character {
       userId: statsData['userId'] as String,
       id: statsData['id'] as String,
       name: statsData['name'] as String,
-      hp: statsData['hp'] as int,
+      
       characterLevel: statsData['character_level'] as int,
-      career: statsData['career'] as String,
-      attributes: (statsData['attributes'] as Map<String, dynamic>)
+      race: statsData['race'] as String,
+      abilities: (statsData['abilities'] as Map<String, dynamic>)
           .map((key, value) => MapEntry(key, value as int)),
-      skills: (statsData['skills'] as Map<String, dynamic>)
-          .map((key, value) => MapEntry(key, value as int)),
-      talents: (statsData['talents'] as List<dynamic>)
+      age: statsData['age'] as int,
+      alignment: statsData['alignment'] as String,
+      height: statsData['height'] as double,
+      weight: statsData['weight'] as double,
+      size: statsData['size'] as String,
+      traits: (statsData['traits'] as List<dynamic>)
           .map((value) => value as String)
           .toList(),
+      languages: (statsData['languages'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      characterClass: statsData['characterClass'] as String,
+      description: statsData['description'] as String,
+      hitDie: statsData['hitDie'] as String,
+      proficiencies: (statsData['proficiencies'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      tools: (statsData['tools'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      hp: statsData['hp'] as int,
+      skills: (statsData['skills'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      equipment: (statsData['equipment'] as List<dynamic>)
+          .map((value) => value as String)
+          .toList(),
+      sex: statsData['sex'] as String,
+      background: statsData['background'] as String,
+      eyesColor: statsData['eyesColor'] as String,
+      hairColor: statsData['hairColor'] as String,
+      skinColor: statsData['skinColor'] as String,
       appearance: statsData['appearance'] as String,
-      personalAgenda: statsData['signature_item'] as String,
-      friend: statsData['friend'] as String,
-      rival: statsData['rival'] as String,
-      gear: (statsData['gear'] as List<dynamic>)
-          .map((value) => value as String)
-          .toList(),
       photoUrl: statsData['photo_url'] as String,
-      signatureItem: statsData['signature_item'] as String,
-      cash: statsData['cash'] as int,
     );
   }
 }
