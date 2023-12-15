@@ -26,7 +26,6 @@ class DydCharacter extends Character {
   final int hp;
   final List<String> skills;
   final List<String> equipment;
-  //TODO
   final String sex;
   final String background;
   final String eyesColor;
@@ -86,7 +85,7 @@ class DydCharacter extends Character {
     final proficiencies = _generateRandomProficiencies(characterClass);
     final tools = _getRandomTools(characterClass);
     final hp = _getRandomHp(characterClass, abilities["CON"]!);
-    final skills = _generateRandomSkills(characterClass);
+    final skills = _generateRandomSkills(characterClass, race);
     final equipment = _getRandomEquipment(characterClass);
     final sex = _getRandomSex();
     final background = _getRandomBackground();
@@ -467,13 +466,13 @@ class DydCharacter extends Character {
       "Gnome": [
         "Dark vision",
       ],
-      "Half-elf": [ //TODO
+      "Half-elf": [ 
         "Dark vision",
         "Skill versatility: you gain proficiency in two extra skills"
       ],
       "Half-orc": [
         "Dark vision",
-        "Menacing: You gain proficiency in intimidation skill", //TODO
+        "Menacing: You gain proficiency in intimidation skill", 
         "Relentless Endurance: When you are reduced to 0 HP, you can drop to 1 hit point instead. You can't use this again until you finish a long rest"
       ],
       "Tiefling": [
@@ -781,10 +780,19 @@ class DydCharacter extends Character {
     throw Exception("Unsupported HP selected");
   }
 
-  static List<String> _getExtraRandomSkills(int num, List<String> availableSkills) {
+  static List<String> _getExtraRandomSkills(int num, List<String> availableSkills, String race) {
+    int skillNum = num;
+    if(race == "Half-elf") {
+      skillNum += 2;
+    }
     List<String> newExtraSkills = [];
     List<String> extraSkills = availableSkills;
-    for(int i=0; i<num; i++) {
+    if(race == "Half-orc") {
+      newExtraSkills.add("Intimidation");
+      extraSkills.remove("Intimidation");
+    }
+    
+    for(int i=0; i<skillNum; i++) {
       String newRandomSkill = randomChoice(extraSkills);
       newExtraSkills.add(newRandomSkill);
       extraSkills.remove(newRandomSkill);
@@ -792,10 +800,19 @@ class DydCharacter extends Character {
     return newExtraSkills;
   }
 
-  static List<String> _getAnyExtraRandomSkills(int num) {
+  static List<String> _getAnyExtraRandomSkills(int num, String race) {
+    int skillNum = num;
+    if(race == "Half-elf") {
+      skillNum += 2;
+    }
     List<String> newExtraSkills = [];
     List<String> extraSkills = ["Acrobatics", "Animal handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"];
-    for(int i=0; i<num; i++) {
+    if(race == "Half-orc") {
+      newExtraSkills.add("Intimidation");
+      extraSkills.remove("Intimidation");
+    }
+    
+    for(int i=0; i<skillNum; i++) {
       String newRandomSkill = randomChoice(extraSkills);
       newExtraSkills.add(newRandomSkill);
       extraSkills.remove(newRandomSkill);
@@ -803,20 +820,20 @@ class DydCharacter extends Character {
     return newExtraSkills;
   }
 
-  static List<String> _generateRandomSkills(String selectedClass) {
+  static List<String> _generateRandomSkills(String selectedClass, String selectedRace) {
     Map<String, List<String>> skills = {
-      "Barbarian": _getExtraRandomSkills(2, ["Animal handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"]),
-      "Bard": _getAnyExtraRandomSkills(3),
-      "Cleric": _getExtraRandomSkills(2, ["History", "Insight", "Medicine", "Persuasion", "Religion"]),
-      "Druid": _getExtraRandomSkills(2, ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"]),
-      "Fighter": _getExtraRandomSkills(2, ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]),
-      "Monk": _getExtraRandomSkills(2, ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"]),
-      "Paladin": _getExtraRandomSkills(2, ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"]),
-      "Ranger": _getExtraRandomSkills(3, ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"]),
-      "Rogue": _getExtraRandomSkills(4, ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"]),
-      "Sorcerer": _getExtraRandomSkills(2, ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"]),
-      "Warlock": _getExtraRandomSkills(2, ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"]),
-      "Wizard": _getExtraRandomSkills(2, ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"])
+      "Barbarian": _getExtraRandomSkills(2, ["Animal handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], selectedRace),
+      "Bard": _getAnyExtraRandomSkills(3, selectedRace),
+      "Cleric": _getExtraRandomSkills(2, ["History", "Insight", "Medicine", "Persuasion", "Religion"], selectedRace),
+      "Druid": _getExtraRandomSkills(2, ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], selectedRace),
+      "Fighter": _getExtraRandomSkills(2, ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], selectedRace),
+      "Monk": _getExtraRandomSkills(2, ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"], selectedRace),
+      "Paladin": _getExtraRandomSkills(2, ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], selectedRace),
+      "Ranger": _getExtraRandomSkills(3, ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"], selectedRace),
+      "Rogue": _getExtraRandomSkills(4, ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"], selectedRace),
+      "Sorcerer": _getExtraRandomSkills(2, ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"], selectedRace),
+      "Warlock": _getExtraRandomSkills(2, ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"], selectedRace),
+      "Wizard": _getExtraRandomSkills(2, ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], selectedRace)
     };
 
     if (skills.containsKey(selectedClass)) {
@@ -830,7 +847,7 @@ class DydCharacter extends Character {
       "Barbarian": [
         ["A greataxe", "Any martial melee weapon"],
         ["Two hand axes ", "Any simple weapon "],
-        ["An explorer’s pack and four javelins"],
+        ["An explorer's pack and four javelins"],
       ],
       "Bard": [
         ["A rapier", "A longsword", "Any simple weapon"],
@@ -991,7 +1008,7 @@ class DydCharacter extends Character {
         "Scar",
         "Cold look",
         "Haughty smile",
-        "Custom armor"
+        "Custom armor",
         "Toothpick in the mouth",
         "Imposing mustache",
         "Old clothes",
@@ -1018,18 +1035,18 @@ class DydCharacter extends Character {
         "Sweet and calm voice",
         "Cold and indifferent gaze",
         "Glasses",
-        "White coat"
+        "White coat",
         "Hair cut with a brush or collected in a bun",
         "Intense and severe expression",
         "Impeccable uniform",
         "Looks like working a lot and sleeping little",
         "Stretched posture",
         "Serene and relaxing voice",
-        "Impatient tapping of the foot"
+        "Impatient tapping of the foot",
         "Arrogant walk",
         "Identifying patches from previous missions",
         "Expressionless face",
-        "Look of skepticism"
+        "Look of skepticism",
         "Tattoos",
         "Scar",
         "Broken nose",
@@ -1038,7 +1055,7 @@ class DydCharacter extends Character {
         "Loud laughter",
         "Calloused and bruised hands",
         "Dirty boots that echo with each step",
-        "Disheveled hair"
+        "Disheveled hair",
         "Disheveled and unkempt appearance",
         "Stained coat",
         "Nervous attitude",
@@ -1046,7 +1063,7 @@ class DydCharacter extends Character {
         "Neat and well-trimmed hairstyle",
         "Thoughtful look",
         "Always clears throat before speaking",
-        "Eyes tired from overwork"
+        "Eyes tired from overwork",
       ];
 
       return randomChoice(appearance);
