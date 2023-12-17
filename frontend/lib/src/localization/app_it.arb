@@ -205,6 +205,11 @@
     "exit_game_dialog_exit": "Esci",
 
     "pairing_mode_create": "Crea partita",
-    "pairing_mode_join": "Unisciti alla partita"
+    "pairing_mode_join": "Unisciti alla partita",
+    "waiting_room": "Sala d'attesa",
+    "game_selection": "Scrivi il codice del gioco a cui vuoi unirti",
+    "game_code": "Codice del gioco"
+
+
 
 }

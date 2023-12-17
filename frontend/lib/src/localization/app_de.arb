@@ -205,5 +205,9 @@
     "exit_game_dialog_exit": "Verlassen",
 
     "pairing_mode_create": "Spiel erstellen",
-    "pairing_mode_join": "Spiel beitreten"
+    "pairing_mode_join": "Spiel beitreten",
+    "waiting_room": "Warteraum",
+    "game_selection": "Geben Sie den Code des Spiels ein, dem Sie beitreten möchten",
+    "game_code": "Spielcode"
+
 }

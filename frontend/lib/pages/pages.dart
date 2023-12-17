@@ -12,3 +12,4 @@ export 'select_character_page_mobile.dart';
 export 'select_mode_mobile.dart';
 export 'pairing_mode_page.dart';
 export 'pairing_mode_page_mobile.dart';
+export 'game_selection_page.dart';

@@ -10,3 +10,4 @@ export 'select_character_screen.dart';
 export 'select_mode_screen.dart';
 export 'pairing_mode_screen.dart';
 export 'waiting_room_screen.dart';
+export 'game_selection_screen.dart';

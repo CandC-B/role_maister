@@ -205,5 +205,10 @@
     "exit_game_dialog_exit": "Sair",
 
     "pairing_mode_create": "Criar jogo",
-    "pairing_mode_join": "Entrar no jogo"
+    "pairing_mode_join": "Entrar no jogo",
+    "waiting_room": "Sala de espera",
+    "game_selection": "Escreva o código do jogo ao qual deseja se juntar",
+    "game_code": "Código do jogo"
+
+
 }

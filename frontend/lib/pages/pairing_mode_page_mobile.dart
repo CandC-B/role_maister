@@ -43,7 +43,7 @@ class _PairingModePageState extends State<PairingModePageMobile> {
           onTap: () {
             singleton.multiplayer = false;
             singleton.pairingMode = true;
-            context.go("/form_multiplayer");
+            context.go("/game_selection");
           },
           child: ImageColorFilter(
             imagePath: 'assets/images/join_game_pairing_mode.jpg',

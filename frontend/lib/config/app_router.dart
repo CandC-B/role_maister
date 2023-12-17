@@ -252,6 +252,22 @@ class ApplicationRouter {
             },
           ),
           GoRoute(
+            path: 'game_selection',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: const GameSelectionScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                      opacity: CurveTween(curve: Curves.easeInOutCirc)
+                          .animate(animation),
+                      child: child);
+                },
+              );
+            },
+          ),
+          GoRoute(
             path: 'waiting_room',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return CustomTransitionPage(

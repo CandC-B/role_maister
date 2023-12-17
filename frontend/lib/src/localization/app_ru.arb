@@ -205,7 +205,9 @@
     "exit_game_dialog_exit": "Выход",
 
     "pairing_mode_create": "Создать игру",
-    "pairing_mode_join": "Присоединиться к игре"
-
+    "pairing_mode_join": "Присоединиться к игре",
+    "waiting_room": "Зал ожидания",
+    "game_selection": "Введите код игры, к которой вы хотите присоединиться",
+    "game_code": "Код игры"
 
 }
