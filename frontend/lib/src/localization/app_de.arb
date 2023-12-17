@@ -202,7 +202,12 @@
     "exit_game_dialog_text": "Möchten Sie das Spiel wirklich verlassen?",
     "exit_game_dialog_autosave": "(Das Spiel wird automatisch gespeichert)",
     "exit_game_dialog_cancel": "Abbrechen",
-    "exit_game_dialog_exit": "Verlassen"
+    "exit_game_dialog_exit": "Verlassen",
 
+    "pairing_mode_create": "Spiel erstellen",
+    "pairing_mode_join": "Spiel beitreten",
+    "waiting_room": "Warteraum",
+    "game_selection": "Geben Sie den Code des Spiels ein, dem Sie beitreten möchten",
+    "game_code": "Spielcode"
 
 }

@@ -21,6 +21,8 @@ class AppSingleton {
   String? currentGame;
   String history = "";
   bool multiplayer = false;
+  bool pairingMode = false;
+  bool joinPairingMode = false;
   final ValueNotifier<String> gameMode = ValueNotifier<String>("aliens");
   String? selectedCharacterId;
   String? selectedCharacterName;

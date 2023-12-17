@@ -202,6 +202,12 @@
     "exit_game_dialog_text": "Êtes-vous sûr de vouloir quitter le jeu?",
     "exit_game_dialog_autosave": "(Le jeu sera enregistré automatiquement)",
     "exit_game_dialog_cancel": "Annuler",
-    "exit_game_dialog_exit": "Quitter"
+    "exit_game_dialog_exit": "Quitter",
+
+    "pairing_mode_create": "Créer une partie",
+    "pairing_mode_join": "Rejoindre la partie",
+    "waiting_room": "Salle d'attente",
+    "game_selection": "Écrivez le code du jeu auquel vous souhaitez vous joindre",
+    "game_code": "Code du jeu"
 
 }
