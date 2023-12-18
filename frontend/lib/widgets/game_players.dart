@@ -178,7 +178,6 @@ class _StatsTabState extends State<StatsTab> {
     return Scaffold(
         backgroundColor: Colors.black87,
         body: Container(
-            // child: const Text("Stats Tab Content"),
             child: singleton.gameMode.value == "aliens"
                 ? profileAliensCharacterCard.showStats(singleton.alienCharacter)
                 : singleton.gameMode.value == "dyd"
@@ -198,7 +197,7 @@ class PlayersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black87,
       body: FutureBuilder(
         future:
             firestoreService.getCharactersFromGameId(singleton.currentGame!),

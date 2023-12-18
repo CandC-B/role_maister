@@ -203,8 +203,7 @@ class _ProfileDydCharacterCardState extends State<ProfileDydCharacterCard> {
   }
 
   Widget _showStats(DydCharacter character) {
-    print("_showStats");
-    return Column(
+    return SingleChildScrollView(child: Column(
       children: [
         _buildStatItem(
             'HP', Icons.favorite, character.hp.toString(), Colors.white),
@@ -253,6 +252,8 @@ class _ProfileDydCharacterCardState extends State<ProfileDydCharacterCard> {
         _buildStatItem('Appearance', Icons.emoji_people,
             character.appearance, Colors.white),
       ],
-    );
+    ),);
+    
+    
   }
 }

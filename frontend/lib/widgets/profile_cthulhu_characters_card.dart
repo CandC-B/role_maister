@@ -5,6 +5,7 @@ import 'package:role_maister/pages/profile_page.dart';
 import 'package:role_maister/widgets/characters_tab.dart';
 import 'package:role_maister/widgets/widgets.dart';
 import 'package:role_maister/config/firebase_logic.dart';
+
 class ProfileCthulhuCharacterCard extends StatefulWidget {
   final CthulhuCharacter character;
   const ProfileCthulhuCharacterCard({super.key, required this.character});
@@ -12,7 +13,7 @@ class ProfileCthulhuCharacterCard extends StatefulWidget {
   @override
   State<ProfileCthulhuCharacterCard> createState() =>
       _ProfileCthulhuCharacterCardState();
-  
+
   showStats(CthulhuCharacter character) {
     _ProfileCthulhuCharacterCardState state =
         _ProfileCthulhuCharacterCardState();
@@ -104,12 +105,13 @@ class _ProfileCthulhuCharacterCardState
                 color: Colors.white,
               ),
               onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: true);
-                },
-              );
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: true);
+                  },
+                );
               },
             ),
             IconButton(
@@ -119,11 +121,12 @@ class _ProfileCthulhuCharacterCardState
               ),
               onPressed: () {
                 showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: false);
-                },
-              );
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: false);
+                  },
+                );
               },
             ),
             Icon(
@@ -167,9 +170,11 @@ class _ProfileCthulhuCharacterCardState
   }
 
   Widget _showStats(CthulhuCharacter character) {
-    return Column(children: [
-       _buildStatItem('HP', Icons.favorite, character.hp.toString(),
-              Colors.white),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildStatItem(
+              'HP', Icons.favorite, character.hp.toString(), Colors.white),
           _buildStatItem('Character Level', Icons.bar_chart,
               character.characterLevel.toString(), Colors.white),
           _buildStatItem(
@@ -180,23 +185,24 @@ class _ProfileCthulhuCharacterCardState
               Icons.list,
               character.skills.toString().replaceAll(RegExp("[{}]"), ""),
               Colors.white),
-          _buildStatItem('Talents', Icons.star,
-              character.talents.join(', '), Colors.white),
-          _buildStatItem('Appearance', Icons.face, character.appearance,
+          _buildStatItem('Talents', Icons.star, character.talents.join(', '),
               Colors.white),
+          _buildStatItem(
+              'Appearance', Icons.face, character.appearance, Colors.white),
           _buildStatItem('Personal Agenda', Icons.assignment,
               character.personalAgenda, Colors.white),
           _buildStatItem('Friend', Icons.sentiment_very_satisfied,
               character.friend, Colors.white),
           _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
               character.rival, Colors.white),
-          _buildStatItem('Gear', Icons.accessibility,
-              character.gear.join(', '), Colors.white),
-          _buildStatItem('Signature Item', Icons.edit,
-              character.signatureItem, Colors.white),
-          _buildStatItem('Cash', Icons.attach_money,
-              '\$${character.cash}', Colors.white),
-    ],);
+          _buildStatItem('Gear', Icons.accessibility, character.gear.join(', '),
+              Colors.white),
+          _buildStatItem('Signature Item', Icons.edit, character.signatureItem,
+              Colors.white),
+          _buildStatItem(
+              'Cash', Icons.attach_money, '\$${character.cash}', Colors.white),
+        ],
+      ),
+    );
   }
 }
-
