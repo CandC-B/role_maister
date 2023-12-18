@@ -12,6 +12,12 @@ class ProfileAliensCharacterCard extends StatefulWidget {
   @override
   State<ProfileAliensCharacterCard> createState() =>
       _ProfileAliensCharacterCardState();
+
+  showStats(AliensCharacter character) {
+    print("showStats");
+    _ProfileAliensCharacterCardState state = _ProfileAliensCharacterCardState();
+    return state._showStats(character);
+  }
 }
 
 class _ProfileAliensCharacterCardState
@@ -98,12 +104,13 @@ class _ProfileAliensCharacterCardState
                 color: Colors.white,
               ),
               onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: true);
-                },
-              );
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: true);
+                  },
+                );
               },
             ),
             IconButton(
@@ -113,11 +120,12 @@ class _ProfileAliensCharacterCardState
               ),
               onPressed: () {
                 showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: false);
-                },
-              );
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: false);
+                  },
+                );
               },
             ),
             Icon(
@@ -159,5 +167,39 @@ class _ProfileAliensCharacterCardState
       ),
     );
   }
-}
 
+  Widget _showStats(AliensCharacter character) {
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        _buildStatItem(
+            'HP', Icons.favorite, character.hp.toString(), Colors.white),
+        _buildStatItem('Character Level', Icons.bar_chart,
+            character.characterLevel.toString(), Colors.white),
+        _buildStatItem('Career', Icons.school, character.career, Colors.white),
+        _buildAttributeStats(character.attributes),
+        _buildStatItem(
+            'Skills',
+            Icons.list,
+            character.skills.toString().replaceAll(RegExp("[{}]"), ""),
+            Colors.white),
+        _buildStatItem(
+            'Talents', Icons.star, character.talents.join(', '), Colors.white),
+        _buildStatItem(
+            'Appearance', Icons.face, character.appearance, Colors.white),
+        _buildStatItem('Personal Agenda', Icons.assignment,
+            character.personalAgenda, Colors.white),
+        _buildStatItem('Friend', Icons.sentiment_very_satisfied,
+            character.friend, Colors.white),
+        _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
+            character.rival, Colors.white),
+        _buildStatItem('Gear', Icons.accessibility, character.gear.join(', '),
+            Colors.white),
+        _buildStatItem('Signature Item', Icons.edit, character.signatureItem,
+            Colors.white),
+        _buildStatItem(
+            'Cash', Icons.attach_money, '\$${character.cash}', Colors.white),
+      ],
+    ));
+  }
+}

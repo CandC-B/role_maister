@@ -13,10 +13,13 @@ class ProfileDydCharacterCard extends StatefulWidget {
   @override
   State<ProfileDydCharacterCard> createState() =>
       _ProfileDydCharacterCardState();
+  showStats(DydCharacter character) {
+    _ProfileDydCharacterCardState state = _ProfileDydCharacterCardState();
+    return state._showStats(character);
+  }
 }
 
-class _ProfileDydCharacterCardState
-    extends State<ProfileDydCharacterCard> {
+class _ProfileDydCharacterCardState extends State<ProfileDydCharacterCard> {
   bool isExpanded = false;
 
   Widget _buildStatItem(
@@ -28,7 +31,7 @@ class _ProfileDydCharacterCardState
     );
   }
 
-   Widget _buildAbilitiesStats(Map<String, int> abilities) {
+  Widget _buildAbilitiesStats(Map<String, int> abilities) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,12 +59,12 @@ class _ProfileDydCharacterCardState
           title: Text('Intelligence: ${abilities['INT']}',
               style: const TextStyle(color: Colors.white)),
         ),
-         ListTile(
+        ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
           title: Text('Wisdom: ${abilities['WIS']}',
               style: const TextStyle(color: Colors.white)),
         ),
-         ListTile(
+        ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
           title: Text('Charisma: ${abilities['CHA']}',
               style: const TextStyle(color: Colors.white)),
@@ -70,10 +73,10 @@ class _ProfileDydCharacterCardState
     );
   }
 
-  Widget _buildSex(String sex){
-    if (sex == 'Male'){
+  Widget _buildSex(String sex) {
+    if (sex == 'Male') {
       return _buildStatItem('Sex', Icons.male, sex, Colors.white);
-    }else{
+    } else {
       return _buildStatItem('Sex', Icons.female, sex, Colors.white);
     }
   }
@@ -117,12 +120,13 @@ class _ProfileDydCharacterCardState
                 color: Colors.white,
               ),
               onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: true);
-                },
-              );
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: true);
+                  },
+                );
               },
             ),
             IconButton(
@@ -132,11 +136,12 @@ class _ProfileDydCharacterCardState
               ),
               onPressed: () {
                 showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersEditionOrDeletionDialog(character: widget.character.toMap(), isEdition: false);
-                },
-              );
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CharactersEditionOrDeletionDialog(
+                        character: widget.character.toMap(), isEdition: false);
+                  },
+                );
               },
             ),
             Icon(
@@ -146,8 +151,8 @@ class _ProfileDydCharacterCardState
           ],
         ),
         children: [
-          _buildStatItem(
-              'HP', Icons.favorite, widget.character.hp.toString(), Colors.white),
+          _buildStatItem('HP', Icons.favorite, widget.character.hp.toString(),
+              Colors.white),
           _buildStatItem('Character Level', Icons.bar_chart,
               widget.character.characterLevel.toString(), Colors.white),
           _buildStatItem(
@@ -159,41 +164,95 @@ class _ProfileDydCharacterCardState
               widget.character.alignment, Colors.white),
           _buildStatItem('Height', Icons.height,
               widget.character.height.toString(), Colors.white),
-          _buildStatItem('Weight', Icons.line_weight, widget.character.weight.toString(),
-              Colors.white),
+          _buildStatItem('Weight', Icons.line_weight,
+              widget.character.weight.toString(), Colors.white),
           _buildStatItem('Size', Icons.accessibility_new, widget.character.size,
               Colors.white),
-          _buildStatItem(
-              'Traits', Icons.emoji_emotions, widget.character.traits.join(', '), Colors.white),
-          _buildStatItem('Languages', Icons.language, widget.character.languages.join(', '),
-              Colors.white),
+          _buildStatItem('Traits', Icons.emoji_emotions,
+              widget.character.traits.join(', '), Colors.white),
+          _buildStatItem('Languages', Icons.language,
+              widget.character.languages.join(', '), Colors.white),
           _buildStatItem('Character Class', Icons.account_box,
               widget.character.characterClass, Colors.white),
           _buildStatItem('Description', Icons.description,
               widget.character.description, Colors.white),
-          _buildStatItem('hitDice', Icons.casino,
-              widget.character.hitDie, Colors.white),
+          _buildStatItem(
+              'hitDice', Icons.casino, widget.character.hitDie, Colors.white),
           _buildStatItem('Proficiencies', Icons.emoji_objects,
               widget.character.proficiencies.join(', '), Colors.white),
-          _buildStatItem('Tools', Icons.backpack, widget.character.tools.join(', '),
-              Colors.white),
+          _buildStatItem('Tools', Icons.backpack,
+              widget.character.tools.join(', '), Colors.white),
           _buildStatItem('Skills', Icons.sports_kabaddi,
               widget.character.skills.join(', '), Colors.white),
           _buildStatItem('Equipment', Icons.shopping_bag,
               widget.character.equipment.join(', '), Colors.white),
           _buildSex(widget.character.sex),
-          _buildStatItem('Background', Icons.book,
-              widget.character.background, Colors.white),
+          _buildStatItem('Background', Icons.book, widget.character.background,
+              Colors.white),
           _buildStatItem('Eyes Color', Icons.remove_red_eye,
               widget.character.eyesColor, Colors.white),
           _buildStatItem('Hair Color', Icons.brush, widget.character.hairColor,
               Colors.white),
           _buildStatItem('Skin Color', Icons.face, widget.character.skinColor,
               Colors.white),
-          _buildStatItem('Appearance', Icons.emoji_people, widget.character.appearance, Colors.white),
+          _buildStatItem('Appearance', Icons.emoji_people,
+              widget.character.appearance, Colors.white),
         ],
       ),
     );
   }
-}
 
+  Widget _showStats(DydCharacter character) {
+    print("_showStats");
+    return Column(
+      children: [
+        _buildStatItem(
+            'HP', Icons.favorite, character.hp.toString(), Colors.white),
+        _buildStatItem('Character Level', Icons.bar_chart,
+            character.characterLevel.toString(), Colors.white),
+        _buildStatItem(
+            'Race', Icons.cruelty_free, character.race, Colors.white),
+        _buildAbilitiesStats(character.abilities),
+        _buildStatItem('Age', Icons.calendar_today,
+            character.age.toString(), Colors.white),
+        _buildStatItem("Alignment", Icons.account_balance,
+            character.alignment, Colors.white),
+        _buildStatItem('Height', Icons.height,
+            character.height.toString(), Colors.white),
+        _buildStatItem('Weight', Icons.line_weight,
+            character.weight.toString(), Colors.white),
+        _buildStatItem('Size', Icons.accessibility_new, character.size,
+            Colors.white),
+        _buildStatItem('Traits', Icons.emoji_emotions,
+            character.traits.join(', '), Colors.white),
+        _buildStatItem('Languages', Icons.language,
+            character.languages.join(', '), Colors.white),
+        _buildStatItem('Character Class', Icons.account_box,
+            character.characterClass, Colors.white),
+        _buildStatItem('Description', Icons.description,
+            character.description, Colors.white),
+        _buildStatItem(
+            'hitDice', Icons.casino, character.hitDie, Colors.white),
+        _buildStatItem('Proficiencies', Icons.emoji_objects,
+            character.proficiencies.join(', '), Colors.white),
+        _buildStatItem('Tools', Icons.backpack,
+            character.tools.join(', '), Colors.white),
+        _buildStatItem('Skills', Icons.sports_kabaddi,
+            character.skills.join(', '), Colors.white),
+        _buildStatItem('Equipment', Icons.shopping_bag,
+            character.equipment.join(', '), Colors.white),
+        _buildSex(character.sex),
+        _buildStatItem('Background', Icons.book, character.background,
+            Colors.white),
+        _buildStatItem('Eyes Color', Icons.remove_red_eye,
+            character.eyesColor, Colors.white),
+        _buildStatItem('Hair Color', Icons.brush, character.hairColor,
+            Colors.white),
+        _buildStatItem(
+            'Skin Color', Icons.face, character.skinColor, Colors.white),
+        _buildStatItem('Appearance', Icons.emoji_people,
+            character.appearance, Colors.white),
+      ],
+    );
+  }
+}

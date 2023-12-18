@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:role_maister/widgets/characters_tab.dart';
+import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
+import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
+import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({super.key, required this.gameId});
@@ -30,16 +34,16 @@ class _GamePlayersState extends State<GamePlayers> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
-          final userStatistics;
-          if (singleton.gameMode.value == "aliens") {
-            userStatistics = singleton.alienCharacter;
-          } else if (singleton.gameMode.value == "dyd") {
-            userStatistics = singleton.dydCharacter;
-          } else if (singleton.gameMode.value == "cthulhu") {
-            userStatistics = singleton.cthulhuCharacter;
-          } else {
-            userStatistics = AliensCharacter.random();
-          }
+          // final userStatistics;
+          // if (singleton.gameMode.value == "aliens") {
+          //   userStatistics = singleton.alienCharacter;
+          // } else if (singleton.gameMode.value == "dyd") {
+          //   userStatistics = singleton.dydCharacter;
+          // } else if (singleton.gameMode.value == "cthulhu") {
+          //   userStatistics = singleton.cthulhuCharacter;
+          // } else {
+          //   userStatistics = AliensCharacter.random();
+          // }
           return DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -56,7 +60,7 @@ class _GamePlayersState extends State<GamePlayers> {
                 ],
                 title: const Text('Role MAIster'),
                 backgroundColor: Colors.deepPurple,
-                bottom:  TabBar(
+                bottom: TabBar(
                   indicatorColor: Colors.white,
                   tabs: [
                     Tab(text: AppLocalizations.of(context)!.game_stats),
@@ -66,14 +70,14 @@ class _GamePlayersState extends State<GamePlayers> {
               ),
               body: TabBarView(
                 children: [
-                  Center(child: StatsTab(userStats: userStatistics)),
+                  Center(child: StatsTab()),
                   Center(child: PlayersTab()),
                 ],
               ),
             ),
           );
         } else {
-          return  Text(AppLocalizations.of(context)!.no_stats_found);
+          return Text(AppLocalizations.of(context)!.no_stats_found);
         }
       },
     );
@@ -120,8 +124,8 @@ class _GamePlayersState extends State<GamePlayers> {
                       8.0), // Espacio entre el texto principal y el texto en cursiva
               Text(
                 AppLocalizations.of(context)!.exit_game_dialog_autosave,
-                style:
-                    const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+                style: const TextStyle(
+                    color: Colors.white, fontStyle: FontStyle.italic),
               ),
             ],
           ),
@@ -156,9 +160,7 @@ class _GamePlayersState extends State<GamePlayers> {
 class StatsTab extends StatefulWidget {
   const StatsTab({
     super.key,
-    required this.userStats,
   });
-  final AliensCharacter userStats;
 
   @override
   State<StatsTab> createState() => _StatsTabState();
@@ -167,12 +169,23 @@ class StatsTab extends StatefulWidget {
 class _StatsTabState extends State<StatsTab> {
   @override
   Widget build(BuildContext context) {
+    ProfileAliensCharacterCard profileAliensCharacterCard =
+        ProfileAliensCharacterCard(character: singleton.alienCharacter);
+    ProfileDydCharacterCard profiledydCharacterCard =
+        ProfileDydCharacterCard(character: singleton.dydCharacter);
+    ProfileCthulhuCharacterCard profileCthulhuCharacterCard =
+        ProfileCthulhuCharacterCard(character: singleton.cthulhuCharacter);
     return Scaffold(
         backgroundColor: Colors.black87,
         body: Container(
-          // child: const Text("Stats Tab Content"),
-          child: Stats(userStats: widget.userStats),
-        ));
+            // child: const Text("Stats Tab Content"),
+            child: singleton.gameMode.value == "aliens"
+                ? profileAliensCharacterCard.showStats(singleton.alienCharacter)
+                : singleton.gameMode.value == "dyd"
+                    ? profiledydCharacterCard.showStats(singleton.dydCharacter)
+                    : singleton.gameMode.value == "cthulhu"
+                        ? profileCthulhuCharacterCard.showStats(singleton.cthulhuCharacter)
+                        :  const Center(child: CircularProgressIndicator(color: Colors.deepPurple,))));
   }
 }
 
@@ -257,123 +270,123 @@ class PlayerCard extends StatelessWidget {
   }
 }
 
-class Stats extends StatelessWidget {
-  const Stats({super.key, required this.userStats});
-  final AliensCharacter userStats;
+// class Stats extends StatelessWidget {
+//   const Stats({super.key, required this.userStats});
+//   final AliensCharacter userStats;
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: This is Mock user statistics, replace with real data
-    // TODO: Improve the UI
-    // TODO: Reorder the stats
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: This is Mock user statistics, replace with real data
+//     // TODO: Improve the UI
+//     // TODO: Reorder the stats
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black54,
-        title: Text(userStats.name),
-      ),
-      backgroundColor: Colors.deepPurple,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-             children: [
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_hp,
-              Icons.favorite, userStats.hp.toString(), Colors.white),
-          // _buildStatItem('userStats Level', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_character_level,
-          Icons.bar_chart,
-              userStats.characterLevel.toString(), Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_career,
-              Icons.school, userStats.career, Colors.white),
-          _buildAttributeStats(userStats.attributes, context),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_skills,
-              Icons.list,
-              userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
-              Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_talents, 
-          Icons.star, userStats.talents.join(', '),
-              Colors.white),
-          _buildStatItem(
-              // 'Appearance', 
-              AppLocalizations.of(context)!.aliens_appearance,
-              Icons.face, userStats.appearance, Colors.white),
-          // _buildStatItem('Personal Agenda', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_personal_agenda,
-          Icons.assignment,
-              userStats.personalAgenda, Colors.white),
-          // _buildStatItem('Friend', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_friend,
-          Icons.sentiment_very_satisfied,
-              userStats.friend, Colors.white),
-          // _buildStatItem('Rival', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_rival,
-          Icons.sentiment_very_dissatisfied,
-              userStats.rival, Colors.white),
-          // _buildStatItem('Gear', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_gear,
-          Icons.accessibility, userStats.gear.join(', '),
-              Colors.white),
-          // _buildStatItem('Signature Item', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_signature_item,
-          Icons.edit, userStats.signatureItem,
-              Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_cash, 
-              Icons.attach_money, '\$${userStats.cash}', Colors.white),
-        ],
-          ),
-        ),
-      ),
-    );
-  }
+//     return Scaffold(
+//       appBar: AppBar(
+//         leading: null,
+//         automaticallyImplyLeading: false,
+//         backgroundColor: Colors.black54,
+//         title: Text(userStats.name),
+//       ),
+//       backgroundColor: Colors.deepPurple,
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//              children: [
+//           _buildStatItem(
+//               AppLocalizations.of(context)!.aliens_hp,
+//               Icons.favorite, userStats.hp.toString(), Colors.white),
+//           // _buildStatItem('userStats Level', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_character_level,
+//           Icons.bar_chart,
+//               userStats.characterLevel.toString(), Colors.white),
+//           _buildStatItem(
+//               AppLocalizations.of(context)!.aliens_career,
+//               Icons.school, userStats.career, Colors.white),
+//           _buildAttributeStats(userStats.attributes, context),
+//           _buildStatItem(
+//               AppLocalizations.of(context)!.aliens_skills,
+//               Icons.list,
+//               userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
+//               Colors.white),
+//           _buildStatItem(
+//               AppLocalizations.of(context)!.aliens_talents, 
+//           Icons.star, userStats.talents.join(', '),
+//               Colors.white),
+//           _buildStatItem(
+//               // 'Appearance', 
+//               AppLocalizations.of(context)!.aliens_appearance,
+//               Icons.face, userStats.appearance, Colors.white),
+//           // _buildStatItem('Personal Agenda', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_personal_agenda,
+//           Icons.assignment,
+//               userStats.personalAgenda, Colors.white),
+//           // _buildStatItem('Friend', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_friend,
+//           Icons.sentiment_very_satisfied,
+//               userStats.friend, Colors.white),
+//           // _buildStatItem('Rival', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_rival,
+//           Icons.sentiment_very_dissatisfied,
+//               userStats.rival, Colors.white),
+//           // _buildStatItem('Gear', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_gear,
+//           Icons.accessibility, userStats.gear.join(', '),
+//               Colors.white),
+//           // _buildStatItem('Signature Item', 
+//           _buildStatItem(AppLocalizations.of(context)!.aliens_signature_item,
+//           Icons.edit, userStats.signatureItem,
+//               Colors.white),
+//           _buildStatItem(
+//               AppLocalizations.of(context)!.aliens_cash, 
+//               Icons.attach_money, '\$${userStats.cash}', Colors.white),
+//         ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 
-  Widget _buildStatItem(
-      String label, IconData icon, String value, Color textColor) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.white),
-      title: Text(label, style: const TextStyle(color: Colors.white)),
-      subtitle: Text(value, style: TextStyle(color: textColor)),
-    );
-  }
+//   Widget _buildStatItem(
+//       String label, IconData icon, String value, Color textColor) {
+//     return ListTile(
+//       leading: Icon(icon, color: Colors.white),
+//       title: Text(label, style: const TextStyle(color: Colors.white)),
+//       subtitle: Text(value, style: TextStyle(color: textColor)),
+//     );
+//   }
 
-  Widget _buildAttributeStats(Map<String, int> attributes, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ListTile(
-          leading: Icon(Icons.insert_chart, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_attributes,
-          style: TextStyle(color: Colors.white)),
-        ),
-        ListTile(
-          leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_strength + ': ${attributes['Strength']}',
-              style: const TextStyle(color: Colors.white)),
-        ),
-        ListTile(
-          leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_agility + ': ${attributes['Agility']}',
-              style: const TextStyle(color: Colors.white)),
-        ),
-        ListTile(
-          leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_empathy + ': ${attributes['Empathy']}',
-              style: const TextStyle(color: Colors.white)),
-        ),
-        ListTile(
-          leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_wits + ': ${attributes['Wits']}',
-              style: const TextStyle(color: Colors.white)),
-        ),
-      ],
-    );
-  }
-}
+//   Widget _buildAttributeStats(Map<String, int> attributes, BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         ListTile(
+//           leading: Icon(Icons.insert_chart, color: Colors.white),
+//           title: Text(AppLocalizations.of(context)!.aliens_attributes,
+//           style: TextStyle(color: Colors.white)),
+//         ),
+//         ListTile(
+//           leading: const Icon(Icons.sports_tennis, color: Colors.white),
+//           title: Text(AppLocalizations.of(context)!.aliens_strength + ': ${attributes['Strength']}',
+//               style: const TextStyle(color: Colors.white)),
+//         ),
+//         ListTile(
+//           leading: const Icon(Icons.directions_run, color: Colors.white),
+//           title: Text(AppLocalizations.of(context)!.aliens_agility + ': ${attributes['Agility']}',
+//               style: const TextStyle(color: Colors.white)),
+//         ),
+//         ListTile(
+//           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
+//           title: Text(AppLocalizations.of(context)!.aliens_empathy + ': ${attributes['Empathy']}',
+//               style: const TextStyle(color: Colors.white)),
+//         ),
+//         ListTile(
+//           leading: const Icon(Icons.lightbulb, color: Colors.white),
+//           title: Text(AppLocalizations.of(context)!.aliens_wits + ': ${attributes['Wits']}',
+//               style: const TextStyle(color: Colors.white)),
+//         ),
+//       ],
+//     );
+//   }
+// }
