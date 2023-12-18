@@ -187,19 +187,22 @@ class ProfileDydCharacter extends StatelessWidget {
                     return ListView.builder(
                       padding: const EdgeInsets.all(10),
                       reverse: false,
-                      // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < dydCharacters.length) {
                           var data = dydCharacters[index].data()
                               as Map<String, dynamic>;
-                          if (data['userId'] == singleton.player!.uid) {
-                            DydCharacter dydCharacter = DydCharacter.fromMap(
+                            if (data['userId'] == singleton.player!.uid) {
+                              DydCharacter dydCharacter =
+                                  DydCharacter.fromMap(
                                 dydCharacters[index].data()
-                                    as Map<String, dynamic>);
-                            return ProfileDydCharacterCard(
-                              character: dydCharacter,
-                            );
-                          }
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileDydCharacterCard(
+                                character: dydCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );
@@ -210,13 +213,18 @@ class ProfileDydCharacter extends StatelessWidget {
                   }
                 } else {
                   return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Image.asset('assets/images/small_logo.png'),
-                      ),
+                      child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/small_logo.png'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  );
+                  ));
                 }
               },
             ),
@@ -280,20 +288,22 @@ class ProfileCthulhuCharacter extends StatelessWidget {
                     return ListView.builder(
                       padding: const EdgeInsets.all(10),
                       reverse: false,
-                      // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < cthulhuCharacters.length) {
                           var data = cthulhuCharacters[index].data()
                               as Map<String, dynamic>;
-                          if (data['userId'] == singleton.player!.uid) {
-                            CthulhuCharacter cthulhuCharacter =
-                                CthulhuCharacter.fromMap(
-                                    cthulhuCharacters[index].data()
-                                        as Map<String, dynamic>);
-                            return ProfileCthulhuCharacterCard(
-                              character: cthulhuCharacter,
-                            );
-                          }
+                            if (data['userId'] == singleton.player!.uid) {
+                              CthulhuCharacter cthulhuCharacter =
+                                  CthulhuCharacter.fromMap(
+                                cthulhuCharacters[index].data()
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileCthulhuCharacterCard(
+                                character: cthulhuCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );
@@ -304,13 +314,18 @@ class ProfileCthulhuCharacter extends StatelessWidget {
                   }
                 } else {
                   return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Image.asset('assets/images/small_logo.png'),
-                      ),
+                      child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/small_logo.png'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  );
+                  ));
                 }
               },
             ),
