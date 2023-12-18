@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:role_maister/models/player_game_data.dart';
 import 'package:uuid/uuid.dart';
+import 'package:shortid/shortid.dart';
 class Game {
   final String uid;
+  final String short_uid;
   final int num_players;
   final String role_system;
   final Map<String, dynamic> players;
@@ -12,18 +14,21 @@ class Game {
 
   Game({
     String? uid,
+    String? short_uid,
     required this.num_players,
     required this.role_system,
     required this.players,
     required this.story_description,
     required this.ready_players,
     required this.game_ready,
-  }) : uid = uid ?? const Uuid().v4();
+  }) : uid = uid ?? const Uuid().v4(),
+        short_uid = shortid.generate();
 
   factory Game.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
     if (data != null) {
       String uid = data['uid'] ?? '';
+      String short_uid = data['short_uid'] ?? '';
       int num_players = data['num_players'] ?? 0;
       String role_system = data['role_system'] ?? '';
       Map<String, dynamic> players = Map<String, dynamic>.from(data['players'] ?? []);
@@ -33,6 +38,7 @@ class Game {
 
       return Game(
         uid: uid,
+        short_uid: short_uid,
         num_players: num_players,
         role_system: role_system,
         players: players,
@@ -48,6 +54,7 @@ class Game {
   toMap() {
     return {
       'uid': this.uid,
+      'short_uid': this.short_uid,
       'num_players': this.num_players,
       'role_system': this.role_system,
       'players': this.players,
@@ -60,6 +67,7 @@ class Game {
   static fromMap(Map<String, dynamic> statsData) {
     return Game(
       uid: statsData['uid'],
+      short_uid: statsData['short_uid'],
       num_players: statsData['num_players'],
       role_system: statsData['role_system'],
       players: statsData['players'],
