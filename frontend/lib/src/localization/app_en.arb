@@ -204,6 +204,22 @@
   "exit_game_dialog_cancel": "Cancel",
   "exit_game_dialog_exit": "Exit",
 
+  "characters": "Characters",
+  "games": "Games",
+  "email": "Email",
+  "games_played": "Games played",
+  "tokens_left": "Tokens left",
+  "experience": "Experience",
+  "change_password": "Change Password",
+  "you_dont_have_any_characters": "You do not have any characters",
+  "enter_your_new_character_name": "Enter your new character name",
+  "character_name": "Character name",
+  "are_you_sure_you_want_to_delete_this_character": "Are you sure you want to delete this character?",
+  "game_mode": "Game Mode",
+  "players": "Players",
+  "resume": "Resume",
+  "add_character": "Add Character"
+
   "pairing_mode_create": "Create Game",
   "pairing_mode_join": "Join Game",
   "waiting_room": "Waiting room",

@@ -59,15 +59,15 @@ class FirebaseService {
         if (userSnapshot.exists) {
           final Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-          if (userData.containsKey(singleton.gameMode.value)) {
-            final List<dynamic> characters = userData[singleton.gameMode.value];
+          if (userData.containsKey(character["mode"])) {
+            final List<dynamic> characters = userData[character["mode"]];
             characters.add(character["id"]);
             await userReference.update({
-              singleton.gameMode.value: characters, // Corregir la sintaxis aquí
+              character["mode"]: characters, // Corregir la sintaxis aquí
             });
           } else {
             await userReference.update({
-              singleton.gameMode.value: [character["id"]],
+              character["mode"]: [character["id"]],
             });
           }
         } else {
@@ -331,7 +331,6 @@ class FirebaseService {
             gameSnapshot.data() as Map<String, dynamic>;
 
         if (gameData.containsKey("players")) {
-          print("test");
           final playerIds = gameData["players"];
           List<Map<String, dynamic>> charactersData = [];
           for (int i = 0; i < playerIds.values.length; i++) {
@@ -485,10 +484,8 @@ class FirebaseService {
     }
   }
 
-// TODO I have changed this
   Future<void> createGame(Map<String, dynamic> gameConfig) async {
     try {
-      print(gameConfig);
       await _firestore
           .collection('game')
           .doc(gameConfig['uid'])
@@ -1000,13 +997,14 @@ class FirebaseService {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('game') // replace with your collection name
-          .where('users', arrayContains: userId)
           .get();
 
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        // Assuming 'name' is the field containing game information
-        Game game = Game.fromMap(document.data() as Map<String, dynamic>);
-        games.add(game);
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        if (data['players'].keys.contains(userId)) {
+          Game game = Game.fromMap(document.data() as Map<String, dynamic>);
+          games.add(game);
+        }
       }
     } catch (e) {
       print('Error fetching games: $e');
