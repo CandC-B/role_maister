@@ -19,10 +19,14 @@ class AppSingleton {
   User? user;
   Player? player;
   String? currentGame;
+  String? currentGameShortUid;
   String history = "";
   bool multiplayer = false;
-  final ValueNotifier<String> gameMode = ValueNotifier<String>("Aliens");
+  bool pairingMode = false;
+  bool joinPairingMode = false;
+  final ValueNotifier<String> gameMode = ValueNotifier<String>("aliens");
   String? selectedCharacterId;
+  String? selectedCharacterName;
   AliensCharacter alienCharacter = AliensCharacter.random();
   DydCharacter dydCharacter = DydCharacter.random();
   CthulhuCharacter cthulhuCharacter = CthulhuCharacter.random();

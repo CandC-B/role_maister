@@ -117,8 +117,6 @@ class TokenPackageCard extends StatelessWidget {
                 ),
                 onPressed: () {
                   // TODO: Implement actual payment processing here
-                  // Once payment is successful, you can update the user's token balance.
-                  // For this example, you can just close the dialog.
                   Navigator.of(context).pop();
                 },
               ),

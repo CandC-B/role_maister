@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/cohere_logic.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:role_maister/models/cohere_models.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
+import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/models.dart';
+import 'package:role_maister/models/player_game_data.dart';
 import 'package:role_maister/widgets/cthulhu_characters_card.dart';
 import 'package:role_maister/widgets/dyd_characters_card.dart';
 import 'package:role_maister/widgets/widgets.dart';
@@ -23,7 +27,7 @@ class SelectCharacterPageMobile extends StatefulWidget {
 }
 
 class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
-  Map<String, dynamic>? charactersData;
+  Map<String, dynamic>? charactersData = {};
   int selectedIndex = 0;
 
   @override
@@ -44,17 +48,21 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   Future<void> createRandomPlayer() async {
     try {
-      if (singleton.gameMode.value == "Aliens") {
+      if (singleton.gameMode.value == "aliens") {
         AliensCharacter newRandomUser = AliensCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode.value == "Dyd") {
+      } else if (singleton.gameMode.value == "dyd") {
         DydCharacter newRandomUser = DydCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
-      } else if (singleton.gameMode.value == "Cthulhu") {
+      } else if (singleton.gameMode.value == "cthulhu") {
         CthulhuCharacter newRandomUser = CthulhuCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       } else {
         AliensCharacter newRandomUser = AliensCharacter.random();
+        newRandomUser.userId = singleton.user!.uid;
         await firebase.createCharacter(newRandomUser.toMap());
       }
 
@@ -89,7 +97,10 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Text(AppLocalizations.of(context)!.random_character, style: TextStyle(color: Colors.white),),
+              Text(
+                AppLocalizations.of(context)!.random_character,
+                style: TextStyle(color: Colors.white),
+              ),
             ],
           ),
         );
@@ -97,39 +108,42 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     );
   }
 
-  // TODO: pasar la historia
   Future<void> createNewGame(String characterId) async {
-    Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    if (singleton.gameMode.value == "Aliens") {
-      Map<String, dynamic> mapUserStats = singleton.alienCharacter.toMap();
-    } else if (singleton.gameMode.value == "Dyd") {
-      Map<String, dynamic> mapUserStats = singleton.dydCharacter.toMap();
-    } else if (singleton.gameMode.value == "Cthulhu") {
-      Map<String, dynamic> mapUserStats = singleton.cthulhuCharacter.toMap();
-    }
-    mapUserStats["user"] = singleton.user!.uid;
-    Map<String, dynamic> gameConfig = {
-      "role_system": "aliens",
-      "num_players": 1,
-      "story_description": singleton.history,
-      "players": [characterId]
+    Map<String, dynamic> game_players = {
+      singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
     };
-    String gameUid = await firebase.createGame(gameConfig);
+    Map<String, dynamic> ready_players = {singleton.player!.uid: false};
+    Game newGame = Game(
+        num_players: 1,
+        role_system: singleton.gameMode.value,
+        players: game_players,
+        story_description: singleton.history,
+        ready_players: ready_players,
+        game_ready: false);
+    singleton.currentGame = newGame.uid;
+    singleton.currentGameShortUid = newGame.short_uid;
+    await firebase.createGame(newGame.toMap());
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
-
-    gameConfig.remove("players");
-    mapUserStats.addAll(gameConfig);
-    final response = await http.post(
-        // TODO: add constants.dart in utils folder
-        Uri.https("rolemaister.onrender.com", "/game/"),
-        headers: headers,
-        body: jsonEncode(mapUserStats));
-    var coralMessage = json.decode(response.body)["message"];
-    await firebase.saveMessage(coralMessage, DateTime.now(), gameUid, "IA");
-    singleton.currentGame = gameUid;
+    String response;
+    if (singleton.gameMode.value == "aliens" || singleton.gameMode.value == "dyd") {
+      response = await createGame(newGame);
+    } else {
+      throw Exception("Tonto el que lo lea");
+    }
+    var coralMessage = response;
+    // await firebase.saveMessage(coralMessage, DateTime.now(), newGame.uid, "IA");
+    await firebase.saveMessage(
+      ChatMessages(
+          sentBy: "IA",
+          sentAt: DateTime.now(),
+          text: coralMessage,
+          characterName: "",
+          senderName: "IA"),
+      newGame.uid,
+    );
   }
 
   void startMultiPlayerGame() async {
@@ -167,34 +181,72 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       },
       barrierDismissible: false,
     );
+
     int queueLen = await firebase.getQueueLength();
+    // TODO: para partidas con más jugadores lo único que hará falta
+    // distingir el primer jugador y el último del resto
+    // primero --> crea el game en firebase
+    // medio --> añade su id al juego
+    // último --> añade su id y llama a Coral
     if (queueLen == 0) {
+      // First user to enter the queue
       await firebase.addUserToQueue(characterId);
-      // TODO: no llamar a Coral
-      await createNewGame(singleton.selectedCharacterId!);
+      Map<String, dynamic> game_players = {
+        singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
+      };
+      Map<String, dynamic> ready_players = {singleton.player!.uid: false};
+      Game newGame = Game(
+          num_players: 1,
+          role_system: singleton.gameMode.value,
+          players: game_players,
+          story_description: singleton.history,
+          ready_players: ready_players,
+          game_ready: false);
+      singleton.currentGame = newGame.uid;
+      singleton.currentGameShortUid = newGame.short_uid;
+      await firebase.createGame(newGame.toMap());
       await firebase.addGameToQueue(characterId);
-      while (await firebase.getQueueLength() < 2) {
+      while (!await firebase.checkIfReady()) {
+        print("Waiting...");
         await Future.delayed(const Duration(seconds: 1));
       }
+      print('Empty queue');
+      await firebase.emptyQueue();
       // ignore: use_build_context_synchronously
       context.go("/game");
     } else {
+      // Second user to enter the queue
       await firebase.addUserToQueue(characterId);
-      while (await firebase.getQueueLength() < 2) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
       String gameId = '';
       do {
         // Keep calling getGameId() until it returns a non-empty string
-        gameId = await firebase.getGameId();
+        gameId = await firebase.getGameIdFromQueue();
         await Future.delayed(const Duration(seconds: 1));
       } while (gameId.isEmpty);
+
       singleton.currentGame = gameId;
       print(singleton.currentGame);
       await firebase.modifyGame(gameId, singleton.selectedCharacterId!);
+      // Prompt Coral to start the game
+      Game currentGame = Game.fromMap(await firebase.getGame(gameId));
+      var coralMessage = await createGame(currentGame);
+      // await firebase.saveMessage(
+      //     coralMessage, DateTime.now(), singleton.currentGame!, "IA");
+      await firebase.saveMessage(
+        ChatMessages(
+            sentBy: "IA",
+            sentAt: DateTime.now(),
+            text: coralMessage,
+            characterName: "",
+            senderName: "IA"),
+        singleton.currentGame!,
+      );
+
+      print("LAST USER");
+      await firebase.addReadyToQueue();
+
       // ignore: use_build_context_synchronously
       context.go("/game");
-      await firebase.emptyQueue();
     }
   }
 
@@ -236,6 +288,75 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     createNewGame(singleton.selectedCharacterId!).then((value) {
       context.go("/game");
     });
+  }
+
+  void startPairingModeGame() async {
+    if (singleton.joinPairingMode) {
+      joinPairingModeGame();
+    } else {
+      createPairingModeGame();
+    }
+  }
+
+  void createPairingModeGame() async {
+    print("START PAIRING MODE GAME");
+    final characterId = charactersData!.keys.elementAt(selectedIndex);
+    final characterData = charactersData![characterId];
+    Map<String, dynamic> game_players = {
+      singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
+    };
+    Map<String, dynamic> ready_players = {singleton.player!.uid: false};
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset('assets/images/small_logo.png'),
+                  ),
+                ),
+              ),
+              LinearProgressIndicator(
+                color: Colors.amber,
+                backgroundColor: Colors.white,
+              ),
+              SizedBox(height: 16),
+              Text(
+                AppLocalizations.of(context)!.creating_game,
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+      barrierDismissible: false,
+    );
+    // Create the game
+    Game newGame = Game(
+        num_players: 1,
+        role_system: singleton.gameMode.value,
+        players: game_players,
+        story_description: singleton.history,
+        ready_players: ready_players,
+        game_ready: false);
+    singleton.currentGame = newGame.uid;
+    singleton.currentGameShortUid = newGame.short_uid;
+    await firebase.createGame(newGame.toMap());
+
+    // Go to waiting room
+    context.go("/waiting_room");
+  }
+
+  void joinPairingModeGame() async {
+    await firebase.modifyGame(
+        singleton.currentGame!, singleton.selectedCharacterId!);
+    context.go("/waiting_room");
   }
 
   @override
@@ -310,6 +431,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                     print("START GAME");
                     if (singleton.multiplayer) {
                       startMultiPlayerGame();
+                    } else if (singleton.pairingMode) {
+                      startPairingModeGame();
                     } else {
                       startSinglePlayerGame();
                     }
@@ -362,7 +485,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   future: loadCharacterData(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      // You can show a loading indicator while loading the data
+                      // While waiting for the data to load, show a loading spinner
                       return Center(
                         child: Container(
                           color: Colors.transparent,
@@ -388,7 +511,12 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
                           singleton.selectedCharacterId =
                               charactersData!.keys.elementAt(selectedIndex);
-                          if (singleton.gameMode.value == "Aliens") {
+
+                          singleton.selectedCharacterName =
+                              charactersData![singleton.selectedCharacterId]
+                                  ?['name'];
+
+                          if (singleton.gameMode.value == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -404,7 +532,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                                 selected: selectedIndex == index,
                               ),
                             );
-                          } else if (singleton.gameMode.value == "Dyd") {
+                          } else if (singleton.gameMode.value == "dyd") {
                             singleton.dydCharacter = DydCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -419,7 +547,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                                 selected: selectedIndex == index,
                               ),
                             );
-                          } else if (singleton.gameMode.value == "Cthulhu") {
+                          } else if (singleton.gameMode.value == "cthulhu") {
                             singleton.cthulhuCharacter =
                                 CthulhuCharacter.fromMap(charactersData![
                                     charactersData!.keys
