@@ -465,13 +465,13 @@ class DiscordChatMessage extends StatelessWidget {
                     Text(
                       
 
-                      senderName == 'IA' ? 
-                        'IA'
+                      senderName == 'IA' || senderName == 'System' ?
+                        senderName
                       :
                         '$senderName${isSender ? " (You)" : " ($characterName)"}',
 
                       style: TextStyle(
-                        color: Colors.deepPurple,
+                        color: senderName == 'System' ? Colors.red : Colors.deepPurple,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -479,7 +479,7 @@ class DiscordChatMessage extends StatelessWidget {
                     Text(
                       message,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: senderName == 'System' ? Colors.red : Colors.white,
                         fontSize: 16,
                       ),
                     ),

@@ -226,5 +226,13 @@
     "players": "Spieler",
     "resume": "Fortsetzen",
     "add_character": "Charakter hinzufügen",
-    "pairing_mode_ready": "Bereit"
+    "pairing_mode_ready": "Bereit",
+    "exit_game_dialog_exit": "Verlassen",
+
+    "report_player_dialog_title": "Spieler melden",
+    "report_player_dialog_text": "Sind Sie sicher, dass Sie den Spieler melden möchten ",
+    "report_player_dialog_cancel": "Abbrechen",
+    "report_player_dialog_report": "Melden"
+
+
 }

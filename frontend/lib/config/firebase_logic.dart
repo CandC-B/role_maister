@@ -970,6 +970,103 @@ class FirebaseService {
     }
   }
 
+  // modificar valor del campo votedToGetKicked dentro del player que se le pase
+  Future<void> saveKickVote(String gameId, String playerId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+
+        if (gameSnapshot.exists) {
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          var player = players[playerId];
+          PlayerGameData playerGameData = PlayerGameData.fromMap(player);
+          playerGameData.votedToGetKicked += 1;
+          players[playerId] = playerGameData.toMap();
+          gameData['players'] = players;
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error in saveKickVote');
+      throw error;
+    }
+  }
+
+  void observeAndHandleGameChanges(String gameId, String currentUserUid, BuildContext context) {
+    _firestore.collection('game').doc(gameId).snapshots().listen((event) {
+      if (event.exists) {
+        final data = event.data() as Map<String, dynamic>?;
+        if (data != null) {
+          
+          // check if currentUserUid is in the players list
+          if (data['players'].containsKey(currentUserUid)) {
+            // check if the player has voted to kick
+            PlayerGameData playerGameData = PlayerGameData.fromMap(data['players'][currentUserUid]);
+
+
+            Game game = Game.fromMap(data);
+            print ('GAME DATA: ' + game.toString());
+            print('PLAYER ID: ' + currentUserUid);
+            print('PLAYER DATA: ' + 
+              playerGameData.characterId + ' ' + 
+              playerGameData.votedToGetKicked.toString());
+
+            if (data['players'].length != 1 && playerGameData.votedToGetKicked >= data['players'].length - 1) {
+              // kick the player
+              print ('A TOMAR POR CULO!!');
+
+              // context.widget.test = "A TOMAR POR CULO!!";
+              // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
+
+              deleteKickedPlayer(gameId, currentUserUid);
+              context.push("/");
+              // singleton.currentGame = "";
+            }
+          }
+        
+        }
+      }
+    });
+  }
+
+  Future<void> deleteKickedPlayer(String gameId, String playerId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+
+        if (gameSnapshot.exists) {
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          players.remove(playerId);
+          gameData['players'] = players;
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error in delete kicked player');
+      throw error;
+    }
+  }
+
   Future<List<Game>> fetchGamesByUserId(String userId) async {
     List<Game> games = [];
 
