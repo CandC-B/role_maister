@@ -484,7 +484,6 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
 }
 
 void createAlien(String characterName) {
-  singleton.gameMode.value = "aliens";
   AliensCharacter newAlien = AliensCharacter.random();
   newAlien.name = characterName;
   newAlien.userId = singleton.user!.uid;
@@ -492,7 +491,6 @@ void createAlien(String characterName) {
 }
 
 void createDyd(String characterName) {
-  singleton.gameMode.value = "dyd";
   DydCharacter newDyd = DydCharacter.random();
   newDyd.name = characterName;
   newDyd.userId = singleton.user!.uid;
@@ -500,7 +498,6 @@ void createDyd(String characterName) {
 }
 
 void createCthulhu(String characterName) {
-  singleton.gameMode.value = "cthulhu";
   CthulhuCharacter newCthulhu = CthulhuCharacter.random();
   newCthulhu.name = characterName;
   newCthulhu.userId = singleton.user!.uid;

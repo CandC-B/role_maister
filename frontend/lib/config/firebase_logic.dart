@@ -59,15 +59,15 @@ class FirebaseService {
         if (userSnapshot.exists) {
           final Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-          if (userData.containsKey(singleton.gameMode.value)) {
-            final List<dynamic> characters = userData[singleton.gameMode.value];
+          if (userData.containsKey(character["mode"])) {
+            final List<dynamic> characters = userData[character["mode"]];
             characters.add(character["id"]);
             await userReference.update({
-              singleton.gameMode.value: characters, // Corregir la sintaxis aquí
+              character["mode"]: characters, // Corregir la sintaxis aquí
             });
           } else {
             await userReference.update({
-              singleton.gameMode.value: [character["id"]],
+              character["mode"]: [character["id"]],
             });
           }
         } else {

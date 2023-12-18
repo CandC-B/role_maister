@@ -149,7 +149,7 @@ void showConfirmationDialog(BuildContext context, Game game) {
               singleton.currentGame = game.uid;
               singleton.selectedCharacterName = character["name"];
               singleton.selectedCharacterId = characterId;
-              singleton.gameMode = ValueNotifier<String>(game.role_system);
+              // singleton.gameMode = ValueNotifier<String>(game.role_system);
               if (game.role_system == "aliens") {
                 singleton.alienCharacter = AliensCharacter.fromMap(character);
               } else if (game.role_system == "dyd") {
