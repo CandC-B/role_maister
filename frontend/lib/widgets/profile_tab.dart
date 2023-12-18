@@ -65,9 +65,9 @@ class ProfileStats extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox(height: 10),
-        const Text(
-          'Email: ',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.email,
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.deepPurple,
             fontWeight: FontWeight.bold,
@@ -79,9 +79,9 @@ class ProfileStats extends StatelessWidget {
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Games played: ',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.games_played,
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.deepPurple,
             fontWeight: FontWeight.bold,
@@ -93,9 +93,9 @@ class ProfileStats extends StatelessWidget {
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Tokens left: ',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.tokens_left,
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.deepPurple,
             fontWeight: FontWeight.bold,
@@ -107,9 +107,9 @@ class ProfileStats extends StatelessWidget {
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Experience: ',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.experience,
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.deepPurple,
             fontWeight: FontWeight.bold,
@@ -141,10 +141,10 @@ class ProfileStats extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15))),
             onPressed: () => (),
-            child: const SizedBox(
+            child: SizedBox(
               width: 150,
               height: 40,
-              child: Center(child: Text('Change Password')),
+              child: Center(child: Text(AppLocalizations.of(context)!.change_password)),
             ),
           ),
         ),
