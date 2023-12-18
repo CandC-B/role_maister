@@ -202,7 +202,21 @@
     "exit_game_dialog_text": "Вы уверены, что хотите выйти из игры?",
     "exit_game_dialog_autosave": "(Игра будет сохранена автоматически)",
     "exit_game_dialog_cancel": "Отмена",
-    "exit_game_dialog_exit": "Выход"
+    "exit_game_dialog_exit": "Выход",
 
-
+    "characters": "Персонажи",
+    "games": "Игры",
+    "email": "Эл. почта",
+    "games_played": "Сыгранные игры",
+    "tokens_left": "Оставшиеся жетоны",
+    "experience": "Опыт",
+    "change_password": "Изменить пароль",
+    "you_dont_have_any_characters": "У вас нет персонажей",
+    "enter_your_new_character_name": "Введите имя вашего нового персонажа",
+    "character_name": "Имя персонажа",
+    "are_you_sure_you_want_to_delete_this_character": "Вы уверены, что хотите удалить этого персонажа?",
+    "game_mode": "Режим игры",
+    "players": "Игроки",
+    "resume": "Возобновить",
+    "add_character": "Добавить персонажа"
 }

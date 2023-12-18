@@ -81,7 +81,8 @@ class TokenPackageCard extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  "Game mode: ${game.role_system}\nPlayers: ${game.num_players}",
+                  AppLocalizations.of(context)!.game_mode + 
+                  " ${game.role_system}\n" + AppLocalizations.of(context)!.players + " ${game.num_players}",
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 trailing: ElevatedButton(
@@ -95,9 +96,9 @@ class TokenPackageCard extends StatelessWidget {
                   onPressed: () {
                     showConfirmationDialog(context, game);
                   },
-                  child: const Text(
-                    "Resume",
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    AppLocalizations.of(context)!.resume,
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),

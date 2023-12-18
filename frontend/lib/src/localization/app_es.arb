@@ -203,8 +203,21 @@
   "exit_game_dialog_text": "¿Estás seguro de que quieres salir del juego?",
   "exit_game_dialog_autosave": "(El juego se guardará automáticamente)",
   "exit_game_dialog_cancel": "Cancelar",
-  "exit_game_dialog_exit": "Salir"
+  "exit_game_dialog_exit": "Salir",
 
-
-
+  "characters": "Personajes",
+  "games": "Juegos",
+  "email": "Correo electrónico",
+  "games_played": "Juegos jugados",
+  "tokens_left": "Fichas restantes",
+  "experience": "Experiencia",
+  "change_password": "Cambiar contraseña",
+  "you_dont_have_any_characters": "No tienes ningún personaje",
+  "enter_your_new_character_name": "Ingresa el nombre de tu nuevo personaje",
+  "character_name": "Nombre del personaje",
+  "are_you_sure_you_want_to_delete_this_character": "¿Estás seguro de que quieres eliminar este personaje?",
+  "game_mode": "Modo de juego",
+  "players": "Jugadores",
+  "resume": "Continuar",
+  "add_character": "Agregar personaje"
 }
