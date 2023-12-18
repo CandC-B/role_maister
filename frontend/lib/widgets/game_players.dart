@@ -3,18 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class GamePlayers extends StatefulWidget {
   const GamePlayers({super.key, required this.gameId});
   final String gameId;
 
   @override
-  State<GamePlayers> createState() => _GamePlayersState();
+  State<GamePlayers> createState() => _GamePlayersState();  
 }
 
 class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
+    // firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
       builder:
@@ -56,7 +60,7 @@ class _GamePlayersState extends State<GamePlayers> {
                 ],
                 title: const Text('Role MAIster'),
                 backgroundColor: Colors.deepPurple,
-                bottom:  TabBar(
+                bottom: TabBar(
                   indicatorColor: Colors.white,
                   tabs: [
                     Tab(text: AppLocalizations.of(context)!.game_stats),
@@ -73,13 +77,16 @@ class _GamePlayersState extends State<GamePlayers> {
             ),
           );
         } else {
-          return  Text(AppLocalizations.of(context)!.no_stats_found);
+          return Text(AppLocalizations.of(context)!.no_stats_found);
         }
       },
     );
   }
 
   Future<AliensCharacter> getUserStats(String gameId) async {
+        firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+
+
     try {
       final List<Map<String, dynamic>> statsData =
           await firestoreService.getCharactersFromGameId(gameId);
@@ -120,8 +127,8 @@ class _GamePlayersState extends State<GamePlayers> {
                       8.0), // Espacio entre el texto principal y el texto en cursiva
               Text(
                 AppLocalizations.of(context)!.exit_game_dialog_autosave,
-                style:
-                    const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+                style: const TextStyle(
+                    color: Colors.white, fontStyle: FontStyle.italic),
               ),
             ],
           ),
@@ -207,7 +214,12 @@ class PlayersTab extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return PlayerCard(playerName: snapshot.data![index]["name"]);
+                // return PlayerCard(playerName: snapshot.data![index]["name"], numPlayers: snapshot.data!.length);
+                return PlayerCard(
+                    playerName: snapshot.data![index]["name"],
+                    numPlayers: snapshot.data!.length,
+                    id: snapshot.data![index]["userId"],
+                  );
               },
             );
           } else {
@@ -219,14 +231,48 @@ class PlayersTab extends StatelessWidget {
   }
 }
 
-// TODO: LAS CARTAS DEBEN SER BUTTONS TAMBIÉN PARA  UE PUEDAS VER LOS STATS DE OTROS PLAYERS
-class PlayerCard extends StatelessWidget {
+class PlayerCard extends StatefulWidget {
   final String playerName;
+  final int numPlayers;
+  final String id;
 
-  const PlayerCard({super.key, required this.playerName});
+  const PlayerCard(
+      {Key? key,
+      required this.playerName,
+      required this.numPlayers,
+      required this.id,
+      })
+      : super(key: key);
+
+  @override
+  _PlayerCardState createState() => _PlayerCardState();
+}
+
+class _PlayerCardState extends State<PlayerCard> {
+  bool isReported = false;
+  int numPlayers = 0;
+
+  void saveSystemMsg(String text) async {
+    text = await translateText(text, 'en');
+
+    firestoreService.saveMessage(
+      ChatMessages(
+          sentBy: "System",
+          sentAt: DateTime.now(),
+          text: text,
+          senderName: "System",
+          characterName: ''),
+      singleton.currentGame!,
+    );
+  }
+
+  void saveVote(String gameId, String playerId) async {
+    await firestoreService.saveKickVote(gameId, playerId);
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         // Acción vacía
@@ -241,22 +287,113 @@ class PlayerCard extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              const Icon(
-                Icons.account_circle,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 10.0),
               Expanded(
                 child: Text(
-                  playerName,
+                  widget.playerName,
                   style: const TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               ),
+              const SizedBox(width: 10.0),
+              widget.playerName == singleton.selectedCharacterName
+                  ? const SizedBox()
+                  : IconButton(
+                      icon: Icon(
+                        Icons.report,
+                        color: isReported ? Colors.grey : Colors.red,
+                      ),
+                      onPressed: isReported
+                          ? null
+                          : () {
+                              // Abrir el diálogo aquí
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.deepPurple,
+                                    title: Text(
+                                      AppLocalizations.of(context)!
+                                          .report_player_dialog_title,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    content: Text(
+                                      "${AppLocalizations.of(context)!.report_player_dialog_text}${widget.playerName}?",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .report_player_dialog_cancel,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          // Lógica para manejar el reporte
+                                          setState(() {
+                                            isReported = true;
+                                          });
+                                          Navigator.of(context).pop();
+
+                                          saveSystemMsg(
+                                              "El jugador ${widget.playerName} ha sido reportado por mal comportamiento. (Votos: 1/${widget.numPlayers - 1})");
+
+                                          saveVote(singleton.currentGame!,
+                                              widget.id);
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .report_player_dialog_report,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                    ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<String> translateText(String text, String targetLocale) async {
+    final url = Uri.parse(
+        'https://google-translate113.p.rapidapi.com/api/v1/translator/text');
+    final headers = {
+      'content-type': 'application/x-www-form-urlencoded',
+      'X-RapidAPI-Key': 'caf9b2a90emsh35ef4bc666f9d1ap107021jsnb69346f6591e',
+      'X-RapidAPI-Host': 'google-translate113.p.rapidapi.com',
+    };
+
+    final body = {
+      'from': 'auto',
+      'to': targetLocale,
+      'text': text,
+    };
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData.containsKey('trans')) {
+        return responseData['trans'];
+      } else {
+        throw Exception('Campo "trans" no encontrado en la respuesta');
+      }
+    } catch (error) {
+      throw Exception('Error en la solicitud de traducción: $error');
+    }
   }
 }
 
@@ -283,55 +420,61 @@ class Stats extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-             children: [
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_hp,
-              Icons.favorite, userStats.hp.toString(), Colors.white),
-          // _buildStatItem('userStats Level', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_character_level,
-          Icons.bar_chart,
-              userStats.characterLevel.toString(), Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_career,
-              Icons.school, userStats.career, Colors.white),
-          _buildAttributeStats(userStats.attributes, context),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_skills,
-              Icons.list,
-              userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
-              Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_talents, 
-          Icons.star, userStats.talents.join(', '),
-              Colors.white),
-          _buildStatItem(
-              // 'Appearance', 
-              AppLocalizations.of(context)!.aliens_appearance,
-              Icons.face, userStats.appearance, Colors.white),
-          // _buildStatItem('Personal Agenda', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_personal_agenda,
-          Icons.assignment,
-              userStats.personalAgenda, Colors.white),
-          // _buildStatItem('Friend', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_friend,
-          Icons.sentiment_very_satisfied,
-              userStats.friend, Colors.white),
-          // _buildStatItem('Rival', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_rival,
-          Icons.sentiment_very_dissatisfied,
-              userStats.rival, Colors.white),
-          // _buildStatItem('Gear', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_gear,
-          Icons.accessibility, userStats.gear.join(', '),
-              Colors.white),
-          // _buildStatItem('Signature Item', 
-          _buildStatItem(AppLocalizations.of(context)!.aliens_signature_item,
-          Icons.edit, userStats.signatureItem,
-              Colors.white),
-          _buildStatItem(
-              AppLocalizations.of(context)!.aliens_cash, 
-              Icons.attach_money, '\$${userStats.cash}', Colors.white),
-        ],
+            children: [
+              _buildStatItem(AppLocalizations.of(context)!.aliens_hp,
+                  Icons.favorite, userStats.hp.toString(), Colors.white),
+              // _buildStatItem('userStats Level',
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_character_level,
+                  Icons.bar_chart,
+                  userStats.characterLevel.toString(),
+                  Colors.white),
+              _buildStatItem(AppLocalizations.of(context)!.aliens_career,
+                  Icons.school, userStats.career, Colors.white),
+              _buildAttributeStats(userStats.attributes, context),
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_skills,
+                  Icons.list,
+                  userStats.skills.toString().replaceAll(RegExp("[{}]"), ""),
+                  Colors.white),
+              _buildStatItem(AppLocalizations.of(context)!.aliens_talents,
+                  Icons.star, userStats.talents.join(', '), Colors.white),
+              _buildStatItem(
+                  // 'Appearance',
+                  AppLocalizations.of(context)!.aliens_appearance,
+                  Icons.face,
+                  userStats.appearance,
+                  Colors.white),
+              // _buildStatItem('Personal Agenda',
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_personal_agenda,
+                  Icons.assignment,
+                  userStats.personalAgenda,
+                  Colors.white),
+              // _buildStatItem('Friend',
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_friend,
+                  Icons.sentiment_very_satisfied,
+                  userStats.friend,
+                  Colors.white),
+              // _buildStatItem('Rival',
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_rival,
+                  Icons.sentiment_very_dissatisfied,
+                  userStats.rival,
+                  Colors.white),
+              // _buildStatItem('Gear',
+              _buildStatItem(AppLocalizations.of(context)!.aliens_gear,
+                  Icons.accessibility, userStats.gear.join(', '), Colors.white),
+              // _buildStatItem('Signature Item',
+              _buildStatItem(
+                  AppLocalizations.of(context)!.aliens_signature_item,
+                  Icons.edit,
+                  userStats.signatureItem,
+                  Colors.white),
+              _buildStatItem(AppLocalizations.of(context)!.aliens_cash,
+                  Icons.attach_money, '\$${userStats.cash}', Colors.white),
+            ],
           ),
         ),
       ),
@@ -347,33 +490,42 @@ class Stats extends StatelessWidget {
     );
   }
 
-  Widget _buildAttributeStats(Map<String, int> attributes, BuildContext context) {
+  Widget _buildAttributeStats(
+      Map<String, int> attributes, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
           leading: Icon(Icons.insert_chart, color: Colors.white),
           title: Text(AppLocalizations.of(context)!.aliens_attributes,
-          style: TextStyle(color: Colors.white)),
+              style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_strength + ': ${attributes['Strength']}',
+          title: Text(
+              AppLocalizations.of(context)!.aliens_strength +
+                  ': ${attributes['Strength']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_agility + ': ${attributes['Agility']}',
+          title: Text(
+              AppLocalizations.of(context)!.aliens_agility +
+                  ': ${attributes['Agility']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_empathy + ': ${attributes['Empathy']}',
+          title: Text(
+              AppLocalizations.of(context)!.aliens_empathy +
+                  ': ${attributes['Empathy']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text(AppLocalizations.of(context)!.aliens_wits + ': ${attributes['Wits']}',
+          title: Text(
+              AppLocalizations.of(context)!.aliens_wits +
+                  ': ${attributes['Wits']}',
               style: const TextStyle(color: Colors.white)),
         ),
       ],

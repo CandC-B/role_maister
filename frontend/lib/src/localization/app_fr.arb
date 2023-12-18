@@ -202,6 +202,11 @@
     "exit_game_dialog_text": "Êtes-vous sûr de vouloir quitter le jeu?",
     "exit_game_dialog_autosave": "(Le jeu sera enregistré automatiquement)",
     "exit_game_dialog_cancel": "Annuler",
-    "exit_game_dialog_exit": "Quitter"
+    "exit_game_dialog_exit": "Quitter",
+
+    "report_player_dialog_title": "Signaler un joueur",
+    "report_player_dialog_text": "Êtes-vous sûr de vouloir signaler le joueur ",
+    "report_player_dialog_cancel": "Annuler",
+    "report_player_dialog_report": "Signaler"
 
 }

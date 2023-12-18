@@ -202,7 +202,12 @@
     "exit_game_dialog_text": "Möchten Sie das Spiel wirklich verlassen?",
     "exit_game_dialog_autosave": "(Das Spiel wird automatisch gespeichert)",
     "exit_game_dialog_cancel": "Abbrechen",
-    "exit_game_dialog_exit": "Verlassen"
+    "exit_game_dialog_exit": "Verlassen",
+
+    "report_player_dialog_title": "Spieler melden",
+    "report_player_dialog_text": "Sind Sie sicher, dass Sie den Spieler melden möchten ",
+    "report_player_dialog_cancel": "Abbrechen",
+    "report_player_dialog_report": "Melden"
 
 
 }

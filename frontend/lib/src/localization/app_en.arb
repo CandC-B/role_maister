@@ -202,6 +202,11 @@
   "exit_game_dialog_text": "Are you sure you want to exit the game?",
   "exit_game_dialog_autosave": "(The game will be saved automatically)",
   "exit_game_dialog_cancel": "Cancel",
-  "exit_game_dialog_exit": "Exit"
+  "exit_game_dialog_exit": "Exit",
+
+  "report_player_dialog_title": "Report Player",
+  "report_player_dialog_text": "Are you sure you want to report player ",
+  "report_player_dialog_cancel": "Cancel",
+  "report_player_dialog_report": "Report"
 
 }
