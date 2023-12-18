@@ -219,4 +219,10 @@
   "players": "Players",
   "resume": "Resume",
   "add_character": "Add Character"
+
+  "pairing_mode_create": "Create Game",
+  "pairing_mode_join": "Join Game",
+  "waiting_room": "Waiting room",
+  "game_selection": "Write the code of the game you want to join",
+  "game_code": "Game code"
 }

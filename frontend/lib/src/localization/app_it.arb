@@ -204,6 +204,12 @@
     "exit_game_dialog_cancel": "Annulla",
     "exit_game_dialog_exit": "Esci",
 
+    "pairing_mode_create": "Crea partita",
+    "pairing_mode_join": "Unisciti alla partita",
+    "waiting_room": "Sala d'attesa",
+    "game_selection": "Scrivi il codice del gioco a cui vuoi unirti",
+    "game_code": "Codice del gioco"
+
     "characters": "Personaggi",
     "games": "Giochi",
     "email": "E-mail",

@@ -7,6 +7,8 @@ class Game {
   final String role_system;
   final Map<String, dynamic> players;
   final String story_description;
+  final Map<String, dynamic> ready_players;
+  final bool game_ready;
 
   Game({
     String? uid,
@@ -14,6 +16,8 @@ class Game {
     required this.role_system,
     required this.players,
     required this.story_description,
+    required this.ready_players,
+    required this.game_ready,
   }) : uid = uid ?? const Uuid().v4();
 
   factory Game.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -24,6 +28,8 @@ class Game {
       String role_system = data['role_system'] ?? '';
       Map<String, dynamic> players = Map<String, dynamic>.from(data['players'] ?? []);
       String story_description = data['story_description'] ?? '';
+      Map<String, dynamic> ready_players = Map<String, dynamic>.from(data['ready_players'] ?? []);
+      bool game_ready = data['game_ready'] ?? false;
 
       return Game(
         uid: uid,
@@ -31,6 +37,8 @@ class Game {
         role_system: role_system,
         players: players,
         story_description: story_description,
+        ready_players: ready_players,
+        game_ready: game_ready,
       );
     } else {
       throw Exception('Failed to parse document data');
@@ -44,6 +52,8 @@ class Game {
       'role_system': this.role_system,
       'players': this.players,
       'story_description': this.story_description,
+      'ready_players': this.ready_players,
+      'game_ready': this.game_ready,
     };
   }
 
@@ -54,6 +64,8 @@ class Game {
       role_system: statsData['role_system'],
       players: statsData['players'],
       story_description: statsData['story_description'],
+      ready_players: statsData['ready_players'],
+      game_ready: statsData['game_ready'],
     );
   }
 }

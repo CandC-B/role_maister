@@ -110,11 +110,14 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
 
   Future<void> createNewGame(String characterId) async {
     Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+    Map<String, dynamic> ready_players = {singleton.player!.uid: false};
     Game newGame = Game(
       num_players: 1,
       role_system: singleton.gameMode.value,
       players: game_players,
       story_description: singleton.history,
+      ready_players: ready_players,
+      game_ready: false
     );
     singleton.currentGame = newGame.uid;
     await firebase.createGame(newGame.toMap());
@@ -183,16 +186,18 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     // primero --> crea el game en firebase
     // medio --> añade su id al juego
     // último --> añade su id y llama a Coral
-    // TODO: esto no escala a multiples partidas a la vez (se necesiaría una cola por partida multi)
     if (queueLen == 0) {
       // First user to enter the queue
       await firebase.addUserToQueue(characterId);
       Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+      Map<String, dynamic> ready_players = {singleton.player!.uid: false};
       Game newGame = Game(
         num_players: 1,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history,
+        ready_players: ready_players,
+        game_ready: false
       );
       singleton.currentGame = newGame.uid;
       await firebase.createGame(newGame.toMap());
@@ -281,6 +286,72 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     });
   }
 
+  void startPairingModeGame() async {
+    if(singleton.joinPairingMode) {
+      joinPairingModeGame();
+    } else {
+      createPairingModeGame();
+    }
+  }
+
+  void createPairingModeGame () async {
+    print("START PAIRING MODE GAME");
+    final characterId = charactersData!.keys.elementAt(selectedIndex);
+    final characterData = charactersData![characterId];
+    Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+    Map<String, dynamic> ready_players = {singleton.player!.uid: false};
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset('assets/images/small_logo.png'),
+                  ),
+                ),
+              ),
+              LinearProgressIndicator(
+                color: Colors.amber,
+                backgroundColor: Colors.white,
+              ),
+              SizedBox(height: 16),
+              Text(
+                AppLocalizations.of(context)!.creating_game,
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+      barrierDismissible: false,
+    );
+    // Create the game
+     Game newGame = Game(
+        num_players: 1,
+        role_system: singleton.gameMode.value,
+        players: game_players,
+        story_description: singleton.history,
+        ready_players: ready_players,
+        game_ready: false
+      );
+    singleton.currentGame = newGame.uid;
+    await firebase.createGame(newGame.toMap());
+
+    // Go to waiting room
+    context.go("/waiting_room");
+  }
+
+  void joinPairingModeGame () async {
+    await firebase.modifyGame(singleton.currentGame!, singleton.selectedCharacterId!);
+    context.go("/waiting_room");
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -353,6 +424,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                     print("START GAME");
                     if (singleton.multiplayer) {
                       startMultiPlayerGame();
+                    } else if (singleton.pairingMode) {
+                      startPairingModeGame();
                     } else {
                       startSinglePlayerGame();
                     }

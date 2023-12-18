@@ -219,4 +219,17 @@
   "players": "Jogadores",
   "resume": "Continuar",
   "add_character": "Adicionar personagem"
+
+  "exit_game_dialog_title": "Sair do Jogo",
+  "exit_game_dialog_text": "Tem certeza de que deseja sair do jogo?",
+  "exit_game_dialog_autosave": "(Il gioco verrà salvato automaticamente)",
+  "exit_game_dialog_cancel": "Cancelar",
+  "exit_game_dialog_exit": "Sair",
+
+  "pairing_mode_create": "Criar jogo",
+  "pairing_mode_join": "Entrar no jogo",
+  "waiting_room": "Sala de espera",
+  "game_selection": "Escreva o código do jogo ao qual deseja se juntar",
+  "game_code": "Código do jogo"
+
 }

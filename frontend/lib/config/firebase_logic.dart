@@ -267,6 +267,59 @@ class FirebaseService {
         .snapshots();
   }
 
+  Stream<List<Map<String, dynamic>>> getCharactersStreamFromGameId(
+      String gameId) {
+    try {
+      final DocumentReference gameReference =
+          _firestore.collection("game").doc(gameId);
+
+      return gameReference.snapshots().asyncMap((gameSnapshot) async {
+        if (gameSnapshot.exists) {
+          final Map<String, dynamic> gameData =
+              gameSnapshot.data() as Map<String, dynamic>;
+
+          if (gameData.containsKey("players")) {
+            final playerIds = gameData["players"];
+            Map<String, dynamic> players_ready = gameData["ready_players"];
+            List<Map<String, dynamic>> charactersData = [];
+
+            for (int i = 0; i < playerIds.values.length; i++) {
+              PlayerGameData playerGameData =
+                  PlayerGameData.fromMap(playerIds.values.elementAt(i));
+
+              final DocumentReference characterReference = _firestore
+                  .collection('character')
+                  .doc(singleton.gameMode.value)
+                  .collection(singleton.gameMode.value)
+                  .doc(playerGameData.characterId);
+
+              final DocumentSnapshot characterSnapshot =
+                  await characterReference.get();
+
+              if (characterSnapshot.exists) {
+                final Map<String, dynamic> characterData =
+                    characterSnapshot.data() as Map<String, dynamic>;
+                characterData["ready"] =
+                    players_ready[playerIds.keys.elementAt(i)];
+                charactersData.add(characterData);
+              } else {
+                print("CHARACTER: Document does not exist for player ID: " +
+                    playerGameData.characterId);
+              }
+            }
+            return charactersData;
+          } else {
+            throw Exception("GAME: Attribute 'players' does not exist");
+          }
+        } else {
+          throw Exception("GAME: Document does not exist");
+        }
+      });
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getCharactersFromGameId(
       String gameId) async {
     try {
@@ -297,8 +350,8 @@ class FirebaseService {
               charactersData.add(characterData);
             } else {
               // Handle the case where a character document does not exist
-              print(
-                  "CHARACTER: Document does not exist for player ID: " + playerGameData.characterId);
+              print("CHARACTER: Document does not exist for player ID: " +
+                  playerGameData.characterId);
             }
           }
           // final List<String> characterIdsList =
@@ -442,6 +495,99 @@ class FirebaseService {
     }
   }
 
+  Future<bool> isGameReady(String gameId) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('game').doc(gameId).get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> gameData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        return gameData['game_ready'];
+      } else {
+        throw Exception("GAME: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> setGameReady(String gameId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+        if (gameSnapshot.exists) {
+          // Modify the game data
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          gameData['game_ready'] = true;
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error');
+      throw error;
+    }
+  }
+
+
+  Future<bool> allPlayersReady(String gameId) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore.collection('game').doc(gameId).get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> gameData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> readyPlayers = gameData['ready_players'];
+        for (var value in readyPlayers.values) {
+          if (value == false) {
+            return false;
+          }
+        }
+        return true;
+      } else {
+        throw Exception("GAME: Document does not exist");
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> gamePlayerReady(String gameId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+        if (gameSnapshot.exists) {
+          // Modify the game data
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          gameData['ready_players'][singleton.player!.uid] = true;
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error');
+      throw error;
+    }
+  }
+
   // Function to modify the game by updating num_players and adding a player
   Future<void> modifyGame(String gameId, String characterId) async {
     try {
@@ -458,12 +604,18 @@ class FirebaseService {
         if (gameSnapshot.exists) {
           // Modify the game data
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          gameData['num_players'] += 1;
-          PlayerGameData playerGameData = PlayerGameData(characterId: characterId);
+          PlayerGameData playerGameData =
+              PlayerGameData(characterId: characterId);
           // Add the current characterId to the list of players
-          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players_ready =
+              Map<String, dynamic>.from(gameData['ready_players'] ?? []);
           players[singleton.player!.uid] = playerGameData.toMap();
+          players_ready[singleton.player!.uid] = false;
           gameData['players'] = players;
+          gameData['num_players'] = players.length;
+          gameData['ready_players'] = players_ready;
 
           tx.update(gameRef, gameData);
         }
@@ -705,8 +857,7 @@ class FirebaseService {
     context.push("/");
   }
 
-  Future<void> saveMessage(
-    ChatMessages message, String currentGameId) async {
+  Future<void> saveMessage(ChatMessages message, String currentGameId) async {
     if (message.text.trim().isNotEmpty) {
       // String sender;
       // if (message.sentBy == "IA") {
@@ -732,7 +883,6 @@ class FirebaseService {
         print('Error saving message: $error');
         rethrow;
       }
-        
     }
   }
 
