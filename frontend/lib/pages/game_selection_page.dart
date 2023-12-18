@@ -27,7 +27,7 @@ class GameSelectionPage extends StatelessWidget {
       ),
       child: Padding(
         padding: kIsWeb? 
-          EdgeInsets.symmetric(horizontal: 150.0, vertical: 120.0):
+          EdgeInsets.symmetric(horizontal: size.width * 0.05, vertical: size.height * 0.05):
           EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Container(
           alignment: Alignment.topCenter,
@@ -37,7 +37,7 @@ class GameSelectionPage extends StatelessWidget {
           ),
           child: Padding(
             padding: kIsWeb? 
-            EdgeInsets.symmetric(horizontal: 150.0, vertical: 120.0):
+            EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: size.height * 0.05):
             EdgeInsets.symmetric(horizontal: 40.0, vertical: 40.0),
             child: Column(
               children: [
@@ -52,7 +52,7 @@ class GameSelectionPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 50.0),
                 Padding(
-                  padding: kIsWeb? EdgeInsets.symmetric(horizontal: 400.0, vertical: 80.0): EdgeInsets.all(8.0),
+                  padding: kIsWeb? EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: size.height * 0.05): EdgeInsets.all(8.0),
                   child: TextField(
                     controller: _gameIdController,
                     style: const TextStyle(

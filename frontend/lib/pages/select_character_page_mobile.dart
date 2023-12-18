@@ -109,16 +109,17 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   Future<void> createNewGame(String characterId) async {
-    Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+    Map<String, dynamic> game_players = {
+      singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
+    };
     Map<String, dynamic> ready_players = {singleton.player!.uid: false};
     Game newGame = Game(
-      num_players: 1,
-      role_system: singleton.gameMode.value,
-      players: game_players,
-      story_description: singleton.history,
-      ready_players: ready_players,
-      game_ready: false
-    );
+        num_players: 1,
+        role_system: singleton.gameMode.value,
+        players: game_players,
+        story_description: singleton.history,
+        ready_players: ready_players,
+        game_ready: false);
     singleton.currentGame = newGame.uid;
     await firebase.createGame(newGame.toMap());
 
@@ -189,16 +190,17 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     if (queueLen == 0) {
       // First user to enter the queue
       await firebase.addUserToQueue(characterId);
-      Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+      Map<String, dynamic> game_players = {
+        singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
+      };
       Map<String, dynamic> ready_players = {singleton.player!.uid: false};
       Game newGame = Game(
-        num_players: 1,
-        role_system: singleton.gameMode.value,
-        players: game_players,
-        story_description: singleton.history,
-        ready_players: ready_players,
-        game_ready: false
-      );
+          num_players: 1,
+          role_system: singleton.gameMode.value,
+          players: game_players,
+          story_description: singleton.history,
+          ready_players: ready_players,
+          game_ready: false);
       singleton.currentGame = newGame.uid;
       await firebase.createGame(newGame.toMap());
       await firebase.addGameToQueue(characterId);
@@ -287,18 +289,20 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
   }
 
   void startPairingModeGame() async {
-    if(singleton.joinPairingMode) {
+    if (singleton.joinPairingMode) {
       joinPairingModeGame();
     } else {
       createPairingModeGame();
     }
   }
 
-  void createPairingModeGame () async {
+  void createPairingModeGame() async {
     print("START PAIRING MODE GAME");
     final characterId = charactersData!.keys.elementAt(selectedIndex);
     final characterData = charactersData![characterId];
-    Map<String, dynamic> game_players = {singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()};
+    Map<String, dynamic> game_players = {
+      singleton.player!.uid: PlayerGameData(characterId: characterId).toMap()
+    };
     Map<String, dynamic> ready_players = {singleton.player!.uid: false};
     showDialog(
       context: context,
@@ -332,14 +336,13 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       barrierDismissible: false,
     );
     // Create the game
-     Game newGame = Game(
+    Game newGame = Game(
         num_players: 1,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history,
         ready_players: ready_players,
-        game_ready: false
-      );
+        game_ready: false);
     singleton.currentGame = newGame.uid;
     await firebase.createGame(newGame.toMap());
 
@@ -347,8 +350,9 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     context.go("/waiting_room");
   }
 
-  void joinPairingModeGame () async {
-    await firebase.modifyGame(singleton.currentGame!, singleton.selectedCharacterId!);
+  void joinPairingModeGame() async {
+    await firebase.modifyGame(
+        singleton.currentGame!, singleton.selectedCharacterId!);
     context.go("/waiting_room");
   }
 
@@ -478,86 +482,14 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                   future: loadCharacterData(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ListView.builder(
-                        itemCount: charactersData!.length,
-                        itemBuilder: (context, index) {
-                          final characterId =
-                              charactersData!.keys.elementAt(index);
-                          final characterData = charactersData![characterId];
-
-                          singleton.selectedCharacterId =
-                              charactersData!.keys.elementAt(selectedIndex);
-
-                          singleton.selectedCharacterName =
-                              charactersData![singleton.selectedCharacterId]
-                                  ?['name'];
-
-                          if (singleton.gameMode.value == "Aliens") {
-                            singleton.alienCharacter = AliensCharacter.fromMap(
-                                charactersData![charactersData!.keys
-                                    .elementAt(selectedIndex)]);
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                              },
-                              child: AliensCharacterCard(
-                                character:
-                                    AliensCharacter.fromMap(characterData),
-                                selected: selectedIndex == index,
-                              ),
-                            );
-                          } else if (singleton.gameMode.value == "Dyd") {
-                            singleton.dydCharacter = DydCharacter.fromMap(
-                                charactersData![charactersData!.keys
-                                    .elementAt(selectedIndex)]);
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                              },
-                              child: DydCharacterCard(
-                                character: DydCharacter.fromMap(characterData),
-                                selected: selectedIndex == index,
-                              ),
-                            );
-                          } else if (singleton.gameMode.value == "Cthulhu") {
-                            singleton.cthulhuCharacter =
-                                CthulhuCharacter.fromMap(charactersData![
-                                    charactersData!.keys
-                                        .elementAt(selectedIndex)]);
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                              },
-                              child: CthulhuCharacterCard(
-                                character:
-                                    CthulhuCharacter.fromMap(characterData),
-                                selected: selectedIndex == index,
-                              ),
-                            );
-                          } else {
-                            singleton.alienCharacter = AliensCharacter.fromMap(
-                                charactersData![charactersData!.keys
-                                    .elementAt(selectedIndex)]);
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                              },
-                              child: AliensCharacterCard(
-                                character:
-                                    AliensCharacter.fromMap(characterData),
-                                selected: selectedIndex == index,
-                              ),
-                            );
-                          }
-                        },
+                      // While waiting for the data to load, show a loading spinner
+                      return Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Center(
+                            child: Image.asset('assets/images/small_logo.png'),
+                          ),
+                        ),
                       );
                     } else if (snapshot.hasError) {
                       // Handle the error
