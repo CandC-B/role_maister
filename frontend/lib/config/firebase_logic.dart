@@ -278,7 +278,6 @@ class FirebaseService {
             gameSnapshot.data() as Map<String, dynamic>;
 
         if (gameData.containsKey("players")) {
-          print("test");
           final playerIds = gameData["players"];
           List<Map<String, dynamic>> charactersData = [];
           for (int i = 0; i < playerIds.values.length; i++) {
