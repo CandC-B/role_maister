@@ -209,7 +209,8 @@
   "pairing_mode_join": "Unirse al juego",
   "waiting_room": "Sala de espera",
   "game_selection": "Escribe el código del juego al que quieres unirte",
-  "game_code": "Código del juego"
+  "game_code": "Código del juego",
+  "accept_button": "Aceptar",
 
   "characters": "Personajes",
   "games": "Juegos",

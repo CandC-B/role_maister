@@ -208,7 +208,8 @@
     "pairing_mode_join": "Rejoindre la partie",
     "waiting_room": "Salle d'attente",
     "game_selection": "Écrivez le code du jeu auquel vous souhaitez vous joindre",
-    "game_code": "Code du jeu"
+    "game_code": "Code du jeu",
+    "accept_button": "Accepter",
 
     "characters": "Personnages",
     "games": "Jeux",

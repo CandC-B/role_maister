@@ -218,7 +218,8 @@
   "game_mode": "Game Mode",
   "players": "Players",
   "resume": "Resume",
-  "add_character": "Add Character"
+  "add_character": "Add Character",
+  "accept_button": "accept",
 
   "pairing_mode_create": "Create Game",
   "pairing_mode_join": "Join Game",

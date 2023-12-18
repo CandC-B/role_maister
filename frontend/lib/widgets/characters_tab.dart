@@ -474,7 +474,7 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
             Navigator.of(context).pop();
           },
           child: Text(
-            AppLocalizations.of(context)!.accept,
+            AppLocalizations.of(context)!.accept_button,
             style: const TextStyle(color: Colors.white),
           ),
         )
@@ -571,7 +571,7 @@ class _CharactersEditionOrDeletionDialogState
             Navigator.of(context).pop();
           },
           child: Text(
-            AppLocalizations.of(context)!.accept,
+            AppLocalizations.of(context)!.accept_button,
             style: const TextStyle(color: Colors.white),
           ),
         )

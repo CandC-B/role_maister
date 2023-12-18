@@ -208,7 +208,8 @@
     "pairing_mode_join": "Присоединиться к игре",
     "waiting_room": "Зал ожидания",
     "game_selection": "Введите код игры, к которой вы хотите присоединиться",
-    "game_code": "Код игры"
+    "game_code": "Код игры",
+    "accept_button": "Принять",
 
     "characters": "Персонажи",
     "games": "Игры",

@@ -208,8 +208,9 @@
     "pairing_mode_join": "Spiel beitreten",
     "waiting_room": "Warteraum",
     "game_selection": "Geben Sie den Code des Spiels ein, dem Sie beitreten möchten",
-    "game_code": "Spielcode"
-
+    "game_code": "Spielcode",
+    "accept_button": "Akzeptieren",
+    
     "characters": "Charaktere",
     "games": "Spiele",
     "email": "E-Mail",
