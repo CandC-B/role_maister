@@ -226,7 +226,7 @@
     "players": "Игроки",
     "resume": "Возобновить",
     "add_character": "Добавить персонажа",
-    "pairing_mode_ready": "Готово" 
+    "pairing_mode_ready": "Готово" ,
     "exit_game_dialog_exit": "Выход",
 
     "report_player_dialog_title": "Пожаловаться на игрока",

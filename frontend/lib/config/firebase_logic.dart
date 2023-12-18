@@ -1025,6 +1025,9 @@ class FirebaseService {
               // kick the player
               print ('A TOMAR POR CULO!!');
 
+              // context.widget.test = "A TOMAR POR CULO!!";
+              // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
+
               deleteKickedPlayer(gameId, currentUserUid);
               context.push("/");
               // singleton.currentGame = "";

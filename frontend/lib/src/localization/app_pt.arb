@@ -232,7 +232,7 @@
   "waiting_room": "Sala de espera",
   "game_selection": "Escreva o código do jogo ao qual deseja se juntar",
   "game_code": "Código do jogo",
-  "pairing_mode_ready": "Pronto"
+  "pairing_mode_ready": "Pronto",
 
     "exit_game_dialog_title": "Sair do Jogo",
     "exit_game_dialog_text": "Tem certeza de que deseja sair do jogo?",
