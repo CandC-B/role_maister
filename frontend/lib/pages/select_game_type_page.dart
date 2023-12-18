@@ -12,7 +12,6 @@ class SelectGameTypePage extends StatefulWidget {
 }
 
 class _SelectGameTypePageState extends State<SelectGameTypePage> {
-  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,7 +32,8 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
           height: size.height * 0.9,
           width: size.width * 0.8,
           color: Colors.black87,
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             InkWell(
               onTap: () {
                 singleton.multiplayer = false;
@@ -68,17 +68,24 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
                 isHovering: false,
               ),
             ),
-            ImageColorFilter(
+            InkWell(
+              onTap: () {
+                singleton.multiplayer = true;
+                print("pairing mode");
+                context.go("/form_pairing_mode");
+              },
+              child: ImageColorFilter(
                 imagePath: 'assets/images/pairingmode.PNG',
                 routeName: 'FantasyHome',
                 imageText: AppLocalizations.of(context)!.pairing_mode,
-                isAvailable: false,
+                isAvailable: true,
                 height: size.height * 0.9,
                 width: size.width * 0.8 / 3,
                 isLink: false,
                 preset: false,
                 isHovering: false,
               ),
+            ),
           ]),
         ),
       ),

@@ -74,7 +74,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
                 imagePath: 'assets/images/dungeons_and_dragons.jpg',
                 routeName: '/form_singleplayer',
                 imageText: "DUNGEONS AND DRAGONS",
-                isAvailable: false,
+                isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: singleton.multiplayer && kIsWeb
                     ? size.width * 0.8 * 2 / 3

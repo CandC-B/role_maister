@@ -24,7 +24,6 @@ class GameForm extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    print(singleton.multiplayer);
     return Container(
       color: Colors.black87,
       child: Column(children: [
@@ -42,10 +41,12 @@ class GameForm extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    "${AppLocalizations.of(context)!.number_of_players}1",
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  singleton.pairingMode
+                      ? SizedBox()
+                      : Text(
+                          "${AppLocalizations.of(context)!.number_of_players}1",
+                          style: const TextStyle(color: Colors.white),
+                        ),
                   SizedBox(
                     height: size.height * 0.05,
                   ),

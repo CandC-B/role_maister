@@ -53,19 +53,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 length: 3,
                 child: Column(
                   children: [
-                    const TabBar(
+                    TabBar(
                       indicatorColor: Colors.deepPurple,
                       isScrollable: true,
                       labelColor: Colors.deepPurple,
-                      labelStyle: TextStyle(
+                      labelStyle: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.deepPurple,
                       ),
                       tabs: [
-                        Tab(text: 'Profile'),
-                        Tab(text: 'Characters'),
-                        Tab(text: 'Resume Game'),
+                        Tab(text: AppLocalizations.of(context)!.profile),
+                        Tab(text: AppLocalizations.of(context)!.characters),
+                        Tab(text: AppLocalizations.of(context)!.games),
                       ],
                     ),
                     Expanded(

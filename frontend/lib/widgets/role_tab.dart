@@ -67,7 +67,7 @@ class _RoleTabState extends State<RoleTab> {
             imagePath: 'assets/images/dungeons_and_dragons.jpg',
             routeName: '/game',
             imageText: "DUNGEONS AND DRAGONS",
-            isAvailable: false,
+            isAvailable: true,
             height: size.height * 0.9 / 4,
             width: widget.width,
             isLink: false,

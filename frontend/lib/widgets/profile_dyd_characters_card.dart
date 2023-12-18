@@ -28,36 +28,54 @@ class _ProfileDydCharacterCardState
     );
   }
 
-  Widget _buildAttributeStats(Map<String, int> attributes) {
+   Widget _buildAbilitiesStats(Map<String, int> abilities) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ListTile(
           leading: Icon(Icons.insert_chart, color: Colors.white),
-          title: Text('Attributes', style: TextStyle(color: Colors.white)),
+          title: Text('Abilities', style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text('Strength: ${attributes['Strength']}',
+          title: Text('Strength: ${abilities['STR']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text('Agility: ${attributes['Agility']}',
+          title: Text('Dexterity: ${abilities['DEX']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
-          leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text('Empathy: ${attributes['Empathy']}',
+          leading: const Icon(Icons.fitness_center, color: Colors.white),
+          title: Text('Constitution: ${abilities['CON']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('Wits: ${attributes['Wits']}',
+          title: Text('Intelligence: ${abilities['INT']}',
+              style: const TextStyle(color: Colors.white)),
+        ),
+         ListTile(
+          leading: const Icon(Icons.lightbulb, color: Colors.white),
+          title: Text('Wisdom: ${abilities['WIS']}',
+              style: const TextStyle(color: Colors.white)),
+        ),
+         ListTile(
+          leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
+          title: Text('Charisma: ${abilities['CHA']}',
               style: const TextStyle(color: Colors.white)),
         ),
       ],
     );
+  }
+
+  Widget _buildSex(String sex){
+    if (sex == 'Male'){
+      return _buildStatItem('Sex', Icons.male, sex, Colors.white);
+    }else{
+      return _buildStatItem('Sex', Icons.female, sex, Colors.white);
+    }
   }
 
   @override
@@ -128,34 +146,51 @@ class _ProfileDydCharacterCardState
           ],
         ),
         children: [
-          _buildStatItem('HP', Icons.favorite, widget.character.hp.toString(),
-              Colors.white),
+          _buildStatItem(
+              'HP', Icons.favorite, widget.character.hp.toString(), Colors.white),
           _buildStatItem('Character Level', Icons.bar_chart,
               widget.character.characterLevel.toString(), Colors.white),
           _buildStatItem(
-              'Career', Icons.school, widget.character.career, Colors.white),
-          _buildAttributeStats(widget.character.attributes),
+              'Race', Icons.cruelty_free, widget.character.race, Colors.white),
+          _buildAbilitiesStats(widget.character.abilities),
+          _buildStatItem('Age', Icons.calendar_today,
+              widget.character.age.toString(), Colors.white),
+          _buildStatItem("Alignment", Icons.account_balance,
+              widget.character.alignment, Colors.white),
+          _buildStatItem('Height', Icons.height,
+              widget.character.height.toString(), Colors.white),
+          _buildStatItem('Weight', Icons.line_weight, widget.character.weight.toString(),
+              Colors.white),
+          _buildStatItem('Size', Icons.accessibility_new, widget.character.size,
+              Colors.white),
           _buildStatItem(
-              'Skills',
-              Icons.list,
-              widget.character.skills.toString().replaceAll(RegExp("[{}]"), ""),
+              'Traits', Icons.emoji_emotions, widget.character.traits.join(', '), Colors.white),
+          _buildStatItem('Languages', Icons.language, widget.character.languages.join(', '),
               Colors.white),
-          _buildStatItem('Talents', Icons.star,
-              widget.character.talents.join(', '), Colors.white),
-          _buildStatItem('Appearance', Icons.face, widget.character.appearance,
+          _buildStatItem('Character Class', Icons.account_box,
+              widget.character.characterClass, Colors.white),
+          _buildStatItem('Description', Icons.description,
+              widget.character.description, Colors.white),
+          _buildStatItem('hitDice', Icons.casino,
+              widget.character.hitDie, Colors.white),
+          _buildStatItem('Proficiencies', Icons.emoji_objects,
+              widget.character.proficiencies.join(', '), Colors.white),
+          _buildStatItem('Tools', Icons.backpack, widget.character.tools.join(', '),
               Colors.white),
-          _buildStatItem('Personal Agenda', Icons.assignment,
-              widget.character.personalAgenda, Colors.white),
-          _buildStatItem('Friend', Icons.sentiment_very_satisfied,
-              widget.character.friend, Colors.white),
-          _buildStatItem('Rival', Icons.sentiment_very_dissatisfied,
-              widget.character.rival, Colors.white),
-          _buildStatItem('Gear', Icons.accessibility,
-              widget.character.gear.join(', '), Colors.white),
-          _buildStatItem('Signature Item', Icons.edit,
-              widget.character.signatureItem, Colors.white),
-          _buildStatItem('Cash', Icons.attach_money,
-              '\$${widget.character.cash}', Colors.white),
+          _buildStatItem('Skills', Icons.sports_kabaddi,
+              widget.character.skills.join(', '), Colors.white),
+          _buildStatItem('Equipment', Icons.shopping_bag,
+              widget.character.equipment.join(', '), Colors.white),
+          _buildSex(widget.character.sex),
+          _buildStatItem('Background', Icons.book,
+              widget.character.background, Colors.white),
+          _buildStatItem('Eyes Color', Icons.remove_red_eye,
+              widget.character.eyesColor, Colors.white),
+          _buildStatItem('Hair Color', Icons.brush, widget.character.hairColor,
+              Colors.white),
+          _buildStatItem('Skin Color', Icons.face, widget.character.skinColor,
+              Colors.white),
+          _buildStatItem('Appearance', Icons.emoji_people, widget.character.appearance, Colors.white),
         ],
       ),
     );

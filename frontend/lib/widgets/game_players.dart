@@ -71,7 +71,7 @@ class _GamePlayersState extends State<GamePlayers> {
               body: TabBarView(
                 children: [
                   Center(child: StatsTab(userStats: userStatistics)),
-                  Center(child: PlayersTab(userStats: userStatistics)),
+                  Center(child: PlayersTab()),
                 ],
               ),
             ),
@@ -187,10 +187,7 @@ class _StatsTabState extends State<StatsTab> {
 class PlayersTab extends StatelessWidget {
   const PlayersTab({
     super.key,
-    required this.userStats,
   });
-
-  final AliensCharacter userStats;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +220,7 @@ class PlayersTab extends StatelessWidget {
               },
             );
           } else {
-            return const Text('No se encontraron estadísticas.');
+            return const Text('Players not found');
           }
         }),
       ),
