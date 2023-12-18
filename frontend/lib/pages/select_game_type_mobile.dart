@@ -21,6 +21,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 singleton.multiplayer = false;
+                singleton.pairingMode = false;
                 context.go("/form_singleplayer");
               },
               child: ImageColorFilter(
@@ -40,6 +41,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 singleton.multiplayer = true;
+                singleton.pairingMode = false;
                 context.go("/form_multiplayer");
               },
               child: ImageColorFilter(

@@ -225,5 +225,6 @@
     "game_mode": "Режим игры",
     "players": "Игроки",
     "resume": "Возобновить",
-    "add_character": "Добавить персонажа"
+    "add_character": "Добавить персонажа",
+    "pairing_mode_ready": "Готово" 
 }

@@ -226,5 +226,6 @@
   "game_mode": "Modo de juego",
   "players": "Jugadores",
   "resume": "Continuar",
-  "add_character": "Agregar personaje"
+  "add_character": "Agregar personaje",
+  "pairing_mode_ready": "Listo"
 }

@@ -19,6 +19,7 @@ class AppSingleton {
   User? user;
   Player? player;
   String? currentGame;
+  String? currentGameShortUid;
   String history = "";
   bool multiplayer = false;
   bool pairingMode = false;

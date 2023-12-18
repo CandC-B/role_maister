@@ -121,13 +121,14 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         ready_players: ready_players,
         game_ready: false);
     singleton.currentGame = newGame.uid;
+    singleton.currentGameShortUid = newGame.short_uid;
     await firebase.createGame(newGame.toMap());
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
     String response;
-    if (singleton.gameMode.value == "aliens") {
+    if (singleton.gameMode.value == "aliens" || singleton.gameMode.value == "dyd") {
       response = await createGame(newGame);
     } else {
       throw Exception("Tonto el que lo lea");
@@ -202,6 +203,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           ready_players: ready_players,
           game_ready: false);
       singleton.currentGame = newGame.uid;
+      singleton.currentGameShortUid = newGame.short_uid;
       await firebase.createGame(newGame.toMap());
       await firebase.addGameToQueue(characterId);
       while (!await firebase.checkIfReady()) {
@@ -344,6 +346,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         ready_players: ready_players,
         game_ready: false);
     singleton.currentGame = newGame.uid;
+    singleton.currentGameShortUid = newGame.short_uid;
     await firebase.createGame(newGame.toMap());
 
     // Go to waiting room

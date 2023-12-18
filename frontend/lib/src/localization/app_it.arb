@@ -225,5 +225,6 @@
     "game_mode": "Modalità di gioco",
     "players": "Giocatori",
     "resume": "Riprendi",
-    "add_character": "Aggiungi personaggio"
+    "add_character": "Aggiungi personaggio",
+    "pairing_mode_ready": "Pronto"
 }

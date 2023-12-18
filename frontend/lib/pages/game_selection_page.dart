@@ -101,7 +101,8 @@ class GameSelectionPage extends StatelessWidget {
                     ),
                     onPressed: () async {
                       if (_gameIdController.text.isNotEmpty) {
-                        singleton.currentGame = _gameIdController.text;
+                        singleton.currentGame = await firebase.getGameUidByShortUid(_gameIdController.text);
+                        singleton.currentGameShortUid = _gameIdController.text;
                         singleton.joinPairingMode = true;
                         context.go("/select_character");
                       }

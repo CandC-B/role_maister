@@ -225,5 +225,6 @@
   "pairing_mode_join": "Join Game",
   "waiting_room": "Waiting room",
   "game_selection": "Write the code of the game you want to join",
-  "game_code": "Game code"
+  "game_code": "Game code",
+  "pairing_mode_ready": "Ready"
 }

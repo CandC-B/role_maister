@@ -64,7 +64,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                   height: size.height * 0.1,
                   child: Center(
                     child: SelectableText(
-                      singleton.currentGame!,
+                      singleton.currentGameShortUid!,
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
@@ -168,7 +168,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                     },
                     child: FittedBox(
                       fit: BoxFit.contain,
-                      child: Text(AppLocalizations.of(context)!.start_game),
+                      child: Text(AppLocalizations.of(context)!.pairing_mode_ready),
                     ),
                   ),
                 ),

@@ -148,6 +148,7 @@ void showConfirmationDialog(BuildContext context, Game game) {
               Map<String, dynamic> character =
                   await firebase.getCharacter(characterId, game.role_system);
               singleton.currentGame = game.uid;
+              singleton.currentGameShortUid = game.short_uid;
               singleton.selectedCharacterName = character["name"];
               singleton.selectedCharacterId = characterId;
               // singleton.gameMode = ValueNotifier<String>(game.role_system);
