@@ -236,9 +236,7 @@ class _GameChatState extends State<GameChat> {
                   }
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(
-                        // color: AppColors.burgundy,
-                        ),
+                    child: Center(child: CircularProgressIndicator(color: Colors.deepPurple,))
                   );
                 }
               },
