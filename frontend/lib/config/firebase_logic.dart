@@ -431,10 +431,8 @@ class FirebaseService {
     }
   }
 
-// TODO I have changed this
   Future<void> createGame(Map<String, dynamic> gameConfig) async {
     try {
-      print(gameConfig);
       await _firestore
           .collection('game')
           .doc(gameConfig['uid'])
