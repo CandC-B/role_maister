@@ -93,51 +93,12 @@ class _GamePlayersState extends State<GamePlayers> {
     );
   }
 
-  void observeAndHandleGameChanges(
-      String gameId, String currentUserUid, BuildContext context) {
-    FirebaseFirestore.instance
-        .collection('game')
-        .doc(gameId)
-        .snapshots()
-        .listen((event) {
-      if (event.exists) {
-        final data = event.data() as Map<String, dynamic>?;
-        if (data != null) {
-          // check if currentUserUid is in the players list
-          if (data['players'].containsKey(currentUserUid)) {
-            // check if the player has voted to kick
-            PlayerGameData playerGameData =
-                PlayerGameData.fromMap(data['players'][currentUserUid]);
-
-            Game game = Game.fromMap(data);
-            print('GAME DATA: ' + game.toString());
-            print('PLAYER ID: ' + currentUserUid);
-            print('PLAYER DATA: ' +
-                playerGameData.characterId +
-                ' ' +
-                playerGameData.votedToGetKicked.toString());
-
-            if (data['players'].length != 1 &&
-                playerGameData.votedToGetKicked >= data['players'].length - 1) {
-              // kick the player
-              print('A TOMAR POR CULO!!');
-
-              firestoreService.deleteKickedPlayer(gameId, currentUserUid);
-              context.go("/");
-              context.push("/");
-              // singleton.currentGame = "";
-            }
-          }
-        }
-      }
-    });
-  }
+  
 
   Future<AliensCharacter> getUserStats(String gameId) async {
     // firestoreService.observeAndHandleGameChanges(
     //     widget.gameId, singleton.player!.uid, context);
 
-    observeAndHandleGameChanges(gameId, singleton.player!.uid, context);
 
     try {
       final List<Map<String, dynamic>> statsData =

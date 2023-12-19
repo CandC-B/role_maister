@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/main.dart';
+import 'package:role_maister/models/game.dart';
+import 'package:role_maister/models/player_game_data.dart';
 import '../models/models.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,6 +36,46 @@ class _GameChatState extends State<GameChat> {
     super.initState();
 
     // scrollController.addListener(_scrollListener);
+  }
+
+  void observeAndHandleGameChanges(
+      String gameId, String currentUserUid, BuildContext context) {
+    FirebaseFirestore.instance
+        .collection('game')
+        .doc(gameId)
+        .snapshots()
+        .listen((event) {
+      if (event.exists) {
+        final data = event.data() as Map<String, dynamic>?;
+        if (data != null) {
+          // check if currentUserUid is in the players list
+          if (data['players'].containsKey(currentUserUid)) {
+            // check if the player has voted to kick
+            PlayerGameData playerGameData =
+                PlayerGameData.fromMap(data['players'][currentUserUid]);
+
+            Game game = Game.fromMap(data);
+            print('GAME DATA: ' + game.toString());
+            print('PLAYER ID: ' + currentUserUid);
+            print('PLAYER DATA: ' +
+                playerGameData.characterId +
+                ' ' +
+                playerGameData.votedToGetKicked.toString());
+
+            if (data['players'].length != 1 &&
+                playerGameData.votedToGetKicked >= data['players'].length - 1) {
+              // kick the player
+              print('A TOMAR POR CULO!!');
+
+              firestoreService.deleteKickedPlayer(gameId, currentUserUid);
+              context.go("/");
+              context.push("/");
+              // singleton.currentGame = "";
+            }
+          }
+        }
+      }
+    });
   }
 
   void onSendMessage(String text) async {
@@ -98,6 +141,9 @@ class _GameChatState extends State<GameChat> {
   Widget build(BuildContext context) {
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
     Locale locale = appState?.locale ?? const Locale('en');
+
+    observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+
 
     // print ('LOCALE: $locale');
 
