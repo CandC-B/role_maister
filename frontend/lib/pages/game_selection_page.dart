@@ -103,6 +103,8 @@ class GameSelectionPage extends StatelessWidget {
                       if (_gameIdController.text.isNotEmpty) {
                         singleton.currentGame = await firebase.getGameUidByShortUid(_gameIdController.text);
                         singleton.currentGameShortUid = _gameIdController.text;
+                        Map<String, dynamic> gameData = await firebase.getGame(singleton.currentGame!);
+                        singleton.gameMode.value = gameData['role_system'];
                         singleton.joinPairingMode = true;
                         context.go("/select_character");
                       }
