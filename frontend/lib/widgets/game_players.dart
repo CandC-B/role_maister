@@ -123,6 +123,7 @@ class _GamePlayersState extends State<GamePlayers> {
               print('A TOMAR POR CULO!!');
 
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
+              context.go("/");
               context.push("/");
               // singleton.currentGame = "";
             }
