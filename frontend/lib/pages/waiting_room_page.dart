@@ -64,10 +64,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                   height: size.height * 0.1,
                   child: Center(
                     child: CopyToClipboardButton(textToCopy: singleton.currentGameShortUid!,),
-                    // child: SelectableText(
-                    //   singleton.currentGameShortUid!,
-                    //   style: const TextStyle(fontSize: 16, color: Colors.white),
-                    // ),
                   ),
                 ),
                 Container(
@@ -75,11 +71,13 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: kIsWeb ? 3.0 : 0.689),
+                            crossAxisCount: kIsWeb ? 5 : 3,
+                            childAspectRatio: kIsWeb ? 1.0 : 0.4,
+                            crossAxisSpacing:  kIsWeb ? 20.0 : 8.0,
+                            ),
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      return PlayerCircle(
+                      return WaitingRoomPlayerCard(
                         playerName: snapshot.data![index]["name"],
                         ready: snapshot.data![index]["ready"],
                       );
@@ -184,41 +182,4 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 }
 
-class PlayerCircle extends StatelessWidget {
-  final String? playerName;
-  final bool? ready;
 
-  const PlayerCircle({Key? key, this.playerName, this.ready}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor:
-              Colors.deepPurple, // Customize the background color as needed
-          radius: 30.0, // Adjust the radius as needed
-          child: Text(
-            playerName![0]
-                .toUpperCase(), // Display the first letter of the name
-            style: TextStyle(
-              fontSize: 24.0, // Adjust the font size as needed
-              fontWeight: FontWeight.bold,
-              color: Colors.white, // Customize the text color as needed
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          playerName! + (ready! ? ' ✓' : ''),
-          style: TextStyle(
-            fontSize: 22.0, // Adjust the font size as needed
-            color: Colors.white, // Customize the text color as needed
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}

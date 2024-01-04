@@ -11,3 +11,4 @@ export 'image_color_filter.dart';
 export 'game_form.dart';
 export 'aliens_characters_card.dart';
 export 'clipboard_button.dart';
+export 'waiting_room_player_card.dart';
