@@ -472,7 +472,7 @@ class FirebaseService {
       print('Error getting game data: $error');
       throw error;
     }
-  } 
+  }
 
   Future<bool> isGameReady(String gameId) async {
     try {
@@ -516,7 +516,6 @@ class FirebaseService {
       throw error;
     }
   }
-
 
   Future<bool> allPlayersReady(String gameId) async {
     try {
@@ -604,7 +603,6 @@ class FirebaseService {
       throw error;
     }
   }
-
 
   // Function to get the game data from the Firestore collection 'game' by user ID
 
@@ -987,7 +985,8 @@ class FirebaseService {
 
         if (gameSnapshot.exists) {
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
           var player = players[playerId];
           PlayerGameData playerGameData = PlayerGameData.fromMap(player);
           playerGameData.votedToGetKicked += 1;
@@ -1003,28 +1002,30 @@ class FirebaseService {
     }
   }
 
-  void observeAndHandleGameChanges(String gameId, String currentUserUid, BuildContext context) {
+  void observeAndHandleGameChanges(
+      String gameId, String currentUserUid, BuildContext context) {
     _firestore.collection('game').doc(gameId).snapshots().listen((event) {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
-          
           // check if currentUserUid is in the players list
           if (data['players'].containsKey(currentUserUid)) {
             // check if the player has voted to kick
-            PlayerGameData playerGameData = PlayerGameData.fromMap(data['players'][currentUserUid]);
-
+            PlayerGameData playerGameData =
+                PlayerGameData.fromMap(data['players'][currentUserUid]);
 
             Game game = Game.fromMap(data);
-            print ('GAME DATA: ' + game.toString());
+            print('GAME DATA: ' + game.toString());
             print('PLAYER ID: ' + currentUserUid);
-            print('PLAYER DATA: ' + 
-              playerGameData.characterId + ' ' + 
-              playerGameData.votedToGetKicked.toString());
+            print('PLAYER DATA: ' +
+                playerGameData.characterId +
+                ' ' +
+                playerGameData.votedToGetKicked.toString());
 
-            if (data['players'].length != 1 && playerGameData.votedToGetKicked >= data['players'].length - 1) {
+            if (data['players'].length != 1 &&
+                playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
-              print ('A TOMAR POR CULO!!');
+              print('A TOMAR POR CULO!!');
 
               // context.widget.test = "A TOMAR POR CULO!!";
               // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
@@ -1034,7 +1035,6 @@ class FirebaseService {
               // singleton.currentGame = "";
             }
           }
-        
         }
       }
     });
@@ -1055,7 +1055,8 @@ class FirebaseService {
 
         if (gameSnapshot.exists) {
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
           players.remove(playerId);
           gameData['players'] = players;
 
@@ -1124,7 +1125,7 @@ class FirebaseService {
     context.go("/sign_in");
     context.push("/sign_in");
   }
-  
+
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   // Future<void> saveTokenToDatabase(String token) async {
@@ -1137,11 +1138,34 @@ class FirebaseService {
   // }
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
+    NotificationSettings settings = await _firebaseMessaging.requestPermission();
 
     final token = await _firebaseMessaging.getToken();
 
     print("FirebaseMessaging token: $token");
     // await saveTokenToDatabase(token);
+
+    initPushNotifications();
+  }
+
+  void handleMessage(RemoteMessage? message) {
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('Got a message whilst in the foreground!');
+    //   print('Message data: ${message.data}');
+
+    //   if (message.notification != null) {
+    //     print('Message also contained a notification: ${message.notification}');
+    //   }
+    // });
+    if (message == null) return;
+
+    RemoteNotification? notification = message.notification;
+    print("Handling a background message: ${message.data}");
+  }
+
+  Future initPushNotifications() async {
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 }
