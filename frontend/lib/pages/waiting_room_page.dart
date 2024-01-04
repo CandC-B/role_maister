@@ -63,10 +63,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 Container(
                   height: size.height * 0.1,
                   child: Center(
-                    child: SelectableText(
-                      singleton.currentGameShortUid!,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    child: CopyToClipboardButton(textToCopy: singleton.currentGameShortUid!,),
+                    // child: SelectableText(
+                    //   singleton.currentGameShortUid!,
+                    //   style: const TextStyle(fontSize: 16, color: Colors.white),
+                    // ),
                   ),
                 ),
                 Container(
