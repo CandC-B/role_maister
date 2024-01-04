@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
@@ -1122,5 +1123,25 @@ class FirebaseService {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     context.go("/sign_in");
     context.push("/sign_in");
+  }
+  
+  final _firebaseMessaging = FirebaseMessaging.instance;
+
+  // Future<void> saveTokenToDatabase(String token) async {
+  //   String userId = singleton.user!.uid;
+
+  //   await _firestore
+  //       .collection('user')
+  //       .doc(userId)
+  //       .update({'pushToken': token});
+  // }
+
+  Future<void> initNotifications() async {
+    await _firebaseMessaging.requestPermission();
+
+    final token = await _firebaseMessaging.getToken();
+
+    print("FirebaseMessaging token: $token");
+    // await saveTokenToDatabase(token);
   }
 }

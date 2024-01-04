@@ -29,6 +29,7 @@ dependencies:
   uuid: ^3.0.4
   flutter_dotenv: ^5.0.1
   shortid: ^0.1.2
+  firebase_messaging: ^14.7.10
   
 
 dev_dependencies:
