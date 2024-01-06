@@ -115,6 +115,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     Map<String, dynamic> ready_players = {singleton.player!.uid: false};
     Game newGame = Game(
         num_players: 1,
+        creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history,
@@ -197,6 +198,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       Map<String, dynamic> ready_players = {singleton.player!.uid: false};
       Game newGame = Game(
           num_players: 1,
+          creator_uid: singleton.user!.uid,
           role_system: singleton.gameMode.value,
           players: game_players,
           story_description: singleton.history,
@@ -340,6 +342,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     // Create the game
     Game newGame = Game(
         num_players: 1,
+        creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history,

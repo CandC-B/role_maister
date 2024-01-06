@@ -63,7 +63,9 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 Container(
                   height: size.height * 0.1,
                   child: Center(
-                    child: CopyToClipboardButton(textToCopy: singleton.currentGameShortUid!,),
+                    child: CopyToClipboardButton(
+                      textToCopy: singleton.currentGameShortUid!,
+                    ),
                   ),
                 ),
                 Container(
@@ -71,10 +73,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: kIsWeb ? 5 : 3,
-                            childAspectRatio: kIsWeb ? 1.0 : 0.4,
-                            crossAxisSpacing:  kIsWeb ? 20.0 : 8.0,
-                            ),
+                      crossAxisCount: kIsWeb ? 5 : 3,
+                      childAspectRatio: kIsWeb ? 1.0 : 0.6,
+                      crossAxisSpacing: kIsWeb ? 20.0 : 8.0,
+                    ),
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return WaitingRoomPlayerCard(
@@ -88,87 +90,110 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 Container(
                   width: kIsWeb ? size.width * 0.25 : size.width * 0.5,
                   height: kIsWeb ? size.height * 0.05 : size.height * 0.05,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      backgroundColor:
-                          isButtonPressed ? Colors.grey : Colors.deepPurple,
-                      textStyle: const TextStyle(
-                          fontSize: kIsWeb ? 30 : 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        isButtonPressed = true;
-                      });
-                      await firebase.gamePlayerReady(singleton.currentGame!);
-                      // Wait for all players to be ready
-                      while (!(await firebase
-                          .allPlayersReady(singleton.currentGame!))) {
-                        await Future.delayed(const Duration(seconds: 1));
-                      }
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.deepPurple,
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Center(
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    child: Center(
-                                      child: Image.asset(
-                                          'assets/images/small_logo.png'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          backgroundColor:
+                              isButtonPressed ? Colors.grey : Colors.deepPurple,
+                          textStyle: const TextStyle(
+                              fontSize: kIsWeb ? 30 : 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            isButtonPressed = true;
+                          });
+                          await firebase.gamePlayerReady(singleton.currentGame!);
+                          // Wait for all players to be ready
+                          while (!(await firebase
+                              .allPlayersReady(singleton.currentGame!))) {
+                            await Future.delayed(const Duration(seconds: 1));
+                          }
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.deepPurple,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: Image.asset(
+                                              'assets/images/small_logo.png'),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    LinearProgressIndicator(
+                                      color: Colors.amber,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      AppLocalizations.of(context)!.creating_game,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                LinearProgressIndicator(
-                                  color: Colors.amber,
-                                  backgroundColor: Colors.white,
-                                ),
-                                SizedBox(height: 16),
-                                Text(
-                                  AppLocalizations.of(context)!.creating_game,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
+                              );
+                            },
+                            barrierDismissible: false,
                           );
+                          if (singleton.joinPairingMode == false) {
+                            // Prompt Coral to start the game
+                            Game currentGame = Game.fromMap(
+                                await firebase.getGame(singleton.currentGame!));
+                            var coralMessage = await createGame(currentGame);
+                            // await firebase.saveMessage(
+                            //     coralMessage, DateTime.now(), singleton.currentGame!, "IA");
+                            await firebase.saveMessage(
+                              ChatMessages(
+                                  sentBy: "IA",
+                                  sentAt: DateTime.now(),
+                                  text: coralMessage,
+                                  characterName: "",
+                                  senderName: "IA"),
+                              singleton.currentGame!,
+                            );
+                            await firebase.setGameReady(singleton.currentGame!);
+                          } else {
+                            // Wait for game to be ready
+                            while (!(await firebase
+                                .isGameReady(singleton.currentGame!))) {
+                              await Future.delayed(const Duration(seconds: 1));
+                            }
+                          }
+                          context.go("/game");
                         },
-                        barrierDismissible: false,
-                      );
-                      if (singleton.joinPairingMode == false) {
-                        // Prompt Coral to start the game
-                        Game currentGame = Game.fromMap(
-                            await firebase.getGame(singleton.currentGame!));
-                        var coralMessage = await createGame(currentGame);
-                        // await firebase.saveMessage(
-                        //     coralMessage, DateTime.now(), singleton.currentGame!, "IA");
-                        await firebase.saveMessage(
-                          ChatMessages(
-                              sentBy: "IA",
-                              sentAt: DateTime.now(),
-                              text: coralMessage,
-                              characterName: "",
-                              senderName: "IA"),
-                          singleton.currentGame!,
-                        );
-                        await firebase.setGameReady(singleton.currentGame!);
-                      } else {
-                        // Wait for game to be ready
-                        while (!(await firebase
-                            .isGameReady(singleton.currentGame!))) {
-                          await Future.delayed(const Duration(seconds: 1));
-                        }
-                      }
-                      context.go("/game");
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(AppLocalizations.of(context)!.pairing_mode_ready),
-                    ),
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                              AppLocalizations.of(context)!.pairing_mode_ready),
+                        ),
+                      ),
+                      SizedBox(width: kIsWeb ? 20.0 : 8.0),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          backgroundColor: Colors.deepPurple,
+                          textStyle: const TextStyle(
+                              fontSize: kIsWeb ? 30 : 20,
+                              fontWeight: FontWeight.bold),
+                        ), 
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                              AppLocalizations.of(context)!.exit_game_dialog_exit,
+                              style: TextStyle(color: Colors.white),),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -181,5 +206,3 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     );
   }
 }
-
-

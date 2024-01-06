@@ -232,6 +232,9 @@
     "report_player_dialog_title": "Signaler un joueur",
     "report_player_dialog_text": "Êtes-vous sûr de vouloir signaler le joueur ",
     "report_player_dialog_cancel": "Annuler",
-    "report_player_dialog_report": "Signaler"
+    "report_player_dialog_report": "Signaler",
+
+    "kick_player_button": "Expulser le joueur"
+
 
 }
