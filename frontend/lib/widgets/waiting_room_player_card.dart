@@ -24,7 +24,8 @@ class WaitingRoomPlayerCard extends StatelessWidget {
           } else if (snapshot.hasData) {
             print("My user id: " + singleton.user!.uid);
             print("snapshot.data: " + snapshot.data.toString());
-            final Map<String, dynamic> gameData = snapshot.data! as Map<String, dynamic>;
+            final Map<String, dynamic> gameData =
+                snapshot.data! as Map<String, dynamic>;
 
             return Container(
               decoration: BoxDecoration(
@@ -38,9 +39,10 @@ class WaitingRoomPlayerCard extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    playerName! + (ready! ? ' ✓' : ''),
+                    playerName! + (gameData['creator_uid'] == playerId!
+                      ? ' 👑':'') + (playerId! == singleton.user!.uid? ' (You)': '') + (ready! ? ' ✓' : ''),
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 16.0,
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
@@ -51,7 +53,7 @@ class WaitingRoomPlayerCard extends StatelessWidget {
                     radius: 30.0,
                     child: Text(
                       playerName![0].toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -59,18 +61,29 @@ class WaitingRoomPlayerCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  gameData['creator_uid'] == singleton.user!.uid? SizedBox(height: kIsWeb ? 25.0 : 8.0) : SizedBox(),
-                  gameData['creator_uid'] == singleton.user!.uid? ElevatedButton(
-                    onPressed: null,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.deepPurple),
-                    ),
-                    child: Text(
-                        AppLocalizations.of(context)!.kick_player_button,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white)),
-                  ) : SizedBox(),
+                  (gameData['creator_uid'] == singleton.user!.uid &&
+                          playerId! != singleton.user!.uid)
+                      ? SizedBox(height: kIsWeb ? 25.0 : 8.0)
+                      : SizedBox(),
+                  (gameData['creator_uid'] == singleton.user!.uid &&
+                          playerId! != singleton.user!.uid)
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            print("Kicking player: " +
+                                playerId!);
+                            await firebase.kickPlayerFromWaitingRoom(
+                                singleton.currentGame!, playerId!);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.deepPurple),
+                          ),
+                          child: Text(
+                              AppLocalizations.of(context)!.kick_player_button,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white)),
+                        )
+                      : SizedBox(),
                 ],
               ),
             );
