@@ -1152,8 +1152,8 @@ class DydCharacter extends Character {
           .map((key, value) => MapEntry(key, value as int)),
       age: statsData['age'] as int,
       alignment: statsData['alignment'] as String,
-      height: statsData['height'] as double,
-      weight: statsData['weight'] as double,
+      height: statsData['height'].toDouble(),
+      weight: statsData['weight'].toDouble(),
       size: statsData['size'] as String,
       traits: (statsData['traits'] as List<dynamic>)
           .map((value) => value as String)

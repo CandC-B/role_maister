@@ -18,7 +18,6 @@ class GameForm extends StatelessWidget {
   final double image_width;
   final bool preset;
   final bool mobile;
-  var _storyController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +79,7 @@ class GameForm extends StatelessWidget {
                           ),
                           child: TextFormField(
                             cursorColor: Colors.deepPurple,
-                            controller: _storyController,
+                            controller: singleton.history,
                             keyboardType: TextInputType.multiline,
                             style: const TextStyle(color: Colors.white),
                             maxLines: null,
@@ -122,7 +121,6 @@ class GameForm extends StatelessWidget {
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (mobile) {
-                          singleton.history = _storyController.text;
                           context.go("/select_character");
                         }
                       },

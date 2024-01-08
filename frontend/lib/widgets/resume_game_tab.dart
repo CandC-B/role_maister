@@ -24,7 +24,7 @@ class ResumeGameTab extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0,
                       vertical: 2), // Añadir padding alrededor del Card
-                  child: TokenPackageCard(game: snapshot.data![index]),
+                  child: ResumeGameCard(game: snapshot.data![index]),
                 );
               },
             );
@@ -47,9 +47,9 @@ class ResumeGameTab extends StatelessWidget {
   }
 }
 
-class TokenPackageCard extends StatelessWidget {
+class ResumeGameCard extends StatelessWidget {
   Game game;
-  TokenPackageCard({required this.game});
+  ResumeGameCard({required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +82,13 @@ class TokenPackageCard extends StatelessWidget {
                 ),
                 subtitle: Text(
                   AppLocalizations.of(context)!.game_mode + 
-                  " ${game.role_system}\n" + AppLocalizations.of(context)!.players + " ${game.num_players}",
+                  " ${game.role_system}\n" + AppLocalizations.of(context)!.players + " ${game.num_players}\n" + AppLocalizations.of(context)!.description + " ${game.story_description}",
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
-                trailing: ElevatedButton(
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Colors.deepPurple),
@@ -102,6 +105,9 @@ class TokenPackageCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
+                  ],
+                ),
+                
               ),
             );
           } else {
