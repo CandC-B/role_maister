@@ -215,8 +215,9 @@
   "enter_your_new_character_name": "Digite o nome do seu novo personagem",
   "character_name": "Nome do personagem",
   "are_you_sure_you_want_to_delete_this_character": "Tem certeza de que deseja excluir este personagem?",
-  "game_mode": "Modo de jogo",
-  "players": "Jogadores",
+  "game_mode": "Modo de jogo:",
+  "players": "Jogadores:",
+  "description": "Descrição:",
   "resume": "Continuar",
   "add_character": "Adicionar personagem",
 

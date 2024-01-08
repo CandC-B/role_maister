@@ -141,12 +141,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
               appBarInfoButtons(context)
             ]),
       actions: mobile || !kIsWeb
-          ? <Widget> [languagePicker(context, appState)]
+          ? <Widget>[languagePicker(context, appState)]
           : <Widget>[
               languagePicker(context, appState),
               Center(
                 child: singleton.user != null
-                    ? const PopupMenuProfile()
+                    ? /*const PopupMenuProfile()*/ appBarProfileButtons(context)
                     : appBarAuthenticationButtons(context),
               ),
             ],
@@ -158,7 +158,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget languagePicker(BuildContext context, appState) => DropdownButton(
         value: appState?.locale,
-        items:  [
+        items: [
           DropdownMenuItem(
             value: const Locale('en'),
             child: Text(AppLocalizations.of(context)!.english),
@@ -396,36 +396,58 @@ class _CustomAppBarState extends State<CustomAppBar> {
       );
 
   Widget appBarProfileButtons(BuildContext context) => Wrap(
-        alignment: WrapAlignment.end,
+        alignment: WrapAlignment.center,
         children: [
-          MaterialButton(
-            onPressed: () => context.go('/profile'),
-            child: Column(
+          const SizedBox(
+                  width: 10,
+                ),
+          Container(
+            height: 38,
+            alignment: Alignment.center,
+            child: const Row(
               children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.account_circle_outlined,
-                    size: 20.0,
-                    color: Colors.white,
-                  ),
-                  color: const Color(0xFF162A49),
-                  onPressed: () {},
+                Icon(
+                  Icons.paid_outlined,
                 ),
-                const SizedBox(
-                  height: 6,
+                SizedBox(
+                  width: 5,
                 ),
-                signInScreen
-                    ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 2),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30)),
-                      )
-                    : const SizedBox()
+                Text("00000",style: TextStyle(fontSize: 16),),
               ],
             ),
           ),
+          const SizedBox(
+            width: 10,
+          ),
+          const PopupMenuProfile(),
+          // MaterialButton(
+          //   onPressed: () => context.go('/profile'),
+          //   child: Column(
+          //     children: [
+          //       IconButton(
+          //         icon: const Icon(
+          //           Icons.account_circle_outlined,
+          //           size: 20.0,
+          //           color: Colors.white,
+          //         ),
+          //         color: const Color(0xFF162A49),
+          //         onPressed: () {},
+          //       ),
+          //       const SizedBox(
+          //         height: 6,
+          //       ),
+          //       signInScreen
+          //           ? Container(
+          //               padding: const EdgeInsets.symmetric(
+          //                   horizontal: 12, vertical: 2),
+          //               decoration: BoxDecoration(
+          //                   color: Colors.white,
+          //                   borderRadius: BorderRadius.circular(30)),
+          //             )
+          //           : const SizedBox()
+          //     ],
+          //   ),
+          // ),
         ],
       );
 }
