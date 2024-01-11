@@ -104,10 +104,6 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Text(
-                "${AppLocalizations.of(context)!.tokens_required}5",
-                style: TextStyle(color: Colors.white),
-              ),
               SizedBox(
                 height: size.height * 0.05,
               ),

@@ -1,0 +1,1 @@
+const singlePlayerGamePrice = 15;

@@ -399,12 +399,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
         alignment: WrapAlignment.center,
         children: [
           const SizedBox(
-                  width: 10,
-                ),
+            width: 10,
+          ),
           Container(
             height: 38,
             alignment: Alignment.center,
-            child: const Row(
+            child: Row(
               children: [
                 Icon(
                   Icons.paid_outlined,
@@ -412,7 +412,28 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 SizedBox(
                   width: 5,
                 ),
-                Text("00000",style: TextStyle(fontSize: 16),),
+                Center(
+                  child: StreamBuilder<int>(
+                    stream: firebase.getCurrentPlayerTokens(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+
+                        // Access the player tokens from the document snapshot
+                        int playerTokens = snapshot.data ?? 0;
+
+                        return Text(
+                          '$playerTokens',
+                          style: TextStyle(fontSize: 16),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
           ),

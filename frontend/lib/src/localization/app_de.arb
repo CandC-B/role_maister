@@ -233,7 +233,12 @@
     "report_player_dialog_title": "Spieler melden",
     "report_player_dialog_text": "Sind Sie sicher, dass Sie den Spieler melden möchten ",
     "report_player_dialog_cancel": "Abbrechen",
-    "report_player_dialog_report": "Melden"
+    "report_player_dialog_report": "Melden",
+
+    "kick_player_button": "Spieler rausschmeißen",
+    "error_purchasing_tokens": "Fehler beim Kauf von Tokens. Sie müssen sich zuerst anmelden!",
+    "purchase_error_title": "Kauffehler"
+
 
 
 }

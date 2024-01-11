@@ -234,7 +234,14 @@
   "report_player_dialog_title": "Reportar Jugador",
   "report_player_dialog_text": "¿Estás seguro de que quieres informar al jugador ",
   "report_player_dialog_cancel": "Cancelar",
-  "report_player_dialog_report": "Informar"
+  "report_player_dialog_report": "Informar",
+
+  "kick_player_button": "Expulsar jugador",
+  "error_purchasing_tokens": "Error al comprar tokens. ¡Necesitas iniciar sesión primero!",
+  "purchase_error_title": "Error de compra"
+
+
+
 
 
 

@@ -115,6 +115,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     Map<String, dynamic> ready_players = {singleton.player!.uid: false};
     Game newGame = Game(
         num_players: 1,
+        creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history.text,
@@ -146,6 +147,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           senderName: "IA"),
       newGame.uid,
     );
+    firebase.updateAiWordCount(
+            newGame.uid, coralMessage.split(' ').length);
   }
 
   void startMultiPlayerGame() async {
@@ -199,6 +202,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       Map<String, dynamic> ready_players = {singleton.player!.uid: false};
       Game newGame = Game(
           num_players: 1,
+          creator_uid: singleton.user!.uid,
           role_system: singleton.gameMode.value,
           players: game_players,
           story_description: singleton.history.text,
@@ -244,6 +248,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
             senderName: "IA"),
         singleton.currentGame!,
       );
+      firebase.updateAiWordCount(
+            currentGame.uid, coralMessage.split(' ').length);
 
       print("LAST USER");
       await firebase.addReadyToQueue();
@@ -343,6 +349,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     // Create the game
     Game newGame = Game(
         num_players: 1,
+        creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
         story_description: singleton.history.text,
@@ -352,6 +359,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     singleton.currentGameShortUid = newGame.short_uid;
     singleton.history.text = "";
     await firebase.createGame(newGame.toMap());
+
 
     // Go to waiting room
     context.go("/waiting_room");
