@@ -157,11 +157,11 @@ class CthulhuCharacter extends Character {
       "EDU": 0,
     };
 
-    List<int> probs = [40, 50, 50, 50, 60, 60, 70, 80];
-    characteristics.forEach((_, percent) {
-      int prob = randomChoice(probs);
-      percent = prob;
-      probs.remove(prob);
+    List<String> probs = ["40", "50", "50", "50", "60", "60", "70", "80"];
+    characteristics.forEach((stat, percent) {
+      int prob = int.parse(randomChoice((probs)));
+      characteristics[stat] = prob;
+      probs.remove(prob.toString());
     });
 
     return characteristics;
@@ -185,7 +185,7 @@ class CthulhuCharacter extends Character {
   static int makeRoll(int times, int dice) {
     int result = 1;
     for (int i = 0; i < times; i++) {
-      result += Random().nextInt(dice + 1);
+      result += Random().nextInt(dice);
     }
     return result;
   }
@@ -494,7 +494,7 @@ class CthulhuCharacter extends Character {
       "Thin, below average weight. Thick black hair, glasses and a huge smile",
       "Youthful and bright-eyed. Wear fashionable clothes"
     ];
-    if(gender == "male") {
+    if(gender == "Male") {
       return randomChoice(personalMaleDescriptions);
     } else {
       return randomChoice(personalFemaleDescriptions);
@@ -511,7 +511,7 @@ class CthulhuCharacter extends Character {
       "Raised in the Christian faith, she has a healthy respect for the supernatural and can be superstitious",
       "Intense faith in God, she has been raised in the Christian Church by her mother"
     ];
-    if(gender == "male") {
+    if(gender == "Male") {
       return randomChoice(maleIdeologies);
     } else {
       return randomChoice(femaleIdeologies);
@@ -528,7 +528,7 @@ class CthulhuCharacter extends Character {
       "Her father, who she knew worked for the notorious gangster Dutch Schultz in New York",
       "Her mother, to whom she writes every week"
     ];
-    if(gender == "male") {
+    if(gender == "Male") {
       return randomChoice(maleRelatives);
     } else {
       return randomChoice(femaleRelatives);
@@ -556,7 +556,7 @@ class CthulhuCharacter extends Character {
       "A switchblade knife, a gift from his father, who told her 'take it whith you and it will help you get out of any problem'",
       "Her father's last pocket bible"
     ];
-    if(gender == "male") {
+    if(gender == "Male") {
       return randomChoice(malePrizedPossessions);
     } else {
       return randomChoice(femalePrizedPossessions);
@@ -574,7 +574,7 @@ class CthulhuCharacter extends Character {
       "Adventuress. She likes to stay busy and get her hands dirty",
       "She likes to take risks and be immersed in the action"
     ];
-    if(gender == "male") {
+    if(gender == "Male") {
       return randomChoice(maleTraits);
     } else {
       return randomChoice(femaleTraits);
