@@ -5,7 +5,6 @@ import 'package:role_maister/models/character.dart';
 import 'package:uuid/uuid.dart';
 
 class CthulhuCharacter extends Character {
-  // TODO: de momento solo tenemos character level 1
   
   final int characterLevel;
   final String? photoUrl;
@@ -22,7 +21,7 @@ class CthulhuCharacter extends Character {
   final int luck;
   final Map<String, int> skills;
   final Map<String, int> weapons;
-  final List<String> personalDescription;
+  final String personalDescription;
   final String ideology;
   final String relatives;
   final String significantPlaces;
@@ -72,17 +71,17 @@ class CthulhuCharacter extends Character {
     final sanity = _getRandomSanity(characteristics);
     final mp = _getRandomMp(characteristics);
     final luck = _getRandomLuck();
-    final skills = _getRandomSkills(occupation);
-    final weapons = _getRandomWeapons();
+    final skills = _getRandomSkills(characteristics, occupation);
+    final weapons = _getRandomWeapons(bonusDamage, skills);
     final personalDescription = _getRandomPersonalDescription(gender);
-    final ideology = _getRandomIdeology();
-    final relatives = _getRandomRelatives();
+    final ideology = _getRandomIdeology(gender);
+    final relatives = _getRandomRelatives(gender);
     final significantPlaces = _getRandomSignificantPlaces();
-    final prizedPossessions = _getRandomPrizedPossessions();
-    final traits = _getRandomTraits();
+    final prizedPossessions = _getRandomPrizedPossessions(gender);
+    final traits = _getRandomTraits(gender);
     final phobias = _getRandomPhobias();
     final manias = _getRandomManias();
-    final equipment = _getRandomEquipment();
+    final equipment = _getRandomEquipment(weapons);
     
     String name = _getRandomName(gender);
     String userId = "test";
@@ -208,557 +207,448 @@ class CthulhuCharacter extends Character {
     return makeRoll(3, 6) * 5;
   }
 
-  static Map<String, int> _getRandomSkills(String occupation) {
+  static Map<String, int> _getRandomSkills(Map<String, int> characteristics, String occupation) {
     Map<String, Map<String, int>> skills = {
       "Antiquarian": {
-        "Appraise": 0,
-        "Art/Craft": 0,
-        "History": 0,
-        "Language (other)": 0,
-        "Library Use": 0,
-        
+        "Appraise": 05,
+        "Art/Craft": 05,
+        "History": 05,
+        "Language (other)": 01,
+        "Library Use": 20,
+        "Spot Hidden": 25,
+      },
+      "Dilettante": {
+        "Art/Craft": 05,
+        "Language (other)": 01,
+        "Ride": 05,
+      },
+      "Writer": {
+        "Art/Craft": 05,
+        "History": 05,
+        "Library Use": 20,
+        "Language (other)": 01,
+        "Language (own)": characteristics["EDU"]!,
+        "Psychology": 10,
+      },
+      "Police inspector": {
+        "Law": 05,
+        "Listen": 20,
+        "Psychology": 10,
+        "Spot Hidden": 25,
+      },
+      "Private investigator": {
+        "Art/Craft": 05,
+        "Disguise": 05,
+        "Law": 05,
+        "Library Use": 20,
+        "Psychology": 10,
+        "Spot Hidden": 25,
+      },
+      "Medic": {
+        "Art/Craft": 05,
+        "Disguise": 05,
+        "Law": 05,
+        "Library Use": 20,
+        "Psychology": 10,
+        "Spot Hidden": 25,
       },
     };
-    if(occupation == 'Antiquarian') {
-
+    if(occupation == 'Antiquarian') { 
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Antiquarian']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Antiquarian']![skill] = prob;
+      }); 
+    } else if(occupation == 'Dilettante') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        0, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Dilettante']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Dilettante']![skill] = prob;
+      }); 
+      extras = _getExtraRandomSkills(
+        characteristics, 
+        3, 
+        ["Firearms (Handgun)", "Firearms (Rifle/Shotgun)"], 
+        skills['Dilettante']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Dilettante']![skill] = prob;
+      }); 
+    } else if(occupation == 'Writer') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Natural World", "Occult"], 
+        skills['Writer']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Writer']![skill] = prob;
+      }); 
+    } else if(occupation == 'Police inspector') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        0, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Police inspector']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Police inspector']![skill] = prob;
+      }); 
+      extras = _getExtraRandomSkills(
+        characteristics, 
+        0, 
+        ["Art/Craft", "Disguise"], 
+        skills['Police inspector']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Police inspector']![skill] = prob;
+      }); 
+      extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Firearms (Handgun)", "Firearms (Rifle/Shotgun)"], 
+        skills['Police inspector']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Police inspector']![skill] = prob;
+      }); 
+    } else if(occupation == 'Private investigator') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        0, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Private investigator']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Private investigator']![skill] = prob;
+      }); 
+      extras = _getExtraRandomSkills(
+        characteristics, 
+        0, 
+        ["Locksmith", "Firearms (Handgun)", "Firearms (Rifle/Shotgun)"], 
+        skills['Private investigator']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Private investigator']![skill] = prob;
+      }); 
+    } else if(occupation == 'Medic') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Antiquarian']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Antiquarian']![skill] = prob;
+      }); 
+    } else if(occupation == 'Journalist') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['Journalist']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['Journalist']![skill] = prob;
+      }); 
+    } else if(occupation == 'University professor') {
+      Map<String, int> extras = _getExtraRandomSkills(
+        characteristics, 
+        1, 
+        ["Fast Talk", "Charm", "Intimidate", "Persuade"], 
+        skills['University professor']!.keys.toList()
+      );
+      extras.forEach((skill, prob) { 
+        skills['University professor']![skill] = prob;
+      }); 
     }
     
-    return Map<String, int>();
+    return skills[occupation]!;
   }
 
-  static final Map<String, int> _randomSkills = {
-    "Accounting": 05,
-    "Anthropology": 01,
-    "Appraise": 05,
-    "Archeology": 01,
-    "Art/Craft": 05,
-    "Charm": 15,
-    "Climb": 20,
-    "Credit Rating": 00,
-    "Disguise": 05,
-    "Dodge": characteristics['DEX']!/2.floor(),
+  static Map<String, int> _getExtraRandomSkills (Map<String, int> characteristics, int extraNum, List<String> extraSkills, List<String> currentSkills) {
+    Map<String, int> skills = {
+      "Accounting": 05,
+      "Anthropology": 01,
+      "Appraise": 05,
+      "Archeology": 01,
+      "Art/Craft": 05,
+      "Charm": 15,
+      "Climb": 20,
+      "Credit Rating": 00,
+      "Disguise": 05,
+      // "Dodge": (characteristics['DEX']!/2).floor(),
+      "Dodge": (characteristics["DEX"]!/2).floor(),
+      "Drive Auto": 20,
+      "Elec. Repair": 10,
+      "Fast Talk": 05,
+      "Fighting (Brawl)": 25,
+      "Firearms (Handgun)": 20,
+      "Firearms (Rifle/Shotgun)": 25,
+      "First Aid": 30,
+      "History": 05,
+      "Intimidate": 15,
+      "Jump": 20,
+      "Language (other)": 01,
+      "Language (own)": characteristics["EDU"]!,
+      "Law": 05,
+      "Library Use": 20,
+      "Listen": 20,
+      "Locksmith": 01,
+      "Mech. Repair": 10,
+      "Medicine": 01,
+      "Natural World": 10,
+      "Navigate": 10,
+      "Occult": 05,
+      "Persuade": 10,
+      "Pilot": 01,
+      "Psychoanalysis": 01,
+      "Psychology": 10,
+      "Ride": 05,
+      "Science": 01,
+      "Sleight of Hand": 10,
+      "Spot Hidden": 25,
+      "Stealth": 20,
+      "Survival": 10,
+      "Swim": 20,
+      "Throw": 20,
+      "Track": 10
+    };
+    Map<String, int> newSkills = {};
+    if(extraSkills.isNotEmpty) {
+      for (String extraSkill in extraSkills) {
+        newSkills[extraSkill] = skills[extraSkill]!;
+        skills.remove(extraSkill);
+      }
+    }
+    for(String currentSkill in currentSkills) {
+      skills.remove(currentSkill);
+    }
+    if(extraNum > 0) {
+      // we want some extra skills defined in extraNum
+      List<String> skillsKeys = skills.keys.toList();
+      for(int i = 0; i < extraNum; i++) {
+        // int randomSkillIndex = Random().nextInt(extraSkills.length);
+        // if(skills.)
+        String randomSkill = randomChoice(skillsKeys);
+        newSkills[randomSkill] = skills[randomSkill]!;
+      }
+    } 
+    return newSkills;
+  }
+
+  static Map<String, int> _getRandomWeapons(int bonus, Map<String, int> skills) {
+    Map<String, int> allWeapons = {
+      // "Brawl": makeRoll(1, 3) + bonus,
+      "Small Knife" : makeRoll(1, 4) + bonus,
+      "Machete": makeRoll(1, 8) + bonus,
+      "Small Club": makeRoll(1, 6) + bonus,
+      "Baseball bat": makeRoll(1, 8) + bonus,
+      // "Handgun": makeRoll(1, 10),
+      // "Shotgun": makeRoll(2, 6),
+      // "Rifle": makeRoll(2, 6) + 4
+    };
+    Map<String, int> weapons = {
+      "Brawl": makeRoll(1, 3) + bonus
+    };
+    // List<String> randomWeapons = ["Small Knife", "Machete", "Small Club", "Baseball bat"];
+    List<String> randomWeapons = allWeapons.keys.toList();
+    int numExtraWeapons = Random().nextInt(3);
+    for(int i = 0; i < numExtraWeapons; i++){
+      String extraRandomWeapon = randomChoice(randomWeapons);
+      weapons[extraRandomWeapon] = allWeapons[extraRandomWeapon]!;
+      randomWeapons.remove(extraRandomWeapon);
+    }
+
+    if(skills.containsKey("Firearms (Handgun)")) {
+      weapons["Handgun"] = makeRoll(1, 10);
+    }
+    if(skills.containsKey("Firearms (Rifle/Shotgun)")) {
+      String firearm = randomChoice(["Shotgun", "Rifle"]);
+      if(firearm == "Shotgun") {
+        weapons["Shotgun"] = makeRoll(2, 6);
+      } else {
+        weapons["Rifle"] = makeRoll(2, 6) + 4;
+      }
+    }
     
-  };
-
-  static Map<String, int> _getRandomWeapons() {
-    return Map<String, int>();
+    return weapons;
   }
 
-  static List<String> _getRandomPersonalDescription(String gender) {
-    return [""].toList();
+  static String _getRandomPersonalDescription(String gender) {
+    List<String> personalMaleDescriptions = [
+      "He is wearing a slightly worn suit. Average height. Careful mustache. He uses monocle instead of glasses when examining a text.",
+      "Handsome but rough. Slim. He wears a suit if he has to, but prefers a more casual outfit.",
+      "Youthful and bright-eyed. Wear fashionable clothes"
+    ];
+    List<String> personalFemaleDescriptions = [
+      "Athletic physique. Elegant hairstyle for dark brown hair. Dressed in the style of the 20's",
+      "Thin, below average weight. Thick black hair, glasses and a huge smile",
+      "Youthful and bright-eyed. Wear fashionable clothes"
+    ];
+    if(gender == "male") {
+      return randomChoice(personalMaleDescriptions);
+    } else {
+      return randomChoice(personalFemaleDescriptions);
+    }
   }
 
-  static String _getRandomIdeology() {
-    return "";
+  static String _getRandomIdeology(String gender) {
+    List<String> maleIdeologies = [
+      "Interested all his life in myth and folklore. He is willing to believe in the reality of the supernatural, although he has not yet found any solid evidence",
+      "Deep love for history and ancient cultures. He wants to make a reputation as a treasure hunter"
+      "The science. OVer time, it will be possible to explain everything. He does not believe in ghosts and seeks a scientific explanation for any strange event."
+    ];
+    List<String> femaleIdeologies = [
+      "Raised in the Christian faith, she has a healthy respect for the supernatural and can be superstitious",
+      "Intense faith in God, she has been raised in the Christian Church by her mother"
+    ];
+    if(gender == "male") {
+      return randomChoice(maleIdeologies);
+    } else {
+      return randomChoice(femaleIdeologies);
+    }
   }
 
-  static String _getRandomRelatives() {
-    return "";
+  static String _getRandomRelatives(String gender) {
+    List<String> maleRelatives = [
+      "His late wife, Jane. He thinks there was something she wanted to tell him before she died",
+      "His father, Francisco Jones, whose discoveries made him famous. He feels overshadowed by his father",
+      "His older brother Paco, who adores him and works as a doctor in San Francisco"
+    ];
+    List<String> femaleRelatives = [
+      "Her father, who she knew worked for the notorious gangster Dutch Schultz in New York",
+      "Her mother, to whom she writes every week"
+    ];
+    if(gender == "male") {
+      return randomChoice(maleRelatives);
+    } else {
+      return randomChoice(femaleRelatives);
+    }
   }
 
   static String _getRandomSignificantPlaces() {
-    return "";
+    List<String> significantPlaces = [
+      "A wooded and quiet space, where you can listen to the birds and relax with a good book",
+      "A bar where strong liquor is served and you can forget your problems",
+      "Within beloved family in New York. Practices athletics to clear her mind",
+      "Libraries, where you can get lost in a huge science book",
+      "Mother's house in Boston, where they serve the best food you can eat" 
+    ];
+    return randomChoice(significantPlaces);
   }
 
-  static String _getRandomPrizedPossessions() {
-    return "";
+  static String _getRandomPrizedPossessions(String gender) {
+    List<String> malePrizedPossessions = [
+      "A small frame containing a photograph of Jane, his late wife",
+      "His little medal of Saint Christofer, which gives him good luck",
+      "A silver penknife, a gift from his brother and which he wears as an amulet"
+    ];
+    List<String> femalePrizedPossessions = [
+      "A switchblade knife, a gift from his father, who told her 'take it whith you and it will help you get out of any problem'",
+      "Her father's last pocket bible"
+    ];
+    if(gender == "male") {
+      return randomChoice(malePrizedPossessions);
+    } else {
+      return randomChoice(femalePrizedPossessions);
+    }
   }
 
-  static String _getRandomTraits() {
-    return "";
+  static String _getRandomTraits(String gender) {
+    List<String> maleTraits = [
+      "Inquisitive. Takes a meticulous approach to research",
+      "Indomitable. He usually acts without thinking",
+    ];
+    List<String> femaleTraits = [
+      "Inquisitive. Takes a meticulous approach to research",
+      "Tough and temperamental. She loves to argue. Never goes under a ladder",
+      "Adventuress. She likes to stay busy and get her hands dirty",
+      "She likes to take risks and be immersed in the action"
+    ];
+    if(gender == "male") {
+      return randomChoice(maleTraits);
+    } else {
+      return randomChoice(femaleTraits);
+    }
   }
 
   static String _getRandomPhobias() {
-    return "";
+    List<String> phobias = [
+      "None",
+      "Acrophobia: fear of heights",
+      "Arachnophobia: fear of spiders",
+      "Bibliophobia: fear of books",
+      "Eisoptrophobia: fear of mirrors",
+      "Hematophobia: fear of blood",
+      "Necrophobia: fear of dead things",
+      "Odontophobia: fear of teeth",
+      "Pyrophobia: fear of fire",
+      "Telephonephobia: fear of phones",
+      "Xenophobia: fear of foreigners and strangers",
+    ];
+    return randomChoice(phobias);
   }
 
   static String _getRandomManias() {
-    return "";
-  }
-
-  static List<String> _getRandomEquipment() {
-    return [""].toList();
-  }
-
-
-  static String _generateCareer() {
-    List<String> careers = [
-      "Colonial marine",
-      "Colonial marshall",
-      "Agent",
-      "Kid",
-      "Medic",
-      "Official",
-      "Pilot",
-      "Roughneck",
-      "Scientific"
+    List<String> manias = [
+      "None",
+      "Agatomania: pathological kindness",
+      "Algomania: obsession with pain",
+      "Amenomania: irrational joy",
+      "Bibliokleptomania: compulsion to steal books",
+      "Clazomania: irrational urge to scream",
+      "Kleptomania: irrational impulse to steal",
+      "Dikemania: Obsession with compliance with laws",
+      "Geliomania: uncontrollable urge to laugh",
+      "Nosomania: delusions of suffering from imaginary illness",
+      "Pseudomania: irrational urge to lie",
     ];
-    return randomChoice(careers);
+    return randomChoice(manias);
   }
 
-  static Map<String, int> _generateRandomAttributes(String selectedCareer) {
-    Map<String, int> attributes = {
-      "Strength": 0,
-      "Agility": 0,
-      "Wits": 0,
-      "Empathy": 0
-    };
-    int remainingPoints = 14;
-
-    if (selectedCareer == "Colonial marine" || selectedCareer == "Roughneck") {
-      attributes["Strength"] = 5;
+  static List<String> _getRandomEquipment(Map<String, int> weapons) {
+    List<String> allEquipment = [
+      "Fountain pen, pencils and small blue ink bottle",
+      "Memo pad",
+      "Travel equipment in a suitcase",
+      // ".38 pistol and ammunition",
+      "Pencils and notepad",
+      "Comb",
+      "Medallion of Saint Christopher",
+      "Razor",
+      "Bag",
+      "Forks",
+      "Crucifix shaped pendant",
+      // "A silver knife",
+      "Wallet containing small science equipment",
+      "Hockey stick",
+      "Wallet",
+      "Pocket bible"
+    ];
+    List<String> equipment = [];
+    int equipmentNum = 5;
+    if(weapons.containsKey("Small knife")) {
+      equipment.add("A silver knife");
+      equipmentNum--;
+    } else if(weapons.containsKey("Handgun")) {
+      equipment.add(".38 pistol and ammunition");
+      equipmentNum--;
     }
-
-    if (selectedCareer == "Kid" || selectedCareer == "Pilot") {
-      attributes["Agility"] = 5;
+    for(int i = 0; i < equipmentNum; i++) {
+      String newEquipment = randomChoice(allEquipment);
+      equipment.add(newEquipment);
+      allEquipment.remove(newEquipment);
     }
-
-    if (selectedCareer == "Colonial marshall" ||
-        selectedCareer == "Scientific" ||
-        selectedCareer == "Agent") {
-      attributes["Wits"] = 5;
-    }
-
-    if (selectedCareer == "Medic" || selectedCareer == "Official") {
-      attributes["Empathy"] = 5;
-    }
-
-    // Assign the remaining attributes randomly so that they sum 14
-    remainingPoints -= attributes.values.reduce((a, b) => a + b);
-    while (remainingPoints > 0) {
-      String attributeToIncrement = randomChoice(attributes.keys.toList());
-      if (attributes[attributeToIncrement]! < 5) {
-        attributes[attributeToIncrement] =
-            (attributes[attributeToIncrement] ?? 0) + 1;
-        remainingPoints--;
-      }
-    }
-
-    return attributes;
-  }
-
-  static Map<String, int> _generateRandomSkills(String selectedCareer) {
-    // TODO: make random but to sum 9
-    if (selectedCareer == "Colonial marine" || selectedCareer == "Roughneck") {
-      return {"Close combat": 3, "Stamina": 3, "Heavy Machinery": 3};
-    }
-    if (selectedCareer == "Kid" || selectedCareer == "Pilot") {
-      return {"Ranged combat": 3, "Mobility": 3, "Piloting": 3};
-    }
-    if (selectedCareer == "Colonial marshall" ||
-        selectedCareer == "Scientific" ||
-        selectedCareer == "Agent") {
-      return {"Observation": 3, "Survival": 3, "Comtech": 3};
-    }
-    if (selectedCareer == "Medic" || selectedCareer == "Official") {
-      return {"Command": 3, "Manipulation": 3, "Medical aid": 3};
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static List<String> _generateRandomTalents(String selectedCareer) {
-    Map<String, List<String>> talents = {
-      "Colonial marine": ["Banter", "Overkill", "Past the limit"],
-      "Colonial marshall": ["Authority", "Investigator", "Subdue"],
-      "Agent": ["Cunning", "Personal safety", "Take control"],
-      "Kid": ["Beneath notice", "Dodge", "Nimble"],
-      "Medic": ["Calming presence", "Investigator", "Subdue"],
-      "Official": ["Field commander", "Influence", "Pull rank"],
-      "Pilot": ["Full throttle", "Like the back of your hand", "Reckless"],
-      "Roughneck": ["Resilient", "The long haul", "True grit"],
-      "Scientific": ["Analysis", "Breakthrough", "Inquisitive"]
-    };
-
-    if (talents.containsKey(selectedCareer)) {
-      return [randomChoice(talents[selectedCareer]!)];
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomName2(String selectedCareer) {
-    Map<String, List<String>> names = {
-      "Colonial marine": [
-        "Marcus Mullaney",
-        "Nik Elson",
-        "Vic Pasengrau",
-        "Kimi Diem",
-        "Tara Zanelli",
-        "Chrissy López"
-      ],
-      "Colonial marshall": [
-        "Jack Kitani",
-        "Barrell Klein",
-        "Ivan Mankov",
-        "Akira Kano",
-        "Angela Harris",
-        "Lee-Ann Jenkins"
-      ],
-      "Agent": [
-        "Conrad Schmidt",
-        "Alexander Balconi",
-        "Ryan Middlebrook",
-        "Michiko Nogumi",
-        "Sheridan Lampara",
-        "Mercedes Prince"
-      ],
-      "Kid": [
-        "Chip Harrington",
-        "Hugo Turner",
-        "Jakey Myers",
-        "Meggie Wu",
-        "Maisie Kelly",
-        "Becca David"
-      ],
-      "Medic": [
-        "Cho Hadfield",
-        "Ken Ibana",
-        "Sullivan Ward",
-        "Ana Kasnavik",
-        "Juno Blanchard",
-        "Katie Aberly"
-      ],
-      "Official": [
-        "Eugene Proctor",
-        "Oliver Bryant",
-        "Lloyd T. Darrington",
-        "Wendy Stern",
-        "Julia Kwang",
-        "Camille Kirschner"
-      ],
-      "Pilot": [
-        "Casper Edmonton",
-        "Sven Stackman",
-        "Kiel Avari",
-        "Fiona O'Neill",
-        "Constance Navona",
-        "Igraine Turner"
-      ],
-      "Roughneck": [
-        "Mac Masterton",
-        "Kip Tranter",
-        "Charlie Stead",
-        "Sassy Díaz",
-        "Kat Longridge",
-        "Jayden Pace"
-      ],
-      "Scientific": [
-        "Viggo Kowalski",
-        "Drew Lancaster",
-        "Travis Torrence",
-        "Elena Sánchez",
-        "Louise Mallory",
-        "Karima Yusef"
-      ]
-    };
-
-    if (names.containsKey(selectedCareer)) {
-      return randomChoice(names[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomAppearance(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
-        "Brush haircut",
-        "Tattoo on the arm",
-        "Scar",
-        "Cold look",
-        "Haughty smile",
-        "Custom armor"
-      ],
-      "Colonial marshall": [
-        "Toothpick in the mouth",
-        "Cigarette in mouth",
-        "Imposing mustache",
-        "Old cap",
-        "Scar that crosses your face",
-        "Gray hair",
-        "Brush haircut",
-        "Inquisitive look",
-        "Worn leather jacket"
-      ],
-      "Agent": [
-        "Cold gaze",
-        "Captivating smile",
-        "Expensive watch",
-        "Signet ring",
-        "Tan",
-        "Elaborate hairstyle",
-        "Vacant expression",
-        "Monogrammed silk tie"
-      ],
-      "Kid": [
-        "Dirty and disheveled",
-        "Cool sneakers that light up when you walk",
-        "Jeans with slits at the knees",
-        "T-shirt with a group logo",
-        "Shorts with many pockets",
-        "Hair in a ponytail",
-        "Bored face",
-        "Baseball cap"
-      ],
-      "Medic": [
-        "Compassionate smile",
-        "Short",
-        "Well-combed hair",
-        "Warm and affectionate gaze",
-        "Prominent dark circles",
-        "Restless hands",
-        "Sweet and calm voice",
-        "Cold and indifferent gaze",
-        "Glasses",
-        "White coat"
-      ],
-      "Official": [
-        "Hair cut with a brush or collected in a bun",
-        "Intense and severe expression",
-        "Impeccable uniform",
-        "Looks like working a lot and sleeping little",
-        "Stretched posture",
-        "Serene and relaxing voice",
-        "Flight suit with identification patch",
-        "Impatient tapping of the foot"
-      ],
-      "Pilot": [
-        "Arrogant walk",
-        "Piercing blue eyes",
-        "Flight suit with many pockets",
-        "Sunglasses",
-        "Identifying patches from previous missions",
-        "Expressionless face",
-        "Always chewing gum",
-        "Look of skepticism"
-      ],
-      "Roughneck": [
-        "Tattoos",
-        "Scar",
-        "Broken nose",
-        "Taciturn expression",
-        "Mocking smile",
-        "Loud laughter",
-        "Calloused and bruised hands",
-        "Safety glasses that cover your eyes",
-        "Dirty boots that echo with each step",
-        "Disheveled hair"
-      ],
-      "Scientific": [
-        "Disheveled and unkempt appearance",
-        "Stained lab coat",
-        "Nervous attitude",
-        "Hands always in pockets",
-        "Neat and well-trimmed hairstyle",
-        "Thoughtful look",
-        "Always clears throat before speaking",
-        "Eyes tired from overwork"
-      ]
-    };
-
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomPersonalAgenda(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
-        "You are a decorated hero and you have to defend your reputation. At all costs.",
-        "You once covered up a war crime. No one should ever know.",
-        "The death of your companion has traumatized you, and now you are terrified of the possibility of entering combat. you have to overcome your fears."
-      ],
-      "Colonial marshall": [
-        "After a long time together, your partner betrayed you and joined a criminal syndicate. He will have to answer you.",
-        "You dream of handing in your badge and retiring to a place where you can live in peace. Do everything possible to achieve it.",
-        "You did something terrible in the past and now it is taking its toll on you. You will have to decide what material you are made of."
-      ],
-      "Agent": [
-        "You crave power and never pass up an opportunity to advance.",
-        "The company is hiding information from you. What will it be? Why?",
-        "You are a good person, but the company is blackmailing you to do their dirty work. Get even as you can."
-      ],
-      "Kid": [
-        "You want to find an adult you can really trust.",
-        "Your whole family has died. Make sure you are never left alone again.",
-        "Nobody gives you any tasks, so dedicate yourself to exploring, trying things, finding life to have fun."
-      ],
-      "Medic": [
-        "You are hooked on a strong painkiller. You have to keep your stock (and the secret) well.",
-        "You have some unusual (and confidential) medical reports that the company is looking for. Find out why they are so important.",
-        "You swore you would never take a life, and you intend to honor that oath."
-      ],
-      "Official": [
-        "You come from a family of officers. You have to earn a promotion or some decoration, and tomorrow is too late.",
-        "You screwed up once. Make sure no more shit happens to you.",
-        "Mistakes are costly, don't let any of your subordinates screw up. And make sure they understand why."
-      ],
-      "Pilot": [
-        "You only think about exceeding the limit, about taking risks and taking risks, so take risks.",
-        "You are stubborn and do not shy away from anything, even if your friends may be hurt.",
-        "You are a loner and prefer to act without depending on others."
-      ],
-      "Roughneck": [
-        "You seek strong emotions compulsively. If there is something that entails a risk, you are there to assume it.",
-        "You once gave up your family for work. Now you don't plan to disappoint your friends. Never.",
-        "You like to enjoy your free time. If you can grab a can of beer and spend some time alone, you are the happiest person in the world."
-      ],
-      "Scientific": [
-        "Your last project was stolen, so now you keep most of your findings a secret.",
-        "You hate authority; Do your best to appear uncooperative.",
-        "It is very difficult for you to delegate to others, even when it makes you work more than necessary."
-      ],
-    };
-
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static List<String> _getRandomGear(String selectedCareer) {
-    Map<String, List<List<String>>> appearance = {
-      "Colonial marine": [
-        ["A pulse rifle", "A smart machine gun"],
-        ["A motion tracker", "2 electroshock grenades"],
-        ["A pressure suit", "Armor"],
-        ["A sparkler", "A deck of cards"]
-      ],
-      "Colonial marshall": [
-        ["A .357 Magnum revolver", "A pump-action shotgun."],
-        ["Some binoculars", "A high-power flashlight."],
-        ["A first aid kit", "An electric baton."],
-        ["1D6 Sleep Remover pills", "A personal communicator."],
-      ],
-      "Agent": [
-        ["A leather briefcase", "A chrome briefcase."],
-        ["A gold-plated fountain pen", "A luxury watch."],
-        [
-          "A data transmission card with corporate accreditation",
-          "A service pistol."
-        ],
-        ["1D6 sleep reliever pills", "1D6 dose of Naproleve."]
-      ],
-      "Kid": [
-        ["A fishing line", "a laser pointer."],
-        ["A magnet", "A remote-controlled car."],
-        ["A yo-yo", "An electronic game."],
-        ["A personal locator", "colored pencils."]
-      ],
-      "Medic": [
-        ["Surgical instruments", "A compression suit."],
-        ["1D6 doses of Naproleve", "1D6 Quitaseño pills"],
-        ["A first aid kit", "1D6 doses of experimental drugs."],
-        ["A Samani E series watch", "A personal communicator."]
-      ],
-      "Official": [
-        ["A service gun", "A high-tech gun"],
-        ["A watch", "binoculars"],
-        ["A motion tracker", "Compression suit"],
-        ["A personal tablet", "A friend-enemy transponder"]
-      ],
-      "Pilot": [
-        ["A service pistol", "A portable remote control terminal."],
-        ["A personal communicator", "1D6 flares."],
-        ["A maintenance tool", "A personal tablet."],
-        ["A systems diagnostic tool", "A compression suit."]
-      ],
-      "Roughneck": [
-        ["A blowtorch", "A pneumatic riveter."],
-        ["1D6 dose of Hydroctin", "A maintenance tool."],
-        ["High-proof liquor", "A compression suit."],
-        ["A high-powered flashlight", "Magnetic tape recorder"]
-      ],
-      "Scientific": [
-        ["A digital video camera", "A personal communicator."],
-        ["A personal tablet", "A neurovisor."],
-        ["A system diagnostic tool", "Personal data transmitter."],
-        ["A motion tracker", "First aid kit."]
-      ],
-    };
-
-    List<String> gear = [];
-    if (appearance.containsKey(selectedCareer)) {
-      appearance[selectedCareer]!.forEach((element) {
-        String choice = randomChoice(element);
-        gear.add(choice);
-      });
-      return gear;
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static String _getRandomSignatureItem(String selectedCareer) {
-    Map<String, List<String>> appearance = {
-      "Colonial marine": [
-        "The bullet that almost killed you",
-        "The dog tags of a fallen comrade",
-        "A trophy of a defeated enemy",
-      ],
-      "Colonial marshall": [
-        "A photograph of a loved one.",
-        "A dented flask with an inscription on the front.",
-        "Newspaper clippings about an unsolved case.",
-      ],
-      "Agent": [
-        "A written corporate authorization.",
-        "Your divorce papers.",
-        "An employee of the year award.",
-      ],
-      "Kid": [
-        "A lunch box covered in stickers.",
-        "Your favorite doll or action figure.",
-        "The bracelet your older sibling made you.",
-      ],
-      "Medic": [
-        "A framed medical certificate.",
-        "A letter from your son (or daughter).",
-        "Your last psychological evaluation. \"Everything's finally over\"",
-      ],
-      "Official": [
-        "The on-board cat.",
-        "A recommendation letter.",
-        "A commercial flight officer license.",
-      ],
-      "Pilot": [
-        "A bobblehead doll for the dashboard.",
-        "A flight log.",
-        "Some aviator sunglasses.",
-      ],
-      "Roughneck": [
-        "A tool belt.",
-        "Your partner's photograph.",
-        "A crucifix or any other religious icon.",
-      ],
-      "Scientific": [
-        "An albert einstein award.",
-        "A half-written scientific article.",
-        "Blackmail letters.",
-      ],
-    };
-
-    if (appearance.containsKey(selectedCareer)) {
-      return randomChoice(appearance[selectedCareer]!);
-    }
-    throw Exception("Unsupported career selected");
-  }
-
-  static int _getRandomCash(String selectedCareer) {
-    Map<String, int> cash = {
-      "Colonial marine": Random().nextInt(6) * 100,
-      "Colonial marshall": Random().nextInt(6) * 100,
-      "Agent": (Random().nextInt(6) + Random().nextInt(6)) * 100,
-      "Kid": Random().nextInt(6) * 100,
-      "Medic": Random().nextInt(6) * 100,
-      "Official": (Random().nextInt(6) + Random().nextInt(6)) * 100,
-      "Pilot": Random().nextInt(6) * 100,
-      "Roughneck": Random().nextInt(6) * 100,
-      "Scientific": Random().nextInt(6) * 100
-    };
-
-    if (cash.containsKey(selectedCareer)) {
-      return cash[selectedCareer]!;
-    }
-    throw Exception("Unsupported career selected");
+    return equipment;
   }
 
   @override
@@ -848,9 +738,7 @@ class CthulhuCharacter extends Character {
           .map((key, value) => MapEntry(key, value as int)),
       weapons: (statsData['weapons'] as Map<String, dynamic>)
           .map((key, value) => MapEntry(key, value as int)),
-      personalDescription: (statsData['personalDescription'] as List<dynamic>)
-          .map((value) => value as String)
-          .toList(),
+      personalDescription: statsData['personalDescription'] as String,
       ideology: statsData['ideology'] as String,
       relatives: statsData['relatives'] as String,
       significantPlaces: statsData['significantPlaces'] as String,
