@@ -118,18 +118,20 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
-        story_description: singleton.history,
+        story_description: singleton.history.text,
         ready_players: ready_players,
         game_ready: false);
     singleton.currentGame = newGame.uid;
     singleton.currentGameShortUid = newGame.short_uid;
+    singleton.history.text = "";
     await firebase.createGame(newGame.toMap());
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
     String response;
-    if (singleton.gameMode.value == "aliens" || singleton.gameMode.value == "dyd") {
+    if (singleton.gameMode.value == "aliens" ||
+        singleton.gameMode.value == "dyd") {
       response = await createGame(newGame);
     } else {
       throw Exception("Tonto el que lo lea");
@@ -201,11 +203,12 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           creator_uid: singleton.user!.uid,
           role_system: singleton.gameMode.value,
           players: game_players,
-          story_description: singleton.history,
+          story_description: singleton.history.text,
           ready_players: ready_players,
           game_ready: false);
       singleton.currentGame = newGame.uid;
       singleton.currentGameShortUid = newGame.short_uid;
+      singleton.history.text = "";
       await firebase.createGame(newGame.toMap());
       await firebase.addGameToQueue(characterId);
       while (!await firebase.checkIfReady()) {
@@ -345,11 +348,12 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         creator_uid: singleton.user!.uid,
         role_system: singleton.gameMode.value,
         players: game_players,
-        story_description: singleton.history,
+        story_description: singleton.history.text,
         ready_players: ready_players,
         game_ready: false);
     singleton.currentGame = newGame.uid;
     singleton.currentGameShortUid = newGame.short_uid;
+    singleton.history.text = "";
     await firebase.createGame(newGame.toMap());
 
     // Go to waiting room
