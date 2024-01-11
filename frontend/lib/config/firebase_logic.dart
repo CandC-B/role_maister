@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/app_singleton.dart';
@@ -22,6 +24,7 @@ FirebaseService firestoreService = FirebaseService();
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<Map<String, dynamic>> getCharacter(
       String characterId, String gameMode) async {
@@ -1260,5 +1263,47 @@ class FirebaseService {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     context.go("/sign_in");
     context.push("/sign_in");
+  }
+
+  // Firebase storage
+  Future<String> uploadFile(Uint8List file, String fileName) async {
+    try {
+      Reference storageReference = _storage.ref().child(fileName);
+      UploadTask uploadTask = storageReference.putData(file);
+      await uploadTask.whenComplete(() => print("File uploaded successfully"));
+      String url = await storageReference.getDownloadURL();
+      return url;
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  // Update the user's profile picture
+  Future<bool> updateUserProfilePicture(String userId, String url) async {
+    try {
+      // Reference to the Firestore collection 'user'
+      CollectionReference usersCollection =
+          _firestore.collection('user');
+
+      // Get the user document by user ID
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await usersCollection.doc(userId).get() as DocumentSnapshot<Map<String, dynamic>>;
+      if (userSnapshot.exists) {
+        // Modify the user data
+        Map<String, dynamic> userData = userSnapshot.data()!;
+        userData['photoUrl'] = url;
+
+        // Update the user document
+        await usersCollection.doc(userId).update(userData);
+        singleton.player = Player.fromMap(userData);
+        return true;
+      } else {
+        throw Exception("User not found");
+      }
+    } catch (error) {
+      print('Error updating user profile picture: $error');
+      throw error;
+    }
   }
 }

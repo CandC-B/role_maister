@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         // {
         //     "name": "frontend",
         //     "request": "launch",
@@ -12,14 +13,24 @@
             "request": "launch",
             "type": "dart",
             "deviceId": "chrome",
-            "program": "frontend/lib/main.dart"
+            "program": "frontend/lib/main.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-renderer",
+                "html",
+            ]
         },
         {
             "name": "Android",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5554",
-            "program": "frontend/lib/main.dart"
+            "program": "frontend/lib/main.dart",
+            "args": [
+                "-d",
+                "emulator-5554",
+            ]
         },
     ],
     "compounds": [
