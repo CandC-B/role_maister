@@ -101,6 +101,8 @@ class _GameChatState extends State<GameChat> {
           characterName: singleton.selectedCharacterName!),
       widget.gameId,
     );
+    firestoreService.updatePlayerWordCount(
+        widget.gameId, singleton.player!.uid, text.length);
 
     textEditingController.clear();
 
@@ -125,6 +127,8 @@ class _GameChatState extends State<GameChat> {
               characterName: ''),
           widget.gameId,
         );
+        firebase.updateAiWordCount(
+            widget.gameId, json.decode(response.body)["message"].split(' ').length);
       }
     } else {
       // Handle the case where there was an error fetching messages
@@ -143,7 +147,6 @@ class _GameChatState extends State<GameChat> {
     Locale locale = appState?.locale ?? const Locale('en');
 
     observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
-
 
     // print ('LOCALE: $locale');
 
@@ -282,8 +285,10 @@ class _GameChatState extends State<GameChat> {
                   }
                 } else {
                   return const Center(
-                    child: Center(child: CircularProgressIndicator(color: Colors.deepPurple,))
-                  );
+                      child: Center(
+                          child: CircularProgressIndicator(
+                    color: Colors.deepPurple,
+                  )));
                 }
               },
             ),
@@ -472,9 +477,8 @@ class DiscordChatMessage extends StatelessWidget {
         Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          leading: 
-
-            senderName == 'IA' ?
+          leading: senderName == 'IA'
+              ?
               // CircleAvatar(
               //   backgroundColor: Colors.deepPurple,
               //   child: Image.asset(
@@ -485,23 +489,21 @@ class DiscordChatMessage extends StatelessWidget {
               // )
 
               CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/bot_master.png',
-                  width: 100.0,
-                  height: 100.0,
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset(
+                    'assets/images/bot_master.png',
+                    width: 100.0,
+                    height: 100.0,
+                  ),
+                )
+              : CircleAvatar(
+                  backgroundColor: Colors.deepPurple,
+                  child: Text(
+                    senderName.substring(
+                        0, 1), // Mostrar la primera letra del nombre de usuario
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              )
-            : 
-
-          CircleAvatar(
-            backgroundColor: Colors.deepPurple,
-            child: Text(
-              senderName.substring(
-                  0, 1), // Mostrar la primera letra del nombre de usuario
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
           title: Row(
             children: [
               Expanded(
@@ -509,15 +511,13 @@ class DiscordChatMessage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      
-
-                      senderName == 'IA' || senderName == 'System' ?
-                        senderName
-                      :
-                        '$senderName${isSender ? " (You)" : " ($characterName)"}',
-
+                      senderName == 'IA' || senderName == 'System'
+                          ? senderName
+                          : '$senderName${isSender ? " (You)" : " ($characterName)"}',
                       style: TextStyle(
-                        color: senderName == 'System' ? Colors.red : Colors.deepPurple,
+                        color: senderName == 'System'
+                            ? Colors.red
+                            : Colors.deepPurple,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -525,7 +525,8 @@ class DiscordChatMessage extends StatelessWidget {
                     Text(
                       message,
                       style: TextStyle(
-                        color: senderName == 'System' ? Colors.red : Colors.white,
+                        color:
+                            senderName == 'System' ? Colors.red : Colors.white,
                         fontSize: 16,
                       ),
                     ),

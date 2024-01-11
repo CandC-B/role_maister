@@ -834,38 +834,37 @@ class FirebaseService {
     context.push("/");
   }
 
-  Future<void> changePlayerBalance(BuildContext context, double token_change) async {
-  try {
-    String uid = singleton.user!.uid;
-    DocumentReference<Map<String, dynamic>> playerReference =
-        _firestore.collection('user').doc(uid);
+  Future<void> changePlayerBalance(
+      BuildContext context, double token_change) async {
+    try {
+      String uid = singleton.user!.uid;
+      DocumentReference<Map<String, dynamic>> playerReference =
+          _firestore.collection('user').doc(uid);
 
-    // Get the player document
-    DocumentSnapshot<Map<String, dynamic>> playerDocument =
-        await playerReference.get();
+      // Get the player document
+      DocumentSnapshot<Map<String, dynamic>> playerDocument =
+          await playerReference.get();
 
-    if (playerDocument.exists) {
-      // Create a Player instance from the document
-      Player player = Player.fromDocument(playerDocument);
-      
-      // Modify player tokens
-      player.tokens += token_change;
+      if (playerDocument.exists) {
+        // Create a Player instance from the document
+        Player player = Player.fromDocument(playerDocument);
 
-      // Update the player in the database
-      singleton.player = player;
-      await playerReference.update(player.toMap());
-    } else {
-      // Handle the case where the player document does not exist
-      // For example, show an error message to the user.
-      print('Player document does not exist.');
+        // Modify player tokens
+        player.tokens += token_change;
+
+        // Update the player in the database
+        singleton.player = player;
+        await playerReference.update(player.toMap());
+      } else {
+        // Handle the case where the player document does not exist
+        // For example, show an error message to the user.
+        print('Player document does not exist.');
+      }
+    } catch (e) {
+      // Handle any errors that may occur during the process
+      print('Error updating player tokens in the database: $e');
     }
-  } catch (e) {
-    // Handle any errors that may occur during the process
-    print('Error updating player tokens in the database: $e');
   }
-}
-
-
 
   Future<void> saveMessage(ChatMessages message, String currentGameId) async {
     if (message.text.trim().isNotEmpty) {
@@ -1134,7 +1133,7 @@ class FirebaseService {
     }
   }
 
-  Stream<int> getCurrentPlayerTokens(){
+  Stream<int> getCurrentPlayerTokens() {
     return _firestore
         .collection('user')
         .doc(singleton.user!.uid)
@@ -1148,6 +1147,62 @@ class FirebaseService {
         throw Exception("USER: Document does not exist");
       }
     });
+  }
+
+  Future<void> updatePlayerWordCount(
+      String gameUid, String playerUid, int wordIncrement) async {
+    try {
+      // Reference to the game document
+      DocumentReference<Map<String, dynamic>> gameReference =
+          _firestore.collection('game').doc(gameUid);
+
+      // Get the current game document
+      DocumentSnapshot<Map<String, dynamic>> gameDocument =
+          await gameReference.get();
+
+      if (gameDocument.exists) {
+        // Retrieve the current players map from the document
+        Map<String, dynamic> players = gameDocument.data()?['players'] ?? {};
+
+        // Check if the playerUid exists in the players map
+        if (players.containsKey(playerUid)) {
+          // Update the player's data
+          players[playerUid]['word_count'] += wordIncrement; // Assuming toMap() method in PlayerGameData
+
+          // Update the game document with the modified players map
+          await gameReference.update({'players': players});
+        } else {
+          print('Player with UID $playerUid not found in the game.');
+        }
+      } else {
+        print('Game with UID $gameUid not found.');
+      }
+    } catch (e) {
+      print('Error updating player data: $e');
+    }
+  }
+
+  Future<void> updateAiWordCount(
+      String gameUid, int wordIncrement) async {
+    try {
+      // Reference to the game document
+      DocumentReference<Map<String, dynamic>> gameReference =
+          _firestore.collection('game').doc(gameUid);
+
+      // Get the current game document
+      DocumentSnapshot<Map<String, dynamic>> gameDocument =
+          await gameReference.get();
+
+      if (gameDocument.exists) {
+        int aiWordCount = gameDocument.data()?['ia_word_count'] ?? 0;
+        aiWordCount += wordIncrement;
+        await gameReference.update({'ia_word_count': aiWordCount});
+      } else {
+        print('Game with UID $gameUid not found.');
+      }
+    } catch (e) {
+      print('Error updating player data: $e');
+    }
   }
 
   Future<List<Game>> fetchGamesByUserId(String userId) async {

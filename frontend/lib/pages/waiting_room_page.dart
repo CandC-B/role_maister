@@ -218,6 +218,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                                   senderName: "IA"),
                               singleton.currentGame!,
                             );
+                            firebase.updateAiWordCount(singleton.currentGame!, coralMessage.split(' ').length);
                             await firebase.setGameReady(singleton.currentGame!);
                           } else {
                             // Wait for game to be ready

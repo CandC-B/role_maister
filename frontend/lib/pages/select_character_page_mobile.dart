@@ -147,6 +147,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           senderName: "IA"),
       newGame.uid,
     );
+    firebase.updateAiWordCount(
+            newGame.uid, coralMessage.split(' ').length);
   }
 
   void startMultiPlayerGame() async {
@@ -246,6 +248,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
             senderName: "IA"),
         singleton.currentGame!,
       );
+      firebase.updateAiWordCount(
+            currentGame.uid, coralMessage.split(' ').length);
 
       print("LAST USER");
       await firebase.addReadyToQueue();
@@ -355,6 +359,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     singleton.currentGameShortUid = newGame.short_uid;
     singleton.history.text = "";
     await firebase.createGame(newGame.toMap());
+
 
     // Go to waiting room
     context.go("/waiting_room");
