@@ -235,7 +235,11 @@
     "report_player_dialog_cancel": "Annulla",
     "report_player_dialog_report": "Segnala",
 
-    "kick_player_button": "Espelli giocatore"
+    "kick_player_button": "Espelli giocatore",
+    "error_purchasing_tokens": "Errore durante l'acquisto di gettoni. Devi effettuare l'accesso prima!",
+    "purchase_error_title": "Errore di acquisto"
+
+
 
 
 }

@@ -834,6 +834,39 @@ class FirebaseService {
     context.push("/");
   }
 
+  Future<void> changePlayerBalance(BuildContext context, double token_change) async {
+  try {
+    String uid = singleton.user!.uid;
+    DocumentReference<Map<String, dynamic>> playerReference =
+        _firestore.collection('user').doc(uid);
+
+    // Get the player document
+    DocumentSnapshot<Map<String, dynamic>> playerDocument =
+        await playerReference.get();
+
+    if (playerDocument.exists) {
+      // Create a Player instance from the document
+      Player player = Player.fromDocument(playerDocument);
+      
+      // Modify player tokens
+      player.tokens += token_change;
+
+      // Update the player in the database
+      singleton.player = player;
+      await playerReference.update(player.toMap());
+    } else {
+      // Handle the case where the player document does not exist
+      // For example, show an error message to the user.
+      print('Player document does not exist.');
+    }
+  } catch (e) {
+    // Handle any errors that may occur during the process
+    print('Error updating player tokens in the database: $e');
+  }
+}
+
+
+
   Future<void> saveMessage(ChatMessages message, String currentGameId) async {
     if (message.text.trim().isNotEmpty) {
       // String sender;
@@ -1099,6 +1132,22 @@ class FirebaseService {
       print('Error modifying the game: $error in delete kicked player');
       throw error;
     }
+  }
+
+  Stream<int> getCurrentPlayerTokens(){
+    return _firestore
+        .collection('user')
+        .doc(singleton.user!.uid)
+        .snapshots()
+        .map((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> userData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        return userData['tokens'];
+      } else {
+        throw Exception("USER: Document does not exist");
+      }
+    });
   }
 
   Future<List<Game>> fetchGamesByUserId(String userId) async {

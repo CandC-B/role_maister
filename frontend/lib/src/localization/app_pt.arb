@@ -247,6 +247,10 @@
     "report_player_dialog_cancel": "Cancelar",
     "report_player_dialog_report": "Relatar",
 
-    "kick_player_button": "Expulsar jogador"
+    "kick_player_button": "Expulsar jogador",
+    "error_purchasing_tokens": "Erro ao comprar tokens. Você precisa fazer login antes!",
+    "purchase_error_title": "Erro na compra"
+
+
 
 }

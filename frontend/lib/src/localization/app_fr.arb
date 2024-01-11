@@ -235,7 +235,11 @@
     "report_player_dialog_cancel": "Annuler",
     "report_player_dialog_report": "Signaler",
 
-    "kick_player_button": "Expulser le joueur"
+    "kick_player_button": "Expulser le joueur",
+    "error_purchasing_tokens": "Erreur lors de l'achat de jetons. Vous devez vous connecter d'abord!",
+    "purchase_error_title": "Erreur d'achat"
+
+
 
 
 }

@@ -235,7 +235,10 @@
     "report_player_dialog_cancel": "Abbrechen",
     "report_player_dialog_report": "Melden",
 
-    "kick_player_button": "Spieler rausschmeißen"
+    "kick_player_button": "Spieler rausschmeißen",
+    "error_purchasing_tokens": "Fehler beim Kauf von Tokens. Sie müssen sich zuerst anmelden!",
+    "purchase_error_title": "Kauffehler"
+
 
 
 }

@@ -235,8 +235,8 @@
     "report_player_dialog_cancel": "Отмена",
     "report_player_dialog_report": "Пожаловаться",
 
-    "kick_player_button": "Выгнать игрока"
-
-
+    "kick_player_button": "Выгнать игрока",
+    "error_purchasing_tokens": "Ошибка покупки токенов. Вам необходимо войти перед этим!",
+    "purchase_error_title": "Ошибка покупки"
 
 }
