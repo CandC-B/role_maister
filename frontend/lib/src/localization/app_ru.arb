@@ -233,7 +233,10 @@
     "report_player_dialog_title": "Пожаловаться на игрока",
     "report_player_dialog_text": "Вы уверены, что хотите пожаловаться на игрока ",
     "report_player_dialog_cancel": "Отмена",
-    "report_player_dialog_report": "Пожаловаться"
+    "report_player_dialog_report": "Пожаловаться",
+
+    "kick_player_button": "Выгнать игрока"
+
 
 
 }

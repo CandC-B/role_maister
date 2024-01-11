@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:shortid/shortid.dart';
 class Game {
   final String uid;
+  final String creator_uid;
   final String short_uid;
   final int num_players;
   final String role_system;
@@ -14,6 +15,7 @@ class Game {
 
   Game({
     String? uid,
+    required this.creator_uid,
     String? short_uid,
     required this.num_players,
     required this.role_system,
@@ -28,6 +30,7 @@ class Game {
     Map<String, dynamic>? data = document.data();
     if (data != null) {
       String uid = data['uid'] ?? '';
+      String creator_uid = data['creator_uid'] ?? '';
       String short_uid = data['short_uid'] ?? '';
       int num_players = data['num_players'] ?? 0;
       String role_system = data['role_system'] ?? '';
@@ -38,6 +41,7 @@ class Game {
 
       return Game(
         uid: uid,
+        creator_uid: creator_uid,
         short_uid: short_uid,
         num_players: num_players,
         role_system: role_system,
@@ -54,6 +58,7 @@ class Game {
   toMap() {
     return {
       'uid': this.uid,
+      'creator_uid': this.creator_uid, 
       'short_uid': this.short_uid,
       'num_players': this.num_players,
       'role_system': this.role_system,
@@ -67,6 +72,7 @@ class Game {
   static fromMap(Map<String, dynamic> statsData) {
     return Game(
       uid: statsData['uid'],
+      creator_uid: statsData['creator_uid'],
       short_uid: statsData['short_uid'],
       num_players: statsData['num_players'],
       role_system: statsData['role_system'],

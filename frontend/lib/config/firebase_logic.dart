@@ -471,7 +471,7 @@ class FirebaseService {
       print('Error getting game data: $error');
       throw error;
     }
-  } 
+  }
 
   Future<bool> isGameReady(String gameId) async {
     try {
@@ -515,7 +515,6 @@ class FirebaseService {
       throw error;
     }
   }
-
 
   Future<bool> allPlayersReady(String gameId) async {
     try {
@@ -603,7 +602,6 @@ class FirebaseService {
       throw error;
     }
   }
-
 
   // Function to get the game data from the Firestore collection 'game' by user ID
 
@@ -986,7 +984,8 @@ class FirebaseService {
 
         if (gameSnapshot.exists) {
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
           var player = players[playerId];
           PlayerGameData playerGameData = PlayerGameData.fromMap(player);
           playerGameData.votedToGetKicked += 1;
@@ -1002,28 +1001,30 @@ class FirebaseService {
     }
   }
 
-  void observeAndHandleGameChanges(String gameId, String currentUserUid, BuildContext context) {
+  void observeAndHandleGameChanges(
+      String gameId, String currentUserUid, BuildContext context) {
     _firestore.collection('game').doc(gameId).snapshots().listen((event) {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
-          
           // check if currentUserUid is in the players list
           if (data['players'].containsKey(currentUserUid)) {
             // check if the player has voted to kick
-            PlayerGameData playerGameData = PlayerGameData.fromMap(data['players'][currentUserUid]);
-
+            PlayerGameData playerGameData =
+                PlayerGameData.fromMap(data['players'][currentUserUid]);
 
             Game game = Game.fromMap(data);
-            print ('GAME DATA: ' + game.toString());
+            print('GAME DATA: ' + game.toString());
             print('PLAYER ID: ' + currentUserUid);
-            print('PLAYER DATA: ' + 
-              playerGameData.characterId + ' ' + 
-              playerGameData.votedToGetKicked.toString());
+            print('PLAYER DATA: ' +
+                playerGameData.characterId +
+                ' ' +
+                playerGameData.votedToGetKicked.toString());
 
-            if (data['players'].length != 1 && playerGameData.votedToGetKicked >= data['players'].length - 1) {
+            if (data['players'].length != 1 &&
+                playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
-              print ('A TOMAR POR CULO!!');
+              print('A TOMAR POR CULO!!');
 
               // context.widget.test = "A TOMAR POR CULO!!";
               // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
@@ -1033,10 +1034,42 @@ class FirebaseService {
               // singleton.currentGame = "";
             }
           }
-        
         }
       }
     });
+  }
+
+  Future<void> kickPlayerFromWaitingRoom(String gameId, String playerId) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+
+        if (gameSnapshot.exists) {
+          print("HERE");
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
+          var player = players[playerId];
+          PlayerGameData playerGameData = PlayerGameData.fromMap(player);
+          playerGameData.isKickedFromWaitingRoom = true;
+          players[playerId] = playerGameData.toMap();
+          gameData['players'] = players;
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error in kickPlayerFromWaitingRoom');
+      throw error;
+    }
   }
 
   Future<void> deleteKickedPlayer(String gameId, String playerId) async {
@@ -1054,7 +1087,8 @@ class FirebaseService {
 
         if (gameSnapshot.exists) {
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          Map<String, dynamic> players = Map<String, dynamic>.from(gameData['players'] ?? []);
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
           players.remove(playerId);
           gameData['players'] = players;
 
