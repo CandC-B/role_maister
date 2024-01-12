@@ -74,7 +74,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     Size size = MediaQuery.of(context).size;
     observeAndHandleGameChanges(
         singleton.currentGame!, singleton.player!.uid, context);
-
     return Container(
       width: size.width,
       height: size.height,
@@ -215,7 +214,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                                   sentAt: DateTime.now(),
                                   text: coralMessage,
                                   characterName: "",
-                                  senderName: "IA"),
+                                  senderName: "IA",
+                                  userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a',),
                               singleton.currentGame!,
                             );
                             firebase.updateAiWordCount(singleton.currentGame!, coralMessage.split(' ').length);

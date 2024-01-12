@@ -98,7 +98,8 @@ class _GameChatState extends State<GameChat> {
           sentAt: DateTime.now(),
           text: text,
           senderName: singleton.player!.username,
-          characterName: singleton.selectedCharacterName!),
+          characterName: singleton.selectedCharacterName!,
+          userImage: singleton.player!.photoUrl!),
       widget.gameId,
     );
     firestoreService.updatePlayerWordCount(
@@ -124,7 +125,8 @@ class _GameChatState extends State<GameChat> {
               sentAt: DateTime.now(),
               text: json.decode(response.body)["message"],
               senderName: 'IA',
-              characterName: ''),
+              characterName: '',
+              userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
           widget.gameId,
         );
         firebase.updateAiWordCount(
@@ -227,6 +229,7 @@ class _GameChatState extends State<GameChat> {
                                       listMessages[index].get('senderName'),
                                   characterName:
                                       listMessages[index].get('characterName'),
+                                      userImage: listMessages[index].get('userImage'),
                                 );
                               } else if (translateSnapshot.hasError) {
                                 // En caso de error durante la traducción
@@ -270,6 +273,7 @@ class _GameChatState extends State<GameChat> {
                                       listMessages[index].get('senderName'),
                                   characterName:
                                       listMessages[index].get('characterName'),
+                                      userImage: listMessages[index].get('userImage'),
                                 );
                               }
                             },
@@ -459,13 +463,15 @@ class DiscordChatMessage extends StatelessWidget {
   final bool isSender;
   final String senderName;
   final String characterName;
+  final String userImage;
 
   DiscordChatMessage(
       {required this.username,
       required this.message,
       this.isSender = false,
       this.characterName = '',
-      required this.senderName});
+      required this.senderName,
+      required this.userImage});
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +483,7 @@ class DiscordChatMessage extends StatelessWidget {
         Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          leading: senderName == 'IA'
+          leading: /*senderName == 'IA'
               ?
               // CircleAvatar(
               //   backgroundColor: Colors.deepPurple,
@@ -496,13 +502,9 @@ class DiscordChatMessage extends StatelessWidget {
                     height: 100.0,
                   ),
                 )
-              : CircleAvatar(
-                  backgroundColor: Colors.deepPurple,
-                  child: Text(
-                    senderName.substring(
-                        0, 1), // Mostrar la primera letra del nombre de usuario
-                    style: TextStyle(color: Colors.white),
-                  ),
+              : */CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: NetworkImage(userImage),
                 ),
           title: Row(
             children: [

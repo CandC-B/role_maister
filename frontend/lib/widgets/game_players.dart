@@ -281,7 +281,8 @@ class _PlayerCardState extends State<PlayerCard> {
           sentAt: DateTime.now(),
           text: text,
           senderName: "System",
-          characterName: ''),
+          characterName: '',
+          userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/small_logo.png?alt=media&token=54ac8a51-9a0d-4a78-baea-81cdc07efc16'),
       singleton.currentGame!,
     );
   }
