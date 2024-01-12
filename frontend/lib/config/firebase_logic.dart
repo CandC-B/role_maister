@@ -259,6 +259,34 @@ class FirebaseService {
       rethrow;
     }
   }
+  // Unused function
+  Future<Map<String, dynamic>> getPlayersDataFromGameId(String gameId) async {
+    try {
+      // Get the document reference
+      final DocumentReference gameReference =
+          _firestore.collection("game").doc(gameId);
+
+      // Get the document snapshot
+      final DocumentSnapshot gameSnapshot = await gameReference.get();
+
+      // Check if the document exists
+      if (gameSnapshot.exists) {
+        final Map<String, dynamic> gameData =
+            gameSnapshot.data() as Map<String, dynamic>;
+        // Extract the "players" field as a Map<String, dynamic>
+        Map<String, dynamic> players = gameData['players'];
+
+        // Use the players map as needed
+        return players;
+      } else {
+        // Document doesn't exist
+        throw Exception("Waiting Room: Document with ID $gameId does not exist.");
+      }
+    } catch (e) {
+      // Handle errors
+        throw Exception("Waiting Room: Error fetching players data: $e");
+    }
+  }
 
   Stream<QuerySnapshot<Object?>> fetchCharactersByMode(String mode) async* {
     print("get characters from mode");
@@ -974,6 +1002,29 @@ class FirebaseService {
     }
   }
 
+  Future<String> getUserImageFromUserId(String userId) async {
+    try {
+      print(userId);
+      // Reference to the Firestore collection 'users' (adjust to your collection name)
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('user');
+
+      // Query to get the user document by user ID
+      DocumentSnapshot userSnapshot = await usersCollection.doc(userId).get();
+
+      if (userSnapshot.exists) {
+        // If a user document is found, return the username
+        return userSnapshot.get('photoUrl');
+      } else {
+        // If no user document is found, return an appropriate value (null or an empty string, for example)
+        throw Exception("User not found");
+      }
+    } catch (error) {
+      print('Error getting username: $error');
+      throw error;
+    }
+  }
+
   Future<List<String>> getUsernames(
       List<QueryDocumentSnapshot<Object?>> messages) async {
     List<String> usernames = [];
@@ -1170,7 +1221,8 @@ class FirebaseService {
         // Check if the playerUid exists in the players map
         if (players.containsKey(playerUid)) {
           // Update the player's data
-          players[playerUid]['word_count'] += wordIncrement; // Assuming toMap() method in PlayerGameData
+          players[playerUid]['word_count'] +=
+              wordIncrement; // Assuming toMap() method in PlayerGameData
 
           // Update the game document with the modified players map
           await gameReference.update({'players': players});
@@ -1185,8 +1237,7 @@ class FirebaseService {
     }
   }
 
-  Future<void> updateAiWordCount(
-      String gameUid, int wordIncrement) async {
+  Future<void> updateAiWordCount(String gameUid, int wordIncrement) async {
     try {
       // Reference to the game document
       DocumentReference<Map<String, dynamic>> gameReference =
@@ -1283,12 +1334,12 @@ class FirebaseService {
   Future<bool> updateUserProfilePicture(String userId, String url) async {
     try {
       // Reference to the Firestore collection 'user'
-      CollectionReference usersCollection =
-          _firestore.collection('user');
+      CollectionReference usersCollection = _firestore.collection('user');
 
       // Get the user document by user ID
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-          await usersCollection.doc(userId).get() as DocumentSnapshot<Map<String, dynamic>>;
+          await usersCollection.doc(userId).get()
+              as DocumentSnapshot<Map<String, dynamic>>;
       if (userSnapshot.exists) {
         // Modify the user data
         Map<String, dynamic> userData = userSnapshot.data()!;

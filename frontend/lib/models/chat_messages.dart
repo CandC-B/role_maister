@@ -7,6 +7,7 @@ class ChatMessages {
   String senderName;
   String characterName;
   bool isInvalid;
+  String userImage;
 
   ChatMessages(
       {required this.sentBy,
@@ -14,7 +15,8 @@ class ChatMessages {
       required this.text,
       required this.senderName,
       required this.characterName,
-      this.isInvalid = false
+      this.isInvalid = false,
+      required this.userImage
     });
 
   factory ChatMessages.fromDocument(DocumentSnapshot documentSnapshot) {
@@ -24,6 +26,7 @@ class ChatMessages {
     String senderName = documentSnapshot.get('senderName');
     String characterName = documentSnapshot.get('characterName');
     bool isInvalid = documentSnapshot.get('isInvalid');
+    String userImage = documentSnapshot.get('userImage');
 
     return ChatMessages(
         sentBy: sentBy,
@@ -31,7 +34,8 @@ class ChatMessages {
         text: text,
         senderName: senderName,
         characterName: characterName,
-        isInvalid: isInvalid
+        isInvalid: isInvalid,
+        userImage: userImage,
       );
   }
 
@@ -42,7 +46,8 @@ class ChatMessages {
       'text': text,
       'senderName': senderName,
       'characterName': characterName,
-      'isInvalid': isInvalid
+      'isInvalid': isInvalid,
+      'userImage': userImage
     };
   }
 }

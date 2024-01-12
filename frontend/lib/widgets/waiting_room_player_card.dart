@@ -26,8 +26,25 @@ class WaitingRoomPlayerCard extends StatelessWidget {
             print("snapshot.data: " + snapshot.data.toString());
             final Map<String, dynamic> gameData =
                 snapshot.data! as Map<String, dynamic>;
+            return _buildGameWidget(gameData);
+          } else {
+            return Text(AppLocalizations.of(context)!.no_stats_found);
+          }
+        });
+  }
 
-            return Container(
+  Widget _buildGameWidget(gameData) {
+  return FutureBuilder(
+    future: _buildPlayersImageMap(gameData),
+    builder: (context, playersImageSnapshot) {
+      if (playersImageSnapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator(); // o cualquier otro indicador de carga
+      } else if (playersImageSnapshot.hasError) {
+        return Text('Error: ${playersImageSnapshot.error}');
+      } else if (playersImageSnapshot.hasData) {
+        final Map<String, String> playersImage =
+            playersImageSnapshot.data as Map<String, String>;
+        return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 border: Border.all(
@@ -39,8 +56,10 @@ class WaitingRoomPlayerCard extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    playerName! + (gameData['creator_uid'] == playerId!
-                      ? ' 👑':'') + (playerId! == singleton.user!.uid? ' (You)': '') + (ready! ? ' ✓' : ''),
+                    playerName! +
+                        (gameData['creator_uid'] == playerId! ? ' 👑' : '') +
+                        (playerId! == singleton.user!.uid ? ' (You)' : '') +
+                        (ready! ? ' ✓' : ''),
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.white,
@@ -49,17 +68,10 @@ class WaitingRoomPlayerCard extends StatelessWidget {
                   ),
                   SizedBox(height: kIsWeb ? 25.0 : 8.0),
                   CircleAvatar(
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.transparent,
                     radius: 30.0,
-                    child: Text(
-                      playerName![0].toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    // Añadir imagen
+                    backgroundImage: NetworkImage(playersImage[playerId!]!),
                   ),
                   (gameData['creator_uid'] == singleton.user!.uid &&
                           playerId! != singleton.user!.uid)
@@ -69,8 +81,7 @@ class WaitingRoomPlayerCard extends StatelessWidget {
                           playerId! != singleton.user!.uid)
                       ? ElevatedButton(
                           onPressed: () async {
-                            print("Kicking player: " +
-                                playerId!);
+                            print("Kicking player: " + playerId!);
                             await firebase.kickPlayerFromWaitingRoom(
                                 singleton.currentGame!, playerId!);
                           },
@@ -87,9 +98,27 @@ class WaitingRoomPlayerCard extends StatelessWidget {
                 ],
               ),
             );
-          } else {
-            return Text(AppLocalizations.of(context)!.no_stats_found);
-          }
-        });
-  }
+      } else {
+        return SizedBox();
+      }
+    },
+  );
+}
+
+Future<Map<String, String>> _buildPlayersImageMap(gameData) async {
+  final Map<String, dynamic> players = gameData['players'];
+  final Map<String, String> playersImage = {};
+  final List<Future> futures = [];
+
+  players.forEach((key, value) {
+    futures.add(
+      firebase.getUserImageFromUserId(key).then((currentPlayerImage) {
+        playersImage[key] = currentPlayerImage;
+      }),
+    );
+  });
+
+  await Future.wait(futures);
+  return playersImage;
+}
 }
