@@ -49,8 +49,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('You were kicked'),
-                    content: Text('You were kicked by the host of the game.'),
+                    backgroundColor: Colors.deepPurple,
+                    title: Text('You were kicked', style: TextStyle(color: Colors.white),),
+                    content: Text('You were kicked by the host of the game.', style: TextStyle(color: Colors.white)),
+                    
                   );
                 },
               );
