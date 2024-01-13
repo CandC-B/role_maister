@@ -132,7 +132,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     };
     String response;
     if (singleton.gameMode.value == "aliens" ||
-        singleton.gameMode.value == "dyd") {
+        singleton.gameMode.value == "dyd" || singleton.gameMode.value == "cthulhu") {
       response = await createGame(newGame);
     } else {
       throw Exception("Tonto el que lo lea");
