@@ -239,7 +239,7 @@
   "kick_player_button": "Expulsar jugador",
   "error_purchasing_tokens": "Error al comprar tokens. ¡Necesitas iniciar sesión primero!",
   "purchase_error_title": "Error de compra",
-  "no_tokens": "Error al crear el juego. ¡No tienes suficientes fichas! Compra algunas en la tienda."
+  "no_tokens": "Error al crear el juego. ¡No tienes suficientes fichas! Compra algunas en la tienda.",
 
   "game_confirm_msg_deletion": "¿Estás seguro de que deseas borrar estos mensajes?",
   "game_confirm_msg_deletion_text": "Esta acción no se puede deshacer.",

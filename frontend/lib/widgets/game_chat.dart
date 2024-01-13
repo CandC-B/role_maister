@@ -130,8 +130,6 @@ class _GameChatState extends State<GameChat> {
               characterName: '',
               userImage:
                   'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
-              userImage:
-                  'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
           widget.gameId,
         );
         firebase.updateAiWordCount(widget.gameId,
@@ -261,33 +259,6 @@ class _GameChatState extends State<GameChat> {
                                           ConnectionState.waiting ||
                                       translateSnapshot.connectionState ==
                                           ConnectionState.none) {
-                                    // Mostrar el mensaje original mientras espera la traducción
-                                    // return BubbleSpecialThree(
-                                    //   text: listMessages[index].get('text'),
-                                    //   color: others_msg
-                                    //       ? const Color.fromARGB(255, 234, 226, 248)
-                                    //       : Colors.deepPurple,
-                                    //   tail: true,
-                                    //   isSender: !others_msg,
-                                    //   textStyle: TextStyle(
-                                    //     color: others_msg ? Colors.black : Colors.white,
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // );
-
-                                    // TODO
-                                    // return DiscordChatBubble(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
-                                    // return DiscordChatMessage(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
                                     return DiscordChatMessage(
                                       username:
                                           listMessages[index].get('sentBy'),
@@ -299,41 +270,14 @@ class _GameChatState extends State<GameChat> {
                                           .get('characterName'),
                                       userImage:
                                           listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
                                     );
                                   } else if (translateSnapshot.hasError) {
                                     // En caso de error durante la traducción
                                     return Text(
                                         'Error de traducción: ${translateSnapshot.error}');
                                   } else {
-                                    // Mostrar la burbuja del mensaje traducido
-                                    // return BubbleSpecialThree(
-                                    //   text: translateSnapshot.data ?? '',
-                                    //   color: others_msg
-                                    //       ? const Color.fromARGB(255, 234, 226, 248)
-                                    //       : Colors.deepPurple,
-                                    //   tail: true,
-                                    //   isSender: !others_msg,
-                                    //   textStyle: TextStyle(
-                                    //     color: others_msg
-                                    //         ? Colors.black
-                                    //         : Colors.white,
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // );
-
-                                    // TODO
-                                    // return DiscordChatBubble(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
-                                    // return DiscordChatMessage(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
                                     return DiscordChatMessage(
                                       username:
                                           listMessages[index].get('sentBy'),
@@ -345,6 +289,8 @@ class _GameChatState extends State<GameChat> {
                                           .get('characterName'),
                                       userImage:
                                           listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
                                     );
                                   }
                                 },
@@ -425,7 +371,9 @@ class _GameChatState extends State<GameChat> {
         Positioned(
           top: kIsWeb ? 0.0 : 20.0,
           child: Padding(
-            padding: (size.width <= 700 || !kIsWeb) ? const EdgeInsets.only(left: 10.0) : const EdgeInsets.only(left: 50.0),
+            padding: (size.width <= 700 || !kIsWeb)
+                ? const EdgeInsets.only(left: 10.0)
+                : const EdgeInsets.only(left: 50.0),
             child: Align(
               alignment: Alignment.topRight,
               child: Container(
