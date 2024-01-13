@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/config/cohere_logic.dart';
+import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/config/firebase_logic.dart';
 import 'package:role_maister/models/chat_messages.dart';
 import 'package:role_maister/models/game.dart';
@@ -67,7 +68,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -210,15 +210,28 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                             //     coralMessage, DateTime.now(), singleton.currentGame!, "IA");
                             await firebase.saveMessage(
                               ChatMessages(
-                                  sentBy: "IA",
-                                  sentAt: DateTime.now(),
-                                  text: coralMessage,
-                                  characterName: "",
-                                  senderName: "IA",
-                                  userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a',),
+                                sentBy: "IA",
+                                sentAt: DateTime.now(),
+                                text: coralMessage,
+                                characterName: "",
+                                senderName: "IA",
+                                userImage:
+                                    'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a',
+                              ),
                               singleton.currentGame!,
                             );
-                            firebase.updateAiWordCount(singleton.currentGame!, coralMessage.split(' ').length);
+                            firebase.updateAiWordCount(singleton.currentGame!,
+                                coralMessage.split(' ').length);
+                            // Take tokens from all players
+                            double tokensToSubstract = getPlayerGamePrice(
+                                0,
+                                coralMessage.split(' ').length,
+                                currentGame.num_players);
+                            await Future.wait(
+                                currentGame.players.keys.map((playerUid) async {
+                              await firebase.changePlayerBalance(
+                                  playerUid, -tokensToSubstract);
+                            }));
                             await firebase.setGameReady(singleton.currentGame!);
                           } else {
                             // Wait for game to be ready
@@ -227,6 +240,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                               await Future.delayed(const Duration(seconds: 1));
                             }
                           }
+                          await firebase
+                              .updateUserPlayedGames(singleton.user!.uid);
                           context.go("/game");
                         },
                         child: FittedBox(
@@ -238,7 +253,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                       SizedBox(width: kIsWeb ? 20.0 : 8.0),
                       ElevatedButton(
                         onPressed: () async {
-                          await firebase.deleteKickedPlayer(singleton.currentGame!, singleton.player!.uid);
+                          await firebase.deleteKickedPlayer(
+                              singleton.currentGame!, singleton.player!.uid);
                           context.go("/");
                           context.push("/");
                           singleton.currentGame = "";
