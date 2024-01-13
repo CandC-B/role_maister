@@ -242,6 +242,8 @@
 
     "game_confirm_msg_deletion": "Вы уверены, что хотите удалить эти сообщения?",
     "game_confirm_msg_deletion_text": "Это действие нельзя отменить.",
-    "game_confirm_msg_deletion_delete": "Удалить"
+    "game_confirm_msg_deletion_delete": "Удалить",
+
+    "game_waiting_for_turn": "Ожидание хода..."
 
 }

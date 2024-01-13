@@ -13,6 +13,8 @@ class Game {
   final String story_description;
   final Map<String, dynamic> ready_players;
   final bool game_ready;
+  final String nextPlayersTurn;
+  int nextPlayersTurnIndex;
 
   Game({
     String? uid,
@@ -25,6 +27,9 @@ class Game {
     required this.story_description,
     required this.ready_players,
     required this.game_ready,
+    required this.nextPlayersTurn,
+    this.nextPlayersTurnIndex = 0,
+
   }) : uid = uid ?? const Uuid().v4(),
         short_uid = shortid.generate();
 
@@ -41,6 +46,8 @@ class Game {
       String story_description = data['story_description'] ?? '';
       Map<String, dynamic> ready_players = Map<String, dynamic>.from(data['ready_players'] ?? []);
       bool game_ready = data['game_ready'] ?? false;
+      String nextPlayersTurn = data['nextPlayersTurn'] ?? '';
+      int nextPlayersTurnIndex = data['nextPlayersTurnIndex'] ?? 0;
 
       return Game(
         uid: uid,
@@ -53,6 +60,8 @@ class Game {
         story_description: story_description,
         ready_players: ready_players,
         game_ready: game_ready,
+        nextPlayersTurn: nextPlayersTurn,
+        nextPlayersTurnIndex: nextPlayersTurnIndex,
       );
     } else {
       throw Exception('Failed to parse document data');
@@ -71,6 +80,8 @@ class Game {
       'story_description': this.story_description,
       'ready_players': this.ready_players,
       'game_ready': this.game_ready,
+      'nextPlayersTurn': this.nextPlayersTurn,
+      'nextPlayersTurnIndex': this.nextPlayersTurnIndex,
     };
   }
 
@@ -86,6 +97,8 @@ class Game {
       story_description: statsData['story_description'],
       ready_players: statsData['ready_players'],
       game_ready: statsData['game_ready'],
+      nextPlayersTurn: statsData['nextPlayersTurn'],
+      nextPlayersTurnIndex: statsData['nextPlayersTurnIndex'],
     );
   }
 }

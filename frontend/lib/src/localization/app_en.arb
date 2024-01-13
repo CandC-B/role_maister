@@ -242,6 +242,8 @@
 
   "game_confirm_msg_deletion": "Are you sure you want to delete this messages?",
   "game_confirm_msg_deletion_text": "This action cannot be undone.",
-  "game_confirm_msg_deletion_delete": "Delete"
+  "game_confirm_msg_deletion_delete": "Delete",
+
+  "game_waiting_for_turn": "Waiting for your turn..."
 
 }
