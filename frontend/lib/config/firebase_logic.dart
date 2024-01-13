@@ -1194,7 +1194,7 @@ class FirebaseService {
       if (documentSnapshot.exists) {
         Map<String, dynamic> userData =
             documentSnapshot.data() as Map<String, dynamic>;
-        return userData['tokens'];
+        return double.parse((userData['tokens']).toStringAsFixed(2));
       } else {
         throw Exception("USER: Document does not exist");
       }

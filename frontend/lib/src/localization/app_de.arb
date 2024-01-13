@@ -237,7 +237,9 @@
 
     "kick_player_button": "Spieler rausschmeißen",
     "error_purchasing_tokens": "Fehler beim Kauf von Tokens. Sie müssen sich zuerst anmelden!",
-    "purchase_error_title": "Kauffehler"
+    "purchase_error_title": "Kauffehler",
+    "no_tokens": "Fehler beim Erstellen des Spiels. Du hast nicht genug Token! Kaufe welche im Shop."
+
 
 
 

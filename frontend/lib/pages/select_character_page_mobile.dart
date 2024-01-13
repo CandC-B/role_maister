@@ -462,14 +462,42 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    print("START GAME");
-                    if (singleton.multiplayer) {
-                      startMultiPlayerGame();
-                    } else if (singleton.pairingMode) {
-                      startPairingModeGame();
+                    if (singleton.player!.tokens <= 0.0){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.deepPurple,
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    child: Center(
+                                      child: Image.asset('assets/images/small_logo.png'),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 16.0),
+                                Text(
+                                  AppLocalizations.of(context)!.no_tokens,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     } else {
-                      startSinglePlayerGame();
-                    }
+                      if (singleton.multiplayer) {
+                        startMultiPlayerGame();
+                      } else if (singleton.pairingMode) {
+                        startPairingModeGame();
+                      } else {
+                        startSinglePlayerGame();
+                      }
+                    } 
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button

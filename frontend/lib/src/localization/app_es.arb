@@ -238,7 +238,9 @@
 
   "kick_player_button": "Expulsar jugador",
   "error_purchasing_tokens": "Error al comprar tokens. ¡Necesitas iniciar sesión primero!",
-  "purchase_error_title": "Error de compra"
+  "purchase_error_title": "Error de compra",
+  "no_tokens": "Error al crear el juego. ¡No tienes suficientes fichas! Compra algunas en la tienda."
+
 
 
 

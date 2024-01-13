@@ -237,7 +237,9 @@
 
     "kick_player_button": "Expulser le joueur",
     "error_purchasing_tokens": "Erreur lors de l'achat de jetons. Vous devez vous connecter d'abord!",
-    "purchase_error_title": "Erreur d'achat"
+    "purchase_error_title": "Erreur d'achat",
+    "no_tokens": "Erreur lors de la création du jeu. Vous n'avez pas assez de jetons ! Achetez-en dans la boutique."
+
 
 
 
