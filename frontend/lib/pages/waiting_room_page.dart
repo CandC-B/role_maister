@@ -28,7 +28,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         .collection('game')
         .doc(gameId)
         .snapshots()
-        .listen((event) {
+        .listen((event) async {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
@@ -42,7 +42,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               // kick the player
               print('A TOMAR POR CULO!! ');
 
-              firestoreService.deleteKickedPlayer(gameId, currentUserUid);
+              await firestoreService.deleteKickedPlayer(gameId, currentUserUid);
 
               // Show a dialog to inform the user
               showDialog(
