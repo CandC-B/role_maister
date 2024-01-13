@@ -910,6 +910,7 @@ class FirebaseService {
             // .add(message.toMap());
             .set(message.toMap());
 
+        await updatePlayersTurn(currentGameId);
           
       } catch (error) {
         print('Error saving message: $error');
@@ -929,6 +930,59 @@ class FirebaseService {
     } catch (error) {
       print('Error deleting message: $error');
       rethrow;
+    }
+  }
+
+  Stream<DocumentSnapshot> observePlayersTurn(String gameId) {
+    return _firestore.collection('game').doc(gameId).snapshots();
+  }
+
+  Future<void> updatePlayersTurn(String gameId, [String? deletedPlayer]) async {
+    try {
+      CollectionReference gamesCollection =
+          FirebaseFirestore.instance.collection('game');
+      // Get a reference to the specific game document
+      DocumentReference gameRef = gamesCollection.doc(gameId);
+
+      // Use a transaction to ensure atomic updates
+      await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+        // Get the current game data
+        DocumentSnapshot<Map<String, dynamic>> gameSnapshot =
+            await tx.get(gameRef) as DocumentSnapshot<Map<String, dynamic>>;
+
+        if (gameSnapshot.exists) {
+          Map<String, dynamic> gameData = gameSnapshot.data()!;
+          String nextPlayerId = gameData['nextPlayersTurn'];
+          int nextPlayerIndex = gameData['nextPlayersTurnIndex'];
+          Map<String, dynamic> players =
+              Map<String, dynamic>.from(gameData['players'] ?? []);
+
+
+          print('TURNO DEL PLAYER ANTERIOR: $nextPlayerId');
+          print('TURNO DEL PLAYER ANTERIOR INDEX: $nextPlayerIndex');
+          print('PLAYERS LENGTH: ${players.length}');
+
+          if (nextPlayerId == 'IA' || deletedPlayer != null) {
+            nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
+            nextPlayerId = players.keys.toList()[nextPlayerIndex];
+          } else {
+            nextPlayerIndex = nextPlayerIndex;
+            nextPlayerId = 'IA';
+          }
+
+          print('TURNO DEL PLAYER SIGUIENTE: $nextPlayerId');
+          print('TURNO DEL PLAYER SIGUIENTE INDEX: $nextPlayerIndex');
+
+          gameData['nextPlayersTurn'] = nextPlayerId;
+          gameData['nextPlayersTurnIndex'] = nextPlayerIndex;
+
+
+          tx.update(gameRef, gameData);
+        }
+      });
+    } catch (error) {
+      print('Error modifying the game: $error in updatePlayersTurn');
+      throw error;
     }
   }
 
@@ -1095,7 +1149,7 @@ class FirebaseService {
 
   void observeAndHandleGameChanges(
       String gameId, String currentUserUid, BuildContext context) {
-    _firestore.collection('game').doc(gameId).snapshots().listen((event) {
+    _firestore.collection('game').doc(gameId).snapshots().listen((event) async {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
@@ -1122,6 +1176,8 @@ class FirebaseService {
               // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
 
               deleteKickedPlayer(gameId, currentUserUid);
+
+              await updatePlayersTurn(gameId, currentUserUid);
               context.push("/");
               // singleton.currentGame = "";
             }

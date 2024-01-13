@@ -121,7 +121,12 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         players: game_players,
         story_description: singleton.history.text,
         ready_players: ready_players,
-        game_ready: false);
+        game_ready: false,
+        nextPlayersTurn: 'IA'
+        );
+
+      print(newGame.toMap());
+
     singleton.currentGame = newGame.uid;
     singleton.currentGameShortUid = newGame.short_uid;
     singleton.history.text = "";
@@ -219,7 +224,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           players: game_players,
           story_description: singleton.history.text,
           ready_players: ready_players,
-          game_ready: false);
+          game_ready: false,
+          nextPlayersTurn: 'IA');
       singleton.currentGame = newGame.uid;
       singleton.currentGameShortUid = newGame.short_uid;
       singleton.history.text = "";
@@ -377,7 +383,8 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
         players: game_players,
         story_description: singleton.history.text,
         ready_players: ready_players,
-        game_ready: false);
+        game_ready: false,
+        nextPlayersTurn: 'IA');
     singleton.currentGame = newGame.uid;
     singleton.currentGameShortUid = newGame.short_uid;
     singleton.history.text = "";

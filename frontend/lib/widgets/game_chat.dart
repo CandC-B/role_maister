@@ -208,6 +208,7 @@ class _GameChatState extends State<GameChat> {
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
     Locale locale = appState?.locale ?? const Locale('en');
     Size size = MediaQuery.of(context).size;
+    var snapshotPlayersTurn = 'IA';
 
     observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
 
@@ -314,39 +315,123 @@ class _GameChatState extends State<GameChat> {
                   },
                 ),
               ),
+
+              // TODO: ESTE ES EL BUENO
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: TextField(
+              //           // focusNode: focusNode,
+              //           textInputAction: TextInputAction.send,
+              //           keyboardType: TextInputType.text,
+              //           textCapitalization: TextCapitalization.sentences,
+              //           controller: textEditingController,
+              //           decoration: InputDecoration(
+              //             hintText:
+              //                 AppLocalizations.of(context)!.game_epic_phase,
+              //             hintStyle: const TextStyle(color: Colors.white),
+              //             enabledBorder: const UnderlineInputBorder(
+              //               borderSide: BorderSide(
+              //                   color: Colors
+              //                       .white), // Set the underline color to white
+              //             ),
+              //             focusedBorder: const UnderlineInputBorder(
+              //               borderSide: BorderSide(
+              //                   color: Colors
+              //                       .deepPurple), // Set the underline color to white when focused
+              //             ),
+              //           ),
+              //           style: const TextStyle(color: Colors.white),
+              //           // kTextInputDecoration.copyWith(hintText: 'write here...'),
+              //           onSubmitted: (value) {
+              //             onSendMessage(textEditingController.text);
+              //           },
+              //         ),
+              //       ),
+              //     ),
+              //     Container(
+              //       padding: const EdgeInsets.all(8.0),
+              //       decoration: BoxDecoration(
+              //         // color: AppColors.burgundy,
+              //         borderRadius: BorderRadius.circular(50.0),
+              //       ),
+              //       child: IconButton(
+              //         onPressed: () {
+              //           onSendMessage(textEditingController.text);
+              //         },
+              //         icon: const Icon(Icons.send_rounded),
+              //         color: Colors.white,
+              //         // color: AppColors.white,
+              //       ),
+              //     ),
+              //   ],
+              // )
+
+              // TODO: TEST
+
               Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        // focusNode: focusNode,
-                        textInputAction: TextInputAction.send,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        controller: textEditingController,
-                        decoration: InputDecoration(
-                          hintText:
-                              AppLocalizations.of(context)!.game_epic_phase,
-                          hintStyle: const TextStyle(color: Colors.white),
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors
-                                    .white), // Set the underline color to white
-                          ),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors
-                                    .deepPurple), // Set the underline color to white when focused
-                          ),
-                        ),
-                        style: const TextStyle(color: Colors.white),
-                        // kTextInputDecoration.copyWith(hintText: 'write here...'),
-                        onSubmitted: (value) {
-                          onSendMessage(textEditingController.text);
-                        },
-                      ),
-                    ),
+                    child: StreamBuilder<DocumentSnapshot>(
+                        stream:
+                            firestoreService.observePlayersTurn(widget.gameId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            snapshotPlayersTurn =
+                                snapshot.data!.get('nextPlayersTurn');
+
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                // focusNode: focusNode,
+                                enabled:
+                                    singleton.player!.tokens > 0 &&
+                                    snapshot.data!.get('nextPlayersTurn') ==
+                                        singleton.user!.uid,
+                                textInputAction: TextInputAction.send,
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                controller: textEditingController,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      snapshot.data!.get('nextPlayersTurn') ==
+                                              singleton.user!.uid
+                                          ? AppLocalizations.of(context)!
+                                              .game_epic_phase
+                                          : AppLocalizations.of(context)!
+                                              .game_waiting_for_turn,
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .white), // Set the underline color to white
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .deepPurple), // Set the underline color to white when focused
+                                  ),
+                                ),
+                                style: const TextStyle(color: Colors.white),
+                                // kTextInputDecoration.copyWith(hintText: 'write here...'),
+                                onSubmitted: (value) {
+                                  onSendMessage(textEditingController.text);
+                                },
+                              ),
+                            );
+                          } else {
+                            return const Center(
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                              color: Colors.deepPurple,
+                            )));
+                          }
+                        }),
                   ),
                   Container(
                     padding: const EdgeInsets.all(8.0),
@@ -354,63 +439,85 @@ class _GameChatState extends State<GameChat> {
                       // color: AppColors.burgundy,
                       borderRadius: BorderRadius.circular(50.0),
                     ),
-                    child: IconButton(
-                      onPressed: () {
-                        onSendMessage(textEditingController.text);
-                      },
-                      icon: const Icon(Icons.send_rounded),
-                      color: Colors.white,
-                      // color: AppColors.white,
-                    ),
+                    child: StreamBuilder<DocumentSnapshot>(
+                        stream:
+                            firestoreService.observePlayersTurn(widget.gameId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            return IconButton(
+                              // onPressed: () {
+
+                              //   onSendMessage(textEditingController.text);
+                              // },
+                              onPressed:  singleton.player!.tokens > 0 && snapshotPlayersTurn ==
+                                      singleton.user!.uid
+                                  ? () {
+                                      onSendMessage(textEditingController.text);
+                                    }
+                                  : null,
+                              icon: const Icon(Icons.send_rounded),
+                              color: Colors.white,
+                              // color: AppColors.white,
+                            );
+                          } else {
+                            return const Center(
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                              color: Colors.deepPurple,
+                            )));
+                          }
+                        }),
                   ),
                 ],
               )
+
+              // TODO: END TODO
             ],
           ),
         ),
-        Positioned(
-          top: kIsWeb ? 0.0 : 20.0,
-          child: Padding(
-            padding: (size.width <= 700 || !kIsWeb)
-                ? const EdgeInsets.only(left: 10.0)
-                : const EdgeInsets.only(left: 50.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: StreamBuilder<double>(
-                  stream: firebase.getUserSpendingStream(
-                    widget.gameId,
-                    singleton.user!.uid,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Text(
-                          'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
+        Align(
+          /*
+ alignment: (size.width > 700 || kIsWeb)
+              ? Alignment.topRight
+              : Alignment.topLeft),
+          */
+          alignment: size.width > 700 || kIsWeb
+              ? Alignment.topCenter
+              : Alignment.topLeft,  
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder<double>(
+              stream: firebase.getUserSpendingStream(
+                widget.gameId,
+                singleton.user!.uid,
               ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ),

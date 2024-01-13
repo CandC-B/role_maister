@@ -243,7 +243,9 @@
 
     "game_confirm_msg_deletion": "Sei sicuro di voler eliminare questi messaggi?",
     "game_confirm_msg_deletion_text": "Questa azione non può essere annullata.",
-    "game_confirm_msg_deletion_delete": "Elimina"
+    "game_confirm_msg_deletion_delete": "Elimina",
+
+    "game_waiting_for_turn": "In attesa del tuo turno..."
 
 
 

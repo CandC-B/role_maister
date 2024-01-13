@@ -254,7 +254,9 @@
 
   "game_confirm_msg_deletion": "Tem certeza de que deseja excluir estas mensagens?",
   "game_confirm_msg_deletion_text": "Esta ação não pode ser desfeita.",
-  "game_confirm_msg_deletion_delete": "Excluir"
+  "game_confirm_msg_deletion_delete": "Excluir",
+
+  "game_waiting_for_turn": "Aguardando a vez de jogadore..."
 
 
 
