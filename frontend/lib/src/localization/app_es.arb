@@ -238,9 +238,44 @@
 
   "kick_player_button": "Expulsar jugador",
   "error_purchasing_tokens": "Error al comprar tokens. ¡Necesitas iniciar sesión primero!",
-  "purchase_error_title": "Error de compra"
+  "purchase_error_title": "Error de compra",
 
-
+  "guides_dnd_text1": "Dungeons & Dragons: Un Viaje a la Imaginación",
+  "guides_dnd_text2": "Bienvenido a Dungeons & Dragons (D&D), un juego que trasciende las fronteras del juego de mesa para convertirse en una aventura inmersiva en los reinos de la creatividad, estrategia y narración. En su núcleo, D&D es más que un juego; es una experiencia compartida donde los jugadores se convierten en los héroes de sus propios cuentos épicos.\n\n",
+  "guides_dnd_text3": "La Esencia de D&D: Una Aventura Colaborativa",
+  "guides_dnd_text4": "D&D no es solo un juego; es una experiencia de contar historias colaborativa donde los jugadores asumen los roles de personajes únicos dentro de un mundo de fantasía. Guiados por un Dungeon Master (DM), la narrativa se desarrolla a través de una serie de misiones, desafíos e giros inesperados. La esencia radica en la libertad para dar forma a la historia juntos, creando recuerdos que perduran mucho después de que los dados hayan sido lanzados.\n\n",
+  "guides_dnd_text5": "Cómo Jugar: Una Sinfonía de Dados y Toma de Decisiones",
+  "guides_dnd_text6": "Crea tu Personaje Heroico",
+  "guides_dnd_text7": "Elige una raza, clase y trasfondo para tu personaje. ¿Serás un mago élfico con un pasado misterioso o un guerrero enano jurado a defender a tus aliados?\n\n",
+  "guides_dnd_text8": "Determina las habilidades, fortalezas y debilidades de tu personaje a través del lanzamiento de los dados.\n\n",
+  "guides_dnd_text9": "Embarcate en Aventuras",
+  "guides_dnd_text10": "Colabora con tus compañeros aventureros y emprende misiones presentadas por el Dungeon Master.\n\n",
+  "guides_dnd_text11": "Navega por mazmorras, enfrenta criaturas míticas y descubre los secretos del mundo de fantasía.\n\n",
+  "guides_dnd_text12": "Rol en el Juego",
+  "guides_dnd_text13": "Sumérgete en la personalidad de tu personaje. Habla, piensa y actúa como lo haría tu héroe en la situación dada.\n\n",
+  "guides_dnd_text14": "Participa en interacciones con personajes no jugadores, tomando decisiones que impactan la narrativa en desarrollo.\n\n",
+  "guides_dnd_text15": "Lanza los Dados",
+  "guides_dnd_text16": "El juego se basa en un conjunto de dados poliédricos para determinar los resultados de las acciones. El icónico dado de 20 caras (d20) a menudo decide el éxito o fracaso de tus esfuerzos.\n\n",
+  "guides_dnd_text17": "Golpes críticos, tiros de salvación y comprobaciones de habilidades agregan un elemento de azar al juego.\n\n",
+  "guides_dnd_text18": "El Arte del Dungeon Master",
+  "guides_dnd_text19": "El Dungeon Master sirve como el narrador, cuentacuentos y árbitro. Guían a los jugadores a través del mundo, presentando desafíos y reaccionando a las elecciones de los jugadores.\n\n",
+  "guides_dnd_text20": "Un DM exitoso teje una narrativa dinámica, adaptándose a las decisiones de los jugadores e imprevisibilidad.\n\n",
+  "guides_dnd_text21": "Creando tu Personaje: Desatando tu Héroe Interior",
+  "guides_dnd_text22": "Raza",
+  "guides_dnd_text23": "Elige una raza para tu personaje, cada una con habilidades y rasgos únicos. Las opciones van desde humanos y elfos hasta enanos, medianos y más.\n\n",
+  "guides_dnd_text24": "Clase",
+  "guides_dnd_text25": "Selecciona una clase que define la profesión y habilidades de tu personaje. ¿Serás un poderoso mago, un astuto pícaro o un resistente clérigo?\n\n",
+  "guides_dnd_text26": "Trasfondo",
+  "guides_dnd_text27": "Determina el trasfondo de tu personaje, dando forma a sus habilidades, rasgos de personalidad y conexiones con el mundo. Los trasfondos incluyen acólitos, forajidos, eruditos y más.\n\n",
+  "guides_dnd_text28": "Puntuaciones de Habilidades",
+  "guides_dnd_text29": "Genera o asigna puntuaciones de habilidades (Fuerza, Destreza, Constitución, Inteligencia, Sabiduría, Carisma) que influyen en las capacidades de tu personaje.\n\n",
+  "guides_dnd_text30": "Equipo",
+  "guides_dnd_text31": "Equipa a tu personaje con equipo inicial basado en su clase y trasfondo. Equipo adicional se puede obtener a través de la exploración y misiones en el juego.\n\n",
+  "guides_dnd_text32": "Historia Anterior",
+  "guides_dnd_text33": "Desarrolla una rica historia para tu personaje. Explora sus orígenes, motivaciones y metas personales, creando una base narrativa para el juego de roles.\n\n",
+  "guides_dnd_text34": "Alineación",
+  "guides_dnd_text35": "Elige una alineación que refleje la brújula moral y ética de tu personaje. Las alineaciones van desde legal bueno hasta caótico malvado.\n\n",
+  "guides_dnd_text36": "D&D es un lienzo abierto donde el único límite es tu imaginación. Así que reúne a tus amigos, prepara tus dados y embarca en un viaje donde cada elección, cada lanzamiento y cada momento compartido se convierte en parte de tu aventura única en los reinos de Dungeons & Dragons. ¡Que tus misiones sean audaces, tus lanzamientos afortunados y tus historias legendarias!\n\n"
 
 
 

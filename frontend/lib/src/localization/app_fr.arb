@@ -237,9 +237,44 @@
 
     "kick_player_button": "Expulser le joueur",
     "error_purchasing_tokens": "Erreur lors de l'achat de jetons. Vous devez vous connecter d'abord!",
-    "purchase_error_title": "Erreur d'achat"
+    "purchase_error_title": "Erreur d'achat",
 
-
+    "guides_dnd_text1": "Donjons & Dragons : Un Voyage dans l'Imagination",
+  "guides_dnd_text2": "Bienvenue dans Donjons & Dragons (D&D), un jeu qui transcende les frontières du jeu de table pour devenir une aventure immersive dans les domaines de la créativité, de la stratégie et du récit. Au cœur de D&D, il ne s'agit pas seulement d'un jeu ; c'est une expérience partagée où les joueurs deviennent les héros de leurs propres contes épiques.\n\n",
+  "guides_dnd_text3": "L'Essence de D&D : Une Aventure Collaborative",
+  "guides_dnd_text4": "D&D n'est pas simplement un jeu ; c'est une expérience de narration collaborative où les joueurs assument les rôles de personnages uniques dans un monde fantastique. Guidée par un Maître du Donjon (DM), la narration se dévoile à travers une série de quêtes, de défis et de rebondissements inattendus. L'essence réside dans la liberté de façonner l'histoire ensemble, créant des souvenirs qui persistent bien après que les dés ont été lancés.\n\n",
+  "guides_dnd_text5": "Comment Jouer : Une Symphonie de Dés et de Prise de Décision",
+  "guides_dnd_text6": "Créez Votre Personnage Héroïque",
+  "guides_dnd_text7": "Choisissez une race, une classe et un historique pour votre personnage. Serez-vous un sorcier elfe au passé mystérieux, ou un guerrier nain juré de défendre vos alliés ?\n\n",
+  "guides_dnd_text8": "Déterminez les capacités, les forces et les faiblesses de votre personnage grâce au lancer de dés.\n\n",
+  "guides_dnd_text9": "Partez à l'Aventure",
+  "guides_dnd_text10": "Collaborez avec vos compagnons aventuriers et lancez-vous dans des quêtes présentées par le Maître du Donjon.\n\n",
+  "guides_dnd_text11": "Naviguez dans des donjons, affrontez des créatures mythiques et découvrez les secrets du monde fantastique.\n\n",
+  "guides_dnd_text12": "Jeu de Rôle",
+  "guides_dnd_text13": "Immergez-vous dans la personnalité de votre personnage. Parlez, réfléchissez et agissez comme le ferait votre héros dans la situation donnée.\n\n",
+  "guides_dnd_text14": "Engagez-vous dans des interactions avec des personnages non-joueurs, prenant des décisions qui impactent la narration en cours.\n\n",
+  "guides_dnd_text15": "Lancez les Dés",
+  "guides_dnd_text16": "Le jeu repose sur un ensemble de dés polyédriques pour déterminer les résultats des actions. Le dé emblématique à 20 faces (d20) décide souvent du succès ou de l'échec de vos entreprises.\n\n",
+  "guides_dnd_text17": "Les coups critiques, les jets de sauvegarde et les vérifications de compétences ajoutent un élément de hasard au jeu.\n\n",
+  "guides_dnd_text18": "L'Art du Maître du Donjon",
+  "guides_dnd_text19": "Le Maître du Donjon sert de conteur, de narrateur et d'arbitre. Ils guident les joueurs à travers le monde, présentant des défis et réagissant aux choix des joueurs.\n\n",
+  "guides_dnd_text20": "Un MD réussi tisse une narration dynamique, s'adaptant aux décisions des joueurs et à l'imprévisibilité.\n\n",
+  "guides_dnd_text21": "Créer Votre Personnage : Libérer Votre Héros Intérieur",
+  "guides_dnd_text22": "Race",
+  "guides_dnd_text23": "Choisissez une race pour votre personnage, chacune ayant des capacités et des traits uniques. Les options vont des humains et des elfes aux nains, aux halfelins et plus encore.\n\n",
+  "guides_dnd_text24": "Classe",
+  "guides_dnd_text25": "Sélectionnez une classe qui définit la profession et les capacités de votre personnage. Serez-vous un puissant sorcier, un rogue furtif ou un clerc résistant ?\n\n",
+  "guides_dnd_text26": "Historique",
+  "guides_dnd_text27": "Déterminez l'historique de votre personnage, façonnant ses compétences, ses traits de personnalité et ses liens avec le monde. Les historiques incluent des acolytes, des hors-la-loi, des érudits et plus encore.\n\n",
+  "guides_dnd_text28": "Scores de Capacité",
+  "guides_dnd_text29": "Générez ou attribuez des scores de capacité (Force, Dextérité, Constitution, Intelligence, Sagesse, Charisme) qui influent sur les capacités de votre personnage.\n\n",
+  "guides_dnd_text30": "Équipement",
+  "guides_dnd_text31": "Équipez votre personnage avec un équipement de départ basé sur sa classe et son historique. Un équipement supplémentaire peut être obtenu grâce à l'exploration en jeu et aux quêtes.\n\n",
+  "guides_dnd_text32": "Antécédents",
+  "guides_dnd_text33": "Développez un riche passé pour votre personnage. Explorez ses origines, motivations et objectifs personnels, créant une base narrative pour le jeu de rôle.\n\n",
+  "guides_dnd_text34": "Alignement",
+  "guides_dnd_text35": "Choisissez un alignement qui reflète la boussole morale et éthique de votre personnage. Les alignements vont de loyal bon à chaotique mauvais.\n\n",
+  "guides_dnd_text36": "D&D est une toile ouverte où la seule limite est votre imagination. Alors, rassemblez vos amis, préparez vos dés et embarquez dans un voyage où chaque choix, chaque lancer de dé et chaque moment partagé devient une partie de votre aventure unique dans les royaumes de Donjons & Dragons. Que vos quêtes soient audacieuses, vos lancers chanceux et vos histoires"
 
 
 }

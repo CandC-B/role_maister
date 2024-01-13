@@ -767,7 +767,7 @@ class DnDTab extends StatelessWidget {
           children: <Widget>[
               const SizedBox(height: 40),
               Text(
-              "Dungeons & Dragons: A Journey into Imagination",
+              AppLocalizations.of(context)!.guides_dnd_text1,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -777,12 +777,12 @@ class DnDTab extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               textAlign: TextAlign.justify,
-              "Welcome to Dungeons & Dragons (D&D), a game that transcends the boundaries of tabletop gaming to become an immersive adventure into the realms of creativity, strategy, and storytelling. At its core, D&D is more than just a game; it's a shared experience where players become the heroes of their own epic tales.\n\n",
+              AppLocalizations.of(context)!.guides_dnd_text2,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              "The Essence of D&D: A Collaborative Adventure",
+              AppLocalizations.of(context)!.guides_dnd_text3,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -792,12 +792,12 @@ class DnDTab extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               textAlign: TextAlign.justify,
-              "D&D is not just a game; it's a collaborative storytelling experience where players assume the roles of unique characters within a fantasy world. Guided by a Dungeon Master (DM), the narrative unfolds through a series of quests, challenges, and unexpected twists. The essence lies in the freedom to shape the story together, creating memories that linger long after the dice have been rolled.\n\n",
+              AppLocalizations.of(context)!.guides_dnd_text4,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              "How to Play: A Symphony of Dice and Decision-Making",
+              AppLocalizations.of(context)!.guides_dnd_text5,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -806,7 +806,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Create Your Heroic Character",
+              AppLocalizations.of(context)!.guides_dnd_text6,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -824,7 +824,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Choose a race, class, and background for your character. Will you be an elven wizard with a mysterious past, or a dwarven warrior sworn to defend your allies?\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text7,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -842,53 +842,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Determine your character's abilities, strengths, and weaknesses through the roll of the dice.\n\n",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Embark on Adventures',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    "Collaborate with your fellow adventurers and embark on quests presented by the Dungeon Master.\n\n",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    "Navigate dungeons, face mythical creatures, and uncover the secrets of the fantasy world.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text8,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -897,7 +851,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Role-Playing",
+              AppLocalizations.of(context)!.guides_dnd_text9,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -916,7 +870,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Immerse yourself in your character's persona. Speak, think, and act as your hero would in the given situation.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text10,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -934,15 +888,16 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Engage in interactions with non-player characters, making choices that impact the unfolding narrative\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text11,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 10),
             Text(
-              "Roll the Dice",
+              AppLocalizations.of(context)!.guides_dnd_text12,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -961,7 +916,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "The game relies on a set of polyhedral dice to determine the outcomes of actions. The iconic 20-sided die (d20) often decides the success or failure of your endeavors.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text13,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -979,7 +934,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Critical hits, saving throws, and skill checks all add an element of chance to the game.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text14,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -987,7 +942,7 @@ class DnDTab extends StatelessWidget {
               ],
             ),
             Text(
-              "The Dungeon Master's Craft",
+              AppLocalizations.of(context)!.guides_dnd_text15,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1006,7 +961,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "The Dungeon Master serves as the storyteller, narrator, and referee. They guide the players through the world, presenting challenges and reacting to player choices.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text16,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1024,7 +979,52 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "A successful DM weaves a dynamic narrative, adapting to player decisions and unpredictability.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text17,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text18,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text19,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text20,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1033,7 +1033,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Creating Your Character: Unleashing Your Inner Hero",
+              AppLocalizations.of(context)!.guides_dnd_text21,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -1042,7 +1042,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Race",
+              AppLocalizations.of(context)!.guides_dnd_text22,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1061,7 +1061,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Choose a race for your character, each with unique abilities and traits. Options range from humans and elves to dwarves, halflings, and more.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text23,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1070,7 +1070,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Class",
+              AppLocalizations.of(context)!.guides_dnd_text24,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1089,7 +1089,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Select a class that defines your character's profession and abilities. Will you be a powerful wizard, a stealthy rogue, or a resilient cleric?\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text25,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1098,7 +1098,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Background",
+              AppLocalizations.of(context)!.guides_dnd_text26,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1117,7 +1117,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Determine your character's background, shaping their skills, personality traits, and connections to the world. Backgrounds include acolytes, outlaws, scholars, and more.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text27,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1126,7 +1126,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Ability Scores",
+              AppLocalizations.of(context)!.guides_dnd_text28,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1145,7 +1145,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Generate or assign ability scores (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma) that influence your character's capabilities.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text29,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1154,7 +1154,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Equipment",
+              AppLocalizations.of(context)!.guides_dnd_text30,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1173,7 +1173,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Outfit your character with starting equipment based on their class and background. Additional gear can be obtained through in-game exploration and quests.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text31,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1182,7 +1182,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Backstory",
+              AppLocalizations.of(context)!.guides_dnd_text32,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1201,7 +1201,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Develop a rich backstory for your character. Explore their origins, motivations, and personal goals, creating a narrative foundation for role-playing.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text33,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1210,7 +1210,7 @@ class DnDTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Alignment",
+              AppLocalizations.of(context)!.guides_dnd_text34,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1229,7 +1229,7 @@ class DnDTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Choose an alignment that reflects your character's moral and ethical compass. Alignments range from lawful good to chaotic evil.\n\n",
+                    AppLocalizations.of(context)!.guides_dnd_text35,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1239,7 +1239,7 @@ class DnDTab extends StatelessWidget {
             const SizedBox(height: 40),
             Text(
               textAlign: TextAlign.justify,
-              "D&D is an open canvas where the only limit is your imagination. So, gather your friends, ready your dice, and embark on a journey where every choice, every roll, and every shared moment becomes a part of your unique adventure in the realms of Dungeons & Dragons. May your quests be daring, your rolls fortunate, and your stories legendary!\n\n",
+              AppLocalizations.of(context)!.guides_dnd_text36,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             ],
