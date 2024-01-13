@@ -937,7 +937,7 @@ class FirebaseService {
     return _firestore.collection('game').doc(gameId).snapshots();
   }
 
-  Future<void> updatePlayersTurn(String gameId) async {
+  Future<void> updatePlayersTurn(String gameId, [String? deletedPlayer]) async {
     try {
       CollectionReference gamesCollection =
           FirebaseFirestore.instance.collection('game');
@@ -952,14 +952,6 @@ class FirebaseService {
 
         if (gameSnapshot.exists) {
           Map<String, dynamic> gameData = gameSnapshot.data()!;
-          // Map<String, dynamic> players =
-          //     Map<String, dynamic>.from(gameData['players'] ?? []);
-          // var player = players[playerId];
-          // PlayerGameData playerGameData = PlayerGameData.fromMap(player);
-          // playerGameData.votedToGetKicked += 1;
-          // players[playerId] = playerGameData.toMap();
-          // gameData['players'] = players;
-
           String nextPlayerId = gameData['nextPlayersTurn'];
           int nextPlayerIndex = gameData['nextPlayersTurnIndex'];
           Map<String, dynamic> players =
@@ -970,7 +962,7 @@ class FirebaseService {
           print('TURNO DEL PLAYER ANTERIOR INDEX: $nextPlayerIndex');
           print('PLAYERS LENGTH: ${players.length}');
 
-          if (nextPlayerId == 'IA') {
+          if (nextPlayerId == 'IA' || deletedPlayer != null) {
             nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
             nextPlayerId = players.keys.toList()[nextPlayerIndex];
           } else {
@@ -1157,7 +1149,7 @@ class FirebaseService {
 
   void observeAndHandleGameChanges(
       String gameId, String currentUserUid, BuildContext context) {
-    _firestore.collection('game').doc(gameId).snapshots().listen((event) {
+    _firestore.collection('game').doc(gameId).snapshots().listen((event) async {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
@@ -1184,6 +1176,8 @@ class FirebaseService {
               // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
 
               deleteKickedPlayer(gameId, currentUserUid);
+
+              await updatePlayersTurn(gameId, currentUserUid);
               context.push("/");
               // singleton.currentGame = "";
             }

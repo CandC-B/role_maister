@@ -388,6 +388,7 @@ class _GameChatState extends State<GameChat> {
                               child: TextField(
                                 // focusNode: focusNode,
                                 enabled:
+                                    singleton.player!.tokens > 0 &&
                                     snapshot.data!.get('nextPlayersTurn') ==
                                         singleton.user!.uid,
                                 textInputAction: TextInputAction.send,
@@ -449,7 +450,7 @@ class _GameChatState extends State<GameChat> {
 
                               //   onSendMessage(textEditingController.text);
                               // },
-                              onPressed: snapshotPlayersTurn ==
+                              onPressed:  singleton.player!.tokens > 0 && snapshotPlayersTurn ==
                                       singleton.user!.uid
                                   ? () {
                                       onSendMessage(textEditingController.text);
@@ -475,49 +476,48 @@ class _GameChatState extends State<GameChat> {
             ],
           ),
         ),
-        Positioned(
-          top: kIsWeb ? 0.0 : 20.0,
-          child: Padding(
-            padding: (size.width <= 700 || !kIsWeb)
-                ? const EdgeInsets.only(left: 10.0)
-                : const EdgeInsets.only(left: 50.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: StreamBuilder<double>(
-                  stream: firebase.getUserSpendingStream(
-                    widget.gameId,
-                    singleton.user!.uid,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Text(
-                          'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
+        Align(
+          /*
+ alignment: (size.width > 700 || kIsWeb)
+              ? Alignment.topRight
+              : Alignment.topLeft),
+          */
+          alignment: size.width > 700 || kIsWeb
+              ? Alignment.topCenter
+              : Alignment.topLeft,  
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder<double>(
+              stream: firebase.getUserSpendingStream(
+                widget.gameId,
+                singleton.user!.uid,
               ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ),
