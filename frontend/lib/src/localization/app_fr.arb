@@ -238,6 +238,7 @@
     "kick_player_button": "Expulser le joueur",
     "error_purchasing_tokens": "Erreur lors de l'achat de jetons. Vous devez vous connecter d'abord!",
     "purchase_error_title": "Erreur d'achat",
+    "no_tokens": "Erreur lors de la création du jeu. Vous n'avez pas assez de jetons ! Achetez-en dans la boutique.",
 
     "game_confirm_msg_deletion": "Êtes-vous sûr de vouloir supprimer ces messages?",
     "game_confirm_msg_deletion_text": "Cette action ne peut pas être annulée.",

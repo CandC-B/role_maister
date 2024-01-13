@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
+import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/main.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player_game_data.dart';
@@ -103,7 +105,7 @@ class _GameChatState extends State<GameChat> {
       widget.gameId,
     );
     firestoreService.updatePlayerWordCount(
-        widget.gameId, singleton.player!.uid, text.length);
+        widget.gameId, singleton.player!.uid, text.split(' ').length);
 
     textEditingController.clear();
 
@@ -128,10 +130,21 @@ class _GameChatState extends State<GameChat> {
               characterName: '',
               userImage:
                   'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
+              userImage:
+                  'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
           widget.gameId,
         );
         firebase.updateAiWordCount(widget.gameId,
             json.decode(response.body)["message"].split(' ').length);
+
+        Game game = Game.fromMap(await firebase.getGame(widget.gameId));
+        // Quitarle tokens al usuario
+        double tokensToSubstract = getPlayerGamePrice(
+            text.split(' ').length,
+            json.decode(response.body)["message"].split(' ').length,
+            game.num_players);
+        await firebase.changePlayerBalance(
+            singleton.user!.uid, -tokensToSubstract);
       }
     } else {
       // Handle the case where there was an error fetching messages
@@ -196,189 +209,264 @@ class _GameChatState extends State<GameChat> {
   Widget build(BuildContext context) {
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
     Locale locale = appState?.locale ?? const Locale('en');
+    Size size = MediaQuery.of(context).size;
 
     observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
 
     // print ('LOCALE: $locale');
 
-    return Container(
-      decoration: const BoxDecoration(
-        // image: DecorationImage(
-        //   image: AssetImage('assets/images/background4.png'),
-        //   fit: BoxFit.cover,
-        //   opacity: 0.9,
-        // ),
-        color: Colors.black87,
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: firestoreService.fetchMessagesByGameId(widget.gameId),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  listMessages = snapshot.data!.docs;
-                  if (listMessages.isNotEmpty) {
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(10),
-                      reverse: true,
-                      // controller: scrollController,
-                      itemBuilder: (context, index) {
-                        if (index < listMessages.length) {
-                          bool others_msg = listMessages[index].get('sentBy') !=
-                              singleton.user!.uid;
-
-                          print('listMessages[index]: ${listMessages[index]}');
-                          print(
-                              'listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
-
-                          return FutureBuilder<String>(
-                            // future: translateText(listMessages[index].get('text'), locale.languageCode),
-                            future: getTranslation(
-                                listMessages[index].get('text'),
-                                locale.languageCode),
-                            builder: (context, translateSnapshot) {
-                              if (translateSnapshot.connectionState ==
-                                      ConnectionState.waiting ||
-                                  translateSnapshot.connectionState ==
-                                      ConnectionState.none) {
-                                // Mostrar el mensaje original mientras espera la traducción
-                                // return BubbleSpecialThree(
-                                //   text: listMessages[index].get('text'),
-                                //   color: others_msg
-                                //       ? const Color.fromARGB(255, 234, 226, 248)
-                                //       : Colors.deepPurple,
-                                //   tail: true,
-                                //   isSender: !others_msg,
-                                //   textStyle: TextStyle(
-                                //     color: others_msg ? Colors.black : Colors.white,
-                                //     fontSize: 16,
-                                //   ),
-                                // );
-
-                                // TODO
-                                // return DiscordChatBubble(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
-
-                                // return DiscordChatMessage(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
-
-                                return DiscordChatMessage(
-                                  username: listMessages[index].get('sentBy'),
-                                  message: listMessages[index].get('text'),
-                                  isSender: !others_msg,
-                                  senderName:
-                                      listMessages[index].get('senderName'),
-                                  characterName:
-                                      listMessages[index].get('characterName'),
-                                  userImage:
-                                      listMessages[index].get('userImage'),
-                                  onDeletePressed: () =>
-                                      // deleteMessage(listMessages[index].id),
-                                      deleteMessage(
-                                          listMessages[index].id, index),
-                                );
-                              } else if (translateSnapshot.hasError) {
-                                // En caso de error durante la traducción
-                                return Text(
-                                    'Error de traducción: ${translateSnapshot.error}');
-                              } else {
-                                return DiscordChatMessage(
-                                  username: listMessages[index].get('sentBy'),
-                                  message: translateSnapshot.data ?? '',
-                                  isSender: !others_msg,
-                                  senderName:
-                                      listMessages[index].get('senderName'),
-                                  characterName:
-                                      listMessages[index].get('characterName'),
-                                  userImage:
-                                      listMessages[index].get('userImage'),
-                                  onDeletePressed: () =>
-                                      // deleteMessage(listMessages[index].id),
-                                      deleteMessage(
-                                          listMessages[index].id, index),
-                                );
-                              }
-                            },
-                          );
-                        }
-                      },
-                    );
-                  } else {
-                    return Center(
-                      child:
-                          Text(AppLocalizations.of(context)!.game_no_messages),
-                    );
-                  }
-                } else {
-                  return const Center(
-                      child: Center(
-                          child: CircularProgressIndicator(
-                    color: Colors.deepPurple,
-                  )));
-                }
-              },
-            ),
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            // image: DecorationImage(
+            //   image: AssetImage('assets/images/background4.png'),
+            //   fit: BoxFit.cover,
+            //   opacity: 0.9,
+            // ),
+            color: Colors.black87,
           ),
-          Row(
+          child: Column(
             children: [
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    // focusNode: focusNode,
-                    textInputAction: TextInputAction.send,
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.game_epic_phase,
-                      hintStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors
-                                .white), // Set the underline color to white
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors
-                                .deepPurple), // Set the underline color to white when focused
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: firestoreService.fetchMessagesByGameId(widget.gameId),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      listMessages = snapshot.data!.docs;
+                      if (listMessages.isNotEmpty) {
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          reverse: true,
+                          // controller: scrollController,
+                          itemBuilder: (context, index) {
+                            if (index < listMessages.length) {
+                              bool others_msg =
+                                  listMessages[index].get('sentBy') !=
+                                      singleton.user!.uid;
+
+                              print(
+                                  'listMessages[index]: ${listMessages[index]}');
+                              print(
+                                  'listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
+
+                              return FutureBuilder<String>(
+                                // future: translateText(listMessages[index].get('text'), locale.languageCode),
+                                future: getTranslation(
+                                    listMessages[index].get('text'),
+                                    locale.languageCode),
+                                builder: (context, translateSnapshot) {
+                                  if (translateSnapshot.connectionState ==
+                                          ConnectionState.waiting ||
+                                      translateSnapshot.connectionState ==
+                                          ConnectionState.none) {
+                                    // Mostrar el mensaje original mientras espera la traducción
+                                    // return BubbleSpecialThree(
+                                    //   text: listMessages[index].get('text'),
+                                    //   color: others_msg
+                                    //       ? const Color.fromARGB(255, 234, 226, 248)
+                                    //       : Colors.deepPurple,
+                                    //   tail: true,
+                                    //   isSender: !others_msg,
+                                    //   textStyle: TextStyle(
+                                    //     color: others_msg ? Colors.black : Colors.white,
+                                    //     fontSize: 16,
+                                    //   ),
+                                    // );
+
+                                    // TODO
+                                    // return DiscordChatBubble(
+                                    //   username: 'Usuario1',
+                                    //   message: 'Hola, ¿cómo estás?',
+                                    //   isSender: true,
+                                    // );
+
+                                    // return DiscordChatMessage(
+                                    //   username: 'Usuario1',
+                                    //   message: 'Hola, ¿cómo estás?',
+                                    //   isSender: true,
+                                    // );
+
+                                    return DiscordChatMessage(
+                                      username:
+                                          listMessages[index].get('sentBy'),
+                                      message: listMessages[index].get('text'),
+                                      isSender: !others_msg,
+                                      senderName:
+                                          listMessages[index].get('senderName'),
+                                      characterName: listMessages[index]
+                                          .get('characterName'),
+                                      userImage:
+                                          listMessages[index].get('userImage'),
+                                    );
+                                  } else if (translateSnapshot.hasError) {
+                                    // En caso de error durante la traducción
+                                    return Text(
+                                        'Error de traducción: ${translateSnapshot.error}');
+                                  } else {
+                                    // Mostrar la burbuja del mensaje traducido
+                                    // return BubbleSpecialThree(
+                                    //   text: translateSnapshot.data ?? '',
+                                    //   color: others_msg
+                                    //       ? const Color.fromARGB(255, 234, 226, 248)
+                                    //       : Colors.deepPurple,
+                                    //   tail: true,
+                                    //   isSender: !others_msg,
+                                    //   textStyle: TextStyle(
+                                    //     color: others_msg
+                                    //         ? Colors.black
+                                    //         : Colors.white,
+                                    //     fontSize: 16,
+                                    //   ),
+                                    // );
+
+                                    // TODO
+                                    // return DiscordChatBubble(
+                                    //   username: 'Usuario1',
+                                    //   message: 'Hola, ¿cómo estás?',
+                                    //   isSender: true,
+                                    // );
+
+                                    // return DiscordChatMessage(
+                                    //   username: 'Usuario1',
+                                    //   message: 'Hola, ¿cómo estás?',
+                                    //   isSender: true,
+                                    // );
+
+                                    return DiscordChatMessage(
+                                      username:
+                                          listMessages[index].get('sentBy'),
+                                      message: translateSnapshot.data ?? '',
+                                      isSender: !others_msg,
+                                      senderName:
+                                          listMessages[index].get('senderName'),
+                                      characterName: listMessages[index]
+                                          .get('characterName'),
+                                      userImage:
+                                          listMessages[index].get('userImage'),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                              AppLocalizations.of(context)!.game_no_messages),
+                        );
+                      }
+                    } else {
+                      return const Center(
+                          child: Center(
+                              child: CircularProgressIndicator(
+                        color: Colors.deepPurple,
+                      )));
+                    }
+                  },
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        // focusNode: focusNode,
+                        textInputAction: TextInputAction.send,
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller: textEditingController,
+                        decoration: InputDecoration(
+                          hintText:
+                              AppLocalizations.of(context)!.game_epic_phase,
+                          hintStyle: const TextStyle(color: Colors.white),
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors
+                                    .white), // Set the underline color to white
+                          ),
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors
+                                    .deepPurple), // Set the underline color to white when focused
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        // kTextInputDecoration.copyWith(hintText: 'write here...'),
+                        onSubmitted: (value) {
+                          onSendMessage(textEditingController.text);
+                        },
                       ),
                     ),
-                    style: const TextStyle(color: Colors.white),
-                    // kTextInputDecoration.copyWith(hintText: 'write here...'),
-                    onSubmitted: (value) {
-                      onSendMessage(textEditingController.text);
-                    },
                   ),
-                ),
-              ),
-              Container(
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      // color: AppColors.burgundy,
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        onSendMessage(textEditingController.text);
+                      },
+                      icon: const Icon(Icons.send_rounded),
+                      color: Colors.white,
+                      // color: AppColors.white,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        Positioned(
+          top: kIsWeb ? 0.0 : 20.0,
+          child: Padding(
+            padding: (size.width <= 700 || !kIsWeb) ? const EdgeInsets.only(left: 10.0) : const EdgeInsets.only(left: 50.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  // color: AppColors.burgundy,
-                  borderRadius: BorderRadius.circular(50.0),
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: IconButton(
-                  onPressed: () {
-                    onSendMessage(textEditingController.text);
+                child: StreamBuilder<double>(
+                  stream: firebase.getUserSpendingStream(
+                    widget.gameId,
+                    singleton.user!.uid,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      );
+                    }
                   },
-                  icon: const Icon(Icons.send_rounded),
-                  color: Colors.white,
-                  // color: AppColors.white,
                 ),
               ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/cohere_logic.dart';
+import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/models/character.dart';
 import 'package:role_maister/models/cohere_models.dart';
 import 'package:role_maister/models/cthulhu_character.dart';
@@ -145,11 +146,21 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
           text: coralMessage,
           characterName: "",
           senderName: "IA",
-          userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
+          userImage:
+              'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
       newGame.uid,
     );
-    firebase.updateAiWordCount(
-            newGame.uid, coralMessage.split(' ').length);
+    firebase.updateAiWordCount(newGame.uid, coralMessage.split(' ').length);
+
+    // Take tokens from all players
+    double tokensToSubstract = getPlayerGamePrice(
+        0, coralMessage.split(' ').length, newGame.num_players);
+    print("TAKE TOKENS: $tokensToSubstract");
+
+    await Future.wait(newGame.players.keys.map((playerUid) async {
+      await firebase.changePlayerBalance(playerUid, -tokensToSubstract);
+    }));
+    await firebase.updateUserPlayedGames(singleton.user!.uid);
   }
 
   void startMultiPlayerGame() async {
@@ -222,6 +233,7 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
       await firebase.emptyQueue();
       // ignore: use_build_context_synchronously
       context.go("/game");
+      await firebase.updateUserPlayedGames(singleton.user!.uid);
     } else {
       // Second user to enter the queue
       await firebase.addUserToQueue(characterId);
@@ -247,15 +259,24 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
             text: coralMessage,
             characterName: "",
             senderName: "IA",
-            userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
+            userImage:
+                'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
         singleton.currentGame!,
       );
       firebase.updateAiWordCount(
-            currentGame.uid, coralMessage.split(' ').length);
+          currentGame.uid, coralMessage.split(' ').length);
+
+      // Take tokens from all players
+      double tokensToSubstract = getPlayerGamePrice(
+          0, coralMessage.split(' ').length, currentGame.num_players);
+      await Future.wait(currentGame.players.keys.map((playerUid) async {
+      await firebase.changePlayerBalance(playerUid, -tokensToSubstract);
+    }));
 
       print("LAST USER");
       await firebase.addReadyToQueue();
 
+      await firebase.updateUserPlayedGames(singleton.user!.uid);
       // ignore: use_build_context_synchronously
       context.go("/game");
     }
@@ -362,7 +383,6 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
     singleton.history.text = "";
     await firebase.createGame(newGame.toMap());
 
-
     // Go to waiting room
     context.go("/waiting_room");
   }
@@ -442,14 +462,42 @@ class _SelectCharacterPageMobileState extends State<SelectCharacterPageMobile> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    print("START GAME");
-                    if (singleton.multiplayer) {
-                      startMultiPlayerGame();
-                    } else if (singleton.pairingMode) {
-                      startPairingModeGame();
+                    if (singleton.player!.tokens <= 0.0){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.deepPurple,
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    child: Center(
+                                      child: Image.asset('assets/images/small_logo.png'),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 16.0),
+                                Text(
+                                  AppLocalizations.of(context)!.no_tokens,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     } else {
-                      startSinglePlayerGame();
-                    }
+                      if (singleton.multiplayer) {
+                        startMultiPlayerGame();
+                      } else if (singleton.pairingMode) {
+                        startPairingModeGame();
+                      } else {
+                        startSinglePlayerGame();
+                      }
+                    } 
                   },
                   child: Container(
                     height: 100.0, // Set a fixed height for the button
