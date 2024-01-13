@@ -252,6 +252,22 @@ class CthulhuCharacter extends Character {
         "Psychology": 10,
         "Spot Hidden": 25,
       },
+      "Journalist": {
+        "Art/Craft": 05,
+        "Disguise": 05,
+        "Law": 05,
+        "Library Use": 20,
+        "Psychology": 10,
+        "Spot Hidden": 25,
+      },
+      "University professor": {
+        "Art/Craft": 05,
+        "Disguise": 05,
+        "Law": 05,
+        "Library Use": 20,
+        "Psychology": 10,
+        "Spot Hidden": 25,
+      },
     };
     if(occupation == 'Antiquarian') { 
       Map<String, int> extras = _getExtraRandomSkills(
