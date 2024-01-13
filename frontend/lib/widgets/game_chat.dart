@@ -155,6 +155,54 @@ class _GameChatState extends State<GameChat> {
     // }
   }
 
+  void deleteMessage(String messageId, int index) {
+    final endDeletingIndex = index;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          // title: Text("Confirmar eliminación de mensajes"),
+          title: Text(
+            AppLocalizations.of(context)!.game_confirm_msg_deletion,
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.game_confirm_msg_deletion_text,
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                for (int i = 0; i <= endDeletingIndex; i++) {
+                  final messageIdToDelete = listMessages[i].id;
+                  firestoreService.deleteMessage(
+                      widget.gameId, messageIdToDelete);
+                }
+
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text(
+                AppLocalizations.of(context)!.game_confirm_msg_deletion_delete,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
@@ -211,33 +259,6 @@ class _GameChatState extends State<GameChat> {
                                           ConnectionState.waiting ||
                                       translateSnapshot.connectionState ==
                                           ConnectionState.none) {
-                                    // Mostrar el mensaje original mientras espera la traducción
-                                    // return BubbleSpecialThree(
-                                    //   text: listMessages[index].get('text'),
-                                    //   color: others_msg
-                                    //       ? const Color.fromARGB(255, 234, 226, 248)
-                                    //       : Colors.deepPurple,
-                                    //   tail: true,
-                                    //   isSender: !others_msg,
-                                    //   textStyle: TextStyle(
-                                    //     color: others_msg ? Colors.black : Colors.white,
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // );
-
-                                    // TODO
-                                    // return DiscordChatBubble(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
-                                    // return DiscordChatMessage(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
                                     return DiscordChatMessage(
                                       username:
                                           listMessages[index].get('sentBy'),
@@ -249,41 +270,14 @@ class _GameChatState extends State<GameChat> {
                                           .get('characterName'),
                                       userImage:
                                           listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
                                     );
                                   } else if (translateSnapshot.hasError) {
                                     // En caso de error durante la traducción
                                     return Text(
                                         'Error de traducción: ${translateSnapshot.error}');
                                   } else {
-                                    // Mostrar la burbuja del mensaje traducido
-                                    // return BubbleSpecialThree(
-                                    //   text: translateSnapshot.data ?? '',
-                                    //   color: others_msg
-                                    //       ? const Color.fromARGB(255, 234, 226, 248)
-                                    //       : Colors.deepPurple,
-                                    //   tail: true,
-                                    //   isSender: !others_msg,
-                                    //   textStyle: TextStyle(
-                                    //     color: others_msg
-                                    //         ? Colors.black
-                                    //         : Colors.white,
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // );
-
-                                    // TODO
-                                    // return DiscordChatBubble(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
-                                    // return DiscordChatMessage(
-                                    //   username: 'Usuario1',
-                                    //   message: 'Hola, ¿cómo estás?',
-                                    //   isSender: true,
-                                    // );
-
                                     return DiscordChatMessage(
                                       username:
                                           listMessages[index].get('sentBy'),
@@ -295,6 +289,8 @@ class _GameChatState extends State<GameChat> {
                                           .get('characterName'),
                                       userImage:
                                           listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
                                     );
                                   }
                                 },
@@ -375,7 +371,9 @@ class _GameChatState extends State<GameChat> {
         Positioned(
           top: kIsWeb ? 0.0 : 20.0,
           child: Padding(
-            padding: (size.width <= 700 || !kIsWeb) ? const EdgeInsets.only(left: 10.0) : const EdgeInsets.only(left: 50.0),
+            padding: (size.width <= 700 || !kIsWeb)
+                ? const EdgeInsets.only(left: 10.0)
+                : const EdgeInsets.only(left: 50.0),
             child: Align(
               alignment: Alignment.topRight,
               child: Container(
@@ -532,46 +530,29 @@ class DiscordChatMessage extends StatelessWidget {
   final String senderName;
   final String characterName;
   final String userImage;
+  final VoidCallback onDeletePressed;
 
-  DiscordChatMessage(
-      {required this.username,
-      required this.message,
-      this.isSender = false,
-      this.characterName = '',
-      required this.senderName,
-      required this.userImage});
+  DiscordChatMessage({
+    required this.username,
+    required this.message,
+    this.isSender = false,
+    this.characterName = '',
+    required this.senderName,
+    required this.userImage,
+    required this.onDeletePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        const SizedBox(
             height: 16.0), // Aumenté el espacio entre el Divider y el mensaje
         Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
         ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          leading: /*senderName == 'IA'
-              ?
-              // CircleAvatar(
-              //   backgroundColor: Colors.deepPurple,
-              //   child: Image.asset(
-              //     'assets/images/bot_master.png',
-              //     width: 100.0,
-              //     height: 100.0,
-              //   ),
-              // )
-
-              CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Image.asset(
-                    'assets/images/bot_master.png',
-                    width: 100.0,
-                    height: 100.0,
-                  ),
-                )
-              : */
-              CircleAvatar(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+          leading: CircleAvatar(
             backgroundColor: Colors.transparent,
             backgroundImage: NetworkImage(userImage),
           ),
@@ -581,18 +562,29 @@ class DiscordChatMessage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      senderName == 'IA' || senderName == 'System'
-                          ? senderName
-                          : '$senderName${isSender ? " (You)" : " ($characterName)"}',
-                      style: TextStyle(
-                        color: senderName == 'System'
-                            ? Colors.red
-                            : Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            senderName == 'IA' || senderName == 'System'
+                                ? senderName
+                                : '$senderName${isSender ? " (You)" : " ($characterName)"}',
+                            style: TextStyle(
+                              color: senderName == 'System'
+                                  ? Colors.red
+                                  : Colors.deepPurple,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        if (!(senderName == 'IA' || senderName == 'System'))
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: onDeletePressed,
+                          ),
+                      ],
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Text(
                       message,
                       style: TextStyle(

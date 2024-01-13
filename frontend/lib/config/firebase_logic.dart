@@ -897,30 +897,38 @@ class FirebaseService {
 
   Future<void> saveMessage(ChatMessages message, String currentGameId) async {
     if (message.text.trim().isNotEmpty) {
-      // String sender;
-      // if (message.sentBy == "IA") {
-      //   sender = 'IA';
-      // } else {
-      //   sender = await getUsername(message.sentBy);
-      // }
-
-      // Map<String, dynamic> messageData = {
-      //   'text': message.text,
-      //   'sentAt': message.sentAt,
-      //   'sentBy': message.sentBy,
-      //   'senderName': sender,
-      // };
-
       try {
+
+        print('CURRENT GAME ID: $currentGameId');
+        print('MESSAGE ID: ${message.id}');
+
         await _firestore
             .collection('message')
             .doc(currentGameId)
             .collection('messages')
-            .add(message.toMap());
+            .doc(message.id)
+            // .add(message.toMap());
+            .set(message.toMap());
+
+          
       } catch (error) {
         print('Error saving message: $error');
         rethrow;
       }
+    }
+  }
+
+  Future<void> deleteMessage(String currentGameId, String messageId) async {
+    try {
+      await _firestore
+          .collection('message')
+          .doc(currentGameId)
+          .collection('messages')
+          .doc(messageId)
+          .delete();
+    } catch (error) {
+      print('Error deleting message: $error');
+      rethrow;
     }
   }
 
