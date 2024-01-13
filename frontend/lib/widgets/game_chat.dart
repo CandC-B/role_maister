@@ -103,7 +103,7 @@ class _GameChatState extends State<GameChat> {
       widget.gameId,
     );
     firestoreService.updatePlayerWordCount(
-        widget.gameId, singleton.player!.uid, text.length);
+        widget.gameId, singleton.player!.uid, text.split(' ').length);
 
     textEditingController.clear();
 
