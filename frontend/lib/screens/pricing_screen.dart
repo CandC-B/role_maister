@@ -119,7 +119,7 @@ class TokenPackageCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
               ),
               onPressed: () async {
-                await firebase.changePlayerBalance(singleton.user!.uid, tokenPackage.price);
+                await firebase.changePlayerBalance(singleton.user!.uid,  double.parse(tokenPackage.name));
                 Navigator.of(context).pop();
               },
             ),

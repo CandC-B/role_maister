@@ -19,6 +19,8 @@ Future<String> createGame(Game game) async {
     initialPrompt = await generateAliensPrompt(game);
   else if (game.role_system == 'dyd')
     initialPrompt = await generateDyDPrompt(game);
+  else if (game.role_system == 'cthulhu')
+    initialPrompt = await generateCthulhuPrompt(game);
   else
     throw Exception('Role system not supported yet');
 

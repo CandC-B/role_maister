@@ -88,7 +88,7 @@ class _RoleTabState extends State<RoleTab> {
             imagePath: 'assets/images/cthulhu.jpg',
             routeName: '/game',
             imageText: "THE CALL OF CTHULHU",
-            isAvailable: false,
+            isAvailable: true,
             height: size.height * 0.9 / 4,
             width: widget.width,
             isLink: false,
