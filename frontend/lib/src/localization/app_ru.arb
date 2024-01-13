@@ -237,6 +237,10 @@
 
     "kick_player_button": "Выгнать игрока",
     "error_purchasing_tokens": "Ошибка покупки токенов. Вам необходимо войти перед этим!",
-    "purchase_error_title": "Ошибка покупки"
+    "purchase_error_title": "Ошибка покупки",
+
+    "game_confirm_msg_deletion": "Вы уверены, что хотите удалить эти сообщения?",
+    "game_confirm_msg_deletion_text": "Это действие нельзя отменить.",
+    "game_confirm_msg_deletion_delete": "Удалить"
 
 }

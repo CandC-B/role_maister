@@ -237,7 +237,11 @@
 
     "kick_player_button": "Spieler rausschmeißen",
     "error_purchasing_tokens": "Fehler beim Kauf von Tokens. Sie müssen sich zuerst anmelden!",
-    "purchase_error_title": "Kauffehler"
+    "purchase_error_title": "Kauffehler",
+
+    "game_confirm_msg_deletion": "Sind Sie sicher, dass Sie diese Nachrichten löschen möchten?",
+    "game_confirm_msg_deletion_text": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "game_confirm_msg_deletion_delete": "Löschen"
 
 
 

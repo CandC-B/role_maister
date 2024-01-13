@@ -237,6 +237,10 @@
 
   "kick_player_button": "Kick Player",
   "purchase_error_title": "Purchase Error",
-  "error_purchasing_tokens": "Error purchasing tokens. You need sign in before!"
+  "error_purchasing_tokens": "Error purchasing tokens. You need sign in before!",
+
+  "game_confirm_msg_deletion": "Are you sure you want to delete this messages?",
+  "game_confirm_msg_deletion_text": "This action cannot be undone.",
+  "game_confirm_msg_deletion_delete": "Delete"
 
 }
