@@ -1,9 +1,10 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
+import 'package:role_maister/config/app_singleton.dart';
 import 'package:role_maister/models/character.dart';
+import 'package:uuid/uuid.dart';
 
 class AliensCharacter extends Character {
-  // TODO: de momento solo tenemos character level 1
   final int characterLevel;
   final String career;
   final Map<String, int> attributes;
@@ -16,15 +17,19 @@ class AliensCharacter extends Character {
   final List<String> gear;
   final String signatureItem;
   final int cash;
+  final String? photoUrl;
   final int hp;
+  final String mode = "aliens";
 
   AliensCharacter({
+    String? id,
     required this.characterLevel,
     required this.career,
     required this.attributes,
     required this.skills,
     required this.talents,
     required String name,
+    required String userId,
     required this.appearance,
     required this.personalAgenda,
     required this.friend,
@@ -32,8 +37,9 @@ class AliensCharacter extends Character {
     required this.gear,
     required this.signatureItem,
     required this.cash,
+    required this.photoUrl,
     required this.hp,
-  }) : super(name);
+  }) : super(name, userId , id: id);
 
   // Factory constructor to generate random AliensCharacter
   factory AliensCharacter.random() {
@@ -42,6 +48,7 @@ class AliensCharacter extends Character {
     final skills = _generateRandomSkills(career);
     final talents = _generateRandomTalents(career);
     String name = _getRandomName(career);
+    String userId = "test";
     final appearance = _getRandomAppearance(career);
     final personalAgenda = _getRandomPersonalAgenda(career);
     final friend = _getRandomName(career);
@@ -49,7 +56,7 @@ class AliensCharacter extends Character {
     final gear = _getRandomGear(career);
     final signatureItem = _getRandomSignatureItem(career);
     final cash = _getRandomCash(career);
-
+    final photoUrl = "small_logo.png";
     return AliensCharacter(
       characterLevel: 1,
       career: career,
@@ -63,8 +70,10 @@ class AliensCharacter extends Character {
       rival: enemy,
       gear: gear,
       signatureItem: signatureItem,
+      photoUrl: photoUrl,
       cash: cash,
       hp: 2 * attributes["Strength"]!,
+      userId: userId,
     );
   }
 
@@ -551,6 +560,9 @@ class AliensCharacter extends Character {
   @override
   String toString() {
     return 'AliensCharacter: {'
+        'userId: $userId,'
+        ' id: $id,'
+        ' mode: $mode,'
         ' characterLevel: $characterLevel,'
         ' career: $career,'
         ' attributes: $attributes,'
@@ -562,6 +574,7 @@ class AliensCharacter extends Character {
         ' friend: $friend,'
         ' rival: $rival,'
         ' gear: $gear,'
+        ' photoUrl: $photoUrl,'
         ' signatureItem: $signatureItem,'
         ' cash: $cash,'
         ' hp: $hp'
@@ -570,6 +583,9 @@ class AliensCharacter extends Character {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
+      'id': id,
+      'mode': mode,
       'character_level': characterLevel,
       'career': career,
       'attributes': attributes,
@@ -581,6 +597,7 @@ class AliensCharacter extends Character {
       'friend': friend,
       'rival': rival,
       'gear': gear,
+      'photoUrl': photoUrl,
       'signature_item': signatureItem,
       'cash': cash,
       'hp': hp,
@@ -589,6 +606,8 @@ class AliensCharacter extends Character {
 
   static fromMap(Map<String, dynamic> statsData) {
     return AliensCharacter(
+      userId: statsData['userId'] as String,
+      id: statsData['id'] as String,
       name: statsData['name'] as String,
       hp: statsData['hp'] as int,
       characterLevel: statsData['character_level'] as int,
@@ -607,8 +626,10 @@ class AliensCharacter extends Character {
       gear: (statsData['gear'] as List<dynamic>)
           .map((value) => value as String)
           .toList(),
+      photoUrl: statsData['photoUrl'] as String,
       signatureItem: statsData['signature_item'] as String,
       cash: statsData['cash'] as int,
     );
   }
+  
 }

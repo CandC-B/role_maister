@@ -33,7 +33,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
   @override
   void initState() {
     super.initState();
-    firebase.getUserCharactersFromMode(singleton.user!.uid, "Aliens");
+    firebase.getUserCharactersFromMode(singleton.user!.uid, "aliens");
   }
 
   @override
@@ -82,9 +82,11 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                           final characterId =
                               charactersData!.keys.elementAt(index);
                           final characterData = charactersData![characterId];
-                          singleton.selectedCharacterId =
-                              charactersData!.keys.elementAt(selectedIndex);
-                          if (widget.mode == "Aliens") {
+
+                          // singleton.selectedCharacterId =
+                          //     charactersData!.keys.elementAt(selectedIndex);
+
+                          if (widget.mode == "aliens") {
                             singleton.alienCharacter = AliensCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -96,7 +98,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                                     AliensCharacter.fromMap(characterData)
                               ),
                             );
-                          } else if (widget.mode == "Dyd") {
+                          } else if (widget.mode == "dyd") {
                             singleton.dydCharacter = DydCharacter.fromMap(
                                 charactersData![charactersData!.keys
                                     .elementAt(selectedIndex)]);
@@ -105,7 +107,7 @@ class _ProfileCharacterPageState extends State<ProfileCharacterPage> {
                                 character: DydCharacter.fromMap(characterData)
                               ),
                             );
-                          } else if (widget.mode == "Cthulhu") {
+                          } else if (widget.mode == "cthulhu") {
                             singleton.cthulhuCharacter =
                                 CthulhuCharacter.fromMap(charactersData![
                                     charactersData!.keys

@@ -4,6 +4,14 @@
     "description": "El título de la aplicación"
   },
 
+  "english": "Inglés",
+  "spanish": "Español",
+  "portuguese": "Portugués",
+  "french": "Francés",
+  "german": "Alemán",
+  "italian": "Italiano",
+  "russian": "Ruso",
+
   "playGame": "Jugar",
   "homePageText": "Deja que una IA sea el maestro \n y disfruta de una sesión de rol \n solo o con tus amigos",
   "homePageText_mobile": "Deja que una IA sea el \n maestro y disfruta \n de una sesión de rol \n solo o con \n tus amigos",
@@ -148,10 +156,9 @@
   "password_info": "Al menos una letra, un dígito y 8 caracteres",
   "accept": "Acepto las ",
   "game_rules": "reglas del juego",
-
-  "single_player": "UN JUGADOR",
-  "multi_player": "MULTIJUGADOR",
-  "pairing_mode": "MODO DE EMPAREJAMIENTO",
+  "single_player": "JUEGO EN SOLITARIO",
+  "multi_player": "EMPAREJAMIENTO",
+  "pairing_mode": "SALAS",
   "coming_soon": "PRÓXIMAMENTE",
   "number_of_players": "Número de jugadores: ",
   "brief_description": "Breve descripción de la historia:",
@@ -190,7 +197,43 @@
   "game_players": "Jugadores",
   "game_epic_phase": "Da forma al destino del viaje de tu personaje...",
   "game_no_messages": "Sin mensajes...",
-  "no_stats_found": "No se encontraron estadísticas..."
+  "no_stats_found": "No se encontraron estadísticas...",
+
+  "exit_game_dialog_title": "Salir del Juego",
+  "exit_game_dialog_text": "¿Estás seguro de que quieres salir del juego?",
+  "exit_game_dialog_autosave": "(El juego se guardará automáticamente)",
+  "exit_game_dialog_cancel": "Cancelar",
+  "exit_game_dialog_exit": "Salir",
+
+  "pairing_mode_create": "Crear juego",
+  "pairing_mode_join": "Unirse al juego",
+  "waiting_room": "Sala de espera",
+  "game_selection": "Escribe el código del juego al que quieres unirte",
+  "game_code": "Código del juego",
+  "accept_button": "Aceptar",
+
+  "characters": "Personajes",
+  "games": "Juegos",
+  "email": "Correo electrónico",
+  "games_played": "Juegos jugados",
+  "tokens_left": "Fichas restantes",
+  "experience": "Experiencia",
+  "change_password": "Cambiar contraseña",
+  "you_dont_have_any_characters": "No tienes ningún personaje",
+  "enter_your_new_character_name": "Ingresa el nombre de tu nuevo personaje",
+  "character_name": "Nombre del personaje",
+  "are_you_sure_you_want_to_delete_this_character": "¿Estás seguro de que quieres eliminar este personaje?",
+  "game_mode": "Modo de juego",
+  "players": "Jugadores",
+  "resume": "Continuar",
+  "add_character": "Agregar personaje",
+  "pairing_mode_ready": "Listo",
+  "exit_game_dialog_exit": "Salir",
+
+  "report_player_dialog_title": "Reportar Jugador",
+  "report_player_dialog_text": "¿Estás seguro de que quieres informar al jugador ",
+  "report_player_dialog_cancel": "Cancelar",
+  "report_player_dialog_report": "Informar"
 
 
 

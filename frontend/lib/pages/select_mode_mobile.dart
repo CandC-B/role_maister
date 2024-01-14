@@ -42,7 +42,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
                 if (!kIsWeb) {
                   context.go("/select_character");
                 } else {
-                  singleton.gameMode.value = "Aliens";
+                  singleton.gameMode.value = "aliens";
                   handleImageSelection(0);
                 }
               },
@@ -66,7 +66,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
               onTap: () {
                 // context.go("/select_character");
                 if (kIsWeb) {
-                  singleton.gameMode.value = "Dyd";
+                  singleton.gameMode.value = "dyd";
                   handleImageSelection(1);
                 }
               },
@@ -74,7 +74,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
                 imagePath: 'assets/images/dungeons_and_dragons.jpg',
                 routeName: '/form_singleplayer',
                 imageText: "DUNGEONS AND DRAGONS",
-                isAvailable: false,
+                isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: singleton.multiplayer && kIsWeb
                     ? size.width * 0.8 * 2 / 3
@@ -90,7 +90,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
               onTap: () {
                 // context.go("/select_character");
                 if (kIsWeb) {
-                  singleton.gameMode.value = "Cthulhu";
+                  singleton.gameMode.value = "cthulhu";
                   handleImageSelection(2);
                 }
               },

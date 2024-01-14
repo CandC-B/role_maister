@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:role_maister/config/app_singleton.dart';
@@ -9,7 +11,7 @@ import 'package:role_maister/pages/profile_page.dart';
 import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
 import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
 import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CharactersTab extends StatefulWidget {
   const CharactersTab({Key? key}) : super(key: key);
 
@@ -61,19 +63,20 @@ class ProfileAliensCharacter extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          isSmallScreen ? const SizedBox() : const Text(
-            "Aliens",
-            style: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          isSmallScreen
+              ? const SizedBox()
+              : const Text(
+                  "Aliens",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: firestoreService.fetchCharactersByUserId(
-                singleton.user!.uid,
-                "Aliens",
+              stream: firestoreService.fetchCharactersByMode(
+                "aliens",
               ),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -85,54 +88,65 @@ class ProfileAliensCharacter extends StatelessWidget {
                       reverse: false,
                       itemBuilder: (context, index) {
                         if (index < aliensCharacters.length) {
-                          AliensCharacter aliensCharacter =
-                              AliensCharacter.fromMap(
-                            aliensCharacters[index].data()
-                                as Map<String, dynamic>,
-                          );
-                          return ProfileAliensCharacterCard(
-                            character: aliensCharacter,
-                          );
+                          var data = aliensCharacters[index].data()
+                              as Map<String, dynamic>;
+                            if (data['userId'] == singleton.player!.uid) {
+                              AliensCharacter aliensCharacter =
+                                  AliensCharacter.fromMap(
+                                aliensCharacters[index].data()
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileAliensCharacterCard(
+                                character: aliensCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text('No messages...'),
+                    return Center(
+                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
                     );
                   }
                 } else {
                   return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Image.asset('assets/images/small_logo.png'),
-                      ),
+                      child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/small_logo.png'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  );
+                  ));
                 }
               },
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     showDialog(
-          //       context: context,
-          //       builder: (BuildContext context) {
-          //         return CharactersDialog(gameMode: "Aliens");
-          //       },
-          //     );
-          //   },
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.deepPurple,
-          //     minimumSize:
-          //         isSmallScreen ? const Size(100, 30) : const Size(250, 40),
-          //   ),
-          //   child: Text(
-          //     "Add Character",
-          //     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-          //   ),
-          // ),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CharactersCreationDialog(gameMode: "aliens");
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              minimumSize:
+                  isSmallScreen ? const Size(100, 30) : const Size(250, 40),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.add_character,
+              style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+            ),
+          ),
         ],
       ),
     );
@@ -150,19 +164,20 @@ class ProfileDydCharacter extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          isSmallScreen ? const SizedBox(): const Text(
-            "D&D",
-            style: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          isSmallScreen
+              ? const SizedBox()
+              : const Text(
+                  "D&D",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: firestoreService.fetchCharactersByUserId(
-                singleton.user!.uid,
-                "Dyd",
+              stream: firestoreService.fetchCharactersByMode(
+                "dyd",
               ),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -172,59 +187,67 @@ class ProfileDydCharacter extends StatelessWidget {
                     return ListView.builder(
                       padding: const EdgeInsets.all(10),
                       reverse: false,
-                      // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < dydCharacters.length) {
-                          DydCharacter dydCharacter = DydCharacter.fromMap(
-                              dydCharacters[index].data()
-                                  as Map<String, dynamic>);
-                          return ProfileDydCharacterCard(
-                            character: dydCharacter,
-                          );
-                          // return messageBubble(
-                          //   chatContent: listMessages[index].get('text'),
-                          //   messageType: listMessages[index].get('sentBy'),
-                          // );
+                          var data = dydCharacters[index].data()
+                              as Map<String, dynamic>;
+                            if (data['userId'] == singleton.player!.uid) {
+                              DydCharacter dydCharacter =
+                                  DydCharacter.fromMap(
+                                dydCharacters[index].data()
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileDydCharacterCard(
+                                character: dydCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text('No messages...'),
+                    return Center(
+                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
                     );
                   }
                 } else {
                   return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Image.asset('assets/images/small_logo.png'),
-                      ),
+                      child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/small_logo.png'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  );
+                  ));
                 }
               },
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     showDialog(
-          //       context: context,
-          //       builder: (BuildContext context) {
-          //         return CharactersDialog(gameMode: "Dyd");
-          //       },
-          //     );
-          //   },
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.deepPurple,
-          //     minimumSize:
-          //         isSmallScreen ? const Size(100, 30) : const Size(250, 40),
-          //   ),
-          //   child: Text(
-          //     "Add Character",
-          //     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-          //   ),
-          // ),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CharactersCreationDialog(gameMode: "dyd");
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              minimumSize:
+                  isSmallScreen ? const Size(100, 30) : const Size(250, 40),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.add_character,
+              style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+            ),
+          ),
         ],
       ),
     );
@@ -242,19 +265,20 @@ class ProfileCthulhuCharacter extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          isSmallScreen ? const SizedBox() : const Text(
-            "Cthulhu",
-            style: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          isSmallScreen
+              ? const SizedBox()
+              : const Text(
+                  "Cthulhu",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: firestoreService.fetchCharactersByUserId(
-                singleton.user!.uid,
-                "Cthulhu",
+              stream: firestoreService.fetchCharactersByMode(
+                "cthulhu",
               ),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -264,59 +288,67 @@ class ProfileCthulhuCharacter extends StatelessWidget {
                     return ListView.builder(
                       padding: const EdgeInsets.all(10),
                       reverse: false,
-                      // controller: scrollController,
                       itemBuilder: (context, index) {
                         if (index < cthulhuCharacters.length) {
-                          CthulhuCharacter cthulhuCharacter =
-                              CthulhuCharacter.fromMap(cthulhuCharacters[index]
-                                  .data() as Map<String, dynamic>);
-                          return ProfileCthulhuCharacterCard(
-                            character: cthulhuCharacter,
-                          );
-                          // return messageBubble(
-                          //   chatContent: listMessages[index].get('text'),
-                          //   messageType: listMessages[index].get('sentBy'),
-                          // );
+                          var data = cthulhuCharacters[index].data()
+                              as Map<String, dynamic>;
+                            if (data['userId'] == singleton.player!.uid) {
+                              CthulhuCharacter cthulhuCharacter =
+                                  CthulhuCharacter.fromMap(
+                                cthulhuCharacters[index].data()
+                                    as Map<String, dynamic>,
+                              );
+                              return ProfileCthulhuCharacterCard(
+                                character: cthulhuCharacter,
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                         }
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text('No messages...'),
+                    return Center(
+                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
                     );
                   }
                 } else {
                   return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Image.asset('assets/images/small_logo.png'),
-                      ),
+                      child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/small_logo.png'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                  );
+                  ));
                 }
               },
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     showDialog(
-          //       context: context,
-          //       builder: (BuildContext context) {
-          //         return CharactersDialog(gameMode: "Cthulhu");
-          //       },
-          //     );
-          //   },
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.deepPurple,
-          //     minimumSize:
-          //         isSmallScreen ? const Size(100, 30) : const Size(250, 40),
-          //   ),
-          //   child: Text(
-          //     "Add Character",
-          //     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-          //   ),
-          // ),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CharactersCreationDialog(gameMode: "cthulhu");
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              minimumSize:
+                  isSmallScreen ? const Size(100, 30) : const Size(250, 40),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.add_character,
+              style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+            ),
+          ),
         ],
       ),
     );
@@ -363,11 +395,187 @@ class ProfileCharactersMobile extends StatelessWidget {
               ),
               Expanded(
                 child: TabBarView(
-                  children: [ProfileAliensCharacter(), ProfileDydCharacter(), ProfileCthulhuCharacter()],
+                  children: [
+                    ProfileAliensCharacter(),
+                    ProfileDydCharacter(),
+                    ProfileCthulhuCharacter()
+                  ],
                 ),
               ),
             ],
           ),
         ));
+  }
+}
+
+
+class CharactersCreationDialog extends StatefulWidget {
+  final String gameMode;
+  CharactersCreationDialog({Key? key, required this.gameMode})
+      : super(key: key);
+  @override
+  _CharactersCreationDialogState createState() =>
+      _CharactersCreationDialogState();
+}
+
+class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
+  TextEditingController characterNameController = TextEditingController();
+  String gameMode = "";
+  @override
+  void initState() {
+    super.initState();
+    gameMode = widget.gameMode;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.deepPurple,
+      title: Text(
+        AppLocalizations.of(context)!.enter_your_new_character_name,
+        style: const TextStyle(color: Colors.white),
+      ),
+      content: TextField(
+        controller: characterNameController,
+        cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: AppLocalizations.of(context)!.character_name,
+          hintStyle: const TextStyle(color: Colors.white),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          border: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            if (gameMode == "aliens") {
+              createAlien(characterNameController.text);
+            } else if (gameMode == "dyd") {
+              createDyd(characterNameController.text);
+            } else if (gameMode == "cthulhu") {
+              createCthulhu(characterNameController.text);
+            }
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            AppLocalizations.of(context)!.accept_button,
+            style: const TextStyle(color: Colors.white),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+void createAlien(String characterName) {
+  AliensCharacter newAlien = AliensCharacter.random();
+  newAlien.name = characterName;
+  newAlien.userId = singleton.user!.uid;
+  firebase.createCharacter(newAlien.toMap());
+}
+
+void createDyd(String characterName) {
+  DydCharacter newDyd = DydCharacter.random();
+  newDyd.name = characterName;
+  newDyd.userId = singleton.user!.uid;
+  firebase.createCharacter(newDyd.toMap());
+}
+
+void createCthulhu(String characterName) {
+  CthulhuCharacter newCthulhu = CthulhuCharacter.random();
+  newCthulhu.name = characterName;
+  newCthulhu.userId = singleton.user!.uid;
+  firebase.createCharacter(newCthulhu.toMap());
+}
+
+class CharactersEditionOrDeletionDialog extends StatefulWidget {
+  final Map<String, dynamic> character;
+  final bool isEdition;
+  CharactersEditionOrDeletionDialog(
+      {Key? key, required this.character, required this.isEdition})
+      : super(key: key);
+  @override
+  _CharactersEditionOrDeletionDialogState createState() =>
+      _CharactersEditionOrDeletionDialogState();
+}
+
+class _CharactersEditionOrDeletionDialogState
+    extends State<CharactersEditionOrDeletionDialog> {
+  TextEditingController characterNameController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.deepPurple,
+      title: widget.isEdition
+          ? Text(
+              AppLocalizations.of(context)!.enter_your_new_character_name,
+              style: const TextStyle(color: Colors.white),
+            )
+          : Text(
+              AppLocalizations.of(context)!.are_you_sure_you_want_to_delete_this_character,
+              style: const TextStyle(color: Colors.white),
+            ),
+      content: widget.isEdition
+          ? TextField(
+              controller: characterNameController,
+              cursorColor: Colors.white,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.character_name,
+                hintStyle: const TextStyle(color: Colors.white),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                border: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+          : const SizedBox(),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            if (widget.isEdition) {
+              widget.character['name'] = characterNameController.text;
+              firebase.updateCharacter(widget.character);
+            } else {
+              firebase.deleteCharacter(widget.character);
+            }
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            AppLocalizations.of(context)!.accept_button,
+            style: const TextStyle(color: Colors.white),
+          ),
+        )
+      ],
+    );
   }
 }
