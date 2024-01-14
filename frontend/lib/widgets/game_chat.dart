@@ -121,7 +121,7 @@ class _GameChatState extends State<GameChat> {
     if (messages != null) {
       Game game = Game.fromMap(await firebase.getGame(widget.gameId));
       List<String> orderedKeys = game.players.keys.toList()..sort();
-      print("INDICE DE PLAYER ACTUAL:"+ game.nextPlayersTurnIndex.toString());
+      print("INDICE DE PLAYER ACTUAL:" + game.nextPlayersTurnIndex.toString());
       int nextPlayerIndex =
           (game.nextPlayersTurnIndex + 1) % game.players.length;
       String nextPlayerUid = orderedKeys.elementAt(nextPlayerIndex);
@@ -499,54 +499,50 @@ class _GameChatState extends State<GameChat> {
             ],
           ),
         ),
-        Padding(
-            padding: kIsWeb? const EdgeInsets.only(top: 8.0): const EdgeInsets.only(top: 20.0),
-          child: Align(
-            /*
-         alignment: (size.width > 700 || kIsWeb)
-                ? Alignment.topRight
-                : Alignment.topLeft),
-            */
-            alignment: size.width > 700 || kIsWeb
-                ? Alignment.topCenter
-                : Alignment.topLeft,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.deepPurple,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: StreamBuilder<double>(
-                stream: firebase.getUserSpendingStream(
-                  widget.gameId,
-                  singleton.user!.uid,
+        size.width > 700 || kIsWeb
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: StreamBuilder<double>(
+                      stream: firebase.getUserSpendingStream(
+                        widget.gameId,
+                        singleton.user!.uid,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Container(
+                            padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              'MAIster tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        'MAIster points spent: ${snapshot.data?.toString() ?? "N/A"}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
-        ),
+              )
+            : SizedBox(),
       ],
     );
   }
@@ -772,7 +768,7 @@ class _DiscordChatMessage extends State<DiscordChatMessage> {
                         ),
                         IconButton(
                           icon: Icon(
-                              isSpeaking ? Icons.volume_off : Icons.volume_up,
+                              isSpeaking ? Icons.volume_up : Icons.volume_off,
                               color: Colors.white),
                           onPressed: () {
                             if (isSpeaking) {
