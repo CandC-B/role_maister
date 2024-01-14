@@ -61,7 +61,7 @@ class SelectGameTypePageMobile extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 singleton.multiplayer = true;
-                print("pairing mode");
+                singleton.pairingMode = true;
                 context.go("/form_pairing_mode");
               },
               child: ImageColorFilter(

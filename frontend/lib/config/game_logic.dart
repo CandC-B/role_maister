@@ -20,8 +20,9 @@ Future<String> generateAliensPrompt(Game game) async {
     // Get all player features
     int i = 0;
     Map<String, dynamic> players = gameSettings['players'];
-    print(players.toString());
-    for (var player in players.values) {
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
       newGameInstruction += "There are player${i + 1} features:.\n";
       i++;
       Map<String, dynamic> characterData = await firebase.getCharacter(
@@ -39,10 +40,9 @@ Future<String> generateAliensPrompt(Game game) async {
     newGameInstruction +=
         "The story will develop as it follows:${gameSettings['story_description']}.\n";
   }
-
   newGameInstruction +=
-      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
-
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
+  print(newGameInstruction);
   return newGameInstruction;
 }
 
@@ -91,7 +91,9 @@ Future<String> generateDyDPrompt(Game game) async {
     // Get all player features
     int i = 0;
     Map<String, dynamic> players = gameSettings['players'];
-    for (var player in players.values) {
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
       newGameInstruction += "There are player${i + 1} features:.\n";
       i++;
       Map<String, dynamic> characterData = await firebase.getCharacter(
@@ -111,8 +113,7 @@ Future<String> generateDyDPrompt(Game game) async {
   }
 
   newGameInstruction +=
-      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
-
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
   print(newGameInstruction);
   return newGameInstruction;
 }
@@ -154,7 +155,9 @@ Future<String> generateCthulhuPrompt(Game game) async {
     // Get all player features
     int i = 0;
     Map<String, dynamic> players = gameSettings['players'];
-    for (var player in players.values) {
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
       newGameInstruction += "There are player${i + 1} features:.\n";
       i++;
       Map<String, dynamic> characterData = await firebase.getCharacter(
@@ -174,9 +177,8 @@ Future<String> generateCthulhuPrompt(Game game) async {
         "The story will develop as it follows:${gameSettings['story_description']}.\n";
   }
 
-  newGameInstruction +=
-      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
-
+ newGameInstruction +=
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
   print(newGameInstruction);
   return newGameInstruction;
 }

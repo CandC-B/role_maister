@@ -958,22 +958,24 @@ class FirebaseService {
               Map<String, dynamic>.from(gameData['players'] ?? []);
 
 
-          print('TURNO DEL PLAYER ANTERIOR: $nextPlayerId');
-          print('TURNO DEL PLAYER ANTERIOR INDEX: $nextPlayerIndex');
-          print('PLAYERS LENGTH: ${players.length}');
-          print('MY ID: ${singleton.user!.uid}');
-          print('DELETED PLAYER: $isDeletedPlayer');
+          // print('TURNO DEL PLAYER ANTERIOR: $nextPlayerId');
+          // print('TURNO DEL PLAYER ANTERIOR INDEX: $nextPlayerIndex');
+          // print('PLAYERS LENGTH: ${players.length}');
+          // print('MY ID: ${singleton.user!.uid}');
+          // print('DELETED PLAYER: $isDeletedPlayer');
+          List<String> orderedKeys =  players.keys.toList()..sort();
+          // print("ORDERED KEYS: $orderedKeys");
 
           if (nextPlayerId == 'IA' || (isDeletedPlayer /*&& nextPlayerId != singleton.user!.uid*/)) {
             nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
-            nextPlayerId = players.keys.toList()[nextPlayerIndex];
+            nextPlayerId = orderedKeys[nextPlayerIndex];
           } else {
             nextPlayerIndex = nextPlayerIndex;
             nextPlayerId = 'IA';
           }
 
-          print('TURNO DEL PLAYER SIGUIENTE: $nextPlayerId');
-          print('TURNO DEL PLAYER SIGUIENTE INDEX: $nextPlayerIndex');
+          // print('TURNO DEL PLAYER SIGUIENTE: $nextPlayerId');
+          // print('TURNO DEL PLAYER SIGUIENTE INDEX: $nextPlayerIndex');
 
           gameData['nextPlayersTurn'] = nextPlayerId;
           gameData['nextPlayersTurnIndex'] = nextPlayerIndex;

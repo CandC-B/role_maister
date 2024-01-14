@@ -37,6 +37,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
             InkWell(
               onTap: () {
                 singleton.multiplayer = false;
+                singleton.pairingMode = false;
                 context.go("/form_singleplayer");
               },
               child: ImageColorFilter(
@@ -54,6 +55,7 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
             InkWell(
               onTap: () {
                 singleton.multiplayer = true;
+                singleton.pairingMode = false;
                 context.go("/form_multiplayer");
               },
               child: ImageColorFilter(
@@ -70,8 +72,8 @@ class _SelectGameTypePageState extends State<SelectGameTypePage> {
             ),
             InkWell(
               onTap: () {
-                singleton.multiplayer = true;
-                print("pairing mode");
+                singleton.multiplayer = false;
+                singleton.pairingMode = true;
                 context.go("/form_pairing_mode");
               },
               child: ImageColorFilter(

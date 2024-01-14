@@ -7,11 +7,14 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/main.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
+import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player_game_data.dart';
 import '../models/models.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class GameChat extends StatefulWidget {
   final String gameId;
@@ -68,7 +71,8 @@ class _GameChatState extends State<GameChat> {
                 playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
               print('A TOMAR POR CULO!!');
-              print('GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
+              print(
+                  'GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
 
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
 
@@ -99,7 +103,7 @@ class _GameChatState extends State<GameChat> {
     // firestoreService.saveMessage(
     //     text, DateTime.now(), widget.gameId, currentUserId);
 
-    firestoreService.saveMessage(
+    await firestoreService.saveMessage(
       ChatMessages(
           sentBy: currentUserId,
           sentAt: DateTime.now(),
@@ -109,17 +113,30 @@ class _GameChatState extends State<GameChat> {
           userImage: singleton.player!.photoUrl!),
       widget.gameId,
     );
-    firestoreService.updatePlayerWordCount(
+    await firestoreService.updatePlayerWordCount(
         widget.gameId, singleton.player!.uid, text.split(' ').length);
 
     textEditingController.clear();
 
     if (messages != null) {
+      Game game = Game.fromMap(await firebase.getGame(widget.gameId));
+      List<String> orderedKeys = game.players.keys.toList()..sort();
+      print("INDICE DE PLAYER ACTUAL:" + game.nextPlayersTurnIndex.toString());
+      int nextPlayerIndex =
+          (game.nextPlayersTurnIndex + 1) % game.players.length;
+      String nextPlayerUid = orderedKeys.elementAt(nextPlayerIndex);
+      String nextPlayerCharacterUid =
+          game.players[nextPlayerUid]['characterId'];
+      Map<String, dynamic> nextPlayerCharacter =
+          await firebase.getCharacter(nextPlayerCharacterUid, game.role_system);
+
+      print("Current Character: ${singleton.selectedCharacterName}");
+      print('give 3 actions for ${nextPlayerCharacter['name']}.');
       final response = await http.post(
           // TODO: add constants.dart in utils folder
           // Uri.http("localhost:8000", "/game/master?message=$text"),
           Uri.parse(
-              "https://rolemaister.onrender.com/game/master?message=$text"),
+              "https://rolemaister.onrender.com/game/master?message=${singleton.selectedCharacterName!}: $text. Continue the story and give 3 actions for ${nextPlayerCharacter['name']}."),
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
@@ -278,6 +295,7 @@ class _GameChatState extends State<GameChat> {
                                           listMessages[index].get('userImage'),
                                       onDeletePressed: () => deleteMessage(
                                           listMessages[index].id, index),
+                                      locale: locale,
                                     );
                                   } else if (translateSnapshot.hasError) {
                                     // En caso de error durante la traducción
@@ -297,6 +315,7 @@ class _GameChatState extends State<GameChat> {
                                           listMessages[index].get('userImage'),
                                       onDeletePressed: () => deleteMessage(
                                           listMessages[index].id, index),
+                                      locale: locale,
                                     );
                                   }
                                 },
@@ -392,8 +411,7 @@ class _GameChatState extends State<GameChat> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextField(
                                 // focusNode: focusNode,
-                                enabled:
-                                    singleton.player!.tokens > 0 &&
+                                enabled: singleton.player!.tokens > 0 &&
                                     snapshot.data!.get('nextPlayersTurn') ==
                                         singleton.user!.uid,
                                 textInputAction: TextInputAction.send,
@@ -455,8 +473,8 @@ class _GameChatState extends State<GameChat> {
 
                               //   onSendMessage(textEditingController.text);
                               // },
-                              onPressed:  singleton.player!.tokens > 0 && snapshotPlayersTurn ==
-                                      singleton.user!.uid
+                              onPressed: singleton.player!.tokens > 0 &&
+                                      snapshotPlayersTurn == singleton.user!.uid
                                   ? () {
                                       onSendMessage(textEditingController.text);
                                     }
@@ -481,51 +499,50 @@ class _GameChatState extends State<GameChat> {
             ],
           ),
         ),
-        Align(
-          /*
- alignment: (size.width > 700 || kIsWeb)
-              ? Alignment.topRight
-              : Alignment.topLeft),
-          */
-          alignment: size.width > 700 || kIsWeb
-              ? Alignment.topCenter
-              : Alignment.topLeft,  
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.deepPurple,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: StreamBuilder<double>(
-              stream: firebase.getUserSpendingStream(
-                widget.gameId,
-                singleton.user!.uid,
-              ),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return Container(
+        size.width > 700 || kIsWeb
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: Text(
-                      'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
+                    child: StreamBuilder<double>(
+                      stream: firebase.getUserSpendingStream(
+                        widget.gameId,
+                        singleton.user!.uid,
                       ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Container(
+                            padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              'MAIster tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                  );
-                }
-              },
-            ),
-          ),
-        ),
+                  ),
+                ),
+              )
+            : SizedBox(),
       ],
     );
   }
@@ -635,7 +652,7 @@ class _GameChatState extends State<GameChat> {
   }
 }
 
-class DiscordChatMessage extends StatelessWidget {
+class DiscordChatMessage extends StatefulWidget {
   final String username;
   final String message;
   final bool isSender;
@@ -644,7 +661,13 @@ class DiscordChatMessage extends StatelessWidget {
   final String userImage;
   final VoidCallback onDeletePressed;
 
-  DiscordChatMessage({
+  // final String message;
+  // static FlutterTts flutterTts = FlutterTts();
+  final Locale locale;
+
+  // const DiscordChatMessage({Key? key, required this.message, required this.flutterTts}) : super(key: key);
+  const DiscordChatMessage({
+    Key? key,
     required this.username,
     required this.message,
     this.isSender = false,
@@ -652,7 +675,48 @@ class DiscordChatMessage extends StatelessWidget {
     required this.senderName,
     required this.userImage,
     required this.onDeletePressed,
-  });
+    required this.locale,
+    // required this.flutterTts,
+  }) : super(key: key);
+
+  @override
+  _DiscordChatMessage createState() => _DiscordChatMessage();
+}
+
+// class _DiscordChatMessage extends StatelessWidget {
+class _DiscordChatMessage extends State<DiscordChatMessage> {
+  // final String username;
+  // final String message;
+  // final bool isSender;
+  // final String senderName;
+  // final String characterName;
+  // final String userImage;
+  // final VoidCallback onDeletePressed;
+
+  // FlutterTts flutterTts = FlutterTts();
+  // final Locale locale;
+  // bool isSpeaking = false;
+
+  late FlutterTts flutterTts;
+  bool isSpeaking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    flutterTts = FlutterTts(); // Inicialización en el initState
+  }
+
+  // DiscordChatMessage({
+  //   super.key,
+  //   required this.username,
+  //   required this.message,
+  //   this.isSender = false,
+  //   this.characterName = '',
+  //   required this.senderName,
+  //   required this.userImage,
+  //   required this.onDeletePressed,
+  //   required this.locale,
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -666,7 +730,8 @@ class DiscordChatMessage extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage(userImage),
+            // backgroundImage: NetworkImage(userImage),
+            backgroundImage: NetworkImage(widget.userImage),
           ),
           title: Row(
             children: [
@@ -677,31 +742,70 @@ class DiscordChatMessage extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
+                          // child: Text(
+                          //   senderName == 'IA' || senderName == 'System'
+                          //       ? senderName
+                          //       : '$senderName${isSender ? " (You)" : " ($characterName)"}',
+                          //   style: TextStyle(
+                          //     color: senderName == 'System'
+                          //         ? Colors.red
+                          //         : Colors.deepPurple,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
                           child: Text(
-                            senderName == 'IA' || senderName == 'System'
-                                ? senderName
-                                : '$senderName${isSender ? " (You)" : " ($characterName)"}',
+                            widget.senderName == 'IA' ||
+                                    widget.senderName == 'System'
+                                ? widget.senderName
+                                : '$widget.senderName${widget.isSender ? " (You)" : " ($widget.characterName)"}',
                             style: TextStyle(
-                              color: senderName == 'System'
+                              color: widget.senderName == 'System'
                                   ? Colors.red
                                   : Colors.deepPurple,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        if (!(senderName == 'IA' || senderName == 'System'))
+                        IconButton(
+                          icon: Icon(
+                              isSpeaking ? Icons.volume_up : Icons.volume_off,
+                              color: Colors.white),
+                          onPressed: () {
+                            if (isSpeaking) {
+                              stopSpeaking();
+                            } else {
+                              startSpeaking();
+                            }
+                          },
+                        ),
+                        // if (!(senderName == 'IA' || senderName == 'System'))
+                        //   IconButton(
+                        //     icon: const Icon(Icons.delete, color: Colors.red),
+                        //     onPressed: onDeletePressed,
+                        //   ),
+                        if (!(widget.senderName == 'IA' ||
+                            widget.senderName == 'System'))
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: onDeletePressed,
+                            onPressed: widget.onDeletePressed,
                           ),
                       ],
                     ),
                     const SizedBox(height: 4.0),
+                    // Text(
+                    //   message,
+                    //   style: TextStyle(
+                    //     color:
+                    //         senderName == 'System' ? Colors.red : Colors.white,
+                    //     fontSize: 16,
+                    //   ),
+                    // ),
                     Text(
-                      message,
+                      widget.message,
                       style: TextStyle(
-                        color:
-                            senderName == 'System' ? Colors.red : Colors.white,
+                        color: widget.senderName == 'System'
+                            ? Colors.red
+                            : Colors.white,
                         fontSize: 16,
                       ),
                     ),
@@ -713,5 +817,20 @@ class DiscordChatMessage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> startSpeaking() async {
+    await flutterTts.setLanguage("es-ES");
+    await flutterTts.speak(widget.message);
+    setState(() {
+      isSpeaking = true;
+    });
+  }
+
+  Future<void> stopSpeaking() async {
+    await flutterTts.stop();
+    setState(() {
+      isSpeaking = false;
+    });
   }
 }

@@ -245,7 +245,10 @@
     "game_confirm_msg_deletion_text": "Questa azione non può essere annullata.",
     "game_confirm_msg_deletion_delete": "Elimina",
 
-    "game_waiting_for_turn": "In attesa del tuo turno...",
+    "game_waiting_for_turn": "In attesa del tuo turno...",,
+    "purchase_success_title": "Acquisto riuscito",
+    "purchase_success_msg": "Hai acquistato con successo ",
+
 
 
     "purchase_error_title": "Errore di acquisto",

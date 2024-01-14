@@ -50,9 +50,12 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     backgroundColor: Colors.deepPurple,
-                    title: Text('You were kicked', style: TextStyle(color: Colors.white),),
-                    content: Text('You were kicked by the host of the game.', style: TextStyle(color: Colors.white)),
-                    
+                    title: Text(
+                      'You were kicked',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    content: Text('You were kicked by the host of the game.',
+                        style: TextStyle(color: Colors.white)),
                   );
                 },
               );
@@ -125,28 +128,33 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 Container(
                   height: size.height * 0.5,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: kIsWeb ? 5 : 3,
-                      childAspectRatio: kIsWeb ? 1.0 : 0.6,
-                      crossAxisSpacing: kIsWeb ? 20.0 : 8.0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: size.width > 700 && kIsWeb ? 5 : 3,
+                      childAspectRatio:  size.width > 700 && kIsWeb ? 1.0 : 0.6,
+                      crossAxisSpacing:  size.width > 700 && kIsWeb ? 20.0 : 8.0,
                     ),
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       print(
                           "snapshot.data: " + snapshot.data![index].toString());
-                      return WaitingRoomPlayerCard(
-                        playerName: snapshot.data![index]["name"],
-                        ready: snapshot.data![index]["ready"],
-                        playerId: snapshot.data![index]["userId"],
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          return WaitingRoomPlayerCard(
+                            playerName: snapshot.data![index]["name"],
+                            ready: snapshot.data![index]["ready"],
+                            playerId: snapshot.data![index]["userId"],
+                            cardWidth: constraints
+                                .maxWidth, // Pass available width to the card
+                          );
+                        },
                       );
                     },
                   ),
                 ),
                 SizedBox(height: 16.0),
                 Container(
-                  width: kIsWeb ? size.width * 0.25 : size.width * 0.5,
-                  height: kIsWeb ? size.height * 0.05 : size.height * 0.05,
+                  width: size.width > 700 && kIsWeb ? size.width * 0.4 : size.width * 0.5,
+                  height: size.width > 700 && kIsWeb ? size.height * 0.05 : size.height * 0.05,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

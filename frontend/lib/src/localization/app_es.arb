@@ -245,7 +245,10 @@
   "game_confirm_msg_deletion_text": "Esta acción no se puede deshacer.",
   "game_confirm_msg_deletion_delete": "Borrar",
 
-  "game_waiting_for_turn": "Esperando a que sea tu turno...",
+  "game_waiting_for_turn": "Esperando a que sea tu turno...",,
+  "purchase_success_title": "Compra exitosa",
+  "purchase_success_msg": "Ha realizado la compra exitosamente ",
+
 
 
   "purchase_error_title": "Error de compra",
