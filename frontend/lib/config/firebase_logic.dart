@@ -910,7 +910,7 @@ class FirebaseService {
             // .add(message.toMap());
             .set(message.toMap());
 
-        await updatePlayersTurn(currentGameId);
+        await updatePlayersTurn(currentGameId, false);
           
       } catch (error) {
         print('Error saving message: $error');
@@ -937,7 +937,7 @@ class FirebaseService {
     return _firestore.collection('game').doc(gameId).snapshots();
   }
 
-  Future<void> updatePlayersTurn(String gameId, [String? deletedPlayer]) async {
+  Future<void> updatePlayersTurn(String gameId, bool isDeletedPlayer) async {
     try {
       CollectionReference gamesCollection =
           FirebaseFirestore.instance.collection('game');
@@ -961,8 +961,10 @@ class FirebaseService {
           print('TURNO DEL PLAYER ANTERIOR: $nextPlayerId');
           print('TURNO DEL PLAYER ANTERIOR INDEX: $nextPlayerIndex');
           print('PLAYERS LENGTH: ${players.length}');
+          print('MY ID: ${singleton.user!.uid}');
+          print('DELETED PLAYER: $isDeletedPlayer');
 
-          if (nextPlayerId == 'IA' || deletedPlayer != null) {
+          if (nextPlayerId == 'IA' || (isDeletedPlayer /*&& nextPlayerId != singleton.user!.uid*/)) {
             nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
             nextPlayerId = players.keys.toList()[nextPlayerIndex];
           } else {
@@ -1171,13 +1173,15 @@ class FirebaseService {
                 playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
               print('A TOMAR POR CULO!!');
-
+              print('GAME ID: ' + gameId);
               // context.widget.test = "A TOMAR POR CULO!!";
               // _GamePlayersState state = context.findAncestorStateOfType<_GamePlayersState>()!;
 
               deleteKickedPlayer(gameId, currentUserUid);
 
-              await updatePlayersTurn(gameId, currentUserUid);
+              print('PLAYER DELETED IN GAME: ' + gameId);
+
+              await updatePlayersTurn(gameId, true);
               context.push("/");
               // singleton.currentGame = "";
             }
@@ -1221,6 +1225,11 @@ class FirebaseService {
   }
 
   Future<void> deleteKickedPlayer(String gameId, String playerId) async {
+
+    print('ENTRAMOS EN DELETE KICKED PLAYER');
+    print('GAME ID: ' + gameId);
+    print('KICKED PLAYER ID: ' + playerId);
+
     try {
       CollectionReference gamesCollection =
           FirebaseFirestore.instance.collection('game');

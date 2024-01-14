@@ -68,8 +68,13 @@ class _GameChatState extends State<GameChat> {
                 playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
               print('A TOMAR POR CULO!!');
+              print('GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
 
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
+
+              print('===============================================');
+              firestoreService.updatePlayersTurn(gameId, true);
+              print('===============================================');
               context.go("/");
               context.push("/");
               // singleton.currentGame = "";

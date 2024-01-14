@@ -28,6 +28,7 @@ class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
     // firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+    Size size = MediaQuery.of(context).size;
 
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
@@ -58,7 +59,7 @@ class _GamePlayersState extends State<GamePlayers> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                automaticallyImplyLeading: kIsWeb ? false : true,
+                automaticallyImplyLeading: size.width > 700 ? false : true,
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.exit_to_app),
