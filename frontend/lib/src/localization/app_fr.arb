@@ -244,7 +244,7 @@
     "game_confirm_msg_deletion_text": "Cette action ne peut pas être annulée.",
     "game_confirm_msg_deletion_delete": "Supprimer",
 
-    "game_waiting_for_turn": "En attente de votre tour...",,
+    "game_waiting_for_turn": "En attente de votre tour...",
     "purchase_success_title": "Achat réussi",
     "purchase_success_msg": "Vous avez acheté avec succès ",
 
