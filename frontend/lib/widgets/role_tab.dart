@@ -14,10 +14,11 @@ class RoleTab extends StatefulWidget {
 class _RoleTabState extends State<RoleTab> {
   // Create a list to store the presets for each image
   List<bool> presets = [
-    true,
-    false,
-    false
+    singleton.gameMode.value == "aliens" ? true : false,
+    singleton.gameMode.value == "dyd" ? true : false,
+    singleton.gameMode.value == "cthulhu" ? true : false
   ]; // Initialize with your default values
+ 
 
   // Function to handle image selection
   void handleImageSelection(int index) {
@@ -88,7 +89,7 @@ class _RoleTabState extends State<RoleTab> {
             imagePath: 'assets/images/cthulhu.jpg',
             routeName: '/game',
             imageText: "THE CALL OF CTHULHU",
-            isAvailable: false,
+            isAvailable: true,
             height: size.height * 0.9 / 4,
             width: widget.width,
             isLink: false,

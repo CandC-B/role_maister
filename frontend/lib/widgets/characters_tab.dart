@@ -12,6 +12,7 @@ import 'package:role_maister/widgets/profile_aliens_characters_card.dart';
 import 'package:role_maister/widgets/profile_cthulhu_characters_card.dart';
 import 'package:role_maister/widgets/profile_dyd_characters_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class CharactersTab extends StatefulWidget {
   const CharactersTab({Key? key}) : super(key: key);
 
@@ -90,24 +91,25 @@ class ProfileAliensCharacter extends StatelessWidget {
                         if (index < aliensCharacters.length) {
                           var data = aliensCharacters[index].data()
                               as Map<String, dynamic>;
-                            if (data['userId'] == singleton.player!.uid) {
-                              AliensCharacter aliensCharacter =
-                                  AliensCharacter.fromMap(
-                                aliensCharacters[index].data()
-                                    as Map<String, dynamic>,
-                              );
-                              return ProfileAliensCharacterCard(
-                                character: aliensCharacter,
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
+                          if (data['userId'] == singleton.player!.uid) {
+                            AliensCharacter aliensCharacter =
+                                AliensCharacter.fromMap(
+                              aliensCharacters[index].data()
+                                  as Map<String, dynamic>,
+                            );
+                            return ProfileAliensCharacterCard(
+                              character: aliensCharacter,
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
                         }
                       },
                     );
                   } else {
                     return Center(
-                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
+                      child: Text(AppLocalizations.of(context)!
+                          .you_dont_have_any_characters),
                     );
                   }
                 } else {
@@ -128,25 +130,25 @@ class ProfileAliensCharacter extends StatelessWidget {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersCreationDialog(gameMode: "aliens");
-                },
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-              minimumSize:
-                  isSmallScreen ? const Size(100, 30) : const Size(250, 40),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.add_character,
-              style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-            ),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     showDialog(
+          //       context: context,
+          //       builder: (BuildContext context) {
+          //         return CharactersCreationDialog(gameMode: "aliens");
+          //       },
+          //     );
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.deepPurple,
+          //     minimumSize:
+          //         isSmallScreen ? const Size(100, 30) : const Size(250, 40),
+          //   ),
+          //   child: Text(
+          //     AppLocalizations.of(context)!.add_character,
+          //     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -191,24 +193,24 @@ class ProfileDydCharacter extends StatelessWidget {
                         if (index < dydCharacters.length) {
                           var data = dydCharacters[index].data()
                               as Map<String, dynamic>;
-                            if (data['userId'] == singleton.player!.uid) {
-                              DydCharacter dydCharacter =
-                                  DydCharacter.fromMap(
-                                dydCharacters[index].data()
-                                    as Map<String, dynamic>,
-                              );
-                              return ProfileDydCharacterCard(
-                                character: dydCharacter,
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
+                          if (data['userId'] == singleton.player!.uid) {
+                            DydCharacter dydCharacter = DydCharacter.fromMap(
+                              dydCharacters[index].data()
+                                  as Map<String, dynamic>,
+                            );
+                            return ProfileDydCharacterCard(
+                              character: dydCharacter,
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
                         }
                       },
                     );
                   } else {
                     return Center(
-                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
+                      child: Text(AppLocalizations.of(context)!
+                          .you_dont_have_any_characters),
                     );
                   }
                 } else {
@@ -234,7 +236,7 @@ class ProfileDydCharacter extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CharactersCreationDialog(gameMode: "dyd");
+                  return CharactersCreationDialog();
                 },
               );
             },
@@ -292,24 +294,25 @@ class ProfileCthulhuCharacter extends StatelessWidget {
                         if (index < cthulhuCharacters.length) {
                           var data = cthulhuCharacters[index].data()
                               as Map<String, dynamic>;
-                            if (data['userId'] == singleton.player!.uid) {
-                              CthulhuCharacter cthulhuCharacter =
-                                  CthulhuCharacter.fromMap(
-                                cthulhuCharacters[index].data()
-                                    as Map<String, dynamic>,
-                              );
-                              return ProfileCthulhuCharacterCard(
-                                character: cthulhuCharacter,
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
+                          if (data['userId'] == singleton.player!.uid) {
+                            CthulhuCharacter cthulhuCharacter =
+                                CthulhuCharacter.fromMap(
+                              cthulhuCharacters[index].data()
+                                  as Map<String, dynamic>,
+                            );
+                            return ProfileCthulhuCharacterCard(
+                              character: cthulhuCharacter,
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
                         }
                       },
                     );
                   } else {
                     return Center(
-                      child: Text(AppLocalizations.of(context)!.you_dont_have_any_characters),
+                      child: Text(AppLocalizations.of(context)!
+                          .you_dont_have_any_characters),
                     );
                   }
                 } else {
@@ -330,25 +333,25 @@ class ProfileCthulhuCharacter extends StatelessWidget {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharactersCreationDialog(gameMode: "cthulhu");
-                },
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-              minimumSize:
-                  isSmallScreen ? const Size(100, 30) : const Size(250, 40),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.add_character,
-              style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
-            ),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     showDialog(
+          //       context: context,
+          //       builder: (BuildContext context) {
+          //         return CharactersCreationDialog(gameMode: "cthulhu");
+          //       },
+          //     );
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.deepPurple,
+          //     minimumSize:
+          //         isSmallScreen ? const Size(100, 30) : const Size(250, 40),
+          //   ),
+          //   child: Text(
+          //     AppLocalizations.of(context)!.add_character,
+          //     style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -408,11 +411,9 @@ class ProfileCharactersMobile extends StatelessWidget {
   }
 }
 
-
 class CharactersCreationDialog extends StatefulWidget {
-  final String gameMode;
-  CharactersCreationDialog({Key? key, required this.gameMode})
-      : super(key: key);
+  // final String gameMode;
+  CharactersCreationDialog({Key? key}) : super(key: key);
   @override
   _CharactersCreationDialogState createState() =>
       _CharactersCreationDialogState();
@@ -420,12 +421,14 @@ class CharactersCreationDialog extends StatefulWidget {
 
 class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
   TextEditingController characterNameController = TextEditingController();
-  String gameMode = "";
-  @override
-  void initState() {
-    super.initState();
-    gameMode = widget.gameMode;
-  }
+  // String gameMode = "";
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   gameMode = widget.gameMode;
+  // }
+  String selectedOption = "aliens";
+  List<String> options = ['aliens', 'dyd', 'cthulhu'];
 
   @override
   Widget build(BuildContext context) {
@@ -435,40 +438,72 @@ class _CharactersCreationDialogState extends State<CharactersCreationDialog> {
         AppLocalizations.of(context)!.enter_your_new_character_name,
         style: const TextStyle(color: Colors.white),
       ),
-      content: TextField(
-        controller: characterNameController,
-        cursorColor: Colors.white,
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          hintText: AppLocalizations.of(context)!.character_name,
-          hintStyle: const TextStyle(color: Colors.white),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          border: const UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.white,
+      content: 
+      SingleChildScrollView(
+        child: Column(
+        children: [
+          TextField(
+            controller: characterNameController,
+            cursorColor: Colors.white,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.character_name,
+              hintStyle: const TextStyle(color: Colors.white),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
-        ),
+          const SizedBox(height: 20),
+          DropdownButton<String>(
+            value: selectedOption,
+            style: const TextStyle(color: Colors.white),
+            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+            underline: Container(),
+            dropdownColor: Colors.deepPurple,
+            isExpanded: true,
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedOption = newValue!;
+              });
+            },
+            items: options.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
+      ),
+      
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: Colors.white)),
+          child: Text(AppLocalizations.of(context)!.cancel,
+              style: const TextStyle(color: Colors.white)),
         ),
         TextButton(
           onPressed: () {
-            if (gameMode == "aliens") {
+            if (selectedOption == "aliens") {
               createAlien(characterNameController.text);
-            } else if (gameMode == "dyd") {
+            } else if (selectedOption == "dyd") {
               createDyd(characterNameController.text);
-            } else if (gameMode == "cthulhu") {
+            } else if (selectedOption == "cthulhu") {
               createCthulhu(characterNameController.text);
             }
             Navigator.of(context).pop();
@@ -528,7 +563,8 @@ class _CharactersEditionOrDeletionDialogState
               style: const TextStyle(color: Colors.white),
             )
           : Text(
-              AppLocalizations.of(context)!.are_you_sure_you_want_to_delete_this_character,
+              AppLocalizations.of(context)!
+                  .are_you_sure_you_want_to_delete_this_character,
               style: const TextStyle(color: Colors.white),
             ),
       content: widget.isEdition
@@ -558,7 +594,8 @@ class _CharactersEditionOrDeletionDialogState
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: Colors.white)),
+          child: Text(AppLocalizations.of(context)!.cancel,
+              style: const TextStyle(color: Colors.white)),
         ),
         TextButton(
           onPressed: () {

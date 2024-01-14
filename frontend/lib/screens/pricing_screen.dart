@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:role_maister/config/config.dart';
 import 'package:role_maister/widgets/appBar/custom_app_bar.dart';
 import 'package:role_maister/widgets/drawer/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ShopScreen extends StatelessWidget {
   final List<TokenPackage> tokenPackages = [
-    TokenPackage("1 Tokens", 1.0),
-    TokenPackage("5 Tokens", 4.0),
-    TokenPackage("10 Tokens", 8.0),
-    TokenPackage("25 Tokens", 22.0),
-    TokenPackage("50 Tokens", 45.0),
+    TokenPackage("1 Token", 1.0),
+    TokenPackage("5 Tokens", 5.0),
+    TokenPackage("10 Tokens", 7.0),
+    TokenPackage("25 Tokens", 12.0),
+    TokenPackage("50 Tokens", 22.0),
   ];
 
   ShopScreen({super.key});
@@ -67,17 +67,20 @@ class TokenPackageCard extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
         subtitle: Text(
-          '\$${tokenPackage.price.toStringAsFixed(2)}',
+          '${tokenPackage.price.toStringAsFixed(2)} \u20AC',
           style: const TextStyle(color: Colors.white, fontSize: 20),
         ),
         trailing: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.deepPurple)),
           onPressed: () {
-            // TODO: Implement payment processing logic here
             // This is where you would integrate a payment gateway.
             // For simplicity, you can show a confirmation dialog here.
-            showConfirmationDialog(context);
+            if (singleton.player != null) {
+              showConfirmationDialog(context);
+            } else {
+              showErrorDialog(context);
+            }
           },
           child: Text(AppLocalizations.of(context)!.buyButton),
         ),
@@ -90,38 +93,93 @@ class TokenPackageCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            title:  Text(
-              AppLocalizations.of(context)!.confirmButton,
-              style: TextStyle(color: Colors.white),
-            ),
-            content: Text(
-              // "Do you want to buy ${tokenPackage.name}?",
-              "${AppLocalizations.of(context)!.confirmPurchaseText} ${tokenPackage.name}?",
-              style: const TextStyle(color: Colors.white),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child:  Text(
-                  AppLocalizations.of(context)!.cancel,
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+          backgroundColor: Colors.deepPurple,
+          title: Text(
+            AppLocalizations.of(context)!.confirmButton,
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            // "Do you want to buy ${tokenPackage.name}?",
+            "${AppLocalizations.of(context)!.confirmPurchaseText} ${tokenPackage.name}?",
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: TextStyle(color: Colors.white),
               ),
-              TextButton(
-                child:  Text(
-                  AppLocalizations.of(context)!.buyButton,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                AppLocalizations.of(context)!.buyButton,
+                style: const TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                await firebase.changePlayerBalance(singleton.user!.uid,
+                    double.parse(tokenPackage.name.split(' ')[0]));
+                Navigator.of(context).pop();
+                showPurchaseConfirmationDialog(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showPurchaseConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          title: Text(
+            AppLocalizations.of(context)!.purchase_success_title,
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            // "Do you want to buy ${tokenPackage.name}?",
+            "${AppLocalizations.of(context)!.purchase_success_msg} ${tokenPackage.name}",
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: <Widget>[
+            Center(
+              child: TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.accept_button,
                   style: const TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  // TODO: Implement actual payment processing here
+                onPressed: () async {
                   Navigator.of(context).pop();
                 },
               ),
-            ],
-          );
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          title: Text(
+            AppLocalizations.of(context)!.purchase_error_title,
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            // Sign up to buy tokens
+            "${AppLocalizations.of(context)!.error_purchasing_tokens}",
+            style: const TextStyle(color: Colors.white),
+          ),
+        );
       },
     );
   }

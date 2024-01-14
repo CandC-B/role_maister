@@ -4,23 +4,32 @@ import 'package:uuid/uuid.dart';
 import 'package:shortid/shortid.dart';
 class Game {
   final String uid;
+  final String creator_uid;
   final String short_uid;
+  int ia_word_count;
   final int num_players;
   final String role_system;
   final Map<String, dynamic> players;
   final String story_description;
   final Map<String, dynamic> ready_players;
   final bool game_ready;
+  final String nextPlayersTurn;
+  int nextPlayersTurnIndex;
 
   Game({
     String? uid,
+    required this.creator_uid,
     String? short_uid,
+    this.ia_word_count = 0,
     required this.num_players,
     required this.role_system,
     required this.players,
     required this.story_description,
     required this.ready_players,
     required this.game_ready,
+    required this.nextPlayersTurn,
+    this.nextPlayersTurnIndex = -1,
+
   }) : uid = uid ?? const Uuid().v4(),
         short_uid = shortid.generate();
 
@@ -28,6 +37,8 @@ class Game {
     Map<String, dynamic>? data = document.data();
     if (data != null) {
       String uid = data['uid'] ?? '';
+      int ia_word_count = data['ia_word_count'] ?? 0;
+      String creator_uid = data['creator_uid'] ?? '';
       String short_uid = data['short_uid'] ?? '';
       int num_players = data['num_players'] ?? 0;
       String role_system = data['role_system'] ?? '';
@@ -35,9 +46,13 @@ class Game {
       String story_description = data['story_description'] ?? '';
       Map<String, dynamic> ready_players = Map<String, dynamic>.from(data['ready_players'] ?? []);
       bool game_ready = data['game_ready'] ?? false;
+      String nextPlayersTurn = data['nextPlayersTurn'] ?? '';
+      int nextPlayersTurnIndex = data['nextPlayersTurnIndex'] ?? 0;
 
       return Game(
         uid: uid,
+        ia_word_count: ia_word_count,
+        creator_uid: creator_uid,
         short_uid: short_uid,
         num_players: num_players,
         role_system: role_system,
@@ -45,6 +60,8 @@ class Game {
         story_description: story_description,
         ready_players: ready_players,
         game_ready: game_ready,
+        nextPlayersTurn: nextPlayersTurn,
+        nextPlayersTurnIndex: nextPlayersTurnIndex,
       );
     } else {
       throw Exception('Failed to parse document data');
@@ -54,6 +71,8 @@ class Game {
   toMap() {
     return {
       'uid': this.uid,
+      'ia_word_count': this.ia_word_count,
+      'creator_uid': this.creator_uid, 
       'short_uid': this.short_uid,
       'num_players': this.num_players,
       'role_system': this.role_system,
@@ -61,12 +80,16 @@ class Game {
       'story_description': this.story_description,
       'ready_players': this.ready_players,
       'game_ready': this.game_ready,
+      'nextPlayersTurn': this.nextPlayersTurn,
+      'nextPlayersTurnIndex': this.nextPlayersTurnIndex,
     };
   }
 
   static fromMap(Map<String, dynamic> statsData) {
     return Game(
       uid: statsData['uid'],
+      ia_word_count: statsData['ia_word_count'],
+      creator_uid: statsData['creator_uid'],
       short_uid: statsData['short_uid'],
       num_players: statsData['num_players'],
       role_system: statsData['role_system'],
@@ -74,6 +97,8 @@ class Game {
       story_description: statsData['story_description'],
       ready_players: statsData['ready_players'],
       game_ready: statsData['game_ready'],
+      nextPlayersTurn: statsData['nextPlayersTurn'],
+      nextPlayersTurnIndex: statsData['nextPlayersTurnIndex'],
     );
   }
 }

@@ -4,7 +4,7 @@ class Player {
   final String uid;
   final String username;
   final String? email;
-  final int tokens;
+  double tokens;
   final List aliens;
   final List dyd;
   final List cthulhu;
@@ -13,7 +13,18 @@ class Player {
   final String? photoUrl;
   final List games;
 
-  Player({required this.uid, required this.username, required this.email, required this.tokens ,required this.aliens ,required this.dyd ,required this.cthulhu, required this.gamesPlayed, required this.experience, required this.photoUrl, required this.games});
+  Player(
+      {required this.uid,
+      required this.username,
+      required this.email,
+      required this.tokens,
+      required this.aliens,
+      required this.dyd,
+      required this.cthulhu,
+      required this.gamesPlayed,
+      required this.experience,
+      required this.photoUrl,
+      required this.games});
 
   factory Player.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
@@ -22,7 +33,7 @@ class Player {
       String uid = data['uid'] ?? '';
       String username = data['username'] ?? '';
       String email = data['email'] ?? '';
-      int tokens = data['tokens'] ?? 0;
+      double tokens = data['tokens'] ?? 0.0;
       List<String> aliens = List<String>.from(data['aliens'] ?? []);
       List<String> dyd = List<String>.from(data['dyd'] ?? []);
       List<String> cthulhu = List<String>.from(data['cthulhu'] ?? []);
@@ -49,10 +60,8 @@ class Player {
       // Handle the case where data is null
       throw Exception('Failed to parse document data');
     }
-
-    
-}
-Map<String, dynamic> toMap() {
+  }
+  Map<String, dynamic> toMap() {
     return {
       'uid': uid,
       'username': username,

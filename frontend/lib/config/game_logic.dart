@@ -1,5 +1,6 @@
 import 'package:role_maister/config/config.dart';
 import 'package:role_maister/models/aliens_character.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/game.dart';
 
@@ -19,8 +20,9 @@ Future<String> generateAliensPrompt(Game game) async {
     // Get all player features
     int i = 0;
     Map<String, dynamic> players = gameSettings['players'];
-    print(players.toString());
-    for (var player in players.values) {
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
       newGameInstruction += "There are player${i + 1} features:.\n";
       i++;
       Map<String, dynamic> characterData = await firebase.getCharacter(
@@ -28,7 +30,6 @@ Future<String> generateAliensPrompt(Game game) async {
       AliensCharacter aliensCharacter = AliensCharacter.fromMap(characterData);
       newGameInstruction += getAliensCharacterFeatures(aliensCharacter);
     }
-
   } else {
     // Singleplayer sentence
     Map<String, dynamic> userInfo = gameSettings['players'];
@@ -39,10 +40,9 @@ Future<String> generateAliensPrompt(Game game) async {
     newGameInstruction +=
         "The story will develop as it follows:${gameSettings['story_description']}.\n";
   }
-
   newGameInstruction +=
-      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
-
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
+  print(newGameInstruction);
   return newGameInstruction;
 }
 
@@ -91,7 +91,9 @@ Future<String> generateDyDPrompt(Game game) async {
     // Get all player features
     int i = 0;
     Map<String, dynamic> players = gameSettings['players'];
-    for (var player in players.values) {
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
       newGameInstruction += "There are player${i + 1} features:.\n";
       i++;
       Map<String, dynamic> characterData = await firebase.getCharacter(
@@ -111,8 +113,7 @@ Future<String> generateDyDPrompt(Game game) async {
   }
 
   newGameInstruction +=
-      "You firstly must develop an introduction to the story. Then suggest 3 possible actions for the player in each message and wait until the user response.\nThe user will choose what to do, and then you must readapt the story based on that decision.\n";
-
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
   print(newGameInstruction);
   return newGameInstruction;
 }
@@ -136,4 +137,83 @@ String getDyDCharacterFeatures(DydCharacter dydCharacter) {
       "My character background stands for: ${dydCharacter.background}\n";
 
   return dydFeatures;
+}
+
+Future<String> generateCthulhuPrompt(Game game) async {
+  Map<String, dynamic> gameSettings = game.toMap();
+  String newGameInstruction = "";
+
+  // First sentence
+  newGameInstruction +=
+      "I want you to act as a dungeon master for my cthulhu game session.\n";
+
+  if (gameSettings['num_players'] > 1) {
+    // Multiplayer sentence
+    newGameInstruction += "There are ${gameSettings['num_players']} players.\n";
+    newGameInstruction +=
+        "To distinguish their actions, each message will start with 'playerX: (message)', being X the user index.\n";
+    // Get all player features
+    int i = 0;
+    Map<String, dynamic> players = gameSettings['players'];
+    List<String> orderedKeys = players.keys.toList()..sort();
+    for (var key in orderedKeys) {
+      var player = players[key];
+      newGameInstruction += "There are player${i + 1} features:.\n";
+      i++;
+      Map<String, dynamic> characterData = await firebase.getCharacter(
+          player["characterId"], gameSettings['role_system']);
+      CthulhuCharacter cthulhuCharacter =
+          CthulhuCharacter.fromMap(characterData);
+      newGameInstruction += getCthulhuCharacterFeatures(cthulhuCharacter);
+    }
+  } else {
+    // Singleplayer sentence
+    Map<String, dynamic> userInfo = gameSettings['players'];
+    Map<String, dynamic> characterData = await firebase.getCharacter(
+        userInfo.values.first["characterId"], gameSettings['role_system']);
+    CthulhuCharacter cthulhuCharacter = CthulhuCharacter.fromMap(characterData);
+    newGameInstruction += getCthulhuCharacterFeatures(cthulhuCharacter);
+    newGameInstruction +=
+        "The story will develop as it follows:${gameSettings['story_description']}.\n";
+  }
+
+ newGameInstruction +=
+      "Develop an introduction to the story and give 3 possible actions to the first player.\n";
+  print(newGameInstruction);
+  return newGameInstruction;
+}
+
+String getCthulhuCharacterFeatures(CthulhuCharacter cthulhuCharacter) {
+  String cthulhuFeatures = "";
+
+  cthulhuFeatures +=
+      "I am ${cthulhuCharacter.name}, a level ${cthulhuCharacter.characterLevel} ${cthulhuCharacter.gender} ${cthulhuCharacter.occupation}, aged ${cthulhuCharacter.age}.\n";
+  cthulhuFeatures +=
+      "My characteristics are: ${cthulhuCharacter.characteristics.entries.map((entry) => "${entry.key} ${entry.value},").join(" ")}\n";
+  cthulhuFeatures += "I have ${cthulhuCharacter.bonusDamage} bonus damage\n";
+  cthulhuFeatures += "I have ${cthulhuCharacter.hp} health points\n";
+  cthulhuFeatures += "I have ${cthulhuCharacter.sanity} sanity points\n";
+  cthulhuFeatures += "I have ${cthulhuCharacter.mp} magic points\n";
+  cthulhuFeatures += "I have ${cthulhuCharacter.luck} luck points\n";
+  cthulhuFeatures +=
+      "My skills are ${cthulhuCharacter.skills.entries.map((entry) => "${entry.key} ${entry.value},").join(" ")}\n";
+  cthulhuFeatures +=
+      "My character's weapons and damages are ${cthulhuCharacter.weapons.entries.map((entry) => "${entry.key} ${entry.value},").join(" ")}\n";
+  cthulhuFeatures +=
+      "My character's description stands for ${cthulhuCharacter.personalDescription}\n";
+  cthulhuFeatures +=
+      "My character's ideology is ${cthulhuCharacter.ideology}\n";
+  cthulhuFeatures +=
+      "My character's relatives are ${cthulhuCharacter.relatives}\n";
+  cthulhuFeatures +=
+      "My character's significant places are ${cthulhuCharacter.significantPlaces}\n";
+  cthulhuFeatures +=
+      "My character prized possessions are ${cthulhuCharacter.prizedPossessions}\n";
+  cthulhuFeatures += "My character's traits are ${cthulhuCharacter.traits}\n";
+  cthulhuFeatures += "My character's phobia is ${cthulhuCharacter.phobias}\n";
+  cthulhuFeatures += "My character's mania is ${cthulhuCharacter.manias}\n";
+  cthulhuFeatures +=
+      "My character's equipment is ${cthulhuCharacter.equipment}\n";
+
+  return cthulhuFeatures;
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/game.dart';
@@ -27,6 +28,7 @@ class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
     // firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+    Size size = MediaQuery.of(context).size;
 
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
@@ -57,6 +59,7 @@ class _GamePlayersState extends State<GamePlayers> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: size.width > 700 ? false : true,
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.exit_to_app),
@@ -93,50 +96,12 @@ class _GamePlayersState extends State<GamePlayers> {
     );
   }
 
-  void observeAndHandleGameChanges(
-      String gameId, String currentUserUid, BuildContext context) {
-    FirebaseFirestore.instance
-        .collection('game')
-        .doc(gameId)
-        .snapshots()
-        .listen((event) {
-      if (event.exists) {
-        final data = event.data() as Map<String, dynamic>?;
-        if (data != null) {
-          // check if currentUserUid is in the players list
-          if (data['players'].containsKey(currentUserUid)) {
-            // check if the player has voted to kick
-            PlayerGameData playerGameData =
-                PlayerGameData.fromMap(data['players'][currentUserUid]);
-
-            Game game = Game.fromMap(data);
-            print('GAME DATA: ' + game.toString());
-            print('PLAYER ID: ' + currentUserUid);
-            print('PLAYER DATA: ' +
-                playerGameData.characterId +
-                ' ' +
-                playerGameData.votedToGetKicked.toString());
-
-            if (data['players'].length != 1 &&
-                playerGameData.votedToGetKicked >= data['players'].length - 1) {
-              // kick the player
-              print('A TOMAR POR CULO!!');
-
-              firestoreService.deleteKickedPlayer(gameId, currentUserUid);
-              context.push("/");
-              // singleton.currentGame = "";
-            }
-          }
-        }
-      }
-    });
-  }
+  
 
   Future<AliensCharacter> getUserStats(String gameId) async {
     // firestoreService.observeAndHandleGameChanges(
     //     widget.gameId, singleton.player!.uid, context);
 
-    observeAndHandleGameChanges(gameId, singleton.player!.uid, context);
 
     try {
       final List<Map<String, dynamic>> statsData =
@@ -319,7 +284,8 @@ class _PlayerCardState extends State<PlayerCard> {
           sentAt: DateTime.now(),
           text: text,
           senderName: "System",
-          characterName: ''),
+          characterName: '',
+          userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/small_logo.png?alt=media&token=54ac8a51-9a0d-4a78-baea-81cdc07efc16'),
       singleton.currentGame!,
     );
   }

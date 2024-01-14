@@ -152,43 +152,7 @@ class AliensTab extends StatelessWidget {
               AppLocalizations.of(context)!.guides_aliens_text4,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    AppLocalizations.of(context)!.guides_aliens_text5,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    AppLocalizations.of(context)!.guides_aliens_text6,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
+           const SizedBox(height: 10),
             const Text(
               'Talents',
               textAlign: TextAlign.start,
@@ -795,49 +759,495 @@ class DnDTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        const SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Column(
-              children: <Widget>[
-                // ... (el contenido anterior)
-                Text(
-                  "This part is important. Since it's an AI that's responsible for guiding the game, and not a human, all players must commit to following certain guidelines to facilitate the flow of the game:\n\n"
-                  "Adhere to your character sheet: Remember your character's details and incorporate them into the conversation whenever possible to provide more context to the AI. Don't change your character's details unless instructed to do so.\n\n"
-                  "Don't make up dice rolls: The natural mechanism for role-playing is dice rolls. If you're asked to make a roll, don't make up the values. Embrace the randomness!\n\n"
-                  "Keep the AI in context: We trust you to follow the story provided by the AI. After all, it's not human. Correct when necessary, make decisions your character would make, and forge your own path, but don't diverge into unrelated topics. You might confuse the AI and disrupt the narrative.\n\n",
+    
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          children: <Widget>[
+              const SizedBox(height: 40),
+              Text(
+              AppLocalizations.of(context)!.guides_dnd_text1,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_dnd_text2,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text3,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_dnd_text4,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text5,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text6,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text7,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
-          ),
-        ),
-        Positioned.fill(
-          child: Container(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Transform.rotate(
-                angle: -atan(200 / 200),
-                child:  FittedBox(
-                  fit: BoxFit.contain,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.coming_soon,
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text8,
                     style: const TextStyle(
-                      fontSize: 5,
-                      color: Colors.deepPurple,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'Poppins',
-                    ),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text9,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text10,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text11,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text12,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text13,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text14,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text15,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text16,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text17,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text18,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text19,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text20,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text21,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text22,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text23,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text24,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text25,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text26,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text27,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text28,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text29,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text30,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text31,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text32,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text33,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_dnd_text34,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_dnd_text35,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_dnd_text36,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ],
         ),
-      ],
+      ),
     );
+
+    // );
   }
 }
 
@@ -846,48 +1256,509 @@ class CthulhuTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        const SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Column(
-              children: <Widget>[
-                // ... (el contenido anterior)
-                Text(
-                  "This part is important. Since it's an AI that's responsible for guiding the game, and not a human, all players must commit to following certain guidelines to facilitate the flow of the game:\n\n"
-                  "Adhere to your character sheet: Remember your character's details and incorporate them into the conversation whenever possible to provide more context to the AI. Don't change your character's details unless instructed to do so.\n\n"
-                  "Don't make up dice rolls: The natural mechanism for role-playing is dice rolls. If you're asked to make a roll, don't make up the values. Embrace the randomness!\n\n"
-                  "Keep the AI in context: We trust you to follow the story provided by the AI. After all, it's not human. Correct when necessary, make decisions your character would make, and forge your own path, but don't diverge into unrelated topics. You might confuse the AI and disrupt the narrative.\n\n",
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          children: <Widget>[
+              const SizedBox(height: 40),
+              Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text1,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_cthulhu_text2,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text3,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_cthulhu_text4,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text5,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text6,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text7,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
-          ),
-        ),
-        Positioned.fill(
-          child: Container(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Transform.rotate(
-                angle: -atan(200 / 200),
-                child:  FittedBox(
-                  fit: BoxFit.contain,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.coming_soon,
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text8,
                     style: const TextStyle(
-                      fontSize: 5,
-                      color: Colors.deepPurple,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'Poppins',
-                    ),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text9,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text10,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text11,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text12,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text13,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text14,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text15,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text16,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text17,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text18,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text19,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text20,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text21,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text22,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text23,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text24,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text25,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text26,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text27,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text28,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text29,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text30,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text31,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text32,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text33,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text34,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text35,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text36,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),
+            Text(
+              textAlign: TextAlign.justify,
+              AppLocalizations.of(context)!.guides_cthulhu_text37,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ],
         ),
-      ],
+      ),
     );
   }
 }

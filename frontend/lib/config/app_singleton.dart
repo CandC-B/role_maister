@@ -20,7 +20,7 @@ class AppSingleton {
   Player? player;
   String? currentGame;
   String? currentGameShortUid;
-  String history = "";
+  TextEditingController history = TextEditingController();
   bool multiplayer = false;
   bool pairingMode = false;
   bool joinPairingMode = false;

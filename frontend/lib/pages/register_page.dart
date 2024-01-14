@@ -273,9 +273,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     User? user = await firebase.signUp(
                         email.text, newPassword1.text, context);
                     if (user != null) {
-                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 5 ,aliens: [], dyd: [], cthulhu: [],gamesPlayed: 0, experience: 1, photoUrl: "small_logo.png", games: []);
+                      Player player = Player(uid: user.uid, username: username.text ,email: user.email, tokens: 0 ,aliens: [], dyd: [], cthulhu: [],gamesPlayed: 0, experience: 1, photoUrl: "https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a", games: []);
                       singleton.player = player;
-                      firebase.saveUser(player);
+                      await firebase.saveUser(player);
                     } else {
                       emailAlreadyExist();
                     }
