@@ -14,10 +14,11 @@ class RoleTab extends StatefulWidget {
 class _RoleTabState extends State<RoleTab> {
   // Create a list to store the presets for each image
   List<bool> presets = [
-    true,
-    false,
-    false
+    singleton.gameMode.value == "aliens" ? true : false,
+    singleton.gameMode.value == "dyd" ? true : false,
+    singleton.gameMode.value == "cthulhu" ? true : false
   ]; // Initialize with your default values
+ 
 
   // Function to handle image selection
   void handleImageSelection(int index) {

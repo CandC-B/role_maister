@@ -7,6 +7,8 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
 import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/main.dart';
+import 'package:role_maister/models/cthulhu_character.dart';
+import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player_game_data.dart';
 import '../models/models.dart';
@@ -68,7 +70,8 @@ class _GameChatState extends State<GameChat> {
                 playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
               print('A TOMAR POR CULO!!');
-              print('GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
+              print(
+                  'GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
 
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
 
@@ -99,7 +102,7 @@ class _GameChatState extends State<GameChat> {
     // firestoreService.saveMessage(
     //     text, DateTime.now(), widget.gameId, currentUserId);
 
-    firestoreService.saveMessage(
+    await firestoreService.saveMessage(
       ChatMessages(
           sentBy: currentUserId,
           sentAt: DateTime.now(),
@@ -109,17 +112,30 @@ class _GameChatState extends State<GameChat> {
           userImage: singleton.player!.photoUrl!),
       widget.gameId,
     );
-    firestoreService.updatePlayerWordCount(
+    await firestoreService.updatePlayerWordCount(
         widget.gameId, singleton.player!.uid, text.split(' ').length);
 
     textEditingController.clear();
 
     if (messages != null) {
+      Game game = Game.fromMap(await firebase.getGame(widget.gameId));
+      List<String> orderedKeys = game.players.keys.toList()..sort();
+      print("INDICE DE PLAYER ACTUAL:"+ game.nextPlayersTurnIndex.toString());
+      int nextPlayerIndex =
+          (game.nextPlayersTurnIndex + 1) % game.players.length;
+      String nextPlayerUid = orderedKeys.elementAt(nextPlayerIndex);
+      String nextPlayerCharacterUid =
+          game.players[nextPlayerUid]['characterId'];
+      Map<String, dynamic> nextPlayerCharacter =
+          await firebase.getCharacter(nextPlayerCharacterUid, game.role_system);
+
+      print("Current Character: ${singleton.selectedCharacterName}");
+      print('give 3 actions for ${nextPlayerCharacter['name']}.');
       final response = await http.post(
           // TODO: add constants.dart in utils folder
           // Uri.http("localhost:8000", "/game/master?message=$text"),
           Uri.parse(
-              "https://rolemaister.onrender.com/game/master?message=$text"),
+              "https://rolemaister.onrender.com/game/master?message=${singleton.selectedCharacterName!}: $text. Continue the story and give 3 actions for ${nextPlayerCharacter['name']}."),
           headers: headers,
           body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
@@ -392,8 +408,7 @@ class _GameChatState extends State<GameChat> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextField(
                                 // focusNode: focusNode,
-                                enabled:
-                                    singleton.player!.tokens > 0 &&
+                                enabled: singleton.player!.tokens > 0 &&
                                     snapshot.data!.get('nextPlayersTurn') ==
                                         singleton.user!.uid,
                                 textInputAction: TextInputAction.send,
@@ -455,8 +470,8 @@ class _GameChatState extends State<GameChat> {
 
                               //   onSendMessage(textEditingController.text);
                               // },
-                              onPressed:  singleton.player!.tokens > 0 && snapshotPlayersTurn ==
-                                      singleton.user!.uid
+                              onPressed: singleton.player!.tokens > 0 &&
+                                      snapshotPlayersTurn == singleton.user!.uid
                                   ? () {
                                       onSendMessage(textEditingController.text);
                                     }
@@ -481,48 +496,51 @@ class _GameChatState extends State<GameChat> {
             ],
           ),
         ),
-        Align(
-          /*
- alignment: (size.width > 700 || kIsWeb)
-              ? Alignment.topRight
-              : Alignment.topLeft),
-          */
-          alignment: size.width > 700 || kIsWeb
-              ? Alignment.topCenter
-              : Alignment.topLeft,  
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.deepPurple,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: StreamBuilder<double>(
-              stream: firebase.getUserSpendingStream(
-                widget.gameId,
-                singleton.user!.uid,
+        Padding(
+            padding: kIsWeb? const EdgeInsets.only(top: 8.0): const EdgeInsets.only(top: 20.0),
+          child: Align(
+            /*
+         alignment: (size.width > 700 || kIsWeb)
+                ? Alignment.topRight
+                : Alignment.topLeft),
+            */
+            alignment: size.width > 700 || kIsWeb
+                ? Alignment.topCenter
+                : Alignment.topLeft,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Text(
-                      'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
+              child: StreamBuilder<double>(
+                stream: firebase.getUserSpendingStream(
+                  widget.gameId,
+                  singleton.user!.uid,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple,
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    ),
-                  );
-                }
-              },
+                      child: Text(
+                        'MAIster points spent: ${snapshot.data?.toString() ?? "N/A"}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ),

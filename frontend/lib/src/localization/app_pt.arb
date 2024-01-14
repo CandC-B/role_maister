@@ -256,7 +256,10 @@
   "game_confirm_msg_deletion_text": "Esta ação não pode ser desfeita.",
   "game_confirm_msg_deletion_delete": "Excluir",
 
-  "game_waiting_for_turn": "Aguardando a vez de jogadore..."
+  "game_waiting_for_turn": "Aguardando a vez de jogadore...",
+  "purchase_success_title": "Acquisto riuscito",
+  "purchase_success_msg": "Hai acquistato con successo "
+
 
 
 
