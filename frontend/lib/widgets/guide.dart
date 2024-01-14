@@ -1263,7 +1263,7 @@ class CthulhuTab extends StatelessWidget {
           children: <Widget>[
               const SizedBox(height: 40),
               Text(
-              "Call of Cthulhu: A Descent into Cosmic Horror",
+              AppLocalizations.of(context)!.guides_cthulhu_text1,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -1273,12 +1273,12 @@ class CthulhuTab extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               textAlign: TextAlign.justify,
-              "Welcome to Call of Cthulhu, a role-playing game that plunges you into the unsettling realms of cosmic horror inspired by the works of H.P. Lovecraft. This game isn't just about survival; it's about maintaining sanity as you confront ancient, malevolent entities that defy human understanding. Prepare to embark on a journey where mysteries are dark, and the horrors are beyond comprehension.\n\n",
+              AppLocalizations.of(context)!.guides_cthulhu_text2,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              "The Essence of Call of Cthulhu: Embrace the Unknown",
+              AppLocalizations.of(context)!.guides_cthulhu_text3,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -1288,12 +1288,12 @@ class CthulhuTab extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               textAlign: TextAlign.justify,
-              "Call of Cthulhu sets the stage for a narrative steeped in mystery, dread, and the unknown. As investigators, players unravel conspiracies, face eldritch horrors, and grapple with the fragility of their own sanity. It's a game where survival might mean escaping with one's mind intact rather than emerging unscathed.\n\n",
+              AppLocalizations.of(context)!.guides_cthulhu_text4,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              "How to Play: A Dance with Madness",
+              AppLocalizations.of(context)!.guides_cthulhu_text5,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -1302,7 +1302,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Create Your Investigator",
+              AppLocalizations.of(context)!.guides_cthulhu_text6,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1320,7 +1320,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Craft an investigator, a character thrust into the realms of cosmic horror. Select a profession, background, and personal connections that define who you are.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text7,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1338,53 +1338,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Investigator skills and characteristics play a crucial role in determining your character's ability to navigate the mysteries.\n\n",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Explore the Unknown',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    "Delve into investigations that lead you to forbidden tomes, ancient artifacts, and cryptic locations.\n\n",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    "Uncover clues, decipher cryptic messages, and connect the dots to reveal the horrifying truth.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text8,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1393,7 +1347,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Face Cosmic Horrors",
+              AppLocalizations.of(context)!.guides_cthulhu_text9,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1412,7 +1366,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Confront otherworldly entities that defy human comprehension. These horrors can warp reality, testing the limits of your investigator's sanity.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text10,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1430,15 +1384,16 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Combat is not always the solution. Sometimes, fleeing or hiding is the only way to survive.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text11,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 10),
             Text(
-              "Sanity Mechanic",
+              AppLocalizations.of(context)!.guides_cthulhu_text12,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1457,7 +1412,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Your investigator's sanity is as important as their physical well-being. Witnessing unspeakable horrors or delving too deep into forbidden knowledge can erode your sanity.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text13,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1475,7 +1430,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "As sanity dwindles, characters may develop phobias, hallucinations, or even descend into madness.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text14,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1483,7 +1438,7 @@ class CthulhuTab extends StatelessWidget {
               ],
             ),
             Text(
-              "The Mythos",
+              AppLocalizations.of(context)!.guides_cthulhu_text15,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1502,7 +1457,52 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "The game is steeped in Lovecraftian lore, featuring cosmic entities like Cthulhu, Nyarlathotep, and Azathoth. These beings exist beyond human comprehension and often drive the overarching narrative.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text16,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text17,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text18,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text19,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1511,7 +1511,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Creating Your Investigator: Unraveling the Human Psyche",
+              AppLocalizations.of(context)!.guides_cthulhu_text20,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 30,
@@ -1520,7 +1520,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Profession and Background",
+              AppLocalizations.of(context)!.guides_cthulhu_text21,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1539,7 +1539,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Choose a profession for your investigator, whether a librarian, journalist, detective, or academic. Your choice impacts your starting skills and connections.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text22,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1557,7 +1557,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Select a background that gives depth to your character, providing motivation and personal history.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text23,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1566,7 +1566,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Skills and Characteristics",
+              AppLocalizations.of(context)!.guides_cthulhu_text24,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1585,7 +1585,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Investigator skills encompass a range of abilities from library use and spot hidden to firearms and occult knowledge.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text25,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1603,35 +1603,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Characteristics like strength, dexterity, intelligence, and appearance determine your investigator's baseline capabilities.\n\n",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Personal Connection",
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '•',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    textAlign: TextAlign.justify,
-                    "Define relationships with other investigators. These connections may provide support, resources, or even lead to tragic story arcs.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text26,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1640,7 +1612,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Equipment",
+              AppLocalizations.of(context)!.guides_cthulhu_text27,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1659,7 +1631,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Outfit your investigator with essential equipment, taking into account the setting and time period of your investigation.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text28,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1668,7 +1640,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Backstory",
+              AppLocalizations.of(context)!.guides_cthulhu_text29,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1687,7 +1659,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Develop a detailed backstory that outlines your investigator's experiences and motivations. Dark secrets and personal traumas may surface during the course of the game.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text30,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1696,7 +1668,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Personal Belongings",
+              AppLocalizations.of(context)!.guides_cthulhu_text31,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1715,7 +1687,7 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "Investigator possessions may include unique items, arcane artifacts, or even dangerous tomes that become integral to the unfolding story.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text32,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1724,7 +1696,7 @@ class CthulhuTab extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Alignment",
+              AppLocalizations.of(context)!.guides_cthulhu_text33,
               textAlign: TextAlign.start,
               style: const TextStyle(
                   fontSize: 20,
@@ -1743,7 +1715,35 @@ class CthulhuTab extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textAlign: TextAlign.justify,
-                    "In Call of Cthulhu, there isn't a traditional alignment system. Characters, however, often find themselves morally conflicted or ethically challenged as they grapple with the horrors they uncover.\n\n",
+                    AppLocalizations.of(context)!.guides_cthulhu_text34,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              AppLocalizations.of(context)!.guides_cthulhu_text35,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '•',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    AppLocalizations.of(context)!.guides_cthulhu_text36,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -1753,7 +1753,7 @@ class CthulhuTab extends StatelessWidget {
             const SizedBox(height: 40),
             Text(
               textAlign: TextAlign.justify,
-              "Call of Cthulhu is an exploration of fear and the fragility of the human mind. As you delve into the shadows, remember that the true horror may not lie in the monsters you face but in the unraveling of your own sanity. Brace yourself for a journey where the line between reality and nightmare blurs, and the cosmic horrors of the Mythos await your investigator's descent into madness. May your wits remain sharp, and your courage unwavering in the face of the unknown.\n\n",
+              AppLocalizations.of(context)!.guides_cthulhu_text37,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             ],
