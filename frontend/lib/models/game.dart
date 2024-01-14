@@ -28,7 +28,7 @@ class Game {
     required this.ready_players,
     required this.game_ready,
     required this.nextPlayersTurn,
-    this.nextPlayersTurnIndex = 0,
+    this.nextPlayersTurnIndex = -1,
 
   }) : uid = uid ?? const Uuid().v4(),
         short_uid = shortid.generate();

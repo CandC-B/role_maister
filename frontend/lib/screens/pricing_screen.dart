@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShopScreen extends StatelessWidget {
   final List<TokenPackage> tokenPackages = [
-    TokenPackage("1 Tokens", 1.0),
+    TokenPackage("1 Token", 1.0),
     TokenPackage("5 Tokens", 5.0),
     TokenPackage("10 Tokens", 7.0),
     TokenPackage("25 Tokens", 12.0),
@@ -119,9 +119,44 @@ class TokenPackageCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
               ),
               onPressed: () async {
-                await firebase.changePlayerBalance(singleton.user!.uid,  double.parse(tokenPackage.name));
+                await firebase.changePlayerBalance(singleton.user!.uid,
+                    double.parse(tokenPackage.name.split(' ')[0]));
                 Navigator.of(context).pop();
+                showPurchaseConfirmationDialog(context);
               },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showPurchaseConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          title: Text(
+            AppLocalizations.of(context)!.purchase_success_title,
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            // "Do you want to buy ${tokenPackage.name}?",
+            "${AppLocalizations.of(context)!.purchase_success_msg} ${tokenPackage.name}",
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: <Widget>[
+            Center(
+              child: TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.accept_button,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
           ],
         );

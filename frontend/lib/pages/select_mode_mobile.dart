@@ -12,19 +12,24 @@ class SelectModeMobilePage extends StatefulWidget {
 }
 
 class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
-    List<bool> presets = [false, false, false];
-    // Function to handle image selection
-    void handleImageSelection(int index) {
-      // Update the preset value for the selected image
-      setState(() {
-        for (var i = 0; i < 3; i++) {
-          presets[i] = false;
-        }
-        presets[index] = true;
-      });
-      print(presets[index]);
-    }
- 
+  // Create a list to store the presets for each image
+  List<bool> presets = [
+    singleton.gameMode.value == "aliens" ? true : false,
+    singleton.gameMode.value == "dyd" ? true : false,
+    singleton.gameMode.value == "cthulhu" ? true : false
+  ]; // Initialize with your default values
+  // Function to handle image selection
+  void handleImageSelection(int index) {
+    // Update the preset value for the selected image
+    setState(() {
+      for (var i = 0; i < 3; i++) {
+        presets[i] = false;
+      }
+      presets[index] = true;
+    });
+    print(presets[index]);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

@@ -244,6 +244,9 @@
     "game_confirm_msg_deletion_text": "Это действие нельзя отменить.",
     "game_confirm_msg_deletion_delete": "Удалить",
 
-    "game_waiting_for_turn": "Ожидание хода..."
+    "game_waiting_for_turn": "Ожидание хода...",
+    "purchase_success_title": "Покупка успешна",
+    "purchase_success_msg": "Вы успешно приобрели "
+
 
 }

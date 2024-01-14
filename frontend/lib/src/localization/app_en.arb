@@ -237,6 +237,8 @@
 
   "kick_player_button": "Kick Player",
   "purchase_error_title": "Purchase Error",
+  "purchase_success_title": "Purchase Success",
+  "purchase_success_msg": "You have successfully purchased ",
   "error_purchasing_tokens": "Error purchasing tokens. You need sign in before!",
   "no_tokens": "Error creating game. You don't have enough tokens! Buy some from the shop.",
 
