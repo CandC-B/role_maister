@@ -132,13 +132,31 @@ class _GameChatState extends State<GameChat> {
 
       print("Current Character: ${singleton.selectedCharacterName}");
       print('give 3 actions for ${nextPlayerCharacter['name']}.');
+      final Map<String, dynamic> requestBody = {
+        "chat_history": messages,
+        "message":
+            "${singleton.selectedCharacterName!}: $text. Continue the story and give 3 actions for ${nextPlayerCharacter['name']}.",
+      };
+      var access_token = "FTt5WJrBKxsheIdKYyi8qK6XJV2JjkwM4KuHUWUq";
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $access_token',
+        'Accept': 'application/json'
+      };
+      print(headers);
+      print(requestBody);
       final response = await http.post(
-          // TODO: add constants.dart in utils folder
-          // Uri.http("localhost:8000", "/game/master?message=$text"),
-          Uri.parse(
-              "https://rolemaister.onrender.com/game/master?message=${singleton.selectedCharacterName!}: $text. Continue the story and give 3 actions for ${nextPlayerCharacter['name']}."),
+          Uri.parse('https://api.cohere.ai/v1/chat'),
           headers: headers,
-          body: jsonEncode(messages));
+          body: jsonEncode(requestBody));
+      print(response.body);
+      // final response = await http.post(
+      //     // TODO: add constants.dart in utils folder
+      //     // Uri.http("localhost:8000", "/game/master?message=$text"),
+      //     Uri.parse(
+      //         "https://rolemaister.onrender.com/game/master?message=),
+      //     headers: headers,
+      //     body: jsonEncode(messages));
       if (text.trim().isNotEmpty) {
         // firestoreService.saveMessage(json.decode(response.body)["message"],
         //     DateTime.now(), widget.gameId, "IA");
@@ -147,7 +165,7 @@ class _GameChatState extends State<GameChat> {
           ChatMessages(
               sentBy: 'IA',
               sentAt: DateTime.now(),
-              text: json.decode(response.body)["message"],
+              text: json.decode(response.body)["text"],
               senderName: 'IA',
               characterName: '',
               userImage:
@@ -155,13 +173,13 @@ class _GameChatState extends State<GameChat> {
           widget.gameId,
         );
         firebase.updateAiWordCount(widget.gameId,
-            json.decode(response.body)["message"].split(' ').length);
+            json.decode(response.body)["text"].split(' ').length);
 
         Game game = Game.fromMap(await firebase.getGame(widget.gameId));
         // Quitarle tokens al usuario
         double tokensToSubstract = getPlayerGamePrice(
             text.split(' ').length,
-            json.decode(response.body)["message"].split(' ').length,
+            json.decode(response.body)["text"].split(' ').length,
             game.num_players);
         await firebase.changePlayerBalance(
             singleton.user!.uid, -tokensToSubstract);

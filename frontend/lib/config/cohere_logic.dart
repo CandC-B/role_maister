@@ -7,8 +7,8 @@ import 'package:role_maister/models/game.dart';
 
 // Function to create a new game // TODO comentar que se pasa game y no lo que había antes
 Future<String> createGame(Game game) async {
-  await dotenv.load(fileName: ".env");
-  var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
+  // await dotenv.load(fileName: ".env");
+  var access_token = "FTt5WJrBKxsheIdKYyi8qK6XJV2JjkwM4KuHUWUq";
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $access_token',
@@ -37,8 +37,8 @@ Future<String> createGame(Game game) async {
 // Function to update the game data
 Future<void> resumeGame(
     List<Map<String, dynamic>> chat_history, String message) async {
-  await dotenv.load(fileName: ".env");
-  var access_token = dotenv.env['COHERE_ACCESS_TOKEN'];
+  // await dotenv.load(fileName: ".env");
+  var access_token = "FTt5WJrBKxsheIdKYyi8qK6XJV2JjkwM4KuHUWUq";
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $access_token',
