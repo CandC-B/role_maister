@@ -238,6 +238,16 @@
     "kick_player_button": "Expulser le joueur",
     "error_purchasing_tokens": "Erreur lors de l'achat de jetons. Vous devez vous connecter d'abord!",
     "purchase_error_title": "Erreur d'achat",
+    "no_tokens": "Erreur lors de la création du jeu. Vous n'avez pas assez de jetons ! Achetez-en dans la boutique.",
+
+    "game_confirm_msg_deletion": "Êtes-vous sûr de vouloir supprimer ces messages?",
+    "game_confirm_msg_deletion_text": "Cette action ne peut pas être annulée.",
+    "game_confirm_msg_deletion_delete": "Supprimer",
+
+    "game_waiting_for_turn": "En attente de votre tour...",
+
+
+    "purchase_error_title": "Erreur d'achat",
 
     "guides_dnd_text1": "Donjons & Dragons : Un Voyage dans l'Imagination",
   "guides_dnd_text2": "Bienvenue dans Donjons & Dragons (D&D), un jeu qui transcende les frontières du jeu de table pour devenir une aventure immersive dans les domaines de la créativité, de la stratégie et du récit. Au cœur de D&D, il ne s'agit pas seulement d'un jeu ; c'est une expérience partagée où les joueurs deviennent les héros de leurs propres contes épiques.\n\n",

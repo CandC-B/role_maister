@@ -250,6 +250,15 @@
     "kick_player_button": "Expulsar jogador",
     "error_purchasing_tokens": "Erro ao comprar tokens. Você precisa fazer login antes!",
     "purchase_error_title": "Erro na compra",
+    "no_tokens": "Erro ao criar o jogo. Você não tem fichas suficientes! Compre algumas na loja.",
+
+  "game_confirm_msg_deletion": "Tem certeza de que deseja excluir estas mensagens?",
+  "game_confirm_msg_deletion_text": "Esta ação não pode ser desfeita.",
+  "game_confirm_msg_deletion_delete": "Excluir",
+
+  "game_waiting_for_turn": "Aguardando a vez de jogadore...",
+
+    "purchase_error_title": "Erro na compra",
 
     "guides_dnd_text1": "Dungeons & Dragons: Uma Jornada à Imaginação",
   "guides_dnd_text2": "Bem-vindo(a) a Dungeons & Dragons (D&D), um jogo que transcende as fronteiras dos jogos de mesa para se tornar uma aventura imersiva nos reinos da criatividade, estratégia e narrativa. No seu cerne, o D&D é mais do que apenas um jogo; é uma experiência compartilhada onde os jogadores se tornam os heróis de suas próprias sagas épicas.\n\n",

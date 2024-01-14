@@ -413,7 +413,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   width: 5,
                 ),
                 Center(
-                  child: StreamBuilder<int>(
+                  child: StreamBuilder<double>(
                     stream: firebase.getCurrentPlayerTokens(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
@@ -422,7 +422,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         }
 
                         // Access the player tokens from the document snapshot
-                        int playerTokens = snapshot.data ?? 0;
+                        double playerTokens = snapshot.data ?? 0;
 
                         return Text(
                           '$playerTokens',

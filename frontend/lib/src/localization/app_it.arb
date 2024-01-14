@@ -238,6 +238,17 @@
     "kick_player_button": "Espelli giocatore",
     "error_purchasing_tokens": "Errore durante l'acquisto di gettoni. Devi effettuare l'accesso prima!",
     "purchase_error_title": "Errore di acquisto",
+    "no_tokens": "Errore durante la creazione del gioco. Non hai abbastanza gettoni! Acquistane alcuni dal negozio.",
+
+
+    "game_confirm_msg_deletion": "Sei sicuro di voler eliminare questi messaggi?",
+    "game_confirm_msg_deletion_text": "Questa azione non può essere annullata.",
+    "game_confirm_msg_deletion_delete": "Elimina",
+
+    "game_waiting_for_turn": "In attesa del tuo turno...",
+
+
+    "purchase_error_title": "Errore di acquisto",
 
     "guides_dnd_text1": "Dungeons & Dragons: Un Viaggio nell'Immaginazione",
   "guides_dnd_text2": "Benvenuti in Dungeons & Dragons (D&D), un gioco che supera i confini del gioco da tavolo per diventare un'avventura immersiva nei regni della creatività, strategia e narrazione. Al suo nucleo, D&D è più di un gioco; è un'esperienza condivisa in cui i giocatori diventano gli eroi delle proprie epiche storie.\n\n",

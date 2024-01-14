@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/models/game.dart';
@@ -27,6 +28,7 @@ class _GamePlayersState extends State<GamePlayers> {
   @override
   Widget build(BuildContext context) {
     // firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
+    Size size = MediaQuery.of(context).size;
 
     return FutureBuilder<AliensCharacter>(
       future: getUserStats(widget.gameId),
@@ -57,6 +59,7 @@ class _GamePlayersState extends State<GamePlayers> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: size.width > 700 ? false : true,
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.exit_to_app),
@@ -281,7 +284,8 @@ class _PlayerCardState extends State<PlayerCard> {
           sentAt: DateTime.now(),
           text: text,
           senderName: "System",
-          characterName: ''),
+          characterName: '',
+          userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/small_logo.png?alt=media&token=54ac8a51-9a0d-4a78-baea-81cdc07efc16'),
       singleton.currentGame!,
     );
   }

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:role_maister/config/config.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:http/http.dart' as http;
+import 'package:role_maister/config/constants.dart';
 import 'package:role_maister/main.dart';
 import 'package:role_maister/models/game.dart';
 import 'package:role_maister/models/player_game_data.dart';
@@ -66,8 +68,13 @@ class _GameChatState extends State<GameChat> {
                 playerGameData.votedToGetKicked >= data['players'].length - 1) {
               // kick the player
               print('A TOMAR POR CULO!!');
+              print('GAME ID ID ANTES DE LLAMAR A DELETE EN GAME CHAT: $gameId');
 
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
+
+              print('===============================================');
+              firestoreService.updatePlayersTurn(gameId, true);
+              print('===============================================');
               context.go("/");
               context.push("/");
               // singleton.currentGame = "";
@@ -98,11 +105,12 @@ class _GameChatState extends State<GameChat> {
           sentAt: DateTime.now(),
           text: text,
           senderName: singleton.player!.username,
-          characterName: singleton.selectedCharacterName!),
+          characterName: singleton.selectedCharacterName!,
+          userImage: singleton.player!.photoUrl!),
       widget.gameId,
     );
     firestoreService.updatePlayerWordCount(
-        widget.gameId, singleton.player!.uid, text.length);
+        widget.gameId, singleton.player!.uid, text.split(' ').length);
 
     textEditingController.clear();
 
@@ -124,11 +132,22 @@ class _GameChatState extends State<GameChat> {
               sentAt: DateTime.now(),
               text: json.decode(response.body)["message"],
               senderName: 'IA',
-              characterName: ''),
+              characterName: '',
+              userImage:
+                  'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/bot_master.png?alt=media&token=50e2cacc-58fa-41a4-b6bc-a838538dd48a'),
           widget.gameId,
         );
-        firebase.updateAiWordCount(
-            widget.gameId, json.decode(response.body)["message"].split(' ').length);
+        firebase.updateAiWordCount(widget.gameId,
+            json.decode(response.body)["message"].split(' ').length);
+
+        Game game = Game.fromMap(await firebase.getGame(widget.gameId));
+        // Quitarle tokens al usuario
+        double tokensToSubstract = getPlayerGamePrice(
+            text.split(' ').length,
+            json.decode(response.body)["message"].split(' ').length,
+            game.num_players);
+        await firebase.changePlayerBalance(
+            singleton.user!.uid, -tokensToSubstract);
       }
     } else {
       // Handle the case where there was an error fetching messages
@@ -141,210 +160,373 @@ class _GameChatState extends State<GameChat> {
     // }
   }
 
+  void deleteMessage(String messageId, int index) {
+    final endDeletingIndex = index;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          // title: Text("Confirmar eliminación de mensajes"),
+          title: Text(
+            AppLocalizations.of(context)!.game_confirm_msg_deletion,
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.game_confirm_msg_deletion_text,
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                for (int i = 0; i <= endDeletingIndex; i++) {
+                  final messageIdToDelete = listMessages[i].id;
+                  firestoreService.deleteMessage(
+                      widget.gameId, messageIdToDelete);
+                }
+
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text(
+                AppLocalizations.of(context)!.game_confirm_msg_deletion_delete,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MyAppState? appState = context.findAncestorStateOfType<MyAppState>();
     Locale locale = appState?.locale ?? const Locale('en');
+    Size size = MediaQuery.of(context).size;
+    var snapshotPlayersTurn = 'IA';
 
     observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
 
     // print ('LOCALE: $locale');
 
-    return Container(
-      decoration: const BoxDecoration(
-        // image: DecorationImage(
-        //   image: AssetImage('assets/images/background4.png'),
-        //   fit: BoxFit.cover,
-        //   opacity: 0.9,
-        // ),
-        color: Colors.black87,
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: firestoreService.fetchMessagesByGameId(widget.gameId),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  listMessages = snapshot.data!.docs;
-                  if (listMessages.isNotEmpty) {
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(10),
-                      reverse: true,
-                      // controller: scrollController,
-                      itemBuilder: (context, index) {
-                        if (index < listMessages.length) {
-                          bool others_msg = listMessages[index].get('sentBy') !=
-                              singleton.user!.uid;
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            // image: DecorationImage(
+            //   image: AssetImage('assets/images/background4.png'),
+            //   fit: BoxFit.cover,
+            //   opacity: 0.9,
+            // ),
+            color: Colors.black87,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: firestoreService.fetchMessagesByGameId(widget.gameId),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      listMessages = snapshot.data!.docs;
+                      if (listMessages.isNotEmpty) {
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          reverse: true,
+                          // controller: scrollController,
+                          itemBuilder: (context, index) {
+                            if (index < listMessages.length) {
+                              bool others_msg =
+                                  listMessages[index].get('sentBy') !=
+                                      singleton.user!.uid;
 
-                          print('listMessages[index]: ${listMessages[index]}');
-                          print(
-                              'listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
+                              print(
+                                  'listMessages[index]: ${listMessages[index]}');
+                              print(
+                                  'listMessages[index].get(sender): ${listMessages[index].get('senderName')}');
 
-                          return FutureBuilder<String>(
-                            // future: translateText(listMessages[index].get('text'), locale.languageCode),
-                            future: getTranslation(
-                                listMessages[index].get('text'),
-                                locale.languageCode),
-                            builder: (context, translateSnapshot) {
-                              if (translateSnapshot.connectionState ==
-                                      ConnectionState.waiting ||
-                                  translateSnapshot.connectionState ==
-                                      ConnectionState.none) {
-                                // Mostrar el mensaje original mientras espera la traducción
-                                // return BubbleSpecialThree(
-                                //   text: listMessages[index].get('text'),
-                                //   color: others_msg
-                                //       ? const Color.fromARGB(255, 234, 226, 248)
-                                //       : Colors.deepPurple,
-                                //   tail: true,
-                                //   isSender: !others_msg,
-                                //   textStyle: TextStyle(
-                                //     color: others_msg ? Colors.black : Colors.white,
-                                //     fontSize: 16,
-                                //   ),
-                                // );
+                              return FutureBuilder<String>(
+                                // future: translateText(listMessages[index].get('text'), locale.languageCode),
+                                future: getTranslation(
+                                    listMessages[index].get('text'),
+                                    locale.languageCode),
+                                builder: (context, translateSnapshot) {
+                                  if (translateSnapshot.connectionState ==
+                                          ConnectionState.waiting ||
+                                      translateSnapshot.connectionState ==
+                                          ConnectionState.none) {
+                                    return DiscordChatMessage(
+                                      username:
+                                          listMessages[index].get('sentBy'),
+                                      message: listMessages[index].get('text'),
+                                      isSender: !others_msg,
+                                      senderName:
+                                          listMessages[index].get('senderName'),
+                                      characterName: listMessages[index]
+                                          .get('characterName'),
+                                      userImage:
+                                          listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
+                                    );
+                                  } else if (translateSnapshot.hasError) {
+                                    // En caso de error durante la traducción
+                                    return Text(
+                                        'Error de traducción: ${translateSnapshot.error}');
+                                  } else {
+                                    return DiscordChatMessage(
+                                      username:
+                                          listMessages[index].get('sentBy'),
+                                      message: translateSnapshot.data ?? '',
+                                      isSender: !others_msg,
+                                      senderName:
+                                          listMessages[index].get('senderName'),
+                                      characterName: listMessages[index]
+                                          .get('characterName'),
+                                      userImage:
+                                          listMessages[index].get('userImage'),
+                                      onDeletePressed: () => deleteMessage(
+                                          listMessages[index].id, index),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                              AppLocalizations.of(context)!.game_no_messages),
+                        );
+                      }
+                    } else {
+                      return const Center(
+                          child: Center(
+                              child: CircularProgressIndicator(
+                        color: Colors.deepPurple,
+                      )));
+                    }
+                  },
+                ),
+              ),
 
-                                // TODO
-                                // return DiscordChatBubble(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
+              // TODO: ESTE ES EL BUENO
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: TextField(
+              //           // focusNode: focusNode,
+              //           textInputAction: TextInputAction.send,
+              //           keyboardType: TextInputType.text,
+              //           textCapitalization: TextCapitalization.sentences,
+              //           controller: textEditingController,
+              //           decoration: InputDecoration(
+              //             hintText:
+              //                 AppLocalizations.of(context)!.game_epic_phase,
+              //             hintStyle: const TextStyle(color: Colors.white),
+              //             enabledBorder: const UnderlineInputBorder(
+              //               borderSide: BorderSide(
+              //                   color: Colors
+              //                       .white), // Set the underline color to white
+              //             ),
+              //             focusedBorder: const UnderlineInputBorder(
+              //               borderSide: BorderSide(
+              //                   color: Colors
+              //                       .deepPurple), // Set the underline color to white when focused
+              //             ),
+              //           ),
+              //           style: const TextStyle(color: Colors.white),
+              //           // kTextInputDecoration.copyWith(hintText: 'write here...'),
+              //           onSubmitted: (value) {
+              //             onSendMessage(textEditingController.text);
+              //           },
+              //         ),
+              //       ),
+              //     ),
+              //     Container(
+              //       padding: const EdgeInsets.all(8.0),
+              //       decoration: BoxDecoration(
+              //         // color: AppColors.burgundy,
+              //         borderRadius: BorderRadius.circular(50.0),
+              //       ),
+              //       child: IconButton(
+              //         onPressed: () {
+              //           onSendMessage(textEditingController.text);
+              //         },
+              //         icon: const Icon(Icons.send_rounded),
+              //         color: Colors.white,
+              //         // color: AppColors.white,
+              //       ),
+              //     ),
+              //   ],
+              // )
 
-                                // return DiscordChatMessage(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
+              // TODO: TEST
 
-                                return DiscordChatMessage(
-                                  username: listMessages[index].get('sentBy'),
-                                  message: listMessages[index].get('text'),
-                                  isSender: !others_msg,
-                                  senderName:
-                                      listMessages[index].get('senderName'),
-                                  characterName:
-                                      listMessages[index].get('characterName'),
-                                );
-                              } else if (translateSnapshot.hasError) {
-                                // En caso de error durante la traducción
-                                return Text(
-                                    'Error de traducción: ${translateSnapshot.error}');
-                              } else {
-                                // Mostrar la burbuja del mensaje traducido
-                                // return BubbleSpecialThree(
-                                //   text: translateSnapshot.data ?? '',
-                                //   color: others_msg
-                                //       ? const Color.fromARGB(255, 234, 226, 248)
-                                //       : Colors.deepPurple,
-                                //   tail: true,
-                                //   isSender: !others_msg,
-                                //   textStyle: TextStyle(
-                                //     color: others_msg
-                                //         ? Colors.black
-                                //         : Colors.white,
-                                //     fontSize: 16,
-                                //   ),
-                                // );
+              Row(
+                children: [
+                  Expanded(
+                    child: StreamBuilder<DocumentSnapshot>(
+                        stream:
+                            firestoreService.observePlayersTurn(widget.gameId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            snapshotPlayersTurn =
+                                snapshot.data!.get('nextPlayersTurn');
 
-                                // TODO
-                                // return DiscordChatBubble(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                // focusNode: focusNode,
+                                enabled:
+                                    singleton.player!.tokens > 0 &&
+                                    snapshot.data!.get('nextPlayersTurn') ==
+                                        singleton.user!.uid,
+                                textInputAction: TextInputAction.send,
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                controller: textEditingController,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      snapshot.data!.get('nextPlayersTurn') ==
+                                              singleton.user!.uid
+                                          ? AppLocalizations.of(context)!
+                                              .game_epic_phase
+                                          : AppLocalizations.of(context)!
+                                              .game_waiting_for_turn,
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .white), // Set the underline color to white
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .deepPurple), // Set the underline color to white when focused
+                                  ),
+                                ),
+                                style: const TextStyle(color: Colors.white),
+                                // kTextInputDecoration.copyWith(hintText: 'write here...'),
+                                onSubmitted: (value) {
+                                  onSendMessage(textEditingController.text);
+                                },
+                              ),
+                            );
+                          } else {
+                            return const Center(
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                              color: Colors.deepPurple,
+                            )));
+                          }
+                        }),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      // color: AppColors.burgundy,
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    child: StreamBuilder<DocumentSnapshot>(
+                        stream:
+                            firestoreService.observePlayersTurn(widget.gameId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            return IconButton(
+                              // onPressed: () {
 
-                                // return DiscordChatMessage(
-                                //   username: 'Usuario1',
-                                //   message: 'Hola, ¿cómo estás?',
-                                //   isSender: true,
-                                // );
+                              //   onSendMessage(textEditingController.text);
+                              // },
+                              onPressed:  singleton.player!.tokens > 0 && snapshotPlayersTurn ==
+                                      singleton.user!.uid
+                                  ? () {
+                                      onSendMessage(textEditingController.text);
+                                    }
+                                  : null,
+                              icon: const Icon(Icons.send_rounded),
+                              color: Colors.white,
+                              // color: AppColors.white,
+                            );
+                          } else {
+                            return const Center(
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                              color: Colors.deepPurple,
+                            )));
+                          }
+                        }),
+                  ),
+                ],
+              )
 
-                                return DiscordChatMessage(
-                                  username: listMessages[index].get('sentBy'),
-                                  message: translateSnapshot.data ?? '',
-                                  isSender: !others_msg,
-                                  senderName:
-                                      listMessages[index].get('senderName'),
-                                  characterName:
-                                      listMessages[index].get('characterName'),
-                                );
-                              }
-                            },
-                          );
-                        }
-                      },
-                    );
-                  } else {
-                    return Center(
-                      child:
-                          Text(AppLocalizations.of(context)!.game_no_messages),
-                    );
-                  }
+              // TODO: END TODO
+            ],
+          ),
+        ),
+        Align(
+          /*
+ alignment: (size.width > 700 || kIsWeb)
+              ? Alignment.topRight
+              : Alignment.topLeft),
+          */
+          alignment: size.width > 700 || kIsWeb
+              ? Alignment.topCenter
+              : Alignment.topLeft,  
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder<double>(
+              stream: firebase.getUserSpendingStream(
+                widget.gameId,
+                singleton.user!.uid,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
                 } else {
-                  return const Center(
-                      child: Center(
-                          child: CircularProgressIndicator(
-                    color: Colors.deepPurple,
-                  )));
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      'Tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  );
                 }
               },
             ),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    // focusNode: focusNode,
-                    textInputAction: TextInputAction.send,
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.game_epic_phase,
-                      hintStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors
-                                .white), // Set the underline color to white
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors
-                                .deepPurple), // Set the underline color to white when focused
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                    // kTextInputDecoration.copyWith(hintText: 'write here...'),
-                    onSubmitted: (value) {
-                      onSendMessage(textEditingController.text);
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  // color: AppColors.burgundy,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    onSendMessage(textEditingController.text);
-                  },
-                  icon: const Icon(Icons.send_rounded),
-                  color: Colors.white,
-                  // color: AppColors.white,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -459,69 +641,62 @@ class DiscordChatMessage extends StatelessWidget {
   final bool isSender;
   final String senderName;
   final String characterName;
+  final String userImage;
+  final VoidCallback onDeletePressed;
 
-  DiscordChatMessage(
-      {required this.username,
-      required this.message,
-      this.isSender = false,
-      this.characterName = '',
-      required this.senderName});
+  DiscordChatMessage({
+    required this.username,
+    required this.message,
+    this.isSender = false,
+    this.characterName = '',
+    required this.senderName,
+    required this.userImage,
+    required this.onDeletePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        const SizedBox(
             height: 16.0), // Aumenté el espacio entre el Divider y el mensaje
         Divider(height: 0.0, thickness: 0.2, color: Colors.grey[300]),
         ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-          leading: senderName == 'IA'
-              ?
-              // CircleAvatar(
-              //   backgroundColor: Colors.deepPurple,
-              //   child: Image.asset(
-              //     'assets/images/bot_master.png',
-              //     width: 100.0,
-              //     height: 100.0,
-              //   ),
-              // )
-
-              CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Image.asset(
-                    'assets/images/bot_master.png',
-                    width: 100.0,
-                    height: 100.0,
-                  ),
-                )
-              : CircleAvatar(
-                  backgroundColor: Colors.deepPurple,
-                  child: Text(
-                    senderName.substring(
-                        0, 1), // Mostrar la primera letra del nombre de usuario
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+          leading: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            backgroundImage: NetworkImage(userImage),
+          ),
           title: Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      senderName == 'IA' || senderName == 'System'
-                          ? senderName
-                          : '$senderName${isSender ? " (You)" : " ($characterName)"}',
-                      style: TextStyle(
-                        color: senderName == 'System'
-                            ? Colors.red
-                            : Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            senderName == 'IA' || senderName == 'System'
+                                ? senderName
+                                : '$senderName${isSender ? " (You)" : " ($characterName)"}',
+                            style: TextStyle(
+                              color: senderName == 'System'
+                                  ? Colors.red
+                                  : Colors.deepPurple,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        if (!(senderName == 'IA' || senderName == 'System'))
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: onDeletePressed,
+                          ),
+                      ],
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Text(
                       message,
                       style: TextStyle(

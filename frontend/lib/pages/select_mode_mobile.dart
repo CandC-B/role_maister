@@ -98,7 +98,7 @@ class _SelectModeMobilePageState extends State<SelectModeMobilePage> {
                 imagePath: 'assets/images/cthulhu.jpg',
                 routeName: '/form_singleplayer',
                 imageText: "THE CALL OF CTHULHU",
-                isAvailable: false,
+                isAvailable: true,
                 height: size.height * 0.9 / 3,
                 width: singleton.multiplayer && kIsWeb
                     ? size.width * 0.8 * 2 / 3

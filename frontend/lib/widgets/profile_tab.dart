@@ -125,7 +125,7 @@ class ProfileStats extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          singleton.player?.tokens.toString() ?? "0",
+          singleton.player?.gamesPlayed.toString() ?? "0",
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),
@@ -139,7 +139,7 @@ class ProfileStats extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          singleton.player?.tokens.toString() ?? "0",
+          singleton.player?.tokens.toStringAsFixed(2) ?? "0",
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
         const SizedBox(height: 20),

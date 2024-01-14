@@ -238,6 +238,15 @@
     "kick_player_button": "Выгнать игрока",
     "error_purchasing_tokens": "Ошибка покупки токенов. Вам необходимо войти перед этим!",
     "purchase_error_title": "Ошибка покупки",
+    "no_tokens": "Ошибка создания игры. У вас недостаточно токенов! Купите их в магазине.",
+
+    "game_confirm_msg_deletion": "Вы уверены, что хотите удалить эти сообщения?",
+    "game_confirm_msg_deletion_text": "Это действие нельзя отменить.",
+    "game_confirm_msg_deletion_delete": "Удалить",
+
+    "game_waiting_for_turn": "Ожидание хода...",
+
+    "purchase_error_title": "Ошибка покупки",
 
 
     "guides_dnd_text1": "Dungeons & Dragons: Путешествие в Мир Воображения",
