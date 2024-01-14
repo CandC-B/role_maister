@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:role_maister/models/dyd_character.dart';
 import 'package:role_maister/models/models.dart';
 import 'package:role_maister/widgets/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DydCharacterCard extends StatelessWidget {
   final DydCharacter character;
@@ -18,53 +19,53 @@ class DydCharacterCard extends StatelessWidget {
     );
   }
 
-  Widget _buildAbilitiesStats(Map<String, int> abilities) {
+  Widget _buildAbilitiesStats(Map<String, int> abilities, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ListTile(
+        ListTile(
           leading: Icon(Icons.insert_chart, color: Colors.white),
-          title: Text('Abilities', style: TextStyle(color: Colors.white)),
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text1, style: TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.sports_tennis, color: Colors.white),
-          title: Text('Strength: ${abilities['STR']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text2 + ': ${abilities['STR']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.directions_run, color: Colors.white),
-          title: Text('Dexterity: ${abilities['DEX']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text3 + ': ${abilities['DEX']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.fitness_center, color: Colors.white),
-          title: Text('Constitution: ${abilities['CON']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text4 + ': ${abilities['CON']}',
               style: const TextStyle(color: Colors.white)),
         ),
         ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('Intelligence: ${abilities['INT']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text5 + ': ${abilities['INT']}',
               style: const TextStyle(color: Colors.white)),
         ),
          ListTile(
           leading: const Icon(Icons.lightbulb, color: Colors.white),
-          title: Text('Wisdom: ${abilities['WIS']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text6 + ': ${abilities['WIS']}',
               style: const TextStyle(color: Colors.white)),
         ),
          ListTile(
           leading: const Icon(Icons.sentiment_satisfied, color: Colors.white),
-          title: Text('Charisma: ${abilities['CHA']}',
+          title: Text(AppLocalizations.of(context)!.cards_dnd_text7 + ': ${abilities['CHA']}',
               style: const TextStyle(color: Colors.white)),
         ),
       ],
     );
   }
 
-  Widget _buildSex(String sex){
-    if (sex == 'Male'){
-      return _buildStatItem('Sex', Icons.male, sex, Colors.white);
+  Widget _buildSex(String sex, BuildContext context){
+    if (sex == AppLocalizations.of(context)!.cards_dnd_text8){
+      return _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text9, Icons.male, sex, Colors.white);
     }else{
-      return _buildStatItem('Sex', Icons.female, sex, Colors.white);
+      return _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text9, Icons.female, sex, Colors.white);
     }
   }
 
@@ -98,51 +99,51 @@ class DydCharacterCard extends StatelessWidget {
           ],
         ),
         children: [
-          _buildStatItem(
-              'HP', Icons.favorite, character.hp.toString(), Colors.white),
-          _buildStatItem('Character Level', Icons.bar_chart,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text10
+              , Icons.favorite, character.hp.toString(), Colors.white),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text11, Icons.bar_chart,
               character.characterLevel.toString(), Colors.white),
           _buildStatItem(
-              'Race', Icons.cruelty_free, character.race, Colors.white),
-          _buildAbilitiesStats(character.abilities),
-          _buildStatItem('Age', Icons.calendar_today,
+              AppLocalizations.of(context)!.cards_dnd_text12, Icons.cruelty_free, character.race, Colors.white),
+          _buildAbilitiesStats(character.abilities, context),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text13, Icons.calendar_today,
               character.age.toString(), Colors.white),
-          _buildStatItem("Alignment", Icons.account_balance,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text14, Icons.account_balance,
               character.alignment, Colors.white),
-          _buildStatItem('Height', Icons.height,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text15, Icons.height,
               character.height.toString(), Colors.white),
-          _buildStatItem('Weight', Icons.line_weight, character.weight.toString(),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text16, Icons.line_weight, character.weight.toString(),
               Colors.white),
-          _buildStatItem('Size', Icons.accessibility_new, character.size,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text17, Icons.accessibility_new, character.size,
               Colors.white),
           _buildStatItem(
-              'Traits', Icons.emoji_emotions, character.traits.join(', '), Colors.white),
-          _buildStatItem('Languages', Icons.language, character.languages.join(', '),
+              AppLocalizations.of(context)!.cards_dnd_text18, Icons.emoji_emotions, character.traits.join(', '), Colors.white),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text19, Icons.language, character.languages.join(', '),
               Colors.white),
-          _buildStatItem('Character Class', Icons.account_box,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text20, Icons.account_box,
               character.characterClass, Colors.white),
-          _buildStatItem('Description', Icons.description,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text21, Icons.description,
               character.description, Colors.white),
-          _buildStatItem('hitDice', Icons.casino,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text22, Icons.casino,
               character.hitDie, Colors.white),
-          _buildStatItem('Proficiencies', Icons.emoji_objects,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text23, Icons.emoji_objects,
               character.proficiencies.join(', '), Colors.white),
-          _buildStatItem('Tools', Icons.backpack, character.tools.join(', '),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text24, Icons.backpack, character.tools.join(', '),
               Colors.white),
-          _buildStatItem('Skills', Icons.sports_kabaddi,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text25, Icons.sports_kabaddi,
               character.skills.join(', '), Colors.white),
-          _buildStatItem('Equipment', Icons.shopping_bag,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text26, Icons.shopping_bag,
               character.equipment.join(', '), Colors.white),
-          _buildSex(character.sex),
-          _buildStatItem('Background', Icons.book,
+          _buildSex(character.sex, context),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text27, Icons.book,
               character.background, Colors.white),
-          _buildStatItem('Eyes Color', Icons.remove_red_eye,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text28, Icons.remove_red_eye,
               character.eyesColor, Colors.white),
-          _buildStatItem('Hair Color', Icons.brush, character.hairColor,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text29, Icons.brush, character.hairColor,
               Colors.white),
-          _buildStatItem('Skin Color', Icons.face, character.skinColor,
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text30, Icons.face, character.skinColor,
               Colors.white),
-          _buildStatItem('Appearance', Icons.emoji_people, character.appearance, Colors.white),
+          _buildStatItem(AppLocalizations.of(context)!.cards_dnd_text31, Icons.emoji_people, character.appearance, Colors.white),
         ],
       ),
     );
