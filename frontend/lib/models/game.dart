@@ -15,6 +15,7 @@ class Game {
   final bool game_ready;
   final String nextPlayersTurn;
   int nextPlayersTurnIndex;
+  final DateTime created_at;
 
   Game({
     String? uid,
@@ -29,9 +30,10 @@ class Game {
     required this.game_ready,
     required this.nextPlayersTurn,
     this.nextPlayersTurnIndex = -1,
-
+    DateTime? created_at,
   }) : uid = uid ?? const Uuid().v4(),
-        short_uid = shortid.generate();
+        short_uid = shortid.generate(),
+        created_at = DateTime.now();
 
   factory Game.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
     Map<String, dynamic>? data = document.data();
@@ -48,6 +50,7 @@ class Game {
       bool game_ready = data['game_ready'] ?? false;
       String nextPlayersTurn = data['nextPlayersTurn'] ?? '';
       int nextPlayersTurnIndex = data['nextPlayersTurnIndex'] ?? 0;
+      DateTime created_at = data['created_at']?.toDate() ?? DateTime.now();
 
       return Game(
         uid: uid,
@@ -62,6 +65,7 @@ class Game {
         game_ready: game_ready,
         nextPlayersTurn: nextPlayersTurn,
         nextPlayersTurnIndex: nextPlayersTurnIndex,
+        created_at: created_at,
       );
     } else {
       throw Exception('Failed to parse document data');
@@ -82,6 +86,7 @@ class Game {
       'game_ready': this.game_ready,
       'nextPlayersTurn': this.nextPlayersTurn,
       'nextPlayersTurnIndex': this.nextPlayersTurnIndex,
+      'created_at': this.created_at,
     };
   }
 
@@ -99,6 +104,7 @@ class Game {
       game_ready: statsData['game_ready'],
       nextPlayersTurn: statsData['nextPlayersTurn'],
       nextPlayersTurnIndex: statsData['nextPlayersTurnIndex'],
+      created_at: statsData['created_at'],
     );
   }
 }

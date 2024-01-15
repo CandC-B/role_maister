@@ -547,7 +547,7 @@ class _GameChatState extends State<GameChat> {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             child: Text(
-                              'MAIster tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                              'MAIster tokens spent: ${snapshot.data?.toStringAsFixed(2) ?? "N/A"}',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,

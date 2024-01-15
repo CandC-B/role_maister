@@ -1424,8 +1424,10 @@ class FirebaseService {
 
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('game') // replace with your collection name
-          .get();
+          .collection('game')
+          .orderBy('created_at') // replace with your collection name
+          .get()
+          ;
 
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
         Map<String, dynamic> data = document.data() as Map<String, dynamic>;

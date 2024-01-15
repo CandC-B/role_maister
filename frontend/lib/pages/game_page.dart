@@ -36,7 +36,7 @@ class GamePage extends StatelessWidget {
                     return Text('Error: ${snapshot.error}');
                   } else {
                     return Text(
-                      'MAIster tokens spent: ${snapshot.data?.toString() ?? "N/A"}',
+                      'MAIster tokens spent: ${snapshot.data?.toStringAsFixed(2) ?? "N/A"}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: size.width > 700 || kIsWeb ? 16.0 : 12.0,
