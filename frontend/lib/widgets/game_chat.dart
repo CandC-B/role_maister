@@ -49,7 +49,7 @@ class _GameChatState extends State<GameChat> {
         .collection('game')
         .doc(gameId)
         .snapshots()
-        .listen((event) {
+        .listen((event) async {
       if (event.exists) {
         final data = event.data() as Map<String, dynamic>?;
         if (data != null) {
@@ -77,7 +77,7 @@ class _GameChatState extends State<GameChat> {
               firestoreService.deleteKickedPlayer(gameId, currentUserUid);
 
               print('===============================================');
-              firestoreService.updatePlayersTurn(gameId, true);
+              await firestoreService.updatePlayersTurn(gameId, true);
               print('===============================================');
               context.go("/");
               context.push("/");
