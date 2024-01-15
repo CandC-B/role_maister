@@ -775,7 +775,7 @@ class _DiscordChatMessage extends State<DiscordChatMessage> {
                             widget.senderName == 'IA' ||
                                     widget.senderName == 'System'
                                 ? widget.senderName
-                                : '$widget.senderName${widget.isSender ? " (You)" : " ($widget.characterName)"}',
+                                : '${widget.senderName}${widget.isSender ? " (You)" : " (${widget.characterName})"}',
                             style: TextStyle(
                               color: widget.senderName == 'System'
                                   ? Colors.red
