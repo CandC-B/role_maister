@@ -24,7 +24,6 @@ class GamePlayers extends StatefulWidget {
 }
 
 class _GamePlayersState extends State<GamePlayers> {
-
   @override
   Widget build(BuildContext context) {
     // firestoreService.observeAndHandleGameChanges(widget.gameId, singleton.player!.uid, context);
@@ -72,7 +71,6 @@ class _GamePlayersState extends State<GamePlayers> {
                 ],
                 title: const Text('Role MAIster'),
                 backgroundColor: Colors.deepPurple,
-               
                 bottom: TabBar(
                   indicatorColor: Colors.white,
                   tabs: [
@@ -96,12 +94,9 @@ class _GamePlayersState extends State<GamePlayers> {
     );
   }
 
-  
-
   Future<AliensCharacter> getUserStats(String gameId) async {
     // firestoreService.observeAndHandleGameChanges(
     //     widget.gameId, singleton.player!.uid, context);
-
 
     try {
       final List<Map<String, dynamic>> statsData =
@@ -202,15 +197,18 @@ class _StatsTabState extends State<StatsTab> {
                 : singleton.gameMode.value == "dyd"
                     ? profiledydCharacterCard.showStats(singleton.dydCharacter)
                     : singleton.gameMode.value == "cthulhu"
-                        ? profileCthulhuCharacterCard.showStats(singleton.cthulhuCharacter)
-                        :  const Center(child: CircularProgressIndicator(color: Colors.deepPurple,))));
+                        ? profileCthulhuCharacterCard
+                            .showStats(singleton.cthulhuCharacter)
+                        : const Center(
+                            child: CircularProgressIndicator(
+                            color: Colors.deepPurple,
+                          ))));
   }
 }
 
 // Players tab
 class PlayersTab extends StatelessWidget {
-
-  const PlayersTab({  
+  const PlayersTab({
     super.key,
   });
 
@@ -243,7 +241,8 @@ class PlayersTab extends StatelessWidget {
                   playerName: snapshot.data![index]["name"],
                   numPlayers: snapshot.data!.length,
                   id: snapshot.data![index]["userId"],
-                  votedToGetKickedBy: snapshot.data![index]["votedToGetKickedBy"], 
+                  votedToGetKickedBy: snapshot.data![index]
+                      ["votedToGetKickedBy"],
                 );
               },
             );
@@ -260,7 +259,7 @@ class PlayerCard extends StatefulWidget {
   final String playerName;
   final int numPlayers;
   final String id;
-  final List<String> votedToGetKickedBy;
+  final List<dynamic> votedToGetKickedBy;
 
   const PlayerCard({
     Key? key,
@@ -275,7 +274,6 @@ class PlayerCard extends StatefulWidget {
 }
 
 class _PlayerCardState extends State<PlayerCard> {
-  bool isReported = false;
   int numPlayers = 0;
 
   void saveSystemMsg(String text) async {
@@ -288,7 +286,8 @@ class _PlayerCardState extends State<PlayerCard> {
           text: text,
           senderName: "System",
           characterName: '',
-          userImage: 'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/small_logo.png?alt=media&token=54ac8a51-9a0d-4a78-baea-81cdc07efc16'),
+          userImage:
+              'https://firebasestorage.googleapis.com/v0/b/role-maister.appspot.com/o/small_logo.png?alt=media&token=54ac8a51-9a0d-4a78-baea-81cdc07efc16'),
       singleton.currentGame!,
     );
   }
@@ -299,6 +298,9 @@ class _PlayerCardState extends State<PlayerCard> {
 
   @override
   Widget build(BuildContext context) {
+    print("*******PLAYER CARD******* ");
+    print(widget.votedToGetKickedBy);
+    print(singleton.player!.uid);
     return GestureDetector(
       onTap: () {
         // Acción vacía
@@ -325,9 +327,13 @@ class _PlayerCardState extends State<PlayerCard> {
                   : IconButton(
                       icon: Icon(
                         Icons.report,
-                        color: isReported ||  widget.votedToGetKickedBy.contains(singleton.player!.uid) ? Colors.grey : Colors.red,
+                        color: widget.votedToGetKickedBy
+                                    .contains(singleton.player!.uid)
+                            ? Colors.grey
+                            : Colors.red,
                       ),
-                      onPressed: isReported || widget.votedToGetKickedBy.contains(singleton.player!.uid)
+                      onPressed: widget.votedToGetKickedBy
+                                  .contains(singleton.player!.uid)
                           ? null
                           : () {
                               // Abrir el diálogo aquí
@@ -362,14 +368,10 @@ class _PlayerCardState extends State<PlayerCard> {
                                       TextButton(
                                         onPressed: () {
                                           // Lógica para manejar el reporte
-                                          setState(() {
-                                            isReported = true;
-                                          });
                                           Navigator.of(context).pop();
 
                                           saveSystemMsg(
                                               "El jugador ${widget.playerName} ha sido reportado por mal comportamiento. (+1 voto)");
-
 
                                           saveVote(singleton.currentGame!,
                                               widget.id);
@@ -393,7 +395,8 @@ class _PlayerCardState extends State<PlayerCard> {
       ),
     );
   }
-   Future<String> translateText(String text, String targetLocale) async {
+
+  Future<String> translateText(String text, String targetLocale) async {
     final url = Uri.parse(
         'https://google-translate113.p.rapidapi.com/api/v1/translator/text');
     final headers = {

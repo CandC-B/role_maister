@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PlayerGameData {
   final String characterId;
   int votedToGetKicked;
-  List<String> votedToGetKickedBy;
+  List<dynamic> votedToGetKickedBy;
   int word_count;
   bool isKickedFromWaitingRoom = false;
 
@@ -19,7 +19,7 @@ class PlayerGameData {
     if (data != null) {
       String characterId = data['characterId'] ?? '';
       int votedToGetKicked = data['votedToGetKicked'] ?? 0;
-      List<String> votedToGetKickedBy = List<String>.from(data['votedToGetKickedBy'] ?? []);
+      List<dynamic> votedToGetKickedBy = List<dynamic>.from(data['votedToGetKickedBy'] ?? []);
       int word_count = data['word_count'] ?? 0;
       bool isKickedFromWaitingRoom = data['isKickedFromWaitingRoom'] ?? false;
 
