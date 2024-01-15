@@ -222,7 +222,7 @@ class PlayersTab extends StatelessWidget {
         stream:
             // firestoreService.getCharactersFromGameId(singleton.currentGame!),
             firestoreService
-                .getCharactersStreamFromGameId(singleton.currentGame!),
+                .getCharactersStreamFromGameIdCard(singleton.currentGame!),
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
@@ -243,6 +243,7 @@ class PlayersTab extends StatelessWidget {
                   playerName: snapshot.data![index]["name"],
                   numPlayers: snapshot.data!.length,
                   id: snapshot.data![index]["userId"],
+                  votedToGetKickedBy: snapshot.data![index]["votedToGetKickedBy"], 
                 );
               },
             );
@@ -259,12 +260,14 @@ class PlayerCard extends StatefulWidget {
   final String playerName;
   final int numPlayers;
   final String id;
+  final List<String> votedToGetKickedBy;
 
   const PlayerCard({
     Key? key,
     required this.playerName,
     required this.numPlayers,
     required this.id,
+    required this.votedToGetKickedBy,
   }) : super(key: key);
 
   @override
@@ -322,9 +325,9 @@ class _PlayerCardState extends State<PlayerCard> {
                   : IconButton(
                       icon: Icon(
                         Icons.report,
-                        color: isReported ? Colors.grey : Colors.red,
+                        color: isReported ||  widget.votedToGetKickedBy.contains(singleton.player!.uid) ? Colors.grey : Colors.red,
                       ),
-                      onPressed: isReported
+                      onPressed: isReported || widget.votedToGetKickedBy.contains(singleton.player!.uid)
                           ? null
                           : () {
                               // Abrir el diálogo aquí

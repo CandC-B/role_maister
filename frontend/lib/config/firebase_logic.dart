@@ -354,6 +354,60 @@ class FirebaseService {
     }
   }
 
+  Stream<List<Map<String, dynamic>>> getCharactersStreamFromGameIdCard(
+      String gameId) {
+    try {
+      final DocumentReference gameReference =
+          _firestore.collection("game").doc(gameId);
+
+      return gameReference.snapshots().asyncMap((gameSnapshot) async {
+        if (gameSnapshot.exists) {
+          final Map<String, dynamic> gameData =
+              gameSnapshot.data() as Map<String, dynamic>;
+
+          if (gameData.containsKey("players")) {
+            final playerIds = gameData["players"];
+            Map<String, dynamic> players_ready = gameData["ready_players"];
+            List<Map<String, dynamic>> charactersData = [];
+
+            for (int i = 0; i < playerIds.values.length; i++) {
+              PlayerGameData playerGameData =
+                  PlayerGameData.fromMap(playerIds.values.elementAt(i));
+
+              final DocumentReference characterReference = _firestore
+                  .collection('character')
+                  .doc(singleton.gameMode.value)
+                  .collection(singleton.gameMode.value)
+                  .doc(playerGameData.characterId);
+
+              final DocumentSnapshot characterSnapshot =
+                  await characterReference.get();
+
+              if (characterSnapshot.exists) {
+                final Map<String, dynamic> characterData =
+                    characterSnapshot.data() as Map<String, dynamic>;
+                characterData["ready"] =
+                    players_ready[playerIds.keys.elementAt(i)];
+                characterData['votedToGetKickedBy'] = playerGameData.votedToGetKickedBy;
+                charactersData.add(characterData);
+              } else {
+                print("CHARACTER: Document does not exist for player ID: " +
+                    playerGameData.characterId);
+              }
+            }
+            return charactersData;
+          } else {
+            throw Exception("GAME: Attribute 'players' does not exist");
+          }
+        } else {
+          throw Exception("GAME: Document does not exist");
+        }
+      });
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getCharactersFromGameId(
       String gameId) async {
     try {
@@ -1141,6 +1195,7 @@ class FirebaseService {
           var player = players[playerId];
           PlayerGameData playerGameData = PlayerGameData.fromMap(player);
           playerGameData.votedToGetKicked += 1;
+          playerGameData.votedToGetKickedBy.add(singleton.user!.uid);
           players[playerId] = playerGameData.toMap();
           gameData['players'] = players;
 
