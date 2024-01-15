@@ -910,7 +910,9 @@ class FirebaseService {
             // .add(message.toMap());
             .set(message.toMap());
 
-        await updatePlayersTurn(currentGameId, false);
+        if (message.sentBy != 'System'){
+          await updatePlayersTurn(currentGameId, false);
+        }
           
       } catch (error) {
         print('Error saving message: $error');
