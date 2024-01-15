@@ -101012,28 +101012,31 @@ case 5:return A.w(null,r)
 case 1:return A.v(p,r)}})
 return A.x($async$mu,r)},
 kR(a,b){return this.a6U(a,b)},
-a6U(a,b){var s=0,r=A.y(t.H),q=1,p,o=this,n,m,l,k,j,i
+a6U(a,b){var s=0,r=A.y(t.H),q=1,p,o=this,n,m,l,k,j,i,h
 var $async$kR=A.u(function(c,d){if(c===1){p=d
-s=q}while(true)switch(s){case 0:j=a.d
-s=B.c.D2(j).length!==0?2:3
+s=q}while(true)switch(s){case 0:i=a.d
+s=B.c.D2(i).length!==0?2:3
 break
 case 2:q=5
 A.aN("CURRENT GAME ID: "+b)
 m=a.a
 A.aN("MESSAGE ID: "+m)
 l=o.a
+k=a.c
 s=8
-return A.o(A.bW(l,l.gb7().bh("message")).bX(0,b).bh("messages").bX(0,m).z9(0,A.a0(["id",m,"sentBy",a.c,"sentAt",a.b,"text",j,"senderName",a.e,"characterName",a.f,"isInvalid",!1,"userImage",a.w],t.N,t.z)),$async$kR)
-case 8:s=9
+return A.o(A.bW(l,l.gb7().bh("message")).bX(0,b).bh("messages").bX(0,m).z9(0,A.a0(["id",m,"sentBy",k,"sentAt",a.b,"text",i,"senderName",a.e,"characterName",a.f,"isInvalid",!1,"userImage",a.w],t.N,t.z)),$async$kR)
+case 8:s=k!=="System"?9:10
+break
+case 9:s=11
 return A.o(o.D7(b,!1),$async$kR)
-case 9:q=1
+case 11:case 10:q=1
 s=7
 break
 case 5:q=4
-i=p
-n=A.Z(i)
+h=p
+n=A.Z(h)
 A.aN("Error saving message: "+A.f(n))
-throw i
+throw h
 s=7
 break
 case 4:s=1
