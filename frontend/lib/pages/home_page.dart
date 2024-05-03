@@ -30,20 +30,33 @@ class HomePage extends StatelessWidget {
             fit: BoxFit.contain,
             child: DefaultTextStyle(
               style: const TextStyle(
-                fontSize: 80.0,
+                fontSize: 75.0,
                 fontWeight: FontWeight.w900,
                 fontFamily: 'Poppins',
                 color: Colors.white,
               ),
-              child: GradientText(
+              child: Text(
                 AppLocalizations.of(context)!.homePageText,
                 overflow: TextOverflow.ellipsis,
-                colors: const [
-                  Color.fromARGB(255, 226, 220, 161),
-                  Color.fromARGB(255, 152, 133, 223),
-                ],
+                textAlign: TextAlign.center,
               ),
             ),
+            // child: DefaultTextStyle(
+            //   style: const TextStyle(
+            //     fontSize: 80.0,
+            //     fontWeight: FontWeight.w900,
+            //     fontFamily: 'Poppins',
+            //     color: Colors.white,
+            //   ),
+            //   child: GradientText(
+            //     AppLocalizations.of(context)!.homePageText,
+            //     overflow: TextOverflow.ellipsis,
+            //     colors: const [
+            //       Color.fromARGB(255, 226, 220, 161),
+            //       Color.fromARGB(255, 152, 133, 223),
+            //     ],
+            //   ),
+            // ),
           ),
         ),
         Positioned(
