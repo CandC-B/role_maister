@@ -107,7 +107,7 @@ class GameForm extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              kIsWeb
+              size.width > 700
                   ? const SizedBox()
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -116,9 +116,7 @@ class GameForm extends StatelessWidget {
                           textStyle: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       onPressed: () {
-                        if (mobile) {
                           context.go("/select_character");
-                        }
                       },
                       child: FittedBox(
                           fit: BoxFit.contain,

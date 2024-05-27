@@ -517,7 +517,7 @@ class _GameChatState extends State<GameChat> {
             ],
           ),
         ),
-        size.width > 700 || kIsWeb
+        size.width > 700 
             ? Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Align(
